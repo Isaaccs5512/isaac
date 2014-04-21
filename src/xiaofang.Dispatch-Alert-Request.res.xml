@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:ns="urn:xiaofang">
+ <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+  <ns:Alert>
+   <base>
+    <id>0</id>
+    <name></name>
+    <entity-type>UNIT</entity-type>
+    <parentid>0</parentid>
+   </base>
+   <group>
+    <id>0</id>
+    <name></name>
+    <entity-type>UNIT</entity-type>
+    <parentid>0</parentid>
+   </group>
+   <describe></describe>
+   <level>Exigency</level>
+   <alram-time></alram-time>
+   <use-cars>0</use-cars>
+   <create-time></create-time>
+   <status>AlertActive</status>
+  </ns:Alert>
+ </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

@@ -1,0 +1,18 @@
+/*Code Generate BNFParser, don't manual modify it.*/
+package pbmsg;
+
+
+message HistoryAlert
+{
+
+optional fixed32 id = 1;
+optional bytes name = 2; 
+optional bytes describe = 3; 
+optional fixed32 level = 4;
+optional bytes alram_time = 5; 
+optional fixed32 use_cars = 6;
+optional bytes create_time = 7; 
+optional bytes over_time = 8; 
+};
+      
+    

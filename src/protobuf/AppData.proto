@@ -1,0 +1,224 @@
+/*Code Generate BNFParser, don't manual modify it.*/
+package pbmsg;
+ enum AlertStatus
+ {
+AlertActive = 0;
+AlertOver = 1;
+};
+ enum AlertLevel
+ {
+Exigency = 0;
+Importance = 1;
+Subordination = 2;
+Ordinary = 3;
+};
+ enum SessionStatus
+ {
+IDLE = 0;
+InGroup = 1;
+Talking = 2;
+};
+ enum RecordType
+ {
+DontRecord = 0;
+AutoRecord = 1;
+ManualRecord = 2;
+};
+ enum AccountServiceStatus
+ {
+AccountStop = 0;
+AccountActive = 1;
+};
+ enum CallPrivilege
+ {
+CallForbid = 0;
+CallFreedom = 1;
+CallPolicy = 2;
+};
+ enum RegisterStatus
+ {
+OffLine = 0;
+OnLine = 1;
+};
+ enum EntityType
+ {
+UNIT = 0;
+ACCOUNT = 1;
+USER = 2;
+GROUP = 3;
+GATEWAY = 4;
+ORGANIZATION = 5;
+ALERT = 6;
+HISTORY_ALERT = 7;
+};
+ enum UserType
+ {
+Admin = 0;
+Operator = 1;
+};
+ enum MessageType
+ {
+Text = 0;
+Picture = 1;
+TextPictureMix = 2;
+};
+ enum TokenPrivilege
+ {
+TokenForbid = 0;
+TokenFreedom = 1;
+TokenPolicy = 2;
+};
+ enum AccountType
+ {
+Dispatcher = 0;
+Terminal = 1;
+Record = 2;
+MediaGateway = 3;
+};
+ enum GpsReportMode
+ {
+GpsManualPull = 0;
+GpsManualPush = 1;
+GpsAutoPush = 2;
+};
+ enum RecordStatus
+ {
+RecordStop = 0;
+RecordStart = 1;
+};
+
+message Address
+{
+
+optional bytes ip = 1; 
+optional fixed32 port = 2;
+};
+      
+
+message Entity
+{
+
+optional fixed32 id = 1;
+optional bytes name = 2; 
+optional EntityType entity_type = 3;
+optional Entity parent = 4;
+};
+      
+
+message Unit
+{
+required Entity base = 1;
+
+optional bool include_members = 2;
+repeated Entity members =3;
+        
+};
+      
+
+message Account
+{
+required Entity base = 1;
+optional AccountType account_type = 2;
+optional bytes number = 3; 
+optional bytes short_number = 4; 
+optional bytes password = 5; 
+optional AccountServiceStatus service_status = 6;
+optional fixed32 priority = 7;
+optional CallPrivilege call_privilege = 8;
+optional TokenPrivilege token_privilege = 9;
+optional GpsReportMode gps_report_mode = 10;
+optional fixed32 ttl = 11;
+optional RegisterStatus status = 12;
+optional RegisterStatus sip_status = 13;
+optional Address address = 14; 
+optional bool binding = 15;
+optional bool subscribing = 16;
+};
+      
+
+message User
+{
+required Entity base = 1;
+optional bytes password = 2; 
+optional UserType user_type = 3;
+optional Entity account = 4;
+optional RegisterStatus status = 5;
+optional Address address = 6; 
+};
+      
+
+message Organization
+{
+required Entity base = 1;
+
+optional bool include_members = 2;
+repeated Entity members =3;
+        
+};
+      
+
+message Participant
+{
+
+optional fixed32 id = 1;
+optional Entity group = 2;
+optional Entity account = 3;
+optional fixed32 priority = 4;
+optional CallPrivilege call_privilege = 5;
+optional TokenPrivilege token_privilege = 6;
+optional bytes join_timestamp = 7; 
+optional SessionStatus status = 8;
+optional bool sync_added = 9;
+};
+      
+
+message Group
+{
+required Entity base = 1;
+optional Entity owner = 2;
+optional bytes number = 3; 
+optional bytes short_number = 4; 
+optional bool sealed = 5;
+
+optional bool include_participants = 6;
+repeated Participant participants =7;
+        
+optional RecordType record_type = 8;
+optional Entity recorder = 9;
+optional RecordStatus record_status = 10;
+optional Entity record_server = 11;
+};
+      
+
+message Alert
+{
+required Entity base = 1;
+optional Entity group = 2;
+optional bytes describe = 3; 
+optional AlertLevel level = 4;
+optional bytes alram_time = 5; 
+optional fixed32 use_cars = 6;
+optional bytes create_time = 7; 
+};
+      
+
+message Gateway
+{
+required Entity base = 1;
+optional Address address = 2; 
+
+optional bool include_allocate_counts = 3;
+repeated Entity allocate_counts =4;
+        
+
+optional bool include_active_counts = 5;
+repeated Entity active_counts =6;
+        
+
+optional bool include_recordings = 7;
+repeated Entity recordings =8;
+        
+optional RegisterStatus status = 9;
+};
+      
+    

@@ -1,0 +1,30 @@
+package pbmsg;
+
+import "AppData.proto";
+
+message EntityData
+{
+    required Entity         id              = 1;   //根据 id.entity_type的值，包含下面特定的字段。
+    optional Unit           unit            = 2;
+    optional Account        account          = 3;
+    optional User           user            = 4;
+    optional Group          group           = 5;
+    optional Alert          alert           = 6;
+    optional Gateway        gateway         = 7;
+    optional Organization   organization    = 8;
+}
+
+enum EntityNotifyType
+{   
+    Created  = 0;
+    Modify   = 1;
+    Update   = 2;
+    Deleted  = 3;
+}
+
+enum ListModifyType
+{
+    Increased  = 0;
+    Decrease   = 1;
+    Replace    = 2;
+}

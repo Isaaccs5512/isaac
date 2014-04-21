@@ -1,0 +1,576 @@
+Accept socket=5 at port=59248 from IP='192.168.146.128'
+Copying context
+Reinitializing context
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+stdsoap2.cpp(8525): free(0x8b56988)
+Free pointer hashtable
+Free ID hashtable
+Initializing for input from socket=5/fd=0
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+Free pointer hashtable
+Free ID hashtable
+stdsoap2.cpp(9389): malloc(96) = 0x8b56988
+Free ID hashtable
+Read 661 bytes from socket=5/fd=0
+Read count=661 (+661)
+Waiting for HTTP request/response...
+HTTP status: POST / HTTP/1.1
+HTTP header: Host: 192.168.146.128:18881
+HTTP header: User-Agent: gSOAP/2.8
+HTTP header: Content-Type: text/xml; charset=utf-8
+stdsoap2.cpp(7649): malloc(36) = 0x8b56d30
+HTTP header: Content-Length: 511
+HTTP header: Connection: close
+Finished HTTP header parsing, status = 0
+Keep alive connection = 0
+Target endpoint='http://192.168.146.128:18881/'
+XML PI <?xml version="1.0" encoding="UTF-8"?>
+Switching to utf-8 encoding
+stdsoap2.cpp(10798): malloc(38) = 0x8b56d70
+Enlarging look-aside buffer to append data, size=0
+New look-aside buffer size=256
+stdsoap2.cpp(10601): malloc(256) = 0x8b56db8
+stdsoap2.cpp(10854): malloc(256) = 0x8b56ed8
+stdsoap2.cpp(2817): malloc(28) = 0x8b56ff8
+Push namespace binding (level=0) 'SOAP-ENV' 'http://schemas.xmlsoap.org/soap/envelope/'
+Push OK ('SOAP-ENV' matches 'SOAP-ENV' in namespace table)
+stdsoap2.cpp(10798): malloc(38) = 0x8b57030
+stdsoap2.cpp(10854): malloc(256) = 0x8b57078
+stdsoap2.cpp(2817): malloc(28) = 0x8b57198
+Push namespace binding (level=0) 'SOAP-ENC' 'http://schemas.xmlsoap.org/soap/encoding/'
+Push OK ('SOAP-ENC' matches 'SOAP-ENC' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x8b571d0
+stdsoap2.cpp(10854): malloc(256) = 0x8b57210
+stdsoap2.cpp(2817): malloc(23) = 0x8b57330
+Push namespace binding (level=0) 'xsi' 'http://www.w3.org/2001/XMLSchema-instance'
+Push OK ('xsi' matches 'xsi' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x8b57368
+stdsoap2.cpp(10854): malloc(256) = 0x8b573a8
+stdsoap2.cpp(2817): malloc(23) = 0x8b574c8
+Push namespace binding (level=0) 'xsd' 'http://www.w3.org/2001/XMLSchema'
+Push OK ('xsd' matches 'xsd' in namespace table)
+stdsoap2.cpp(10798): malloc(32) = 0x8b57500
+stdsoap2.cpp(10854): malloc(256) = 0x8b57540
+stdsoap2.cpp(2817): malloc(22) = 0x8b57660
+Push namespace binding (level=0) 'ns' 'urn:xiaofang'
+Push OK ('ns' matches 'ns' in namespace table)
+Tags and (default) namespaces match: 'SOAP-ENV:Envelope' 'SOAP-ENV:Envelope'
+Begin element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+stdsoap2.cpp(15506): malloc(42) = 0x8b57698
+stdsoap2.cpp(10798): malloc(46) = 0x8b576e0
+stdsoap2.cpp(10854): malloc(256) = 0x8b57730
+Tags and (default) namespaces match: 'SOAP-ENV:Body' 'SOAP-ENV:Body'
+Begin element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Begin element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+Enter id='' type=60 loc=0xb75201a0 size=8 level=0
+Tags match: 'username' 'username'
+Begin element found (level=4) 'username'='username'
+Enter id='' type=28 loc=0xb75201a0 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(16) = 0x8b57850
+End element found (level=4) 'username'='username'
+Tags match: 'password' 'password'
+Begin element found (level=4) 'password'='password'
+Enter id='' type=28 loc=0xb75201a4 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(20) = 0x8b57898
+End element found (level=4) 'password'='password'
+End element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+End element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+End element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+End of receive message ok
+Resolving forwarded data
+Resolution phase
+Resolution done
+Free namespace stack
+stdsoap2.cpp(8550): free(0x8b57660)
+stdsoap2.cpp(8550): free(0x8b574c8)
+stdsoap2.cpp(8550): free(0x8b57330)
+stdsoap2.cpp(8550): free(0x8b57198)
+stdsoap2.cpp(8550): free(0x8b56ff8)
+Accept socket=5 at port=59250 from IP='192.168.146.128'
+Copying context
+Reinitializing context
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+stdsoap2.cpp(8525): free(0x9574988)
+Free pointer hashtable
+Free ID hashtable
+Initializing for input from socket=5/fd=0
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+Free pointer hashtable
+Free ID hashtable
+stdsoap2.cpp(9389): malloc(96) = 0x9574988
+Free ID hashtable
+Read 661 bytes from socket=5/fd=0
+Read count=661 (+661)
+Waiting for HTTP request/response...
+HTTP status: POST / HTTP/1.1
+HTTP header: Host: 192.168.146.128:18881
+HTTP header: User-Agent: gSOAP/2.8
+HTTP header: Content-Type: text/xml; charset=utf-8
+stdsoap2.cpp(7649): malloc(36) = 0x9574d30
+HTTP header: Content-Length: 511
+HTTP header: Connection: close
+Finished HTTP header parsing, status = 0
+Keep alive connection = 0
+Target endpoint='http://192.168.146.128:18881/'
+XML PI <?xml version="1.0" encoding="UTF-8"?>
+Switching to utf-8 encoding
+stdsoap2.cpp(10798): malloc(38) = 0x9574d70
+Enlarging look-aside buffer to append data, size=0
+New look-aside buffer size=256
+stdsoap2.cpp(10601): malloc(256) = 0x9574db8
+stdsoap2.cpp(10854): malloc(256) = 0x9574ed8
+stdsoap2.cpp(2817): malloc(28) = 0x9574ff8
+Push namespace binding (level=0) 'SOAP-ENV' 'http://schemas.xmlsoap.org/soap/envelope/'
+Push OK ('SOAP-ENV' matches 'SOAP-ENV' in namespace table)
+stdsoap2.cpp(10798): malloc(38) = 0x9575030
+stdsoap2.cpp(10854): malloc(256) = 0x9575078
+stdsoap2.cpp(2817): malloc(28) = 0x9575198
+Push namespace binding (level=0) 'SOAP-ENC' 'http://schemas.xmlsoap.org/soap/encoding/'
+Push OK ('SOAP-ENC' matches 'SOAP-ENC' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x95751d0
+stdsoap2.cpp(10854): malloc(256) = 0x9575210
+stdsoap2.cpp(2817): malloc(23) = 0x9575330
+Push namespace binding (level=0) 'xsi' 'http://www.w3.org/2001/XMLSchema-instance'
+Push OK ('xsi' matches 'xsi' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x9575368
+stdsoap2.cpp(10854): malloc(256) = 0x95753a8
+stdsoap2.cpp(2817): malloc(23) = 0x95754c8
+Push namespace binding (level=0) 'xsd' 'http://www.w3.org/2001/XMLSchema'
+Push OK ('xsd' matches 'xsd' in namespace table)
+stdsoap2.cpp(10798): malloc(32) = 0x9575500
+stdsoap2.cpp(10854): malloc(256) = 0x9575540
+stdsoap2.cpp(2817): malloc(22) = 0x9575660
+Push namespace binding (level=0) 'ns' 'urn:xiaofang'
+Push OK ('ns' matches 'ns' in namespace table)
+Tags and (default) namespaces match: 'SOAP-ENV:Envelope' 'SOAP-ENV:Envelope'
+Begin element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+stdsoap2.cpp(15506): malloc(42) = 0x9575698
+stdsoap2.cpp(10798): malloc(46) = 0x95756e0
+stdsoap2.cpp(10854): malloc(256) = 0x9575730
+Tags and (default) namespaces match: 'SOAP-ENV:Body' 'SOAP-ENV:Body'
+Begin element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Begin element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+Enter id='' type=60 loc=0xb751c1a0 size=8 level=0
+Tags match: 'username' 'username'
+Begin element found (level=4) 'username'='username'
+Enter id='' type=28 loc=0xb751c1a0 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(16) = 0x9575850
+End element found (level=4) 'username'='username'
+Tags match: 'password' 'password'
+Begin element found (level=4) 'password'='password'
+Enter id='' type=28 loc=0xb751c1a4 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(20) = 0x9575898
+End element found (level=4) 'password'='password'
+End element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+End element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+End element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+End of receive message ok
+Resolving forwarded data
+Resolution phase
+Resolution done
+Free namespace stack
+stdsoap2.cpp(8550): free(0x9575660)
+stdsoap2.cpp(8550): free(0x95754c8)
+stdsoap2.cpp(8550): free(0x9575330)
+stdsoap2.cpp(8550): free(0x9575198)
+stdsoap2.cpp(8550): free(0x9574ff8)
+Accept socket=5 at port=36662 from IP='192.168.146.128'
+Copying context
+Reinitializing context
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+stdsoap2.cpp(8525): free(0x9048988)
+Free pointer hashtable
+Free ID hashtable
+Initializing for input from socket=5/fd=0
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+Free pointer hashtable
+Free ID hashtable
+stdsoap2.cpp(9389): malloc(96) = 0x9048988
+Free ID hashtable
+Read 661 bytes from socket=5/fd=0
+Read count=661 (+661)
+Waiting for HTTP request/response...
+HTTP status: POST / HTTP/1.1
+HTTP header: Host: 192.168.146.128:18881
+HTTP header: User-Agent: gSOAP/2.8
+HTTP header: Content-Type: text/xml; charset=utf-8
+stdsoap2.cpp(7649): malloc(36) = 0x9048d30
+HTTP header: Content-Length: 511
+HTTP header: Connection: close
+Finished HTTP header parsing, status = 0
+Keep alive connection = 0
+Target endpoint='http://192.168.146.128:18881/'
+XML PI <?xml version="1.0" encoding="UTF-8"?>
+Switching to utf-8 encoding
+stdsoap2.cpp(10798): malloc(38) = 0x9048d70
+Enlarging look-aside buffer to append data, size=0
+New look-aside buffer size=256
+stdsoap2.cpp(10601): malloc(256) = 0x9048db8
+stdsoap2.cpp(10854): malloc(256) = 0x9048ed8
+stdsoap2.cpp(2817): malloc(28) = 0x9048ff8
+Push namespace binding (level=0) 'SOAP-ENV' 'http://schemas.xmlsoap.org/soap/envelope/'
+Push OK ('SOAP-ENV' matches 'SOAP-ENV' in namespace table)
+stdsoap2.cpp(10798): malloc(38) = 0x9049030
+stdsoap2.cpp(10854): malloc(256) = 0x9049078
+stdsoap2.cpp(2817): malloc(28) = 0x9049198
+Push namespace binding (level=0) 'SOAP-ENC' 'http://schemas.xmlsoap.org/soap/encoding/'
+Push OK ('SOAP-ENC' matches 'SOAP-ENC' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x90491d0
+stdsoap2.cpp(10854): malloc(256) = 0x9049210
+stdsoap2.cpp(2817): malloc(23) = 0x9049330
+Push namespace binding (level=0) 'xsi' 'http://www.w3.org/2001/XMLSchema-instance'
+Push OK ('xsi' matches 'xsi' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x9049368
+stdsoap2.cpp(10854): malloc(256) = 0x90493a8
+stdsoap2.cpp(2817): malloc(23) = 0x90494c8
+Push namespace binding (level=0) 'xsd' 'http://www.w3.org/2001/XMLSchema'
+Push OK ('xsd' matches 'xsd' in namespace table)
+stdsoap2.cpp(10798): malloc(32) = 0x9049500
+stdsoap2.cpp(10854): malloc(256) = 0x9049540
+stdsoap2.cpp(2817): malloc(22) = 0x9049660
+Push namespace binding (level=0) 'ns' 'urn:xiaofang'
+Push OK ('ns' matches 'ns' in namespace table)
+Tags and (default) namespaces match: 'SOAP-ENV:Envelope' 'SOAP-ENV:Envelope'
+Begin element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+stdsoap2.cpp(15506): malloc(42) = 0x9049698
+stdsoap2.cpp(10798): malloc(46) = 0x90496e0
+stdsoap2.cpp(10854): malloc(256) = 0x9049730
+Tags and (default) namespaces match: 'SOAP-ENV:Body' 'SOAP-ENV:Body'
+Begin element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Begin element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+Enter id='' type=60 loc=0xb75ed1a0 size=8 level=0
+Tags match: 'username' 'username'
+Begin element found (level=4) 'username'='username'
+Enter id='' type=28 loc=0xb75ed1a0 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(16) = 0x9049850
+End element found (level=4) 'username'='username'
+Tags match: 'password' 'password'
+Begin element found (level=4) 'password'='password'
+Enter id='' type=28 loc=0xb75ed1a4 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(20) = 0x9049898
+End element found (level=4) 'password'='password'
+End element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+End element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+End element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+End of receive message ok
+Resolving forwarded data
+Resolution phase
+Resolution done
+Free namespace stack
+stdsoap2.cpp(8550): free(0x9049660)
+stdsoap2.cpp(8550): free(0x90494c8)
+stdsoap2.cpp(8550): free(0x9049330)
+stdsoap2.cpp(8550): free(0x9049198)
+stdsoap2.cpp(8550): free(0x9048ff8)
+Accept socket=5 at port=44666 from IP='192.168.146.128'
+Copying context
+Reinitializing context
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+stdsoap2.cpp(8525): free(0x9d73988)
+Free pointer hashtable
+Free ID hashtable
+Initializing for input from socket=5/fd=0
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+Free pointer hashtable
+Free ID hashtable
+stdsoap2.cpp(9389): malloc(96) = 0x9d73988
+Free ID hashtable
+Read 661 bytes from socket=5/fd=0
+Read count=661 (+661)
+Waiting for HTTP request/response...
+HTTP status: POST / HTTP/1.1
+HTTP header: Host: 192.168.146.128:18881
+HTTP header: User-Agent: gSOAP/2.8
+HTTP header: Content-Type: text/xml; charset=utf-8
+stdsoap2.cpp(7649): malloc(36) = 0x9d73d30
+HTTP header: Content-Length: 511
+HTTP header: Connection: close
+Finished HTTP header parsing, status = 0
+Keep alive connection = 0
+Target endpoint='http://192.168.146.128:18881/'
+XML PI <?xml version="1.0" encoding="UTF-8"?>
+Switching to utf-8 encoding
+stdsoap2.cpp(10798): malloc(38) = 0x9d73d70
+Enlarging look-aside buffer to append data, size=0
+New look-aside buffer size=256
+stdsoap2.cpp(10601): malloc(256) = 0x9d73db8
+stdsoap2.cpp(10854): malloc(256) = 0x9d73ed8
+stdsoap2.cpp(2817): malloc(28) = 0x9d73ff8
+Push namespace binding (level=0) 'SOAP-ENV' 'http://schemas.xmlsoap.org/soap/envelope/'
+Push OK ('SOAP-ENV' matches 'SOAP-ENV' in namespace table)
+stdsoap2.cpp(10798): malloc(38) = 0x9d74030
+stdsoap2.cpp(10854): malloc(256) = 0x9d74078
+stdsoap2.cpp(2817): malloc(28) = 0x9d74198
+Push namespace binding (level=0) 'SOAP-ENC' 'http://schemas.xmlsoap.org/soap/encoding/'
+Push OK ('SOAP-ENC' matches 'SOAP-ENC' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x9d741d0
+stdsoap2.cpp(10854): malloc(256) = 0x9d74210
+stdsoap2.cpp(2817): malloc(23) = 0x9d74330
+Push namespace binding (level=0) 'xsi' 'http://www.w3.org/2001/XMLSchema-instance'
+Push OK ('xsi' matches 'xsi' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x9d74368
+stdsoap2.cpp(10854): malloc(256) = 0x9d743a8
+stdsoap2.cpp(2817): malloc(23) = 0x9d744c8
+Push namespace binding (level=0) 'xsd' 'http://www.w3.org/2001/XMLSchema'
+Push OK ('xsd' matches 'xsd' in namespace table)
+stdsoap2.cpp(10798): malloc(32) = 0x9d74500
+stdsoap2.cpp(10854): malloc(256) = 0x9d74540
+stdsoap2.cpp(2817): malloc(22) = 0x9d74660
+Push namespace binding (level=0) 'ns' 'urn:xiaofang'
+Push OK ('ns' matches 'ns' in namespace table)
+Tags and (default) namespaces match: 'SOAP-ENV:Envelope' 'SOAP-ENV:Envelope'
+Begin element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+stdsoap2.cpp(15506): malloc(42) = 0x9d74698
+stdsoap2.cpp(10798): malloc(46) = 0x9d746e0
+stdsoap2.cpp(10854): malloc(256) = 0x9d74730
+Tags and (default) namespaces match: 'SOAP-ENV:Body' 'SOAP-ENV:Body'
+Begin element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Begin element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+Enter id='' type=60 loc=0xb75d01a0 size=8 level=0
+Tags match: 'username' 'username'
+Begin element found (level=4) 'username'='username'
+Enter id='' type=28 loc=0xb75d01a0 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(16) = 0x9d74850
+End element found (level=4) 'username'='username'
+Tags match: 'password' 'password'
+Begin element found (level=4) 'password'='password'
+Enter id='' type=28 loc=0xb75d01a4 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(20) = 0x9d74898
+End element found (level=4) 'password'='password'
+End element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+End element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+End element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+End of receive message ok
+Resolving forwarded data
+Resolution phase
+Resolution done
+Free namespace stack
+stdsoap2.cpp(8550): free(0x9d74660)
+stdsoap2.cpp(8550): free(0x9d744c8)
+stdsoap2.cpp(8550): free(0x9d74330)
+stdsoap2.cpp(8550): free(0x9d74198)
+stdsoap2.cpp(8550): free(0x9d73ff8)
+Accept socket=5 at port=59551 from IP='192.168.146.128'
+Copying context
+Reinitializing context
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+stdsoap2.cpp(8525): free(0x9fa4988)
+Free pointer hashtable
+Free ID hashtable
+Initializing for input from socket=5/fd=0
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+Free pointer hashtable
+Free ID hashtable
+stdsoap2.cpp(9389): malloc(96) = 0x9fa4988
+Free ID hashtable
+Read 661 bytes from socket=5/fd=0
+Read count=661 (+661)
+Waiting for HTTP request/response...
+HTTP status: POST / HTTP/1.1
+HTTP header: Host: 192.168.146.128:18881
+HTTP header: User-Agent: gSOAP/2.8
+HTTP header: Content-Type: text/xml; charset=utf-8
+stdsoap2.cpp(7649): malloc(36) = 0x9fa4d30
+HTTP header: Content-Length: 511
+HTTP header: Connection: close
+Finished HTTP header parsing, status = 0
+Keep alive connection = 0
+Target endpoint='http://192.168.146.128:18881/'
+XML PI <?xml version="1.0" encoding="UTF-8"?>
+Switching to utf-8 encoding
+stdsoap2.cpp(10798): malloc(38) = 0x9fa4d70
+Enlarging look-aside buffer to append data, size=0
+New look-aside buffer size=256
+stdsoap2.cpp(10601): malloc(256) = 0x9fa4db8
+stdsoap2.cpp(10854): malloc(256) = 0x9fa4ed8
+stdsoap2.cpp(2817): malloc(28) = 0x9fa4ff8
+Push namespace binding (level=0) 'SOAP-ENV' 'http://schemas.xmlsoap.org/soap/envelope/'
+Push OK ('SOAP-ENV' matches 'SOAP-ENV' in namespace table)
+stdsoap2.cpp(10798): malloc(38) = 0x9fa5030
+stdsoap2.cpp(10854): malloc(256) = 0x9fa5078
+stdsoap2.cpp(2817): malloc(28) = 0x9fa5198
+Push namespace binding (level=0) 'SOAP-ENC' 'http://schemas.xmlsoap.org/soap/encoding/'
+Push OK ('SOAP-ENC' matches 'SOAP-ENC' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x9fa51d0
+stdsoap2.cpp(10854): malloc(256) = 0x9fa5210
+stdsoap2.cpp(2817): malloc(23) = 0x9fa5330
+Push namespace binding (level=0) 'xsi' 'http://www.w3.org/2001/XMLSchema-instance'
+Push OK ('xsi' matches 'xsi' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x9fa5368
+stdsoap2.cpp(10854): malloc(256) = 0x9fa53a8
+stdsoap2.cpp(2817): malloc(23) = 0x9fa54c8
+Push namespace binding (level=0) 'xsd' 'http://www.w3.org/2001/XMLSchema'
+Push OK ('xsd' matches 'xsd' in namespace table)
+stdsoap2.cpp(10798): malloc(32) = 0x9fa5500
+stdsoap2.cpp(10854): malloc(256) = 0x9fa5540
+stdsoap2.cpp(2817): malloc(22) = 0x9fa5660
+Push namespace binding (level=0) 'ns' 'urn:xiaofang'
+Push OK ('ns' matches 'ns' in namespace table)
+Tags and (default) namespaces match: 'SOAP-ENV:Envelope' 'SOAP-ENV:Envelope'
+Begin element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+stdsoap2.cpp(15506): malloc(42) = 0x9fa5698
+stdsoap2.cpp(10798): malloc(46) = 0x9fa56e0
+stdsoap2.cpp(10854): malloc(256) = 0x9fa5730
+Tags and (default) namespaces match: 'SOAP-ENV:Body' 'SOAP-ENV:Body'
+Begin element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Begin element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+Enter id='' type=60 loc=0xb75131a0 size=8 level=0
+Tags match: 'username' 'username'
+Begin element found (level=4) 'username'='username'
+Enter id='' type=28 loc=0xb75131a0 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(16) = 0x9fa5850
+End element found (level=4) 'username'='username'
+Tags match: 'password' 'password'
+Begin element found (level=4) 'password'='password'
+Enter id='' type=28 loc=0xb75131a4 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(20) = 0x9fa5898
+End element found (level=4) 'password'='password'
+End element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+End element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+End element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+End of receive message ok
+Resolving forwarded data
+Resolution phase
+Resolution done
+Free namespace stack
+stdsoap2.cpp(8550): free(0x9fa5660)
+stdsoap2.cpp(8550): free(0x9fa54c8)
+stdsoap2.cpp(8550): free(0x9fa5330)
+stdsoap2.cpp(8550): free(0x9fa5198)
+stdsoap2.cpp(8550): free(0x9fa4ff8)
+Accept socket=5 at port=50646 from IP='192.168.146.128'
+Copying context
+Reinitializing context
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+stdsoap2.cpp(8525): free(0x9338988)
+Free pointer hashtable
+Free ID hashtable
+Initializing for input from socket=5/fd=0
+Free namespace stack
+Free any remaining temp blocks
+Free attribute storage
+Free pointer hashtable
+Free ID hashtable
+stdsoap2.cpp(9389): malloc(96) = 0x9338988
+Free ID hashtable
+Read 661 bytes from socket=5/fd=0
+Read count=661 (+661)
+Waiting for HTTP request/response...
+HTTP status: POST / HTTP/1.1
+HTTP header: Host: 192.168.146.128:18881
+HTTP header: User-Agent: gSOAP/2.8
+HTTP header: Content-Type: text/xml; charset=utf-8
+stdsoap2.cpp(7649): malloc(36) = 0x9338d30
+HTTP header: Content-Length: 511
+HTTP header: Connection: close
+Finished HTTP header parsing, status = 0
+Keep alive connection = 0
+Target endpoint='http://192.168.146.128:18881/'
+XML PI <?xml version="1.0" encoding="UTF-8"?>
+Switching to utf-8 encoding
+stdsoap2.cpp(10798): malloc(38) = 0x9338d70
+Enlarging look-aside buffer to append data, size=0
+New look-aside buffer size=256
+stdsoap2.cpp(10601): malloc(256) = 0x9338db8
+stdsoap2.cpp(10854): malloc(256) = 0x9338ed8
+stdsoap2.cpp(2817): malloc(28) = 0x9338ff8
+Push namespace binding (level=0) 'SOAP-ENV' 'http://schemas.xmlsoap.org/soap/envelope/'
+Push OK ('SOAP-ENV' matches 'SOAP-ENV' in namespace table)
+stdsoap2.cpp(10798): malloc(38) = 0x9339030
+stdsoap2.cpp(10854): malloc(256) = 0x9339078
+stdsoap2.cpp(2817): malloc(28) = 0x9339198
+Push namespace binding (level=0) 'SOAP-ENC' 'http://schemas.xmlsoap.org/soap/encoding/'
+Push OK ('SOAP-ENC' matches 'SOAP-ENC' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x93391d0
+stdsoap2.cpp(10854): malloc(256) = 0x9339210
+stdsoap2.cpp(2817): malloc(23) = 0x9339330
+Push namespace binding (level=0) 'xsi' 'http://www.w3.org/2001/XMLSchema-instance'
+Push OK ('xsi' matches 'xsi' in namespace table)
+stdsoap2.cpp(10798): malloc(33) = 0x9339368
+stdsoap2.cpp(10854): malloc(256) = 0x93393a8
+stdsoap2.cpp(2817): malloc(23) = 0x93394c8
+Push namespace binding (level=0) 'xsd' 'http://www.w3.org/2001/XMLSchema'
+Push OK ('xsd' matches 'xsd' in namespace table)
+stdsoap2.cpp(10798): malloc(32) = 0x9339500
+stdsoap2.cpp(10854): malloc(256) = 0x9339540
+stdsoap2.cpp(2817): malloc(22) = 0x9339660
+Push namespace binding (level=0) 'ns' 'urn:xiaofang'
+Push OK ('ns' matches 'ns' in namespace table)
+Tags and (default) namespaces match: 'SOAP-ENV:Envelope' 'SOAP-ENV:Envelope'
+Begin element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+stdsoap2.cpp(15506): malloc(42) = 0x9339698
+stdsoap2.cpp(10798): malloc(46) = 0x93396e0
+stdsoap2.cpp(10854): malloc(256) = 0x9339730
+Tags and (default) namespaces match: 'SOAP-ENV:Body' 'SOAP-ENV:Body'
+Begin element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Tags and (default) namespaces match: 'ns:Dispatch-Login' 'ns:Dispatch-Login'
+Begin element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+Enter id='' type=60 loc=0xb752f1a0 size=8 level=0
+Tags match: 'username' 'username'
+Begin element found (level=4) 'username'='username'
+Enter id='' type=28 loc=0xb752f1a0 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(16) = 0x9339850
+End element found (level=4) 'username'='username'
+Tags match: 'password' 'password'
+Begin element found (level=4) 'password'='password'
+Enter id='' type=28 loc=0xb752f1a4 size=4 level=0
+Reading string content, flag=1
+stdsoap2.cpp(7649): malloc(20) = 0x9339898
+End element found (level=4) 'password'='password'
+End element found (level=3) 'ns:Dispatch-Login'='ns:Dispatch-Login'
+End element found (level=2) 'SOAP-ENV:Body'='SOAP-ENV:Body'
+End element found (level=1) 'SOAP-ENV:Envelope'='SOAP-ENV:Envelope'
+End of receive message ok
+Resolving forwarded data
+Resolution phase
+Resolution done
+Free namespace stack
+stdsoap2.cpp(8550): free(0x9339660)
+stdsoap2.cpp(8550): free(0x93394c8)
+stdsoap2.cpp(8550): free(0x9339330)
+stdsoap2.cpp(8550): free(0x9339198)
+stdsoap2.cpp(8550): free(0x9338ff8)

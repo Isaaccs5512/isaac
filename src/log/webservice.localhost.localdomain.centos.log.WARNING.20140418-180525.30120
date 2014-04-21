@@ -1,0 +1,5 @@
+Log file created at: 2014/04/18 18:05:25
+Running on machine: localhost.localdomain
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+E0418 18:05:25.289741 30122 task.cpp:230] execute job occur exception:basic_string::at
+E0418 18:05:47.875406 30123 task.cpp:230] execute job occur exception:basic_string::at

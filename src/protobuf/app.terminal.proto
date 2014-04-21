@@ -1,0 +1,474 @@
+package app.terminal;
+
+/*省略了 Terminal前缀*/
+enum MSG
+{
+    Login_Request                   = 300001;
+    Login_Response                  = 300002;
+
+    Logout_Request                  = 300003;
+    Logout_Response                 = 300004;
+
+    Keepalive_Request               = 300005;
+    Keepalive_Response              = 300006;
+
+    Groups_Request                  = 300007;
+    Groups_Response                 = 300008;
+
+    Group_Participants_Request      = 300009;
+    Group_Participants_Response     = 300010;
+
+    Media_Message_Request           = 300011;
+    Media_Message_Response          = 300012;
+
+    Join_Group_Request              = 300013;
+    Join_Group_Response             = 300014;
+
+    Connect_Group_Request           = 300015;
+    Connect_Group_Response          = 300016;
+
+    Speak_Request                   = 300017;
+    Speak_Response                  = 300018;
+
+    Join_Session_Request            = 300019;
+    Join_Session_Response           = 300020;
+
+    Leave_Session_Request           = 300021;
+    Leave_Session_Response          = 300022;
+
+    Release_Token_Request           = 300023;
+    Release_Token_Response          = 300024;
+
+    Appoint_Speak_Request           = 300025;
+    Appoint_Speak_Response          = 300026;
+
+    Send_Message_Request                = 300027;
+    Send_Message_Response               = 300028;
+
+    Subscribe_Location_Request          = 300029;
+    Subscribe_Location_Response         = 300030;
+
+    Alerts_Request                      = 300031;
+    Alerts_Response                     = 300032;
+
+    Alert_Request                       = 300033;
+    Alert_Response                       = 300034;
+
+    History_Alerts_Request              = 300035;
+    History_Alerts_Response             = 300036;
+
+    History_Alert_Request               = 300037;
+    History_Alert_Response              = 300038;
+
+    History_Alert_Mesage_Request        = 300039;
+    History_Alert_Mesage_Response       = 300040;
+    
+    Register_Status_Notification        = 310001;
+    Joined_Group_Notification           = 310002;
+    Leave_Group_Notification            = 310003;
+    Others_Joined_Group_Notification    = 310004;
+    Others_Leave_Group_Notification     = 310005;
+    Media_Message_Notification          = 310006;
+    Session_Status_Notification         = 310007;
+    Location_Notification               = 310008;
+    Alert_Create_Notification           = 310009;
+    Alert_Modify_Notification           = 310010;
+    Alert_Overed_Notification           = 310011;
+
+}
+
+enum CallPrivilege
+{
+    CallForbid       = 0;//禁止
+    CallFreedom      = 1;//自由模式，自己可以主动发起呼叫
+    CallPolicy       = 2;//服务器策略，由服务器决定是否可以呼叫某个群组
+}
+enum TokenPrivilege
+{
+    TokenForbid = 0;
+    TokenFreedom = 1;
+    TokenPolicy = 2;
+}
+enum GpsReportMode
+{
+    GpsManualPull = 0; // 拉模式,应用服务器发送一个GPS信息请求时，终端应答当前的位置信息
+    GpsManualPush = 1; // 手动推送模式,在服务器要求推送GPS信息的时候，终端主动的定时的推送位置信息,直到服务器发送停止命令
+    GpsAutoPush   = 2; // 从终端注册上应用服务器后，就应该主动的定时的推送位置信息到服务器.
+}
+
+enum RegisterStatus
+{
+    OffLine = 0;      //离线
+    OnLine  = 1;      //在线
+}
+enum SessionStatus
+{
+    IDLE    = 0;//注册了SIP服务器，没有加入当前群组的SIP会话
+    InGroup = 1;//已经加入了当前群组的会话
+    Talking = 2;// 获取到话语权，正在讲话
+}
+
+enum AlertLevel 
+{
+    Exigency = 0;      //最高级别，紧急警情
+    Importance = 1;    //级别次于紧急，重要警情
+    Subordination = 2; //级别次于重要, 次于警情
+    Ordinary  = 3;     //最低级别,     普通警情
+}
+
+message LoginRequest 
+{
+    required string number      = 1;
+    optional string password    = 2;
+}
+
+message LoginResponse
+{
+    required string             sip_uri                 = 1;
+    required fixed32            your_id                 = 2;
+    optional bytes              display_name            = 3;
+    required fixed32            talk_priority           = 4;
+    required CallPrivilege      call_privilege          = 5;
+    required TokenPrivilege     token_privilege         = 6;
+    required string             number                  = 7;
+    required fixed32            ttl                     = 8;
+    required GpsReportMode      gps_report_mode         = 9;
+    required string             upload_address          = 10;
+}
+message RegisterStatusNotification
+{
+    required RegisterStatus     status                  = 1;
+}
+
+message Group 
+{
+    required fixed32            id                      = 1;
+    required bytes              name                    = 2;
+    required string             number                  = 3;
+}
+
+message GroupsResponse
+{
+    repeated    Group           joined_groups           = 1;
+    repeated    Group           unjoin_groups           = 2;
+}
+
+message Participant 
+{
+    required    fixed32         account_id              = 1;
+    required    bytes           account_name            = 2;
+    required    fixed32         talk_priority           = 3;
+    optional    CallPrivilege   call_privilege          = 4;
+    optional    TokenPrivilege  token_privilege         = 5;
+    required    SessionStatus   status                  = 6;
+}
+message GroupParticipantsRequest
+{
+    required    fixed32         group_id                = 1;//Group.id
+}
+message GroupParticipantsResponse
+{
+    required    fixed32         group_id                = 1;
+    repeated    Participant     participants            = 2;
+}
+
+message MediaMessageRequest
+{
+    required    fixed32         id                      = 1;
+    optional    string          from_timestamp          = 2;
+    optional    fixed32         from_message_id         = 3;
+    required    fixed32         max_message_count       = 4;    
+}
+
+message MediaMessage
+{
+    required    fixed32         id                      = 1;
+    required    bytes           sender                  = 2;
+    optional    bytes           text                    = 3;
+    optional    string          picture_uri             = 4;
+    optional    string          audio_uri               = 5;
+    optional    fixed32         audio_length            = 6;
+    optional    string          video_uri               = 7;
+    optional    fixed32         video_length            = 8;
+    optional    string          timestamp               = 9;
+}
+message MediaMessageResponse
+{
+    required    fixed32         group_id                = 1;
+    repeated    MediaMessage    messages                = 2;
+    required    fixed32         leave_message_count     = 3;
+}
+
+message JoinedGroupNotification
+{
+    required    fixed32         group_id                = 1;
+    required    bytes           group_name              = 2;
+    required    string          group_number            = 3;
+
+    required    fixed32         talk_priority           = 4;
+    required    CallPrivilege   call_privilege          = 5;
+    required    TokenPrivilege  token_privilege         = 6;
+}
+
+message LeaveGroupNotification
+{
+    required    fixed32         group_id                = 1;
+}
+
+message OthersJoinedGroupNotification
+{
+    required    fixed32         group_id                = 1;
+    repeated    Participant     participants            = 2;
+}
+
+message OthersLeaveGroupNotification
+{
+    required    fixed32         group_id                = 1;
+    repeated    fixed32         account_ids             = 2;
+}
+message MediaMessageNotification
+{   
+    required    fixed32         group_id                = 1;
+    required    MediaMessage    msg                     = 2;
+}
+
+message JoinGroupRequest
+{
+    required    fixed32         group_id                = 1;
+}
+
+message ConnectGroupRequest
+{
+    required    fixed32         group_id                = 1;
+}
+
+message SessionStatusNotification
+{
+    required    fixed32         group_id                = 1;
+    required    fixed32         account_id              = 2;
+    required    MediaMessage   status                  = 3;
+}
+
+message SpeakRequest
+{
+    required    fixed32         group_id                = 1;
+}
+
+message JoinSessionRequest
+{   
+    required fixed32            group_id                = 1;
+}
+
+message LeaveSessionRequest
+{
+    required    fixed32         group_id                = 1;
+}
+
+message ReleaseTokenRequest
+{
+    required    fixed32         group_id                = 1;
+}
+
+message AppointSpeakRequest
+{
+    required    fixed32         group_id                = 1;
+}
+
+message SendMessageRequest
+{
+    required    fixed32         group_id                = 1;
+    optional    bytes           text                    = 2;
+    optional    string          picture_uri             = 3;
+    optional    string          audio_uri               = 4;
+    optional    fixed32         audio_length            = 5;
+    optional    string          video_uri               = 6;
+    optional    fixed32         video_length            = 7;
+
+}
+
+message SubscribeLocationRequest
+{
+    required    bool            subscribing             = 1;
+    required    fixed32         ttl                     = 2;
+}
+
+message SubscribeLocationResponse
+{
+    required    double          longtitude              = 1;
+    required    double          latitude                = 2;
+    required    fixed32         acquire_location_time   = 3;
+}
+
+message LocationNotification
+{
+    required    double          longtitude              = 1;
+    required    double          latitude                = 2;
+    optional    fixed32         acquire_location_time   = 3;
+
+}
+
+message Alert 
+{
+    required    fixed32         id                      = 1;
+    required    bytes           name                    = 2;
+    required    fixed32         group_id                = 3;
+    optional    AlertLevel      level                   = 4;
+    optional    bytes           describe                = 5;
+    optional    string          alarm_time              = 6;
+    optional    fixed32         use_cars                = 7;
+    optional    string          create_time             = 8;
+}
+
+message AlertsResponse
+{
+    repeated    Alert           alerts                  = 4;
+}
+
+message AlertRequest
+{
+    required    fixed32         alert_id                = 1;
+}
+message AlertResponse   
+{
+    required    Alert           alert                   = 1;
+}
+
+message AlertCreateNotification
+{
+    required    fixed32         alert_id                = 1;
+    required    bytes           name                    = 2;
+    required    fixed32         group_id                = 3;
+    
+}
+
+message AlertModifyNotification
+{
+    required   Alert            alert                   = 1;
+}
+
+message AlertOveredNotification
+{
+    required    fixed32         alert_id                = 1;
+}
+
+message HistoryAlertsRequest
+{
+    optional    bytes           name                    = 1;
+
+    optional    string          create_time_from        = 2;
+    optional    string          create_time_to          = 3;
+    
+    optional    string          alram_time_from         = 4;
+    optional    string          alram_time_to         = 5;
+
+    optional    string          over_time_from          = 6;
+    optional    string          over_time_to            = 7;
+}
+
+message HistoryAlert 
+{
+    required    fixed32         id                      = 1;
+    required    bytes           name                    = 2;
+    optional    AlertLevel      level                   = 3;
+    optional    bytes           describe                = 4;
+    optional    string          alarm_time              = 5;
+    optional    fixed32         use_cars                = 6;
+    optional    string          create_time             = 7;
+    optional    string          over_time               = 8;
+}
+
+message HistoryAlertsResponse  
+{
+    repeated    HistoryAlert    history_alerts          = 1;
+}
+
+message HistoryAlertRequest
+{
+    required    fixed32         history_alert_id        = 1;
+}
+message HistoryAlertResponse 
+{
+    required    HistoryAlert    history_alert           = 1;
+}
+
+message HistoryAlertMesageRequest
+{
+    required    fixed32         history_alert_id        = 1;
+    optional    fixed32         from_message_id         = 2;
+    optional    string          from_time               = 3;
+    required    fixed32         max_message_count       = 4;
+}
+
+message HistoryAlertMesageResponse  
+{
+    required    fixed32         history_alert_id        = 1;
+    repeated    MediaMessage    messages                = 2;
+    required    fixed32         leave_message_count     = 3;
+}
+
+message Request 
+{
+    optional LoginRequest                   login                   = 1;
+    optional GroupParticipantsRequest       gourp_participants      = 2;
+    optional MediaMessageRequest            group_message           = 3;
+    optional JoinGroupRequest               join_group              = 4;
+    optional ConnectGroupRequest            connect_group           = 5;
+    optional SpeakRequest                   speak                   = 6;
+    optional JoinSessionRequest             jone_session            = 7;
+    optional LeaveSessionRequest            leave_session           = 8;
+    optional ReleaseTokenRequest            release_token           = 9;
+    optional AppointSpeakRequest            appoint_speak           = 10;
+    optional SendMessageRequest             send_message            = 11;
+    optional SubscribeLocationRequest       subscribe_location      = 12;
+    optional AlertRequest                   alert                   = 13;
+    optional HistoryAlertsRequest           history_alerts          = 14;
+    optional HistoryAlertRequest            history_alert           = 15;
+    optional HistoryAlertMesageRequest      history_alert_message   = 16;
+    
+
+}
+message Response
+{
+    required bool                          result                   = 1;
+    required bool                          last_response            = 2;
+    optional bytes                         error_describe           = 3;
+    
+    optional LoginResponse                 login                    = 4;
+    optional GroupsResponse                groups                   = 5;
+    optional GroupParticipantsResponse     group_participants       = 6;
+    optional MediaMessageResponse          group_message            = 7;
+    optional SubscribeLocationResponse     subscribe_location       = 8;
+    optional AlertsResponse                alerts                   = 9;
+    optional AlertResponse                 alert                    = 10;
+    optional HistoryAlertsResponse         history_alerts           = 11;
+    optional HistoryAlertResponse          history_alert            = 12;
+    optional HistoryAlertMesageResponse    history_alert_message    = 13;
+    
+
+}
+message Indication 
+{
+    optional    RegisterStatusNotification       register_status     = 1;
+    optional    JoinedGroupNotification          joined_group        = 2;
+    optional    LeaveGroupNotification           leave_group         = 3;
+    optional    OthersJoinedGroupNotification    others_joined_group = 4;
+    optional    OthersLeaveGroupNotification     others_leave_group  = 5;
+    optional    MediaMessageNotification         group_message       = 6;
+    optional    SessionStatusNotification        session_status      = 7;
+    optional    LocationNotification             location            = 8;
+    optional    AlertCreateNotification          alert_create        = 9;
+    optional    AlertModifyNotification          alert_modify        = 10;
+    optional    AlertOveredNotification          alert_overed        = 11;
+
+}
+
+message Message 
+{
+    required    MSG         msg_type        = 1;
+    required    fixed32     sequence        = 2;
+    optional    fixed32     session_id      = 3;
+
+    optional    Request     request         = 4;
+    optional    Response    response        = 5;
+    optional    Indication  indication      = 6;
+}

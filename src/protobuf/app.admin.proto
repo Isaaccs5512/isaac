@@ -1,0 +1,140 @@
+package app.admin;
+
+import "AppData.proto";
+import "EntityData.proto";
+
+// Ê¡ÂÔ AdminÇ°×º
+enum MSG
+{
+    Login_Request                       = 100001;
+    Login_Response                      = 100002;
+
+    Logout_Request                      = 100003;
+    Logout_Response                     = 100004;
+
+    Keepalive_Request                   = 100005;
+    Keepalive_Response                  = 100006;
+
+    Append_Entity_Request               = 100007;
+    Append_Entity_Response              = 100008;
+
+    Modify_Entity_Request               = 100009;
+    Modify_Entity_Response              = 100010;
+
+    Delete_Entity_Request               = 100011;
+    Delete_Entity_Response              = 100012;
+
+    Entity_Request                      = 100013;
+    Entity_Response                     = 100014;
+
+    Get_System_Configure_Request        = 100015;
+    Get_System_Configure_Response       = 100016;
+
+    Set_System_Configure_Request        = 100017;
+    Set_System_Configure_Response       = 100018;
+    
+    Entity_Notification                 = 110001;
+}
+
+
+message LoginRequest
+{
+    required    bytes                   username    =   1;
+    required    string                  password    =   2;       
+}
+
+message LoginResponse 
+{
+    required    fixed32                 session_id  =   1;
+    required    pbmsg.User              self        =   2;
+    required    fixed32                 ttl         =   3;
+}
+message AppendEntityRequest
+{
+    required    pbmsg.EntityData              data        =   1;
+}
+
+message AppendEntityResponse        
+{
+    required    pbmsg.EntityData              data        =   1;
+}
+
+message ModifyEntityRequest
+{
+    required    pbmsg.EntityData              data        =   1;
+}
+
+message DeleteEntityRequest
+{
+    required    pbmsg.Entity                  id          =   1;
+}
+
+message EntityRequest
+{
+    required    pbmsg.Entity                  id          =   1;
+}
+message EntityResponse
+{
+    required pbmsg.EntityData                 data        =   1;
+}
+message EntityNotification
+{
+    required    pbmsg.EntityNotifyType        notify_type =   1;
+    required    pbmsg.EntityData              data        =   2;
+}
+
+message SystemConfigure
+{
+    optional    string                  domain      =   1;
+    optional    string                  poc_server  =   2;
+    optional    string                  xmd_server  =   3;
+}
+
+message GetSystemConfigureResponse
+{   
+    required    SystemConfigure         configure   =   1;
+}
+
+message SetSystemConfigureRequest
+{
+    required    SystemConfigure         configure   =   1;
+}
+
+message Request 
+{
+    optional    LoginRequest                login                     = 1;
+    optional    AppendEntityRequest         app_entity                = 2;
+    optional    ModifyEntityRequest         modify_entity             = 3;
+    optional    DeleteEntityRequest         delete_entity             = 4;
+    optional    EntityRequest               entity                    = 5;
+    optional    SetSystemConfigureRequest   set_system_configure      = 6;
+
+}
+message Response
+{
+    required bool                          result                   = 1;
+    required bool                          last_response            = 2;
+    optional bytes                         error_describe           = 3;
+    
+    optional LoginResponse                 login                    = 4;
+    optional AppendEntityResponse          append_entity            = 5;
+    optional EntityResponse                entity                   = 6;
+    optional GetSystemConfigureResponse    get_system_configure     = 7;
+
+}
+message Indication 
+{
+    optional    EntityNotification          entity                  = 1;
+}
+
+message Message 
+{
+    required    MSG         msg_type        = 1;
+    required    fixed32     sequence        = 2;
+    optional    fixed32     session_id      = 3;
+
+    optional    Request     request         = 4;
+    optional    Response    response        = 5;
+    optional    Indication  indication      = 6;
+}
+

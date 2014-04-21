@@ -1,0 +1,19 @@
+/*Code Generate BNFParser, don't manual modify it.*/
+package pbmsg;
+
+
+message MediaMessage
+{
+
+optional fixed32 id = 1;
+optional bytes sender = 2; 
+optional bytes text = 3; 
+optional bytes picture_uri = 4; 
+optional bytes audio_uri = 5; 
+optional fixed32 audio_length = 6;
+optional bytes video_uri = 7; 
+optional fixed32 video_length = 8;
+optional bytes timestamp = 9; 
+};
+      
+    

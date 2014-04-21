@@ -1,0 +1,475 @@
+
+package app.dispatch;
+
+import "AppData.proto";
+import "EntityData.proto";
+import "MediaMessage.proto";
+import "HistoryAlert.proto";
+
+enum MSG
+{
+    Login_Request                       =   200001;
+    Login_Response                      =   200002;
+
+    Logout_Request                      =   200003;
+    Logout_Response                     =   200004;
+
+    Keepalive_Request                   =   200005;
+    Keepalive_Response                  =   200006;
+
+    Entity_Request                      =   200007;
+    Entity_Response                     =   200008;
+
+    Append_Group_Request                =   200009;
+    Append_Group_Response               =   200010;
+
+    Modify_Group_Request                =   200011;
+    Modify_Group_Response               =   200012;
+
+    Modify_Participants_Request         =   200013;
+    Modify_Participants_Response        =   200014;
+
+    Media_Message_Request               =   200015;
+    Media_Message_Response              =   200016;
+
+    Invite_Participant_Request          =   200017;
+    Invite_Participant_Response         =   200018;
+
+    Drop_Participant_Request            =   200019;
+    Drop_Participant_Response           =   200020;
+
+    Release_Participant_Token_Request   =   200021;
+    Release_Participant_Token_Response  =   200022;
+
+    Appoint_Participant_Speak_Request   =   200023;
+    Appoint_Participant_Speak_Response  =   200024;
+
+    Jion_Group_Request                  =   200025;
+    Jion_Group_Response                 =   200026;
+
+    Leave_Group_Request                 =   200027;
+    Leave_Group_Response                =   200028;
+
+    Send_Message_Request                =   200029;
+    Send_Message_Response               =   200030;
+
+    Kick_Participant_Request            =   200031;
+    Kick_Participant_Response           =   200032;
+
+    Start_Record_Request                =   200033;
+    Start_Record_Response               =   200034;
+
+    Stop_Record_Request                 =   200035;
+    Stop_Record_Response                =   200036;
+
+    Subscribe_Account_Location_Request  =   200037;
+    Subscribe_Account_Location_Response =   200038;
+
+    Append_Alert_Request                =   200039;
+    Append_Alert_Response               =   200040;
+
+    Modify_Alert_Request                =   200041;
+    Modify_Alert_Response               =   200042;
+
+    Stop_Alert_Request                  =   200043;
+    Stop_Alert_Response                 =   200044;
+
+    History_Alerts_Request              =   200045;
+    History_Alerts_Response             =   200046;
+
+    History_Alert_Request               =   200047;
+    History_Alert_Response              =   200048;
+
+    History_Alert_Message_Request       =   200049;
+    History_Alert_Message_Response      =   200050;
+
+    Delete_History_Alert_Request        =   200051;
+    Delete_History_Alert_Response       =   200052;
+
+    Delete_Group_Request				= 	200053;
+    Delete_Group_Response				=   200054;
+
+    Entity_Notification                         =   210001;
+    Entity_Status_Notification                  =   210002;
+    Participants_Notification                   =   210003;
+    Join_Group_Request_Notification              =   210004;
+    Participant_Status_Notification             =   210005;
+    Media_Message_Notification                  =   210006;
+    Participant_Connect_Request_Notification    =   210007;
+    Participant_Speak_Request_Notification      =   210008;
+    Session_Status_Notification                 =   210009;
+    Record_Status_Notification                  =   210010;
+    Account_Location_Notification               =   210011;
+    Alert_Overed_Notification                   =   210012;
+
+}
+
+message LoginRequest
+{
+    required    bytes   username        =   1;
+    required    string  password        =   2;
+}
+
+message LoginResponse
+{
+    required    fixed32     session_id      =   1;
+    required    pbmsg.User  self            =   2;
+    required    fixed32     ttl             =   3;
+}
+
+message EntityRequest
+{
+    required    pbmsg.Entity    id  =   1;
+}
+
+message EntityResponse
+{
+    required    pbmsg.EntityData    data    =   1;
+}
+
+message EntityNotification
+{
+    required    pbmsg.EntityNotifyType   notify_type =   1;
+    required    pbmsg.EntityData        data        =   2;
+}
+
+message EntityStatusNotification
+{
+    required    pbmsg.Entity            id          =   1;
+    required    pbmsg.RegisterStatus    status      =   2;
+    optional    pbmsg.RegisterStatus    sip_status  =   3;
+}
+
+message AppendGroupRequest
+{
+    required    pbmsg.Group             group       =   1;
+}
+message AppendGroupResponse
+{
+    required    pbmsg.Group             group       =   1;
+}
+
+message ModifyGroupRequest
+{
+    required    pbmsg.Group             group       =   1;
+}
+message ModifyGroupResponse
+{
+    required    pbmsg.Group             group       =   1;
+}
+
+message ModifyParticipantsRequest
+{
+	required    pbmsg.Entity			group_id		=   1;
+    required    pbmsg.ListModifyType    modify_type     =   2;
+    repeated    pbmsg.Participant       particiapnts    =   3;
+}
+
+message ModifyParticipantsResponse
+{
+	required    pbmsg.Entity			group_id		=   1;
+    required    pbmsg.ListModifyType    modify_type     =   2;
+    repeated    pbmsg.Participant       particiapnts    =   3;
+}
+
+message ParticipantsNotification
+{
+	required    pbmsg.Entity			group_id		=   1;
+    required    pbmsg.ListModifyType    modify_type     =   2;
+    repeated    pbmsg.Participant       particiapnts    =   3;
+}
+
+message JoinGroupRequestNotification
+{
+    required    pbmsg.Entity            group_id        =   1;
+    required    pbmsg.Entity            account_id      =   2;
+}
+message ParticipantStatusNotification
+{
+    required    pbmsg.Entity            group_id        =   1;
+    required    pbmsg.Entity            account_id      =   2;
+    required    pbmsg.SessionStatus     status          =   3;
+}
+
+message MediaMessageRequest
+{
+    required    pbmsg.Entity            id                  =   1;
+    optional    fixed32                 from_message_id     =   2;
+    optional    string                  from_time           =   3;
+    required    fixed32                 max_message_count   =   4;
+}
+
+message MediaMessageResponse
+{
+    required    pbmsg.Entity            id                  =   1;
+    repeated    pbmsg.MediaMessage      messages            =   2;
+    required    fixed32                 leave_message_count = 3;
+
+}
+
+message MediaMessageNotification
+{
+    required    pbmsg.Entity            id                  =   1;
+    required    pbmsg.MediaMessage      msg                 =   2;
+}
+
+message ParticipantConnectRequestNotification
+{
+    required    pbmsg.Entity            group_id            =   1;
+    required    pbmsg.Entity            account_id          =   2;
+}
+
+message ParticipantSpeakRequestNotification
+{
+    required    pbmsg.Entity            group_id            =   1;
+    required    pbmsg.Entity            account_id          =   2;
+}
+
+message InviteParticipantRequest
+{
+    required    pbmsg.Entity            group_id            =   1;
+    required    pbmsg.Entity            account_id          =   2;
+}
+
+message DropParticipantRequest
+{
+    required    pbmsg.Entity            group_id            =   1;
+    required    pbmsg.Entity            account_id          =   2;
+
+}
+
+message ReleaseParticipantTokenRequest
+{
+    required    pbmsg.Entity            group_id            =   1;
+    required    pbmsg.Entity            account_id          =   2;
+
+}
+
+message AppointParticipantSpeakRequest
+{
+    required    pbmsg.Entity            group_id            =   1;
+    required    pbmsg.Entity            account_id          =   2;
+
+}
+
+message JionGroupRequest
+{
+    required    pbmsg.Entity            group_id            =   1;
+}
+
+message LeaveGroupRequest
+{
+    required    pbmsg.Entity            group_id            =   1;
+}
+
+message SessionStatusNotification
+{
+    required    pbmsg.Entity            group_id            =   1;
+    required    pbmsg.SessionStatus     status              =   2;
+
+}
+
+message SendMessageRequest
+{
+    required    pbmsg.Entity            id                  =   1;
+    required    pbmsg.MediaMessage      msg                 =   2;
+}
+
+message KickParticipantRequest
+{
+    required    pbmsg.Entity            group_id            =   1;
+    required    pbmsg.Entity            account_id          =   2;
+
+}
+
+message StartRecordRequest
+{
+    required    pbmsg.Entity            group_id            =   1;
+}
+
+message StopRecordRequest
+{
+    required    pbmsg.Entity            group_id            =   1;
+}
+message RecordStatusNotification
+{
+    required    pbmsg.Entity            group_id            =   1;
+    required    bool                    recording           =   2;
+
+}
+
+message SubscribeAccountLocationRequest
+{
+    required    bool                    subscribing         =   1;
+    required    pbmsg.Entity            account_id          =   2;
+    required    fixed32                 ttl                 =   3;
+}
+
+message AccountLocationNotification
+{
+    required    pbmsg.Entity            account_id          =   1;
+    required    double                  longitude           =   2;
+    required    double                  latitude            =   3;
+    required    string                  timestamp           =   4;
+}
+
+message AppendAlertRequest
+{
+    required    pbmsg.Alert             alert               =   1;
+    repeated    pbmsg.Entity            members             =   2;
+}
+
+message AppendAlertResponse
+{
+    required    pbmsg.Alert             alert               =   1;
+}
+
+message ModifyAlertRequest
+{
+    required    pbmsg.Alert             alert               =   1;
+
+}
+
+message StopAlertRequest
+{
+    required    pbmsg.Entity            alert_id            =   1;
+}
+
+message AlertOveredNotification
+{
+    required    pbmsg.Entity            alert_id            =   1;
+}
+
+message HistoryAlertsRequest
+{
+    optional    bytes           name                    = 1;
+
+    optional    string          create_time_from        = 2;
+    optional    string          create_time_to          = 3;
+
+    optional    string          alram_time_from         = 4;
+    optional    string          alram_time_to           = 5;
+
+    optional    string          over_time_from          = 6;
+    optional    string          over_time_to            = 7;
+
+}
+
+message HistoryAlertsResponse
+{
+    repeated  pbmsg.HistoryAlert       history_alerts          = 1;
+}
+
+message HistoryAlertRequest
+{
+    required    fixed32                 history_alert_id        =   1;
+}
+
+message HistoryAlertResponse
+{
+    required    pbmsg.HistoryAlert      history_alert       = 1;
+}
+
+message HistoryAlertMessageRequest
+{
+    required    fixed32         history_alert_id        = 1;
+    optional    fixed32         from_message_id         = 2;
+    optional    string          from_time               = 3;
+    required    fixed32         max_message_count       = 4;
+}
+
+message HistoryAlertMessageResponse
+{
+    required    fixed32                 history_alert_id        = 1;
+    repeated    pbmsg.MediaMessage      messages                = 2;
+    required    fixed32                 leave_message_count     = 3;
+}
+
+message DeleteHistoryAlertRequest
+{
+    required    fixed32         history_alert_id        = 1;
+}
+
+
+message DeleteGroupRequest
+{
+	required	pbmsg.Entity	group_id				= 1;
+}
+
+message Request
+{
+    optional    LoginRequest                      login                      =   1;
+    optional    EntityRequest                     entity                     =   2;
+    optional    AppendGroupRequest                append_group               =   3;
+    optional    ModifyGroupRequest                modify_group               =   4;
+    optional    ModifyParticipantsRequest         modify_participants        =   5;
+    optional    MediaMessageRequest               media_message              =   6;
+    optional    InviteParticipantRequest          invite_participant         =   7;
+    optional    DropParticipantRequest            drop_participant           =   8;
+    optional    ReleaseParticipantTokenRequest    release_participant_token  =   9;
+    optional    AppointParticipantSpeakRequest    appoint_participant_speak  =   10;
+    optional    JionGroupRequest                  jion_group                 =   11;
+    optional    LeaveGroupRequest                 leave_group                =   12;
+    optional    SendMessageRequest                send_message               =   13;
+    optional    KickParticipantRequest            kick_participant           =   14;
+    optional    StartRecordRequest                start_record               =   15;
+    optional    StopRecordRequest                 stop_record                =   16;
+    optional    SubscribeAccountLocationRequest   subscribe_account_location =   17;
+    optional    AppendAlertRequest                append_alert               =   18;
+    optional    ModifyAlertRequest                modify_alert               =   19;
+    optional    StopAlertRequest                  stop_alert                 =   20;
+    optional    HistoryAlertsRequest              history_alerts             =   21;
+    optional    HistoryAlertRequest               history_alert              =   22;
+    optional    DeleteHistoryAlertRequest         delete_history_alert       =   23;
+    optional    DeleteGroupRequest				  delete_group				 =   24;
+    optional    HistoryAlertMessageRequest		  history_alert_message      =   25;
+
+
+}
+message Response
+{
+    required bool                          result                   = 1;
+    required bool                          last_response            = 2;
+    optional bytes                         error_describe           = 3;
+
+    optional    LoginResponse                      login                     =   4;
+    optional    EntityResponse                     entity                    =   5;
+    optional    AppendGroupResponse                append_group              =   6;
+    optional    ModifyGroupResponse                modify_group              =   7;
+    optional    ModifyParticipantsResponse         modify_participants       =   8;
+    optional    MediaMessageResponse               media_message             =   9;
+    optional    AppendAlertResponse                append_alert              =   10;
+    optional    HistoryAlertsResponse              history_alerts            =   11;
+    optional    HistoryAlertResponse               history_alert             =   12;
+    optional    HistoryAlertMessageResponse         history_alert_message     =   13;
+
+}
+message Indication
+{
+     optional    EntityNotification                        entity                      =   1;
+     optional    EntityStatusNotification                  entity_status               =   2;
+     optional    ParticipantsNotification                  participants                =   3;
+     optional    JoinGroupRequestNotification              join_group_request          =   4;
+     optional    ParticipantStatusNotification             participant_status          =   5;
+     optional    MediaMessageNotification                  media_message               =   6;
+     optional    ParticipantConnectRequestNotification     participant_connect_request =   7;
+     optional    ParticipantSpeakRequestNotification       participant_speak_request   =   8;
+     optional    SessionStatusNotification                 session_status              =   9;
+     optional    RecordStatusNotification                  record_status               =   10;
+     optional    AccountLocationNotification               account_location            =   11;
+     optional    AlertOveredNotification                   alert_overed                =   12;
+
+}
+
+message Message
+{
+    required    MSG         msg_type        = 1;
+    required    fixed32     sequence        = 2;
+    optional    fixed32     session_id      = 3;
+
+    optional    Request     request         = 4;
+    optional    Response    response        = 5;
+    optional    Indication  indication      = 6;
+}
+
+

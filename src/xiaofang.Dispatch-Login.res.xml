@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:ns="urn:xiaofang">
+ <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+  <ns:Login-Response>
+   <session-id>0</session-id>
+   <user>
+    <base>
+     <id>0</id>
+     <name></name>
+     <entity-type>UNIT</entity-type>
+     <parentid>0</parentid>
+    </base>
+    <password></password>
+    <user-type>Admin</user-type>
+    <account>
+     <id>0</id>
+     <name></name>
+     <entity-type>UNIT</entity-type>
+     <parentid>0</parentid>
+    </account>
+    <status>OffLine</status>
+    <address>
+     <ip></ip>
+     <port>0</port>
+    </address>
+   </user>
+   <ttl>0</ttl>
+  </ns:Login-Response>
+ </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

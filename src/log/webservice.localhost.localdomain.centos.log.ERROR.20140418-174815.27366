@@ -1,0 +1,4 @@
+Log file created at: 2014/04/18 17:48:15
+Running on machine: localhost.localdomain
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+E0418 17:48:15.610018 27366 webservice.cpp:37] bind port to socket error

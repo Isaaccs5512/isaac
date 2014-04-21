@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <schema targetNamespace="urn:xiaofang"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:ns="urn:xiaofang"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="unqualified"
+  attributeFormDefault="unqualified">
+  <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+  <simpleType name="RegisterStatus"><!-- ns__RegisterStatus -->
+
+   <restriction base="xsd:string">
+    <enumeration value="OffLine"/><!-- ns__RegisterStatus::OffLine -->
+    <!-- = 0 -->
+    <enumeration value="OnLine"/><!-- ns__RegisterStatus::OnLine -->
+    <!-- = 1 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="UserType"><!-- ns__UserType -->
+
+   <restriction base="xsd:string">
+    <enumeration value="Admin"/><!-- ns__UserType::Admin -->
+    <!-- = 0 -->
+    <enumeration value="Operator"/><!-- ns__UserType::Operator -->
+    <!-- = 1 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="EntityType"><!-- ns__EntityType -->
+
+   <restriction base="xsd:string">
+    <enumeration value="UNIT"/><!-- ns__EntityType::UNIT -->
+    <!-- = 0 -->
+    <enumeration value="ACCOUNT"/><!-- ns__EntityType::ACCOUNT -->
+    <!-- = 1 -->
+    <enumeration value="USER"/><!-- ns__EntityType::USER -->
+    <!-- = 2 -->
+    <enumeration value="GROUP"/><!-- ns__EntityType::GROUP -->
+    <!-- = 3 -->
+    <enumeration value="GATEWAY"/><!-- ns__EntityType::GATEWAY -->
+    <!-- = 4 -->
+    <enumeration value="ORGANIZATION"/><!-- ns__EntityType::ORGANIZATION -->
+    <!-- = 5 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="ListModifyType"><!-- ns__ListModifyType -->
+
+   <restriction base="xsd:string">
+    <enumeration value="Increased"/><!-- ns__ListModifyType::Increased -->
+    <!-- = 0 -->
+    <enumeration value="Decrease"/><!-- ns__ListModifyType::Decrease -->
+    <!-- = 1 -->
+    <enumeration value="Replace"/><!-- ns__ListModifyType::Replace -->
+    <!-- = 2 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="AccountType"><!-- ns__AccountType -->
+
+   <restriction base="xsd:string">
+    <enumeration value="Dispatcher"/><!-- ns__AccountType::Dispatcher -->
+    <!-- = 0 -->
+    <enumeration value="Terminal"/><!-- ns__AccountType::Terminal -->
+    <!-- = 1 -->
+    <enumeration value="Record"/><!-- ns__AccountType::Record -->
+    <!-- = 2 -->
+    <enumeration value="MediaGateway"/><!-- ns__AccountType::MediaGateway -->
+    <!-- = 3 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="AccountServiceStatus"><!-- ns__AccountServiceStatus -->
+
+   <restriction base="xsd:string">
+    <enumeration value="AccountStop"/><!-- ns__AccountServiceStatus::AccountStop -->
+    <!-- = 0 -->
+    <enumeration value="AccountActive"/><!-- ns__AccountServiceStatus::AccountActive -->
+    <!-- = 1 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="CallPrivilege"><!-- ns__CallPrivilege -->
+
+   <restriction base="xsd:string">
+    <enumeration value="CallForbid"/><!-- ns__CallPrivilege::CallForbid -->
+    <!-- = 0 -->
+    <enumeration value="CallFreedom"/><!-- ns__CallPrivilege::CallFreedom -->
+    <!-- = 1 -->
+    <enumeration value="CallPolicy"/><!-- ns__CallPrivilege::CallPolicy -->
+    <!-- = 2 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="TokenPrivilege"><!-- ns__TokenPrivilege -->
+
+   <restriction base="xsd:string">
+    <enumeration value="TokenForbid"/><!-- ns__TokenPrivilege::TokenForbid -->
+    <!-- = 0 -->
+    <enumeration value="TokenFreedom"/><!-- ns__TokenPrivilege::TokenFreedom -->
+    <!-- = 1 -->
+    <enumeration value="TokenPolicy"/><!-- ns__TokenPrivilege::TokenPolicy -->
+    <!-- = 2 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="GpsReportMode"><!-- ns__GpsReportMode -->
+
+   <restriction base="xsd:string">
+    <enumeration value="GpsManualPull"/><!-- ns__GpsReportMode::GpsManualPull -->
+    <!-- = 0 -->
+    <enumeration value="GpsManualPush"/><!-- ns__GpsReportMode::GpsManualPush -->
+    <!-- = 1 -->
+    <enumeration value="GpsAutoPush"/><!-- ns__GpsReportMode::GpsAutoPush -->
+    <!-- = 2 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="SessionStatus"><!-- ns__SessionStatus -->
+
+   <restriction base="xsd:string">
+    <enumeration value="IDLE"/><!-- ns__SessionStatus::IDLE -->
+    <!-- = 0 -->
+    <enumeration value="InGroup"/><!-- ns__SessionStatus::InGroup -->
+    <!-- = 1 -->
+    <enumeration value="Talking"/><!-- ns__SessionStatus::Talking -->
+    <!-- = 2 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="RecordType"><!-- ns__RecordType -->
+
+   <restriction base="xsd:string">
+    <enumeration value="DontRecord"/><!-- ns__RecordType::DontRecord -->
+    <!-- = 0 -->
+    <enumeration value="AutoRecord"/><!-- ns__RecordType::AutoRecord -->
+    <!-- = 1 -->
+    <enumeration value="ManualRecord"/><!-- ns__RecordType::ManualRecord -->
+    <!-- = 2 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="RecordStatus"><!-- ns__RecordStatus -->
+
+   <restriction base="xsd:string">
+    <enumeration value="RecordStop"/><!-- ns__RecordStatus::RecordStop -->
+    <!-- = 0 -->
+    <enumeration value="RecordStart"/><!-- ns__RecordStatus::RecordStart -->
+    <!-- = 1 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="AlertStatus"><!-- ns__AlertStatus -->
+
+   <restriction base="xsd:string">
+    <enumeration value="AlertActive"/><!-- ns__AlertStatus::AlertActive -->
+    <!-- = 0 -->
+    <enumeration value="AlertOver"/><!-- ns__AlertStatus::AlertOver -->
+    <!-- = 1 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="AlertLevel"><!-- ns__AlertLevel -->
+
+   <restriction base="xsd:string">
+    <enumeration value="Exigency"/><!-- ns__AlertLevel::Exigency -->
+    <!-- = 0 -->
+    <enumeration value="Importance"/><!-- ns__AlertLevel::Importance -->
+    <!-- = 1 -->
+    <enumeration value="Subordination"/><!-- ns__AlertLevel::Subordination -->
+    <!-- = 2 -->
+    <enumeration value="Ordinary"/><!-- ns__AlertLevel::Ordinary -->
+    <!-- = 3 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="EntityNotifyType"><!-- ns__EntityNotifyType -->
+
+   <restriction base="xsd:string">
+    <enumeration value="Created"/><!-- ns__EntityNotifyType::Created -->
+    <!-- = 0 -->
+    <enumeration value="Modify"/><!-- ns__EntityNotifyType::Modify -->
+    <!-- = 1 -->
+    <enumeration value="Update"/><!-- ns__EntityNotifyType::Update -->
+    <!-- = 2 -->
+    <enumeration value="Deleted"/><!-- ns__EntityNotifyType::Deleted -->
+    <!-- = 3 -->
+   </restriction>
+  </simpleType>
+  <complexType name="Entity"><!-- ns__Entity -->
+
+   <sequence>
+     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::id -->
+     <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::name -->
+     <element name="entity-type" type="ns:EntityType" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::entity_type -->
+     <element name="parentid" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::parentid -->
+   </sequence>
+  </complexType>
+  <complexType name="Address"><!-- ns__Address -->
+
+   <sequence>
+     <element name="ip" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Address::ip -->
+     <element name="port" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Address::port -->
+   </sequence>
+  </complexType>
+  <complexType name="User"><!-- ns__User -->
+
+   <sequence>
+     <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__User::base -->
+     <element name="password" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__User::password -->
+     <element name="user-type" type="ns:UserType" minOccurs="1" maxOccurs="1"/><!-- ns__User::user_type -->
+     <element name="account" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__User::account -->
+     <element name="status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__User::status -->
+     <element name="address" type="ns:Address" minOccurs="1" maxOccurs="1"/><!-- ns__User::address -->
+   </sequence>
+  </complexType>
+  <complexType name="Account"><!-- ns__Account -->
+
+   <sequence>
+     <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Account::base -->
+     <element name="account-type" type="ns:AccountType" minOccurs="1" maxOccurs="1"/><!-- ns__Account::account_type -->
+     <element name="number" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Account::number -->
+     <element name="short-number" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Account::short_number -->
+     <element name="password" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Account::password -->
+     <element name="service-status" type="ns:AccountServiceStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Account::service_status -->
+     <element name="priority" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Account::priority -->
+     <element name="call-privilege" type="ns:CallPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Account::call_privilege -->
+     <element name="token-privilege" type="ns:TokenPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Account::token_privilege -->
+     <element name="gps-report-mode" type="ns:GpsReportMode" minOccurs="1" maxOccurs="1"/><!-- ns__Account::gps_report_mode -->
+     <element name="ttl" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Account::ttl -->
+     <element name="status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Account::status -->
+     <element name="sip-status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Account::sip_status -->
+     <element name="address" type="ns:Address" minOccurs="1" maxOccurs="1"/><!-- ns__Account::address -->
+   </sequence>
+  </complexType>
+  <complexType name="Unit"><!-- ns__Unit -->
+
+   <sequence>
+     <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Unit::base -->
+     <element name="include-members" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Unit::include_members -->
+     <element name="members" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Unit::members -->
+   </sequence>
+  </complexType>
+  <complexType name="Participant"><!-- ns__Participant -->
+
+   <sequence>
+     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::id -->
+     <element name="group" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::group -->
+     <element name="account" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::account -->
+     <element name="priority" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::priority -->
+     <element name="call-privilege" type="ns:CallPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::call_privilege -->
+     <element name="toke-privilege" type="ns:TokenPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::toke_privilege -->
+     <element name="status" type="ns:SessionStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::status -->
+     <element name="sync-added" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::sync_added -->
+   </sequence>
+  </complexType>
+  <complexType name="Gateway"><!-- ns__Gateway -->
+
+   <sequence>
+     <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::base -->
+     <element name="address" type="ns:Address" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::address -->
+     <element name="include-allocate-counts" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::include_allocate_counts -->
+     <element name="allocate-counts" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::allocate_counts -->
+     <element name="include-active-counts" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::include_active_counts -->
+     <element name="active-counts" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::active_counts -->
+     <element name="status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::status -->
+   </sequence>
+  </complexType>
+  <complexType name="Organization"><!-- ns__Organization -->
+
+   <sequence>
+     <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Organization::base -->
+     <element name="include-members" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Organization::include_members -->
+     <element name="members" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Organization::members -->
+   </sequence>
+  </complexType>
+  <complexType name="MediaMessage"><!-- ns__MediaMessage -->
+
+   <sequence>
+     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::id -->
+     <element name="sender" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::sender -->
+     <element name="text" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::text -->
+     <element name="picture-uri" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::picture_uri -->
+     <element name="audio-uri" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::audio_uri -->
+     <element name="audio-length" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::audio_length -->
+     <element name="video-uri" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::video_uri -->
+     <element name="video-length" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::video_length -->
+     <element name="timestamp" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::timestamp -->
+   </sequence>
+  </complexType>
+  <complexType name="HistoryAlert"><!-- ns__HistoryAlert -->
+
+   <sequence>
+     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::id -->
+     <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::name -->
+     <element name="describe" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::describe -->
+     <element name="level" type="ns:AlertLevel" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::level -->
+     <element name="alram-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::alram_time -->
+     <element name="use-cars" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::use_cars -->
+     <element name="create-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::create_time -->
+     <element name="over-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::over_time -->
+   </sequence>
+  </complexType>
+ </schema>
+

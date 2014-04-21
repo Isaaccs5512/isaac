@@ -1,0 +1,14 @@
+/*Code Generate BNFParser, don't manual modify it.*/
+package pbmsg;
+
+
+message GpsLocation
+{
+
+optional fixed32 account_id = 1;
+optional double latitude = 2;
+optional double longitude = 3;
+optional bytes timestamp = 4; 
+};
+      
+    

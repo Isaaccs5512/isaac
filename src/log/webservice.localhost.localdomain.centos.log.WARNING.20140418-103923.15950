@@ -1,0 +1,4 @@
+Log file created at: 2014/04/18 10:39:23
+Running on machine: localhost.localdomain
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+E0418 10:39:23.043836 15952 connectToAppServer.cpp:20] connect to server,error
