@@ -6,31 +6,35 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <ns:Dispatch-History-Alert-Message>
-   <history-alert-id>0</history-alert-id>
+  <ns:Dispatch-History-Alert-Message-Request-Response>
+   <history-alert-id></history-alert-id>
    <messages>
-    <id>0</id>
+    <id></id>
     <sender></sender>
     <text></text>
     <picture-uri></picture-uri>
     <audio-uri></audio-uri>
-    <audio-length>0</audio-length>
+    <audio-length></audio-length>
     <video-uri></video-uri>
-    <video-length>0</video-length>
+    <video-length></video-length>
     <timestamp></timestamp>
    </messages>
    <messages>
-    <id>0</id>
+    <id></id>
     <sender></sender>
     <text></text>
     <picture-uri></picture-uri>
     <audio-uri></audio-uri>
-    <audio-length>0</audio-length>
+    <audio-length></audio-length>
     <video-uri></video-uri>
-    <video-length>0</video-length>
+    <video-length></video-length>
     <timestamp></timestamp>
    </messages>
-   <leave-message-count>0</leave-message-count>
-  </ns:Dispatch-History-Alert-Message>
+   <size></size>
+   <leave-message-count></leave-message-count>
+   <error-describe></error-describe>
+   <session-id></session-id>
+   <result>false</result>
+  </ns:Dispatch-History-Alert-Message-Request-Response>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

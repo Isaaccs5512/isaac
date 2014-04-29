@@ -6,14 +6,17 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <ns:Session-Status-Notification>
+  <ns:Dispatch-Session-Status-Notification-Response>
    <group-id>
-    <id>0</id>
+    <id></id>
     <name></name>
+    <parentid></parentid>
     <entity-type>UNIT</entity-type>
-    <parentid>0</parentid>
    </group-id>
    <status>IDLE</status>
-  </ns:Session-Status-Notification>
+   <session-id></session-id>
+   <error-describe></error-describe>
+   <result>false</result>
+  </ns:Dispatch-Session-Status-Notification-Response>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

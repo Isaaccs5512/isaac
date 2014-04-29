@@ -7,18 +7,9 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-Invite-Participant-Request>
-   <group-id>
-    <id>0</id>
-    <name></name>
-    <entity-type>UNIT</entity-type>
-    <parentid>0</parentid>
-   </group-id>
-   <account-id>
-    <id>0</id>
-    <name></name>
-    <entity-type>UNIT</entity-type>
-    <parentid>0</parentid>
-   </account-id>
+   <session-id></session-id>
+   <group-id></group-id>
+   <account-id></account-id>
   </ns:Dispatch-Invite-Participant-Request>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

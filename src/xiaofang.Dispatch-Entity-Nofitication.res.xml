@@ -6,198 +6,133 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <ns:Entity-Nofitication-Response>
+  <ns:Dispatch-Entity-Nofitication-Response>
    <notify-type>Created</notify-type>
    <data>
     <id>
-     <id>0</id>
+     <id></id>
      <name></name>
+     <parentid></parentid>
      <entity-type>UNIT</entity-type>
-     <parentid>0</parentid>
     </id>
     <unit>
      <base>
-      <id>0</id>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
      </base>
-     <include-members>false</include-members>
      <members>
-      <id>0</id>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
      </members>
-    </unit>
-    <accout>
-     <base>
-      <id>0</id>
+     <members>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
+     </members>
+     <size></size>
+    </unit>
+    <account>
+     <base>
+      <id></id>
+      <name></name>
+      <parentid></parentid>
+      <entity-type>UNIT</entity-type>
      </base>
-     <account-type>Dispatcher</account-type>
      <number></number>
      <short-number></short-number>
-     <password></password>
-     <service-status>AccountStop</service-status>
-     <priority>0</priority>
+     <priority></priority>
      <call-privilege>CallForbid</call-privilege>
      <token-privilege>TokenForbid</token-privilege>
-     <gps-report-mode>GpsManualPull</gps-report-mode>
-     <ttl>0</ttl>
      <status>OffLine</status>
      <sip-status>OffLine</sip-status>
-     <address>
-      <ip></ip>
-      <port>0</port>
-     </address>
-    </accout>
+    </account>
     <user>
      <base>
-      <id>0</id>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
      </base>
-     <password></password>
-     <user-type>Admin</user-type>
      <account>
-      <id>0</id>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
      </account>
      <status>OffLine</status>
-     <address>
-      <ip></ip>
-      <port>0</port>
-     </address>
     </user>
     <group>
-     <base>
-      <id>0</id>
-      <name></name>
-      <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
-     </base>
-     <owner>
-      <id>0</id>
-      <name></name>
-      <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
-     </owner>
+     <id></id>
+     <name></name>
+     <owner-id></owner-id>
      <number></number>
      <short-number></short-number>
-     <sealed>false</sealed>
-     <include-participants>false</include-participants>
      <participants>
-      <id>0</id>
-      <group>
-       <id>0</id>
-       <name></name>
-       <entity-type>UNIT</entity-type>
-       <parentid>0</parentid>
-      </group>
       <account>
-       <id>0</id>
+       <id></id>
        <name></name>
+       <parentid></parentid>
        <entity-type>UNIT</entity-type>
-       <parentid>0</parentid>
       </account>
-      <priority>0</priority>
+      <priority></priority>
       <call-privilege>CallForbid</call-privilege>
-      <toke-privilege>TokenForbid</toke-privilege>
+      <token-privilege>TokenForbid</token-privilege>
       <status>IDLE</status>
-      <sync-added>false</sync-added>
      </participants>
-     <record-type>DontRecord</record-type>
-     <recorder>
-      <id>0</id>
-      <group>
-       <id>0</id>
-       <name></name>
-       <entity-type>UNIT</entity-type>
-       <parentid>0</parentid>
-      </group>
+     <participants>
       <account>
-       <id>0</id>
+       <id></id>
        <name></name>
+       <parentid></parentid>
        <entity-type>UNIT</entity-type>
-       <parentid>0</parentid>
       </account>
-      <priority>0</priority>
+      <priority></priority>
       <call-privilege>CallForbid</call-privilege>
-      <toke-privilege>TokenForbid</toke-privilege>
+      <token-privilege>TokenForbid</token-privilege>
       <status>IDLE</status>
-      <sync-added>false</sync-added>
-     </recorder>
+     </participants>
+     <size></size>
+     <record-type>DontRecord</record-type>
      <record-status>RecordStop</record-status>
     </group>
     <alert>
      <base>
-      <id>0</id>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
      </base>
-     <group>
-      <id>0</id>
-      <name></name>
-      <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
-     </group>
+     <group-id></group-id>
      <describe></describe>
      <level>Exigency</level>
      <alram-time></alram-time>
-     <use-cars>0</use-cars>
+     <use-cars></use-cars>
      <create-time></create-time>
      <status>AlertActive</status>
     </alert>
-    <gateway>
-     <base>
-      <id>0</id>
-      <name></name>
-      <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
-     </base>
-     <address>
-      <ip></ip>
-      <port>0</port>
-     </address>
-     <include-allocate-counts>false</include-allocate-counts>
-     <allocate-counts>
-      <id>0</id>
-      <name></name>
-      <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
-     </allocate-counts>
-     <include-active-counts>false</include-active-counts>
-     <active-counts>
-      <id>0</id>
-      <name></name>
-      <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
-     </active-counts>
-     <status>OffLine</status>
-    </gateway>
     <organization>
      <base>
-      <id>0</id>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
      </base>
-     <include-members>false</include-members>
      <members>
-      <id>0</id>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
      </members>
     </organization>
    </data>
-  </ns:Entity-Nofitication-Response>
+   <session-id></session-id>
+   <error-describe></error-describe>
+   <result>false</result>
+  </ns:Dispatch-Entity-Nofitication-Response>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

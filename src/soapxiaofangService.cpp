@@ -177,10 +177,8 @@ int xiaofangService::serve()
 
 static int serve_ns__Dispatch_Login(xiaofangService*);
 static int serve_ns__Dispatch_Logout(xiaofangService*);
-static int serve_ns__Dispatch_Keepalive(xiaofangService*);
 static int serve_ns__Dispatch_Entity_Request(xiaofangService*);
 static int serve_ns__Dispatch_Entity_Nofitication(xiaofangService*);
-static int serve_ns__Dispatch_Entity_Status_Notification(xiaofangService*);
 static int serve_ns__Dispatch_Append_Group(xiaofangService*);
 static int serve_ns__Dispatch_Modify_Group(xiaofangService*);
 static int serve_ns__Dispatch_Modify_Participants(xiaofangService*);
@@ -200,12 +198,11 @@ static int serve_ns__Dispatch_Jion_Group_Request(xiaofangService*);
 static int serve_ns__Dispatch_Leave_Group_Request(xiaofangService*);
 static int serve_ns__Dispatch_Session_Status_Notification(xiaofangService*);
 static int serve_ns__Dispatch_Send_Message_Request(xiaofangService*);
-static int serve_ns__Dispatch_Kick_Participant_Request(xiaofangService*);
 static int serve_ns__Dispatch_Start_Record_Request(xiaofangService*);
 static int serve_ns__Dispatch_Stop_Record_Request(xiaofangService*);
 static int serve_ns__Dispatch_Record_Status_Notification(xiaofangService*);
-static int serve_ns__Dispatch_Subscribe_Account_Location_Request(xiaofangService*);
-static int serve_ns__Dispatch_Account_Location_Notification(xiaofangService*);
+static int serve_ns__Dispatch_Subscribe_Account_Info_Request(xiaofangService*);
+static int serve_ns__Dispatch_Account_Info_Notification(xiaofangService*);
 static int serve_ns__Dispatch_Append_Alert_Request(xiaofangService*);
 static int serve_ns__Dispatch_Modify_Alert_Request(xiaofangService*);
 static int serve_ns__Dispatch_Stop_Alert_Request(xiaofangService*);
@@ -221,14 +218,10 @@ int xiaofangService::dispatch()
 		return serve_ns__Dispatch_Login(this);
 	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Logout"))
 		return serve_ns__Dispatch_Logout(this);
-	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Keepalive"))
-		return serve_ns__Dispatch_Keepalive(this);
 	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Entity-Request"))
 		return serve_ns__Dispatch_Entity_Request(this);
 	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Entity-Nofitication"))
 		return serve_ns__Dispatch_Entity_Nofitication(this);
-	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Entity-Status-Notification"))
-		return serve_ns__Dispatch_Entity_Status_Notification(this);
 	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Append-Group"))
 		return serve_ns__Dispatch_Append_Group(this);
 	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Modify-Group"))
@@ -267,18 +260,16 @@ int xiaofangService::dispatch()
 		return serve_ns__Dispatch_Session_Status_Notification(this);
 	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Send-Message-Request"))
 		return serve_ns__Dispatch_Send_Message_Request(this);
-	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Kick-Participant-Request"))
-		return serve_ns__Dispatch_Kick_Participant_Request(this);
 	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Start-Record-Request"))
 		return serve_ns__Dispatch_Start_Record_Request(this);
 	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Stop-Record-Request"))
 		return serve_ns__Dispatch_Stop_Record_Request(this);
 	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Record-Status-Notification"))
 		return serve_ns__Dispatch_Record_Status_Notification(this);
-	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Subscribe-Account-Location-Request"))
-		return serve_ns__Dispatch_Subscribe_Account_Location_Request(this);
-	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Account-Location-Notification"))
-		return serve_ns__Dispatch_Account_Location_Notification(this);
+	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Subscribe-Account-Info-Request"))
+		return serve_ns__Dispatch_Subscribe_Account_Info_Request(this);
+	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Account-Info-Notification"))
+		return serve_ns__Dispatch_Account_Info_Notification(this);
 	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Append-Alert-Request"))
 		return serve_ns__Dispatch_Append_Alert_Request(this);
 	if (!soap_match_tag(this, this->tag, "ns:Dispatch-Modify-Alert-Request"))
@@ -300,7 +291,7 @@ int xiaofangService::dispatch()
 
 static int serve_ns__Dispatch_Login(xiaofangService *soap)
 {	struct ns__Dispatch_Login soap_tmp_ns__Dispatch_Login;
-	ns__Login_Response response;
+	ns__Dispatch_Login_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Login(soap, &soap_tmp_ns__Dispatch_Login);
 	if (!soap_get_ns__Dispatch_Login(soap, &soap_tmp_ns__Dispatch_Login, "ns:Dispatch-Login", NULL))
@@ -321,7 +312,7 @@ static int serve_ns__Dispatch_Login(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Login-Response", "")
+		 || response.soap_put(soap, "ns:Dispatch-Login-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -331,7 +322,7 @@ static int serve_ns__Dispatch_Login(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Login-Response", "")
+	 || response.soap_put(soap, "ns:Dispatch-Login-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -341,8 +332,8 @@ static int serve_ns__Dispatch_Login(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Logout(xiaofangService *soap)
 {	struct ns__Dispatch_Logout soap_tmp_ns__Dispatch_Logout;
-	struct ns__LogOutResponse out;
-	soap_default_ns__LogOutResponse(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Logout(soap, &soap_tmp_ns__Dispatch_Logout);
 	if (!soap_get_ns__Dispatch_Logout(soap, &soap_tmp_ns__Dispatch_Logout, "ns:Dispatch-Logout", NULL))
 		return soap->error;
@@ -350,19 +341,19 @@ static int serve_ns__Dispatch_Logout(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Logout(soap_tmp_ns__Dispatch_Logout.name, &out);
+	soap->error = soap->Dispatch_Logout(soap_tmp_ns__Dispatch_Logout.session_id, soap_tmp_ns__Dispatch_Logout.name, soap_tmp_ns__Dispatch_Logout.password, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__LogOutResponse(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__LogOutResponse(soap, &out, "ns:LogOutResponse", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -372,48 +363,7 @@ static int serve_ns__Dispatch_Logout(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__LogOutResponse(soap, &out, "ns:LogOutResponse", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap->error;
-	return soap_closesock(soap);
-}
-
-static int serve_ns__Dispatch_Keepalive(xiaofangService *soap)
-{	struct ns__Dispatch_Keepalive soap_tmp_ns__Dispatch_Keepalive;
-	struct ns__Dispatch_Keepalive_Request_Response out;
-	soap_default_ns__Dispatch_Keepalive_Request_Response(soap, &out);
-	soap_default_ns__Dispatch_Keepalive(soap, &soap_tmp_ns__Dispatch_Keepalive);
-	if (!soap_get_ns__Dispatch_Keepalive(soap, &soap_tmp_ns__Dispatch_Keepalive, "ns:Dispatch-Keepalive", NULL))
-		return soap->error;
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap->error;
-	soap->error = soap->Dispatch_Keepalive(soap_tmp_ns__Dispatch_Keepalive._, &out);
-	if (soap->error)
-		return soap->error;
-	soap->encodingStyle = "";
-	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Keepalive_Request_Response(soap, &out);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Keepalive_Request_Response(soap, &out, "ns:Dispatch-Keepalive-Request-Response", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	};
-	if (soap_end_count(soap)
-	 || soap_response(soap, SOAP_OK)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Keepalive_Request_Response(soap, &out, "ns:Dispatch-Keepalive-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -423,7 +373,7 @@ static int serve_ns__Dispatch_Keepalive(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Entity_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Entity_Request soap_tmp_ns__Dispatch_Entity_Request;
-	ns__EntityData response;
+	ns__Dispatch_Entity_Request_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Entity_Request(soap, &soap_tmp_ns__Dispatch_Entity_Request);
 	if (!soap_get_ns__Dispatch_Entity_Request(soap, &soap_tmp_ns__Dispatch_Entity_Request, "ns:Dispatch-Entity-Request", NULL))
@@ -432,7 +382,7 @@ static int serve_ns__Dispatch_Entity_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Entity_Request(soap_tmp_ns__Dispatch_Entity_Request.id, response);
+	soap->error = soap->Dispatch_Entity_Request(soap_tmp_ns__Dispatch_Entity_Request.session_id, soap_tmp_ns__Dispatch_Entity_Request.id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -444,7 +394,7 @@ static int serve_ns__Dispatch_Entity_Request(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:EntityData", "")
+		 || response.soap_put(soap, "ns:Dispatch-Entity-Request-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -454,7 +404,7 @@ static int serve_ns__Dispatch_Entity_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:EntityData", "")
+	 || response.soap_put(soap, "ns:Dispatch-Entity-Request-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -464,7 +414,7 @@ static int serve_ns__Dispatch_Entity_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Entity_Nofitication(xiaofangService *soap)
 {	struct ns__Dispatch_Entity_Nofitication soap_tmp_ns__Dispatch_Entity_Nofitication;
-	ns__Entity_Nofitication_Response response;
+	ns__Dispatch_Entity_Nofitication_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Entity_Nofitication(soap, &soap_tmp_ns__Dispatch_Entity_Nofitication);
 	if (!soap_get_ns__Dispatch_Entity_Nofitication(soap, &soap_tmp_ns__Dispatch_Entity_Nofitication, "ns:Dispatch-Entity-Nofitication", NULL))
@@ -473,7 +423,7 @@ static int serve_ns__Dispatch_Entity_Nofitication(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Entity_Nofitication(soap_tmp_ns__Dispatch_Entity_Nofitication._, response);
+	soap->error = soap->Dispatch_Entity_Nofitication(soap_tmp_ns__Dispatch_Entity_Nofitication.session_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -485,7 +435,7 @@ static int serve_ns__Dispatch_Entity_Nofitication(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Entity-Nofitication-Response", "")
+		 || response.soap_put(soap, "ns:Dispatch-Entity-Nofitication-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -495,48 +445,7 @@ static int serve_ns__Dispatch_Entity_Nofitication(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Entity-Nofitication-Response", "")
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap->error;
-	return soap_closesock(soap);
-}
-
-static int serve_ns__Dispatch_Entity_Status_Notification(xiaofangService *soap)
-{	struct ns__Dispatch_Entity_Status_Notification soap_tmp_ns__Dispatch_Entity_Status_Notification;
-	ns__Entity_Status_Notification response;
-	response.soap_default(soap);
-	soap_default_ns__Dispatch_Entity_Status_Notification(soap, &soap_tmp_ns__Dispatch_Entity_Status_Notification);
-	if (!soap_get_ns__Dispatch_Entity_Status_Notification(soap, &soap_tmp_ns__Dispatch_Entity_Status_Notification, "ns:Dispatch-Entity-Status-Notification", NULL))
-		return soap->error;
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap->error;
-	soap->error = soap->Dispatch_Entity_Status_Notification(soap_tmp_ns__Dispatch_Entity_Status_Notification._, response);
-	if (soap->error)
-		return soap->error;
-	soap->encodingStyle = "";
-	soap_serializeheader(soap);
-	response.soap_serialize(soap);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Entity-Status-Notification", "")
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	};
-	if (soap_end_count(soap)
-	 || soap_response(soap, SOAP_OK)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Entity-Status-Notification", "")
+	 || response.soap_put(soap, "ns:Dispatch-Entity-Nofitication-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -546,7 +455,7 @@ static int serve_ns__Dispatch_Entity_Status_Notification(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Append_Group(xiaofangService *soap)
 {	struct ns__Dispatch_Append_Group soap_tmp_ns__Dispatch_Append_Group;
-	ns__Group response;
+	ns__Dispatch_Append_Group_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Append_Group(soap, &soap_tmp_ns__Dispatch_Append_Group);
 	if (!soap_get_ns__Dispatch_Append_Group(soap, &soap_tmp_ns__Dispatch_Append_Group, "ns:Dispatch-Append-Group", NULL))
@@ -555,7 +464,7 @@ static int serve_ns__Dispatch_Append_Group(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Append_Group(soap_tmp_ns__Dispatch_Append_Group.group, response);
+	soap->error = soap->Dispatch_Append_Group(soap_tmp_ns__Dispatch_Append_Group.session_id, soap_tmp_ns__Dispatch_Append_Group.group, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -567,7 +476,7 @@ static int serve_ns__Dispatch_Append_Group(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Group", "")
+		 || response.soap_put(soap, "ns:Dispatch-Append-Group-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -577,7 +486,7 @@ static int serve_ns__Dispatch_Append_Group(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Group", "")
+	 || response.soap_put(soap, "ns:Dispatch-Append-Group-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -587,7 +496,7 @@ static int serve_ns__Dispatch_Append_Group(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Modify_Group(xiaofangService *soap)
 {	struct ns__Dispatch_Modify_Group soap_tmp_ns__Dispatch_Modify_Group;
-	ns__Group response;
+	ns__Dispatch_Modify_Group_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Modify_Group(soap, &soap_tmp_ns__Dispatch_Modify_Group);
 	if (!soap_get_ns__Dispatch_Modify_Group(soap, &soap_tmp_ns__Dispatch_Modify_Group, "ns:Dispatch-Modify-Group", NULL))
@@ -596,7 +505,7 @@ static int serve_ns__Dispatch_Modify_Group(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Modify_Group(soap_tmp_ns__Dispatch_Modify_Group.group, response);
+	soap->error = soap->Dispatch_Modify_Group(soap_tmp_ns__Dispatch_Modify_Group.session_id, soap_tmp_ns__Dispatch_Modify_Group.group, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -608,7 +517,7 @@ static int serve_ns__Dispatch_Modify_Group(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Group", "")
+		 || response.soap_put(soap, "ns:Dispatch-Modify-Group-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -618,7 +527,7 @@ static int serve_ns__Dispatch_Modify_Group(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Group", "")
+	 || response.soap_put(soap, "ns:Dispatch-Modify-Group-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -628,7 +537,7 @@ static int serve_ns__Dispatch_Modify_Group(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Modify_Participants(xiaofangService *soap)
 {	struct ns__Dispatch_Modify_Participants soap_tmp_ns__Dispatch_Modify_Participants;
-	ns__Group response;
+	ns__Dispatch_Modify_Participants_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Modify_Participants(soap, &soap_tmp_ns__Dispatch_Modify_Participants);
 	if (!soap_get_ns__Dispatch_Modify_Participants(soap, &soap_tmp_ns__Dispatch_Modify_Participants, "ns:Dispatch-Modify-Participants", NULL))
@@ -637,7 +546,7 @@ static int serve_ns__Dispatch_Modify_Participants(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Modify_Participants(soap_tmp_ns__Dispatch_Modify_Participants.request, response);
+	soap->error = soap->Dispatch_Modify_Participants(soap_tmp_ns__Dispatch_Modify_Participants.session_id, soap_tmp_ns__Dispatch_Modify_Participants.request, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -649,7 +558,7 @@ static int serve_ns__Dispatch_Modify_Participants(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Group", "")
+		 || response.soap_put(soap, "ns:Dispatch-Modify-Participants-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -659,7 +568,7 @@ static int serve_ns__Dispatch_Modify_Participants(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Group", "")
+	 || response.soap_put(soap, "ns:Dispatch-Modify-Participants-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -669,8 +578,8 @@ static int serve_ns__Dispatch_Modify_Participants(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Delete_Group(xiaofangService *soap)
 {	struct ns__Dispatch_Delete_Group soap_tmp_ns__Dispatch_Delete_Group;
-	struct ns__Delete_Group_Response out;
-	soap_default_ns__Delete_Group_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Delete_Group(soap, &soap_tmp_ns__Dispatch_Delete_Group);
 	if (!soap_get_ns__Dispatch_Delete_Group(soap, &soap_tmp_ns__Dispatch_Delete_Group, "ns:Dispatch-Delete-Group", NULL))
 		return soap->error;
@@ -678,19 +587,19 @@ static int serve_ns__Dispatch_Delete_Group(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Delete_Group(soap_tmp_ns__Dispatch_Delete_Group.group_id, &out);
+	soap->error = soap->Dispatch_Delete_Group(soap_tmp_ns__Dispatch_Delete_Group.session_id, soap_tmp_ns__Dispatch_Delete_Group.group_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Delete_Group_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Delete_Group_Response(soap, &out, "ns:Delete-Group-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -700,7 +609,7 @@ static int serve_ns__Dispatch_Delete_Group(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Delete_Group_Response(soap, &out, "ns:Delete-Group-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -710,7 +619,7 @@ static int serve_ns__Dispatch_Delete_Group(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Dispatch_Participants_Notification(xiaofangService *soap)
 {	struct ns__Dispatch_Dispatch_Participants_Notification soap_tmp_ns__Dispatch_Dispatch_Participants_Notification;
-	ns__Modify_Participant response;
+	ns__Dispatch_Dispatch_Participants_Notification_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Dispatch_Participants_Notification(soap, &soap_tmp_ns__Dispatch_Dispatch_Participants_Notification);
 	if (!soap_get_ns__Dispatch_Dispatch_Participants_Notification(soap, &soap_tmp_ns__Dispatch_Dispatch_Participants_Notification, "ns:Dispatch-Dispatch-Participants-Notification", NULL))
@@ -719,7 +628,7 @@ static int serve_ns__Dispatch_Dispatch_Participants_Notification(xiaofangService
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Dispatch_Participants_Notification(soap_tmp_ns__Dispatch_Dispatch_Participants_Notification._, response);
+	soap->error = soap->Dispatch_Dispatch_Participants_Notification(soap_tmp_ns__Dispatch_Dispatch_Participants_Notification.session_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -731,7 +640,7 @@ static int serve_ns__Dispatch_Dispatch_Participants_Notification(xiaofangService
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Modify-Participant", "")
+		 || response.soap_put(soap, "ns:Dispatch-Dispatch-Participants-Notification-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -741,7 +650,7 @@ static int serve_ns__Dispatch_Dispatch_Participants_Notification(xiaofangService
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Modify-Participant", "")
+	 || response.soap_put(soap, "ns:Dispatch-Dispatch-Participants-Notification-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -751,7 +660,7 @@ static int serve_ns__Dispatch_Dispatch_Participants_Notification(xiaofangService
 
 static int serve_ns__Dispatch_Join_Group_Request_Nofitication(xiaofangService *soap)
 {	struct ns__Dispatch_Join_Group_Request_Nofitication soap_tmp_ns__Dispatch_Join_Group_Request_Nofitication;
-	ns__Join_Group_Request_Nofitication response;
+	ns__Dispatch_Join_Group_Request_Nofitication_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Join_Group_Request_Nofitication(soap, &soap_tmp_ns__Dispatch_Join_Group_Request_Nofitication);
 	if (!soap_get_ns__Dispatch_Join_Group_Request_Nofitication(soap, &soap_tmp_ns__Dispatch_Join_Group_Request_Nofitication, "ns:Dispatch-Join-Group-Request-Nofitication", NULL))
@@ -760,7 +669,7 @@ static int serve_ns__Dispatch_Join_Group_Request_Nofitication(xiaofangService *s
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Join_Group_Request_Nofitication(soap_tmp_ns__Dispatch_Join_Group_Request_Nofitication._, response);
+	soap->error = soap->Dispatch_Join_Group_Request_Nofitication(soap_tmp_ns__Dispatch_Join_Group_Request_Nofitication.session_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -772,7 +681,7 @@ static int serve_ns__Dispatch_Join_Group_Request_Nofitication(xiaofangService *s
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Join-Group-Request-Nofitication", "")
+		 || response.soap_put(soap, "ns:Dispatch-Join-Group-Request-Nofitication-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -782,7 +691,7 @@ static int serve_ns__Dispatch_Join_Group_Request_Nofitication(xiaofangService *s
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Join-Group-Request-Nofitication", "")
+	 || response.soap_put(soap, "ns:Dispatch-Join-Group-Request-Nofitication-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -792,7 +701,7 @@ static int serve_ns__Dispatch_Join_Group_Request_Nofitication(xiaofangService *s
 
 static int serve_ns__Dispatch_Participant_Status_Notification(xiaofangService *soap)
 {	struct ns__Dispatch_Participant_Status_Notification soap_tmp_ns__Dispatch_Participant_Status_Notification;
-	ns__Participant_Status_Notification response;
+	ns__Dispatch_Participant_Status_Notification_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Participant_Status_Notification(soap, &soap_tmp_ns__Dispatch_Participant_Status_Notification);
 	if (!soap_get_ns__Dispatch_Participant_Status_Notification(soap, &soap_tmp_ns__Dispatch_Participant_Status_Notification, "ns:Dispatch-Participant-Status-Notification", NULL))
@@ -801,7 +710,7 @@ static int serve_ns__Dispatch_Participant_Status_Notification(xiaofangService *s
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Participant_Status_Notification(soap_tmp_ns__Dispatch_Participant_Status_Notification._, response);
+	soap->error = soap->Dispatch_Participant_Status_Notification(soap_tmp_ns__Dispatch_Participant_Status_Notification.session_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -813,7 +722,7 @@ static int serve_ns__Dispatch_Participant_Status_Notification(xiaofangService *s
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Participant-Status-Notification", "")
+		 || response.soap_put(soap, "ns:Dispatch-Participant-Status-Notification-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -823,7 +732,7 @@ static int serve_ns__Dispatch_Participant_Status_Notification(xiaofangService *s
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Participant-Status-Notification", "")
+	 || response.soap_put(soap, "ns:Dispatch-Participant-Status-Notification-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -833,7 +742,7 @@ static int serve_ns__Dispatch_Participant_Status_Notification(xiaofangService *s
 
 static int serve_ns__Dispatch_Media_Message_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Media_Message_Request soap_tmp_ns__Dispatch_Media_Message_Request;
-	ns__Media_Message response;
+	ns__Dispatch_Media_Message_Request_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Media_Message_Request(soap, &soap_tmp_ns__Dispatch_Media_Message_Request);
 	if (!soap_get_ns__Dispatch_Media_Message_Request(soap, &soap_tmp_ns__Dispatch_Media_Message_Request, "ns:Dispatch-Media-Message-Request", NULL))
@@ -842,7 +751,7 @@ static int serve_ns__Dispatch_Media_Message_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Media_Message_Request(soap_tmp_ns__Dispatch_Media_Message_Request.id, soap_tmp_ns__Dispatch_Media_Message_Request.from_message_id, soap_tmp_ns__Dispatch_Media_Message_Request.from_time, soap_tmp_ns__Dispatch_Media_Message_Request.max_message_count, response);
+	soap->error = soap->Dispatch_Media_Message_Request(soap_tmp_ns__Dispatch_Media_Message_Request.session_id, soap_tmp_ns__Dispatch_Media_Message_Request.group_id, soap_tmp_ns__Dispatch_Media_Message_Request.from_message_id, soap_tmp_ns__Dispatch_Media_Message_Request.from_time, soap_tmp_ns__Dispatch_Media_Message_Request.max_message_count, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -854,7 +763,7 @@ static int serve_ns__Dispatch_Media_Message_Request(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Media-Message", "")
+		 || response.soap_put(soap, "ns:Dispatch-Media-Message-Request-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -864,7 +773,7 @@ static int serve_ns__Dispatch_Media_Message_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Media-Message", "")
+	 || response.soap_put(soap, "ns:Dispatch-Media-Message-Request-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -874,7 +783,7 @@ static int serve_ns__Dispatch_Media_Message_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Media_Message_Notification(xiaofangService *soap)
 {	struct ns__Dispatch_Media_Message_Notification soap_tmp_ns__Dispatch_Media_Message_Notification;
-	ns__Media_Message_Notification response;
+	ns__Dispatch_Media_Message_Notification_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Media_Message_Notification(soap, &soap_tmp_ns__Dispatch_Media_Message_Notification);
 	if (!soap_get_ns__Dispatch_Media_Message_Notification(soap, &soap_tmp_ns__Dispatch_Media_Message_Notification, "ns:Dispatch-Media-Message-Notification", NULL))
@@ -883,7 +792,7 @@ static int serve_ns__Dispatch_Media_Message_Notification(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Media_Message_Notification(soap_tmp_ns__Dispatch_Media_Message_Notification._, response);
+	soap->error = soap->Dispatch_Media_Message_Notification(soap_tmp_ns__Dispatch_Media_Message_Notification.session_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -895,7 +804,7 @@ static int serve_ns__Dispatch_Media_Message_Notification(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Media-Message-Notification", "")
+		 || response.soap_put(soap, "ns:Dispatch-Media-Message-Notification-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -905,7 +814,7 @@ static int serve_ns__Dispatch_Media_Message_Notification(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Media-Message-Notification", "")
+	 || response.soap_put(soap, "ns:Dispatch-Media-Message-Notification-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -915,7 +824,7 @@ static int serve_ns__Dispatch_Media_Message_Notification(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Participant_Connect_Request_Notification(xiaofangService *soap)
 {	struct ns__Dispatch_Participant_Connect_Request_Notification soap_tmp_ns__Dispatch_Participant_Connect_Request_Notification;
-	ns__Participant_Connect_Request_Notification response;
+	ns__Dispatch_Participant_Connect_Request_Notification_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Participant_Connect_Request_Notification(soap, &soap_tmp_ns__Dispatch_Participant_Connect_Request_Notification);
 	if (!soap_get_ns__Dispatch_Participant_Connect_Request_Notification(soap, &soap_tmp_ns__Dispatch_Participant_Connect_Request_Notification, "ns:Dispatch-Participant-Connect-Request-Notification", NULL))
@@ -924,7 +833,7 @@ static int serve_ns__Dispatch_Participant_Connect_Request_Notification(xiaofangS
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Participant_Connect_Request_Notification(soap_tmp_ns__Dispatch_Participant_Connect_Request_Notification._, response);
+	soap->error = soap->Dispatch_Participant_Connect_Request_Notification(soap_tmp_ns__Dispatch_Participant_Connect_Request_Notification.session_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -936,7 +845,7 @@ static int serve_ns__Dispatch_Participant_Connect_Request_Notification(xiaofangS
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Participant-Connect-Request-Notification", "")
+		 || response.soap_put(soap, "ns:Dispatch-Participant-Connect-Request-Notification-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -946,7 +855,7 @@ static int serve_ns__Dispatch_Participant_Connect_Request_Notification(xiaofangS
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Participant-Connect-Request-Notification", "")
+	 || response.soap_put(soap, "ns:Dispatch-Participant-Connect-Request-Notification-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -956,7 +865,7 @@ static int serve_ns__Dispatch_Participant_Connect_Request_Notification(xiaofangS
 
 static int serve_ns__Dispatch_Participant_Speak_Request_Notification(xiaofangService *soap)
 {	struct ns__Dispatch_Participant_Speak_Request_Notification soap_tmp_ns__Dispatch_Participant_Speak_Request_Notification;
-	ns__Participant_Connect_Request_Notification response;
+	ns__Dispatch_Participant_Speak_Request_Notification_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Participant_Speak_Request_Notification(soap, &soap_tmp_ns__Dispatch_Participant_Speak_Request_Notification);
 	if (!soap_get_ns__Dispatch_Participant_Speak_Request_Notification(soap, &soap_tmp_ns__Dispatch_Participant_Speak_Request_Notification, "ns:Dispatch-Participant-Speak-Request-Notification", NULL))
@@ -965,7 +874,7 @@ static int serve_ns__Dispatch_Participant_Speak_Request_Notification(xiaofangSer
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Participant_Speak_Request_Notification(soap_tmp_ns__Dispatch_Participant_Speak_Request_Notification._, response);
+	soap->error = soap->Dispatch_Participant_Speak_Request_Notification(soap_tmp_ns__Dispatch_Participant_Speak_Request_Notification.session_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -977,7 +886,7 @@ static int serve_ns__Dispatch_Participant_Speak_Request_Notification(xiaofangSer
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Participant-Connect-Request-Notification", "")
+		 || response.soap_put(soap, "ns:Dispatch-Participant-Speak-Request-Notification-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -987,7 +896,7 @@ static int serve_ns__Dispatch_Participant_Speak_Request_Notification(xiaofangSer
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Participant-Connect-Request-Notification", "")
+	 || response.soap_put(soap, "ns:Dispatch-Participant-Speak-Request-Notification-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -997,8 +906,8 @@ static int serve_ns__Dispatch_Participant_Speak_Request_Notification(xiaofangSer
 
 static int serve_ns__Dispatch_Invite_Participant_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Invite_Participant_Request soap_tmp_ns__Dispatch_Invite_Participant_Request;
-	struct ns__Dispatch_Invite_Participant_Request_Response out;
-	soap_default_ns__Dispatch_Invite_Participant_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Invite_Participant_Request(soap, &soap_tmp_ns__Dispatch_Invite_Participant_Request);
 	if (!soap_get_ns__Dispatch_Invite_Participant_Request(soap, &soap_tmp_ns__Dispatch_Invite_Participant_Request, "ns:Dispatch-Invite-Participant-Request", NULL))
 		return soap->error;
@@ -1006,19 +915,19 @@ static int serve_ns__Dispatch_Invite_Participant_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Invite_Participant_Request(soap_tmp_ns__Dispatch_Invite_Participant_Request.group_id, soap_tmp_ns__Dispatch_Invite_Participant_Request.account_id, &out);
+	soap->error = soap->Dispatch_Invite_Participant_Request(soap_tmp_ns__Dispatch_Invite_Participant_Request.session_id, soap_tmp_ns__Dispatch_Invite_Participant_Request.group_id, soap_tmp_ns__Dispatch_Invite_Participant_Request.account_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Invite_Participant_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Invite_Participant_Request_Response(soap, &out, "ns:Dispatch-Invite-Participant-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1028,7 +937,7 @@ static int serve_ns__Dispatch_Invite_Participant_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Invite_Participant_Request_Response(soap, &out, "ns:Dispatch-Invite-Participant-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1038,8 +947,8 @@ static int serve_ns__Dispatch_Invite_Participant_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Drop_Participant_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Drop_Participant_Request soap_tmp_ns__Dispatch_Drop_Participant_Request;
-	struct ns__Dispatch_Drop_Participant_Request_Response out;
-	soap_default_ns__Dispatch_Drop_Participant_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Drop_Participant_Request(soap, &soap_tmp_ns__Dispatch_Drop_Participant_Request);
 	if (!soap_get_ns__Dispatch_Drop_Participant_Request(soap, &soap_tmp_ns__Dispatch_Drop_Participant_Request, "ns:Dispatch-Drop-Participant-Request", NULL))
 		return soap->error;
@@ -1047,19 +956,19 @@ static int serve_ns__Dispatch_Drop_Participant_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Drop_Participant_Request(soap_tmp_ns__Dispatch_Drop_Participant_Request.group_id, soap_tmp_ns__Dispatch_Drop_Participant_Request.account_id, &out);
+	soap->error = soap->Dispatch_Drop_Participant_Request(soap_tmp_ns__Dispatch_Drop_Participant_Request.session_id, soap_tmp_ns__Dispatch_Drop_Participant_Request.group_id, soap_tmp_ns__Dispatch_Drop_Participant_Request.account_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Drop_Participant_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Drop_Participant_Request_Response(soap, &out, "ns:Dispatch-Drop-Participant-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1069,7 +978,7 @@ static int serve_ns__Dispatch_Drop_Participant_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Drop_Participant_Request_Response(soap, &out, "ns:Dispatch-Drop-Participant-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1079,8 +988,8 @@ static int serve_ns__Dispatch_Drop_Participant_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Release_Participant_Token_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Release_Participant_Token_Request soap_tmp_ns__Dispatch_Release_Participant_Token_Request;
-	struct ns__Dispatch_Release_Participant_Token_Request_Response out;
-	soap_default_ns__Dispatch_Release_Participant_Token_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Release_Participant_Token_Request(soap, &soap_tmp_ns__Dispatch_Release_Participant_Token_Request);
 	if (!soap_get_ns__Dispatch_Release_Participant_Token_Request(soap, &soap_tmp_ns__Dispatch_Release_Participant_Token_Request, "ns:Dispatch-Release-Participant-Token-Request", NULL))
 		return soap->error;
@@ -1088,19 +997,19 @@ static int serve_ns__Dispatch_Release_Participant_Token_Request(xiaofangService 
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Release_Participant_Token_Request(soap_tmp_ns__Dispatch_Release_Participant_Token_Request.group_id, soap_tmp_ns__Dispatch_Release_Participant_Token_Request.account_id, &out);
+	soap->error = soap->Dispatch_Release_Participant_Token_Request(soap_tmp_ns__Dispatch_Release_Participant_Token_Request.session_id, soap_tmp_ns__Dispatch_Release_Participant_Token_Request.group_id, soap_tmp_ns__Dispatch_Release_Participant_Token_Request.account_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Release_Participant_Token_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Release_Participant_Token_Request_Response(soap, &out, "ns:Dispatch-Release-Participant-Token-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1110,7 +1019,7 @@ static int serve_ns__Dispatch_Release_Participant_Token_Request(xiaofangService 
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Release_Participant_Token_Request_Response(soap, &out, "ns:Dispatch-Release-Participant-Token-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1120,8 +1029,8 @@ static int serve_ns__Dispatch_Release_Participant_Token_Request(xiaofangService 
 
 static int serve_ns__Dispatch_Appoint_Participant_Speak_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Appoint_Participant_Speak_Request soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request;
-	struct ns__Dispatch_Appoint_Participant_Speak_Request_Response out;
-	soap_default_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Appoint_Participant_Speak_Request(soap, &soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request);
 	if (!soap_get_ns__Dispatch_Appoint_Participant_Speak_Request(soap, &soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request, "ns:Dispatch-Appoint-Participant-Speak-Request", NULL))
 		return soap->error;
@@ -1129,19 +1038,19 @@ static int serve_ns__Dispatch_Appoint_Participant_Speak_Request(xiaofangService 
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Appoint_Participant_Speak_Request(soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request.group_id, soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request.account_id, &out);
+	soap->error = soap->Dispatch_Appoint_Participant_Speak_Request(soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request.session_id, soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request.group_id, soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request.account_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, &out, "ns:Dispatch-Appoint-Participant-Speak-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1151,7 +1060,7 @@ static int serve_ns__Dispatch_Appoint_Participant_Speak_Request(xiaofangService 
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, &out, "ns:Dispatch-Appoint-Participant-Speak-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1161,8 +1070,8 @@ static int serve_ns__Dispatch_Appoint_Participant_Speak_Request(xiaofangService 
 
 static int serve_ns__Dispatch_Jion_Group_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Jion_Group_Request soap_tmp_ns__Dispatch_Jion_Group_Request;
-	struct ns__Dispatch_Jion_Group_Request_Response out;
-	soap_default_ns__Dispatch_Jion_Group_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Jion_Group_Request(soap, &soap_tmp_ns__Dispatch_Jion_Group_Request);
 	if (!soap_get_ns__Dispatch_Jion_Group_Request(soap, &soap_tmp_ns__Dispatch_Jion_Group_Request, "ns:Dispatch-Jion-Group-Request", NULL))
 		return soap->error;
@@ -1170,19 +1079,19 @@ static int serve_ns__Dispatch_Jion_Group_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Jion_Group_Request(soap_tmp_ns__Dispatch_Jion_Group_Request.group_id, &out);
+	soap->error = soap->Dispatch_Jion_Group_Request(soap_tmp_ns__Dispatch_Jion_Group_Request.session_id, soap_tmp_ns__Dispatch_Jion_Group_Request.group_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Jion_Group_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Jion_Group_Request_Response(soap, &out, "ns:Dispatch-Jion-Group-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1192,7 +1101,7 @@ static int serve_ns__Dispatch_Jion_Group_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Jion_Group_Request_Response(soap, &out, "ns:Dispatch-Jion-Group-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1202,8 +1111,8 @@ static int serve_ns__Dispatch_Jion_Group_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Leave_Group_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Leave_Group_Request soap_tmp_ns__Dispatch_Leave_Group_Request;
-	struct ns__Dispatch_Leave_Group_Request_Response out;
-	soap_default_ns__Dispatch_Leave_Group_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Leave_Group_Request(soap, &soap_tmp_ns__Dispatch_Leave_Group_Request);
 	if (!soap_get_ns__Dispatch_Leave_Group_Request(soap, &soap_tmp_ns__Dispatch_Leave_Group_Request, "ns:Dispatch-Leave-Group-Request", NULL))
 		return soap->error;
@@ -1211,19 +1120,19 @@ static int serve_ns__Dispatch_Leave_Group_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Leave_Group_Request(soap_tmp_ns__Dispatch_Leave_Group_Request.group_id, &out);
+	soap->error = soap->Dispatch_Leave_Group_Request(soap_tmp_ns__Dispatch_Leave_Group_Request.session_id, soap_tmp_ns__Dispatch_Leave_Group_Request.group_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Leave_Group_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Leave_Group_Request_Response(soap, &out, "ns:Dispatch-Leave-Group-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1233,7 +1142,7 @@ static int serve_ns__Dispatch_Leave_Group_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Leave_Group_Request_Response(soap, &out, "ns:Dispatch-Leave-Group-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1243,7 +1152,7 @@ static int serve_ns__Dispatch_Leave_Group_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Session_Status_Notification(xiaofangService *soap)
 {	struct ns__Dispatch_Session_Status_Notification soap_tmp_ns__Dispatch_Session_Status_Notification;
-	ns__Session_Status_Notification response;
+	ns__Dispatch_Session_Status_Notification_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Session_Status_Notification(soap, &soap_tmp_ns__Dispatch_Session_Status_Notification);
 	if (!soap_get_ns__Dispatch_Session_Status_Notification(soap, &soap_tmp_ns__Dispatch_Session_Status_Notification, "ns:Dispatch-Session-Status-Notification", NULL))
@@ -1252,7 +1161,7 @@ static int serve_ns__Dispatch_Session_Status_Notification(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Session_Status_Notification(soap_tmp_ns__Dispatch_Session_Status_Notification._, response);
+	soap->error = soap->Dispatch_Session_Status_Notification(soap_tmp_ns__Dispatch_Session_Status_Notification.session_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -1264,7 +1173,7 @@ static int serve_ns__Dispatch_Session_Status_Notification(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Session-Status-Notification", "")
+		 || response.soap_put(soap, "ns:Dispatch-Session-Status-Notification-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1274,7 +1183,7 @@ static int serve_ns__Dispatch_Session_Status_Notification(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Session-Status-Notification", "")
+	 || response.soap_put(soap, "ns:Dispatch-Session-Status-Notification-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1284,8 +1193,8 @@ static int serve_ns__Dispatch_Session_Status_Notification(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Send_Message_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Send_Message_Request soap_tmp_ns__Dispatch_Send_Message_Request;
-	struct ns__Dispatch_Send_Message_Request_Response out;
-	soap_default_ns__Dispatch_Send_Message_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Send_Message_Request(soap, &soap_tmp_ns__Dispatch_Send_Message_Request);
 	if (!soap_get_ns__Dispatch_Send_Message_Request(soap, &soap_tmp_ns__Dispatch_Send_Message_Request, "ns:Dispatch-Send-Message-Request", NULL))
 		return soap->error;
@@ -1293,19 +1202,19 @@ static int serve_ns__Dispatch_Send_Message_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Send_Message_Request(soap_tmp_ns__Dispatch_Send_Message_Request.id, soap_tmp_ns__Dispatch_Send_Message_Request.message, &out);
+	soap->error = soap->Dispatch_Send_Message_Request(soap_tmp_ns__Dispatch_Send_Message_Request.session_id, soap_tmp_ns__Dispatch_Send_Message_Request.group_id, soap_tmp_ns__Dispatch_Send_Message_Request.mediamessage, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Send_Message_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Send_Message_Request_Response(soap, &out, "ns:Dispatch-Send-Message-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1315,48 +1224,7 @@ static int serve_ns__Dispatch_Send_Message_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Send_Message_Request_Response(soap, &out, "ns:Dispatch-Send-Message-Request-Response", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap->error;
-	return soap_closesock(soap);
-}
-
-static int serve_ns__Dispatch_Kick_Participant_Request(xiaofangService *soap)
-{	struct ns__Dispatch_Kick_Participant_Request soap_tmp_ns__Dispatch_Kick_Participant_Request;
-	struct ns__Dispatch_Kick_Participant_Request_Response out;
-	soap_default_ns__Dispatch_Kick_Participant_Request_Response(soap, &out);
-	soap_default_ns__Dispatch_Kick_Participant_Request(soap, &soap_tmp_ns__Dispatch_Kick_Participant_Request);
-	if (!soap_get_ns__Dispatch_Kick_Participant_Request(soap, &soap_tmp_ns__Dispatch_Kick_Participant_Request, "ns:Dispatch-Kick-Participant-Request", NULL))
-		return soap->error;
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap->error;
-	soap->error = soap->Dispatch_Kick_Participant_Request(soap_tmp_ns__Dispatch_Kick_Participant_Request.group_id, soap_tmp_ns__Dispatch_Kick_Participant_Request.account_id, &out);
-	if (soap->error)
-		return soap->error;
-	soap->encodingStyle = "";
-	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Kick_Participant_Request_Response(soap, &out);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Kick_Participant_Request_Response(soap, &out, "ns:Dispatch-Kick-Participant-Request-Response", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	};
-	if (soap_end_count(soap)
-	 || soap_response(soap, SOAP_OK)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Kick_Participant_Request_Response(soap, &out, "ns:Dispatch-Kick-Participant-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1366,8 +1234,8 @@ static int serve_ns__Dispatch_Kick_Participant_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Start_Record_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Start_Record_Request soap_tmp_ns__Dispatch_Start_Record_Request;
-	struct ns__Dispatch_Start_Record_Request_Response out;
-	soap_default_ns__Dispatch_Start_Record_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Start_Record_Request(soap, &soap_tmp_ns__Dispatch_Start_Record_Request);
 	if (!soap_get_ns__Dispatch_Start_Record_Request(soap, &soap_tmp_ns__Dispatch_Start_Record_Request, "ns:Dispatch-Start-Record-Request", NULL))
 		return soap->error;
@@ -1375,19 +1243,19 @@ static int serve_ns__Dispatch_Start_Record_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Start_Record_Request(soap_tmp_ns__Dispatch_Start_Record_Request.group_id, &out);
+	soap->error = soap->Dispatch_Start_Record_Request(soap_tmp_ns__Dispatch_Start_Record_Request.session_id, soap_tmp_ns__Dispatch_Start_Record_Request.group_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Start_Record_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Start_Record_Request_Response(soap, &out, "ns:Dispatch-Start-Record-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1397,7 +1265,7 @@ static int serve_ns__Dispatch_Start_Record_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Start_Record_Request_Response(soap, &out, "ns:Dispatch-Start-Record-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1407,8 +1275,8 @@ static int serve_ns__Dispatch_Start_Record_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Stop_Record_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Stop_Record_Request soap_tmp_ns__Dispatch_Stop_Record_Request;
-	struct ns__Dispatch_Stop_Record_Request_Response out;
-	soap_default_ns__Dispatch_Stop_Record_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Stop_Record_Request(soap, &soap_tmp_ns__Dispatch_Stop_Record_Request);
 	if (!soap_get_ns__Dispatch_Stop_Record_Request(soap, &soap_tmp_ns__Dispatch_Stop_Record_Request, "ns:Dispatch-Stop-Record-Request", NULL))
 		return soap->error;
@@ -1416,19 +1284,19 @@ static int serve_ns__Dispatch_Stop_Record_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Stop_Record_Request(soap_tmp_ns__Dispatch_Stop_Record_Request.group_id, &out);
+	soap->error = soap->Dispatch_Stop_Record_Request(soap_tmp_ns__Dispatch_Stop_Record_Request.session_id, soap_tmp_ns__Dispatch_Stop_Record_Request.group_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Stop_Record_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Stop_Record_Request_Response(soap, &out, "ns:Dispatch-Stop-Record-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1438,7 +1306,7 @@ static int serve_ns__Dispatch_Stop_Record_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Stop_Record_Request_Response(soap, &out, "ns:Dispatch-Stop-Record-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1448,7 +1316,7 @@ static int serve_ns__Dispatch_Stop_Record_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Record_Status_Notification(xiaofangService *soap)
 {	struct ns__Dispatch_Record_Status_Notification soap_tmp_ns__Dispatch_Record_Status_Notification;
-	ns__Dispatch_Record_Status response;
+	ns__Dispatch_Record_Status_Notification_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Record_Status_Notification(soap, &soap_tmp_ns__Dispatch_Record_Status_Notification);
 	if (!soap_get_ns__Dispatch_Record_Status_Notification(soap, &soap_tmp_ns__Dispatch_Record_Status_Notification, "ns:Dispatch-Record-Status-Notification", NULL))
@@ -1457,7 +1325,7 @@ static int serve_ns__Dispatch_Record_Status_Notification(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Record_Status_Notification(soap_tmp_ns__Dispatch_Record_Status_Notification._, response);
+	soap->error = soap->Dispatch_Record_Status_Notification(soap_tmp_ns__Dispatch_Record_Status_Notification.session_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -1469,7 +1337,7 @@ static int serve_ns__Dispatch_Record_Status_Notification(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Dispatch-Record-Status", "")
+		 || response.soap_put(soap, "ns:Dispatch-Record-Status-Notification-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1479,7 +1347,7 @@ static int serve_ns__Dispatch_Record_Status_Notification(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Dispatch-Record-Status", "")
+	 || response.soap_put(soap, "ns:Dispatch-Record-Status-Notification-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1487,59 +1355,18 @@ static int serve_ns__Dispatch_Record_Status_Notification(xiaofangService *soap)
 	return soap_closesock(soap);
 }
 
-static int serve_ns__Dispatch_Subscribe_Account_Location_Request(xiaofangService *soap)
-{	struct ns__Dispatch_Subscribe_Account_Location_Request soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request;
-	struct ns__Dispatch_Subscribe_Account_Location_Request_Response out;
-	soap_default_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, &out);
-	soap_default_ns__Dispatch_Subscribe_Account_Location_Request(soap, &soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request);
-	if (!soap_get_ns__Dispatch_Subscribe_Account_Location_Request(soap, &soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request, "ns:Dispatch-Subscribe-Account-Location-Request", NULL))
-		return soap->error;
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap->error;
-	soap->error = soap->Dispatch_Subscribe_Account_Location_Request(soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request.subscribing, soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request.account_id, soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request.ttl, &out);
-	if (soap->error)
-		return soap->error;
-	soap->encodingStyle = "";
-	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, &out);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, &out, "ns:Dispatch-Subscribe-Account-Location-Request-Response", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	};
-	if (soap_end_count(soap)
-	 || soap_response(soap, SOAP_OK)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, &out, "ns:Dispatch-Subscribe-Account-Location-Request-Response", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap->error;
-	return soap_closesock(soap);
-}
-
-static int serve_ns__Dispatch_Account_Location_Notification(xiaofangService *soap)
-{	struct ns__Dispatch_Account_Location_Notification soap_tmp_ns__Dispatch_Account_Location_Notification;
-	ns__Dispatch_Account_Location_Notification_Response response;
+static int serve_ns__Dispatch_Subscribe_Account_Info_Request(xiaofangService *soap)
+{	struct ns__Dispatch_Subscribe_Account_Info_Request soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request;
+	ns__Normal_Response response;
 	response.soap_default(soap);
-	soap_default_ns__Dispatch_Account_Location_Notification(soap, &soap_tmp_ns__Dispatch_Account_Location_Notification);
-	if (!soap_get_ns__Dispatch_Account_Location_Notification(soap, &soap_tmp_ns__Dispatch_Account_Location_Notification, "ns:Dispatch-Account-Location-Notification", NULL))
+	soap_default_ns__Dispatch_Subscribe_Account_Info_Request(soap, &soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request);
+	if (!soap_get_ns__Dispatch_Subscribe_Account_Info_Request(soap, &soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request, "ns:Dispatch-Subscribe-Account-Info-Request", NULL))
 		return soap->error;
 	if (soap_body_end_in(soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Account_Location_Notification(soap_tmp_ns__Dispatch_Account_Location_Notification._, response);
+	soap->error = soap->Dispatch_Subscribe_Account_Info_Request(soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request.session_id, soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request.subscribing, soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request.account_id, soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request.type, soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request.ttl, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -1551,7 +1378,7 @@ static int serve_ns__Dispatch_Account_Location_Notification(xiaofangService *soa
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Dispatch-Account-Location-Notification-Response", "")
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1561,7 +1388,48 @@ static int serve_ns__Dispatch_Account_Location_Notification(xiaofangService *soa
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Dispatch-Account-Location-Notification-Response", "")
+	 || response.soap_put(soap, "ns:Normal-Response", "")
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap->error;
+	return soap_closesock(soap);
+}
+
+static int serve_ns__Dispatch_Account_Info_Notification(xiaofangService *soap)
+{	struct ns__Dispatch_Account_Info_Notification soap_tmp_ns__Dispatch_Account_Info_Notification;
+	ns__Dispatch_Account_Info_Notification_Response response;
+	response.soap_default(soap);
+	soap_default_ns__Dispatch_Account_Info_Notification(soap, &soap_tmp_ns__Dispatch_Account_Info_Notification);
+	if (!soap_get_ns__Dispatch_Account_Info_Notification(soap, &soap_tmp_ns__Dispatch_Account_Info_Notification, "ns:Dispatch-Account-Info-Notification", NULL))
+		return soap->error;
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap->error;
+	soap->error = soap->Dispatch_Account_Info_Notification(soap_tmp_ns__Dispatch_Account_Info_Notification.session_id, response);
+	if (soap->error)
+		return soap->error;
+	soap->encodingStyle = "";
+	soap_serializeheader(soap);
+	response.soap_serialize(soap);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || response.soap_put(soap, "ns:Dispatch-Account-Info-Notification-Response", "")
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	};
+	if (soap_end_count(soap)
+	 || soap_response(soap, SOAP_OK)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || response.soap_put(soap, "ns:Dispatch-Account-Info-Notification-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1571,7 +1439,7 @@ static int serve_ns__Dispatch_Account_Location_Notification(xiaofangService *soa
 
 static int serve_ns__Dispatch_Append_Alert_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Append_Alert_Request soap_tmp_ns__Dispatch_Append_Alert_Request;
-	ns__Alert response;
+	ns__Dispatch_Append_Alert_Request_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Append_Alert_Request(soap, &soap_tmp_ns__Dispatch_Append_Alert_Request);
 	if (!soap_get_ns__Dispatch_Append_Alert_Request(soap, &soap_tmp_ns__Dispatch_Append_Alert_Request, "ns:Dispatch-Append-Alert-Request", NULL))
@@ -1580,7 +1448,7 @@ static int serve_ns__Dispatch_Append_Alert_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Append_Alert_Request(soap_tmp_ns__Dispatch_Append_Alert_Request.alert, soap_tmp_ns__Dispatch_Append_Alert_Request.acount, response);
+	soap->error = soap->Dispatch_Append_Alert_Request(soap_tmp_ns__Dispatch_Append_Alert_Request.session_id, soap_tmp_ns__Dispatch_Append_Alert_Request.alert, soap_tmp_ns__Dispatch_Append_Alert_Request.members, soap_tmp_ns__Dispatch_Append_Alert_Request.size, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -1592,7 +1460,7 @@ static int serve_ns__Dispatch_Append_Alert_Request(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Alert", "")
+		 || response.soap_put(soap, "ns:Dispatch-Append-Alert-Request-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1602,7 +1470,7 @@ static int serve_ns__Dispatch_Append_Alert_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Alert", "")
+	 || response.soap_put(soap, "ns:Dispatch-Append-Alert-Request-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1612,8 +1480,8 @@ static int serve_ns__Dispatch_Append_Alert_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Modify_Alert_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Modify_Alert_Request soap_tmp_ns__Dispatch_Modify_Alert_Request;
-	struct ns__Dispatch_Modify_Alert_Request_Response out;
-	soap_default_ns__Dispatch_Modify_Alert_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Modify_Alert_Request(soap, &soap_tmp_ns__Dispatch_Modify_Alert_Request);
 	if (!soap_get_ns__Dispatch_Modify_Alert_Request(soap, &soap_tmp_ns__Dispatch_Modify_Alert_Request, "ns:Dispatch-Modify-Alert-Request", NULL))
 		return soap->error;
@@ -1621,19 +1489,19 @@ static int serve_ns__Dispatch_Modify_Alert_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Modify_Alert_Request(soap_tmp_ns__Dispatch_Modify_Alert_Request.alert, &out);
+	soap->error = soap->Dispatch_Modify_Alert_Request(soap_tmp_ns__Dispatch_Modify_Alert_Request.session_id, soap_tmp_ns__Dispatch_Modify_Alert_Request.alert, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Modify_Alert_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Modify_Alert_Request_Response(soap, &out, "ns:Dispatch-Modify-Alert-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1643,7 +1511,7 @@ static int serve_ns__Dispatch_Modify_Alert_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Modify_Alert_Request_Response(soap, &out, "ns:Dispatch-Modify-Alert-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1653,8 +1521,8 @@ static int serve_ns__Dispatch_Modify_Alert_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Stop_Alert_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Stop_Alert_Request soap_tmp_ns__Dispatch_Stop_Alert_Request;
-	struct ns__Dispatch_Stop_Alert_Request_Response out;
-	soap_default_ns__Dispatch_Stop_Alert_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Stop_Alert_Request(soap, &soap_tmp_ns__Dispatch_Stop_Alert_Request);
 	if (!soap_get_ns__Dispatch_Stop_Alert_Request(soap, &soap_tmp_ns__Dispatch_Stop_Alert_Request, "ns:Dispatch-Stop-Alert-Request", NULL))
 		return soap->error;
@@ -1662,19 +1530,19 @@ static int serve_ns__Dispatch_Stop_Alert_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Stop_Alert_Request(soap_tmp_ns__Dispatch_Stop_Alert_Request.alert_id, &out);
+	soap->error = soap->Dispatch_Stop_Alert_Request(soap_tmp_ns__Dispatch_Stop_Alert_Request.session_id, soap_tmp_ns__Dispatch_Stop_Alert_Request.alert_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Stop_Alert_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Stop_Alert_Request_Response(soap, &out, "ns:Dispatch-Stop-Alert-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1684,7 +1552,7 @@ static int serve_ns__Dispatch_Stop_Alert_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Stop_Alert_Request_Response(soap, &out, "ns:Dispatch-Stop-Alert-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1694,8 +1562,8 @@ static int serve_ns__Dispatch_Stop_Alert_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Alert_Overed_Notification(xiaofangService *soap)
 {	struct ns__Dispatch_Alert_Overed_Notification soap_tmp_ns__Dispatch_Alert_Overed_Notification;
-	struct ns__Dispatch_Alert_Overed_Notification_Response out;
-	soap_default_ns__Dispatch_Alert_Overed_Notification_Response(soap, &out);
+	ns__Dispatch_Alert_Overed_Notification_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Alert_Overed_Notification(soap, &soap_tmp_ns__Dispatch_Alert_Overed_Notification);
 	if (!soap_get_ns__Dispatch_Alert_Overed_Notification(soap, &soap_tmp_ns__Dispatch_Alert_Overed_Notification, "ns:Dispatch-Alert-Overed-Notification", NULL))
 		return soap->error;
@@ -1703,19 +1571,19 @@ static int serve_ns__Dispatch_Alert_Overed_Notification(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Alert_Overed_Notification(soap_tmp_ns__Dispatch_Alert_Overed_Notification.alert_id, &out);
+	soap->error = soap->Dispatch_Alert_Overed_Notification(soap_tmp_ns__Dispatch_Alert_Overed_Notification.session_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Alert_Overed_Notification_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Alert_Overed_Notification_Response(soap, &out, "ns:Dispatch-Alert-Overed-Notification-Response", NULL)
+		 || response.soap_put(soap, "ns:Dispatch-Alert-Overed-Notification-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1725,7 +1593,7 @@ static int serve_ns__Dispatch_Alert_Overed_Notification(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Alert_Overed_Notification_Response(soap, &out, "ns:Dispatch-Alert-Overed-Notification-Response", NULL)
+	 || response.soap_put(soap, "ns:Dispatch-Alert-Overed-Notification-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1735,8 +1603,8 @@ static int serve_ns__Dispatch_Alert_Overed_Notification(xiaofangService *soap)
 
 static int serve_ns__Dispatch_History_Alert_Request(xiaofangService *soap)
 {	struct ns__Dispatch_History_Alert_Request soap_tmp_ns__Dispatch_History_Alert_Request;
-	struct ns__Dispatch_History_Alert_RequestResponse soap_tmp_ns__Dispatch_History_Alert_RequestResponse;
-	soap_default_ns__Dispatch_History_Alert_RequestResponse(soap, &soap_tmp_ns__Dispatch_History_Alert_RequestResponse);
+	ns__Dispatch_History_Alert_Request_Reponse response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_History_Alert_Request(soap, &soap_tmp_ns__Dispatch_History_Alert_Request);
 	if (!soap_get_ns__Dispatch_History_Alert_Request(soap, &soap_tmp_ns__Dispatch_History_Alert_Request, "ns:Dispatch-History-Alert-Request", NULL))
 		return soap->error;
@@ -1744,19 +1612,19 @@ static int serve_ns__Dispatch_History_Alert_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_History_Alert_Request(soap_tmp_ns__Dispatch_History_Alert_Request.name, soap_tmp_ns__Dispatch_History_Alert_Request.create_time_from, soap_tmp_ns__Dispatch_History_Alert_Request.create_time_to, soap_tmp_ns__Dispatch_History_Alert_Request.alram_time_from, soap_tmp_ns__Dispatch_History_Alert_Request.alram_time_to, soap_tmp_ns__Dispatch_History_Alert_Request.over_time_from, soap_tmp_ns__Dispatch_History_Alert_Request.over_time_to, soap_tmp_ns__Dispatch_History_Alert_RequestResponse.response);
+	soap->error = soap->Dispatch_History_Alert_Request(soap_tmp_ns__Dispatch_History_Alert_Request.session_id, soap_tmp_ns__Dispatch_History_Alert_Request.name, soap_tmp_ns__Dispatch_History_Alert_Request.create_time_from, soap_tmp_ns__Dispatch_History_Alert_Request.create_time_to, soap_tmp_ns__Dispatch_History_Alert_Request.alram_time_from, soap_tmp_ns__Dispatch_History_Alert_Request.alram_time_to, soap_tmp_ns__Dispatch_History_Alert_Request.over_time_from, soap_tmp_ns__Dispatch_History_Alert_Request.over_time_to, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_History_Alert_RequestResponse(soap, &soap_tmp_ns__Dispatch_History_Alert_RequestResponse);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_History_Alert_RequestResponse(soap, &soap_tmp_ns__Dispatch_History_Alert_RequestResponse, "ns:Dispatch-History-Alert-RequestResponse", NULL)
+		 || response.soap_put(soap, "ns:Dispatch-History-Alert-Request-Reponse", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1766,7 +1634,7 @@ static int serve_ns__Dispatch_History_Alert_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_History_Alert_RequestResponse(soap, &soap_tmp_ns__Dispatch_History_Alert_RequestResponse, "ns:Dispatch-History-Alert-RequestResponse", NULL)
+	 || response.soap_put(soap, "ns:Dispatch-History-Alert-Request-Reponse", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1776,7 +1644,7 @@ static int serve_ns__Dispatch_History_Alert_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_Alert_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Alert_Request soap_tmp_ns__Dispatch_Alert_Request;
-	ns__Alert response;
+	ns__Dispatch_Alert_Request_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_Alert_Request(soap, &soap_tmp_ns__Dispatch_Alert_Request);
 	if (!soap_get_ns__Dispatch_Alert_Request(soap, &soap_tmp_ns__Dispatch_Alert_Request, "ns:Dispatch-Alert-Request", NULL))
@@ -1785,7 +1653,7 @@ static int serve_ns__Dispatch_Alert_Request(xiaofangService *soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Alert_Request(soap_tmp_ns__Dispatch_Alert_Request.alert_id, response);
+	soap->error = soap->Dispatch_Alert_Request(soap_tmp_ns__Dispatch_Alert_Request.session_id, soap_tmp_ns__Dispatch_Alert_Request.alert_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -1797,7 +1665,7 @@ static int serve_ns__Dispatch_Alert_Request(xiaofangService *soap)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Alert", "")
+		 || response.soap_put(soap, "ns:Dispatch-Alert-Request-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1807,7 +1675,7 @@ static int serve_ns__Dispatch_Alert_Request(xiaofangService *soap)
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Alert", "")
+	 || response.soap_put(soap, "ns:Dispatch-Alert-Request-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1817,7 +1685,7 @@ static int serve_ns__Dispatch_Alert_Request(xiaofangService *soap)
 
 static int serve_ns__Dispatch_History_Alert_Message_Request(xiaofangService *soap)
 {	struct ns__Dispatch_History_Alert_Message_Request soap_tmp_ns__Dispatch_History_Alert_Message_Request;
-	ns__Dispatch_History_Alert_Message response;
+	ns__Dispatch_History_Alert_Message_Request_Response response;
 	response.soap_default(soap);
 	soap_default_ns__Dispatch_History_Alert_Message_Request(soap, &soap_tmp_ns__Dispatch_History_Alert_Message_Request);
 	if (!soap_get_ns__Dispatch_History_Alert_Message_Request(soap, &soap_tmp_ns__Dispatch_History_Alert_Message_Request, "ns:Dispatch-History-Alert-Message-Request", NULL))
@@ -1826,7 +1694,7 @@ static int serve_ns__Dispatch_History_Alert_Message_Request(xiaofangService *soa
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_History_Alert_Message_Request(soap_tmp_ns__Dispatch_History_Alert_Message_Request.history_alert_id, soap_tmp_ns__Dispatch_History_Alert_Message_Request.from_message_id, soap_tmp_ns__Dispatch_History_Alert_Message_Request.from_time, soap_tmp_ns__Dispatch_History_Alert_Message_Request.max_message_count, response);
+	soap->error = soap->Dispatch_History_Alert_Message_Request(soap_tmp_ns__Dispatch_History_Alert_Message_Request.session_id, soap_tmp_ns__Dispatch_History_Alert_Message_Request.history_alert_id, soap_tmp_ns__Dispatch_History_Alert_Message_Request.from_message_id, soap_tmp_ns__Dispatch_History_Alert_Message_Request.from_time, soap_tmp_ns__Dispatch_History_Alert_Message_Request.max_message_count, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
@@ -1838,7 +1706,7 @@ static int serve_ns__Dispatch_History_Alert_Message_Request(xiaofangService *soa
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || response.soap_put(soap, "ns:Dispatch-History-Alert-Message", "")
+		 || response.soap_put(soap, "ns:Dispatch-History-Alert-Message-Request-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1848,7 +1716,7 @@ static int serve_ns__Dispatch_History_Alert_Message_Request(xiaofangService *soa
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || response.soap_put(soap, "ns:Dispatch-History-Alert-Message", "")
+	 || response.soap_put(soap, "ns:Dispatch-History-Alert-Message-Request-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1858,8 +1726,8 @@ static int serve_ns__Dispatch_History_Alert_Message_Request(xiaofangService *soa
 
 static int serve_ns__Dispatch_Delete_History_Alert_Request(xiaofangService *soap)
 {	struct ns__Dispatch_Delete_History_Alert_Request soap_tmp_ns__Dispatch_Delete_History_Alert_Request;
-	struct ns__Dispatch_Delete_History_Alert_Request_Response out;
-	soap_default_ns__Dispatch_Delete_History_Alert_Request_Response(soap, &out);
+	ns__Normal_Response response;
+	response.soap_default(soap);
 	soap_default_ns__Dispatch_Delete_History_Alert_Request(soap, &soap_tmp_ns__Dispatch_Delete_History_Alert_Request);
 	if (!soap_get_ns__Dispatch_Delete_History_Alert_Request(soap, &soap_tmp_ns__Dispatch_Delete_History_Alert_Request, "ns:Dispatch-Delete-History-Alert-Request", NULL))
 		return soap->error;
@@ -1867,19 +1735,19 @@ static int serve_ns__Dispatch_Delete_History_Alert_Request(xiaofangService *soap
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap->error;
-	soap->error = soap->Dispatch_Delete_History_Alert_Request(soap_tmp_ns__Dispatch_Delete_History_Alert_Request.history_alert_id, &out);
+	soap->error = soap->Dispatch_Delete_History_Alert_Request(soap_tmp_ns__Dispatch_Delete_History_Alert_Request.session_id, soap_tmp_ns__Dispatch_Delete_History_Alert_Request.history_alert_id, response);
 	if (soap->error)
 		return soap->error;
 	soap->encodingStyle = "";
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Delete_History_Alert_Request_Response(soap, &out);
+	response.soap_serialize(soap);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Delete_History_Alert_Request_Response(soap, &out, "ns:Dispatch-Delete-History-Alert-Request-Response", NULL)
+		 || response.soap_put(soap, "ns:Normal-Response", "")
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1889,7 +1757,7 @@ static int serve_ns__Dispatch_Delete_History_Alert_Request(xiaofangService *soap
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Delete_History_Alert_Request_Response(soap, &out, "ns:Dispatch-Delete-History-Alert-Request-Response", NULL)
+	 || response.soap_put(soap, "ns:Normal-Response", "")
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))

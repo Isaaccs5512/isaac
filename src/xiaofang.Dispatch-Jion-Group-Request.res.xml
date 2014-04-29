@@ -6,7 +6,10 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <ns:Dispatch-Jion-Group-Request-Response>
-  </ns:Dispatch-Jion-Group-Request-Response>
+  <ns:Normal-Response>
+   <session-id></session-id>
+   <error-describe></error-describe>
+   <result>false</result>
+  </ns:Normal-Response>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

@@ -7,12 +7,8 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-Entity-Request>
-   <id>
-    <id>0</id>
-    <name></name>
-    <entity-type>UNIT</entity-type>
-    <parentid>0</parentid>
-   </id>
+   <session-id></session-id>
+   <id></id>
   </ns:Dispatch-Entity-Request>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

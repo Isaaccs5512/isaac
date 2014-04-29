@@ -6,8 +6,8 @@
 *param out	:response
 */
 int ns__Dispatch_Login(std::string username,
-			std::string password,
-			ns__Login_Response &response);
+						std::string password,
+						ns__Dispatch_Login_Response &response);
 
 /*
 brief		:¿ØÖÆÌ¨×¢ÏúµÇÂ¼½Ó¿Ú
@@ -15,17 +15,11 @@ param in	:name
 param in	:
 param out	:
 */
-int ns__Dispatch_Logout(std::string name,
-			struct ns__LogOutResponse { } *out);
+int ns__Dispatch_Logout(std::string session_id,
+						std::string name,
+						std::string password,
+						ns__Normal_Response &response);
 
-/*
-brief		:±£»îÇëÇó
-param in	:
-param in	:
-param out	:
-*/
-int ns__Dispatch_Keepalive(void *_,
-			struct ns__Dispatch_Keepalive_Request_Response { } *out);
 
 /*
 brief		:»ñÈ¡Õû¸öÏµÍ³µÄµ¥Ôª¼Ü¹¹£¨°üº¬µ¥ÔªÏÂÃæµÄÈº×é¡¢PoCÕËºÅµÈ£¬ĞèÒªÍ¨¹ıµİ¹éµÄ·½Ê½£©¸ù¾İResponseµÄÀàĞÍ£¬
@@ -34,8 +28,9 @@ param in	:id //Òª»ñÈ¡µÄÊµÌåµÄid(µÇÂ¼Ê±£¬»á·µ»Øparent_id£¬Ò»°ã´Ó´ËÖµ¿ªÊ¼£¬µİ¹é»ñÈ
 param in	:
 param out	:response
 */
-int ns__Dispatch_Entity_Request(ns__Entity id,
-			ns__EntityData &response);
+int ns__Dispatch_Entity_Request(std::string session_id,
+								std::string id,
+								ns__Dispatch_Entity_Request_Response &response);
 
 /*
 brief		:·şÎñÆ÷Ö÷¶¯·¢ËÍ£¬µ±ÊµÌåµÄÄÚÈİ±»ĞÂÔö¡¢ĞŞ¸Ä¡¢×´Ì¬¸üĞÂ¡¢É¾³ıÊ±£¬Í¬²½Í¨ÖªÓĞÈ¨ÏŞµÄµ÷¶ÈÌ¨¡£
@@ -43,17 +38,8 @@ param in	:
 param in	:
 param out	:response
 */
-int ns__Dispatch_Entity_Nofitication(void *_,
-			ns__Entity_Nofitication_Response &response);
-
-/*
-brief		:ÊµÌå×´Ì¬Í¨Öª¡£Êı¾İÁ¿½Ï¶à£¬ËùÒÔĞÂÔö´ËÏûÏ¢£¬Entity_NofiticationÒ²ÓĞÏàÍ¬µÄ¹¦ÄÜ£¬µ«Êı¾İÈßÓà½Ï¶à£»
-param in	:
-param in	:
-param out	:response
-*/
-int ns__Dispatch_Entity_Status_Notification(void *_,
-			ns__Entity_Status_Notification &response);
+int ns__Dispatch_Entity_Nofitication(std::string session_id,
+			ns__Dispatch_Entity_Nofitication_Response &response);
 
 /*
 brief		:´´½¨Èº×é
@@ -61,8 +47,9 @@ param in	:group  //base.id×Ö¶Î¿ÉÒÔ²»°üº¬»òÕßÎª0
 param in	:
 param out	:response  //base.idÎªÏµÍ³·ÖÅäµÄÎ¨Ò»±àºÅ
 */
-int ns__Dispatch_Append_Group(ns__Group group,
-			ns__Group &response);
+int ns__Dispatch_Append_Group(std::string session_id,
+								ns__Group group,
+								ns__Dispatch_Append_Group_Response &response);
 
 /*
 brief		:´´½¨Èº×é³ı³ÉÔ±ÁĞ±íÒÔÍâµÄĞÅÏ¢
@@ -71,16 +58,18 @@ param in	:group  //base.id Ö¸¶¨ÒªĞŞ¸ÄµÄÈº×égroup.include_members×Ö¶ÎÎªÉèÖÃÎªfals
 param in	:
 param out	:response
 */
-int ns__Dispatch_Modify_Group(ns__Group group,
-			ns__Group &response);
+int ns__Dispatch_Modify_Group(std::string session_id,
+							ns__Group group,
+							ns__Dispatch_Modify_Group_Response &response);
 /*
-brief		:´´½¨Èº×é³ÉÔ±ÁĞ±í
+brief		:ĞŞ¸ÄÈº×é³ÉÔ±ÁĞ±í
 param in	:group_id // ĞèÒªĞŞ¸ÄµÄÈº×éµÄid
 param in	:request   
 param out	:response
 */
-int ns__Dispatch_Modify_Participants(ns__Modify_Participant request,
-			ns__Group &response);
+int ns__Dispatch_Modify_Participants(std::string session_id,
+									ns__Modify_Participant request,
+									ns__Dispatch_Modify_Participants_Response &response);
 
 /*
 brief		:É¾³ıÈº×é£¬É¾³ıÈº×é£¬»áÍ¬²½É¾³ıÓëÈº×é¹ØÁªµÄÏûÏ¢
@@ -88,17 +77,18 @@ param in	:group_id // ĞèÒªĞŞ¸ÄµÄÈº×éµÄid
 param in	:request   
 param out	:
 */
-int ns__Dispatch_Delete_Group(ns__Entity group_id,
-			struct ns__Delete_Group_Response { } *out);
+int ns__Dispatch_Delete_Group(std::string session_id,
+							std::string group_id,
+							ns__Normal_Response &response);
 
 /*
-brief		:´´½¨£¬ÅäÖÃĞŞ¸Ä£¬É¾³ıÍ¨ÖªÊ¹ÓÃ
+brief		:Èº×é´´½¨£¬ÅäÖÃĞŞ¸Ä£¬É¾³ıÍ¨ÖªÊ¹ÓÃ
 param in	:
 param in	:  
 param out	:response
 */
-int ns__Dispatch_Dispatch_Participants_Notification(void *_,
-			ns__Modify_Participant &response);
+int ns__Dispatch_Dispatch_Participants_Notification(std::string session_id,
+			ns__Dispatch_Dispatch_Participants_Notification_Response &response);
 
 /*
 brief		:Ä³¸ö²»ÔÚÈº×éÖĞµÄÖÕ¶Ë£¬ÏàÓ¦¼ÓÈëÄ³¸ö·â±ÕµÄÈº×éÊ±£¬ºóÌ¨ÎŞ·¨¾ö²ß£¬Òò´ËÍÆËÍ´ËÏûÏ¢¸æÖªµ÷¶ÈÌ¨¡£
@@ -107,8 +97,8 @@ param in	:
 param in	:  
 param out	:response
 */
-int ns__Dispatch_Join_Group_Request_Nofitication(void *_,
-			ns__Join_Group_Request_Nofitication &response);
+int ns__Dispatch_Join_Group_Request_Nofitication(std::string session_id,
+			ns__Dispatch_Join_Group_Request_Nofitication_Response &response);
 
 /*
 brief		: Èº×é³ÉÔ±×´Ì¬Í¨Öª,
@@ -116,8 +106,8 @@ param in	:
 param in	:  
 param out	:response
 */
-int ns__Dispatch_Participant_Status_Notification(void *_,
-			ns__Participant_Status_Notification &response);
+int ns__Dispatch_Participant_Status_Notification(std::string session_id,
+			ns__Dispatch_Participant_Status_Notification_Response &response);
 
 /*
 brief		: ¿ÉÒÔË¢ĞÂÖ¸¶¨Èº×éµÄÏûÏ¢£¬ Ë¢ĞÂËùÓĞÈº×éÏûÏ¢¿ÉÄÜĞèÒªÍ¨¹ı¼¸´Î×éºÏ¡£
@@ -127,11 +117,12 @@ param in	:from_time,//²éÑ¯µÄÏûÏ¢µÄ·¢ËÍÊ±¼ä£¬´óÓÚfrom_time
 param in	:max_message_count,//default = 64£»Ó¦´ğÖĞ×î¶à°üº¬¶àÉÙÌõÏûÏ¢¡£ÓÉÓÚÈº×éµÄÏûÏ¢¿ÉÄÜÌ«¶à£¬Èç¹û¿Í»§¶ËÇëÇóµÄÊı¾İ¹ı´ó£¬·şÎñÆ÷¿ÉÄÜ·µ»ØµÄÏûÏ¢±ÈÖ¸¶¨µÄÒªÉÙ¡£
 param out	:response
 */
-int ns__Dispatch_Media_Message_Request(ns__Entity id,
-			uint32 from_message_id,
-			std::string from_time,
-			uint32 max_message_count,
-			ns__Media_Message &response);
+int ns__Dispatch_Media_Message_Request(std::string session_id,
+										std::string group_id,
+										std::string from_message_id,
+										std::string from_time,
+										std::string max_message_count,
+										ns__Dispatch_Media_Message_Request_Response &response);
 
 /*
 brief		:Ó¦ÓÃ·şÎñÆ÷×ª·¢Èº×éÏûÏ¢µ½µ÷¶ÈÌ¨
@@ -139,8 +130,8 @@ param in	:
 param in	:  
 param out	:response
 */
-int ns__Dispatch_Media_Message_Notification(void *_,
-			ns__Media_Message_Notification &response);
+int ns__Dispatch_Media_Message_Notification(std::string session_id,
+			ns__Dispatch_Media_Message_Notification_Response &response);
 
 /*
 brief		:Èº×é³ÉÔ±ÇëÇóÓëÈº×é½¨Á¢Í¨»°Í¨Öª,±ØĞëÎªÈº×é³ÉÔ±,
@@ -150,8 +141,8 @@ param in	:
 param in	:  
 param out	:
 */
-int ns__Dispatch_Participant_Connect_Request_Notification(void *_,
-			ns__Participant_Connect_Request_Notification &response);
+int ns__Dispatch_Participant_Connect_Request_Notification(std::string session_id,
+			ns__Dispatch_Participant_Connect_Request_Notification_Response &response);
 
 /*
 brief		:Ó¦ÓÃ·şÎñÆ÷×ª·¢Èº×éÏûÏ¢µ½µ÷¶ÈÌ¨,³ÉÔ±ÔÚÈº×éÖĞµÄ×´Ì¬ÎªInGroupÊ±£¬Òª·¢ÑÔÊ±£¬
@@ -161,8 +152,8 @@ param in	:
 param in	:  
 param out	:
 */
-int ns__Dispatch_Participant_Speak_Request_Notification(void *_,
-			ns__Participant_Connect_Request_Notification &response);
+int ns__Dispatch_Participant_Speak_Request_Notification(std::string session_id,
+			ns__Dispatch_Participant_Speak_Request_Notification_Response &response);
 
 /*
 brief		:µ÷¶ÈÌ¨ÇëÇó·şÎñÆ÷ÑûÇëÄ³¸öÖÕ¶ËÓëÈº×é½¨Á¢SIP»á»°¡£»òÕßÓëÁíÒ»¸öÖÕ¶Ë½¨Á¢µã¶Ôµãºô½Ğ¡£
@@ -172,9 +163,10 @@ param out	:ÎŞÏûÏ¢Ìå£¬³É¹¦Ó¦´ğ£¬±íÃû·şÎñÆ÷ÒÑ¾­·¢ËÍÏà¹ØÖ¸Áî¸øÖÕ¶ËÕËºÅ£¬
 			//ºóĞø×´Ì¬Í¨¹ıÈº×é³ÉÔ±×´Ì¬Í¨Öª»ñÈ¡; ÑûÇë²»ÔÚ³ÉÔ±ÁĞ±íÖĞµÄÕËºÅ£¬»áÊÕµ½Ó¦´ğ´íÎó.
 			//ÑûÇë²»ÔÚ³ÉÔ±ÁĞ±íÖĞµÄ²Ù×÷ÇëÊ¹ÓÃ¼ÓÈë»á»°
 */
-int ns__Dispatch_Invite_Participant_Request(ns__Entity group_id,
-			ns__Entity account_id,
-			struct ns__Dispatch_Invite_Participant_Request_Response { } *out);
+int ns__Dispatch_Invite_Participant_Request(std::string session_id,
+											std::string group_id,
+											std::string account_id,
+											ns__Normal_Response &response);
 
 /*
 brief		:µ÷¶ÈÌ¨ÇëÇó·şÎñÆ÷¹Ò¶ÏÖ¸¶¨ÖÕ¶ËÓëÄ³¸öÈº×éµÄSIP»á»°¡£
@@ -184,9 +176,10 @@ param out	:ÎŞÏûÏ¢Ìå£¬³É¹¦Ó¦´ğ£¬ËµÃ÷·şÎñÆ÷ÒÑ¾­½ÓÊÜ²¢ÇÒÖ´ĞĞÁËÇëÇó£¬
 			//ºóĞø×´Ì¬Í¨¹ıÈº×é³ÉÔ±×´Ì¬Í¨Öª»ñÈ¡.Èç¹ûÖ¸¶¨µÄ³ÉÔ±²»ÔÚÁĞ±íÖĞ»òÕß²»´¦ÓÚInGroup¡¢Talking×´Ì¬£¬
 			//»áÊÕµ½Ó¦´ğ´íÎó.
 */
-int ns__Dispatch_Drop_Participant_Request(ns__Entity group_id,
-			ns__Entity account_id,
-			struct ns__Dispatch_Drop_Participant_Request_Response { } *out);
+int ns__Dispatch_Drop_Participant_Request(std::string session_id,
+											std::string group_id,
+											std::string account_id,
+											ns__Normal_Response &response);
 
 /*
 brief		:Ö¸¶¨ÊÍ·ÅÄ³¸öÈº×é²ÎÓëÕßµÄ»°È¨¡£
@@ -194,9 +187,10 @@ param in	:group_id
 param in	:account_id //account_id±ØĞëÊÇÈº×éµÄ³ÉÔ±  
 param out	: account_idÔÚÖ¸¶¨Èº×éÖĞ£¬Èç¹û²»ÊÇtalking×´Ì¬£¬Ôò·µ»ØÓ¦´ğ´íÎó.
 */
-int ns__Dispatch_Release_Participant_Token_Request(ns__Entity group_id,
-			ns__Entity account_id,
-			struct ns__Dispatch_Release_Participant_Token_Request_Response { } *out);
+int ns__Dispatch_Release_Participant_Token_Request(std::string session_id,
+													std::string group_id,
+													std::string account_id,
+													ns__Normal_Response &response);
 
 /*
 brief		:µ÷¶ÈÌ¨Ö¸¶¨Ä³¸ö·¢ÑÔÕß·¢ÑÔ¡£
@@ -204,9 +198,10 @@ param in	:group_id
 param in	:account_id  
 param out	:
 */
-int ns__Dispatch_Appoint_Participant_Speak_Request(ns__Entity group_id,
-			ns__Entity account_id,
-			struct ns__Dispatch_Appoint_Participant_Speak_Request_Response { } *out);
+int ns__Dispatch_Appoint_Participant_Speak_Request(std::string session_id,
+													std::string group_id,
+													std::string account_id,
+													ns__Normal_Response &response);
 
 /*
 brief		:²Ù×÷Ô±¼ÓÈëÖ¸¶¨Èº×éµÄ»á»°£¨Ö¸¶¨Èº×éµÄ³ÉÔ±ĞÂÔö²Ù×÷Ô±£©£¬Ò»°ã¿ÉÒÔÓÃÓÚ¼àÌıÃüÁî
@@ -214,8 +209,9 @@ param in	:group_id
 param in	:  
 param out	:
 */
-int ns__Dispatch_Jion_Group_Request(ns__Entity group_id,
-			struct ns__Dispatch_Jion_Group_Request_Response { } *out);
+int ns__Dispatch_Jion_Group_Request(std::string session_id,
+									std::string group_id,
+									ns__Normal_Response &response);
 
 /*
 brief		:²Ù×÷Ô±Àë¿ªÖ¸¶¨Èº×éµÄ»á»°£¨Ö¸¶¨Èº×éµÄ³ÉÔ±ĞÂÔö²Ù×÷Ô±£©£¬Ò»°ã¿ÉÒÔÓÃÓÚ¼àÌıÃüÁî
@@ -223,8 +219,9 @@ param in	:
 param in	:  
 param out	:
 */
-int ns__Dispatch_Leave_Group_Request(ns__Entity group_id,
-			struct ns__Dispatch_Leave_Group_Request_Response { } *out);
+int ns__Dispatch_Leave_Group_Request(std::string session_id,
+									std::string group_id,
+									ns__Normal_Response &response);
 
 /*
 brief		:¼àÌıÈº×éÊ±£¬»á»°×´Ì¬µÄ±¨¸æ
@@ -232,8 +229,8 @@ param in	:
 param in	:  
 param out	:
 */
-int ns__Dispatch_Session_Status_Notification(void *_,
-			ns__Session_Status_Notification &response);
+int ns__Dispatch_Session_Status_Notification(std::string session_id,
+			ns__Dispatch_Session_Status_Notification_Response &response);
 
 /*
 brief		:¿ÉÒÔ·¢ËÍÎÄ×ÖÏûÏ¢ºÍÍ¼Æ¬ÏûÏ¢µ½Ö¸¶¨µÄÈº×é³ÉÔ±£¬»òÕßÈ«²¿¡£
@@ -241,19 +238,10 @@ param in	:id//½ÓÊÕÏûÏ¢µÄÈº×éID»òÕß¾¯Çé;ÏûÏ¢Êµ¼ÊÉÏÊÇÓëÈº×é¹ØÁªµÄ
 param in	:message
 param out	:
 */
-int ns__Dispatch_Send_Message_Request(uint32 id,
-			ns__MediaMessage message,
-			struct ns__Dispatch_Send_Message_Request_Response { } *out);
-
-/*
-brief		:Ìß³öÈº×é
-param in	:group_id
-param in	:account_id//account_id±ØĞëÊÇÈº×éµÄ³ÉÔ±,Èç¹ûÃ»ÓĞÖ¸¶¨account_idÔòÇå¿ÕÈº×éµÄ³ÉÔ±£¬·ñÔò°ÑÖ¸¶¨µÄ³ÉÔ±Ìß³ö.
-param out	:
-*/
-int ns__Dispatch_Kick_Participant_Request(ns__Entity group_id,
-			ns__Entity account_id,
-			struct ns__Dispatch_Kick_Participant_Request_Response { } *out);
+int ns__Dispatch_Send_Message_Request(std::string session_id,
+									std::string group_id,
+									ns__MediaMessage mediamessage,
+									ns__Normal_Response &response);
 
 /*
 brief		:¿ªÊ¼Â¼Òô
@@ -261,8 +249,9 @@ param in	:group_id//Ö¸¶¨Â¼ÒôµÄÈº×é
 param in	:  
 param out	:
 */
-int ns__Dispatch_Start_Record_Request(ns__Entity group_id,
-			struct ns__Dispatch_Start_Record_Request_Response { } *out);
+int ns__Dispatch_Start_Record_Request(std::string session_id,
+									std::string group_id,
+									ns__Normal_Response &response);
 
 /*
 brief		:Í£Ö¹Â¼Òô
@@ -270,8 +259,9 @@ param in	:group_id//Ö¸¶¨Â¼ÒôµÄÈº×é
 param in	:  
 param out	:
 */
-int ns__Dispatch_Stop_Record_Request(ns__Entity group_id,
-			struct ns__Dispatch_Stop_Record_Request_Response { } *out);
+int ns__Dispatch_Stop_Record_Request(std::string session_id,
+									std::string group_id,
+									ns__Normal_Response &response);
 
 /*
 brief		:Â¼Òô×´Ì¬Í¨Öª
@@ -279,29 +269,31 @@ param in	:
 param in	:  
 param out	:response
 */
-int ns__Dispatch_Record_Status_Notification(void *_,
-			ns__Dispatch_Record_Status &response);
+int ns__Dispatch_Record_Status_Notification(std::string session_id,
+			ns__Dispatch_Record_Status_Notification_Response &response);
 
 /*
-brief		:¶©ÔÄĞÅÏ¢,¶ÔÓÚ²»ÔÚÏßµÄÉè±¸£¬ÏµÍ³»áÍÆËÍ×îºóÒ»´ÎµÄÎ»ÖÃĞÅÏ¢
+brief		:¶©ÔÄĞÅÏ¢
 param in	:subscribing,//true-¶©ÔÄ false-È¡Ïû¶©ÔÄ
 param in	:account_id,//¶©ÔÄ»òÕßÈ¡ÏûµÄÕËºÅÒ»°ãÖ»¿ÉÒÔ¶©ÔÄÕËºÅÀàĞÍÎªTerminalµÄ¡£
 param in	:ttl,//ÍÆËÍÖÜÆÚ£¬µ¥Î»s,subscribing==trueÊ±ĞèÒª,·ñÔòÄ¬ÈÏÎª60s
 param out	:
 */
-int ns__Dispatch_Subscribe_Account_Location_Request(bool subscribing,
-			ns__Entity account_id,
-			uint32 ttl,
-			struct ns__Dispatch_Subscribe_Account_Location_Request_Response { } *out);
+int ns__Dispatch_Subscribe_Account_Info_Request(std::string session_id,
+												bool subscribing,
+												std::list<std::string> account_id,
+												enum ns__SubscribeType type,
+												std::string ttl,
+												ns__Normal_Response &response);
 
 /*
-brief		:µ÷¶ÈÌ¨¶©ÔÄÁËÖÕ¶ËµÄGPSĞÅÏ¢ºó£¬ÖÕ¶ËÓĞÎ»ÖÃĞÅÏ¢ÉÏ±¨Ê±,Í¨Öª¸øµ÷¶ÈÌ¨
+brief		:µ÷¶ÈÌ¨¶©ÔÄÁËÖÕ¶ËĞÅÏ¢ºó£¬ÓĞĞÅÏ¢ÉÏ±¨Ê±Í¨Öª¸øµ÷¶ÈÌ¨
 param in	:
 param in	:  
 param out	:response
 */
-int ns__Dispatch_Account_Location_Notification(void *_,
-			ns__Dispatch_Account_Location_Notification_Response &response);
+int ns__Dispatch_Account_Info_Notification(std::string session_id,
+			ns__Dispatch_Account_Info_Notification_Response &response);
 
 /*
 brief		:´´½¨¾¯Çé
@@ -310,9 +302,11 @@ param in	:acount//¾¯ÇéÏà¹ØµÄ³ÉÔ±£¬Èç¹ûalert¹ØÁªÁËgroupÊ±£¬Ôò²»ĞèÒª°üº¬´Ë×Ö¶Î£¬
 					//alert.group²»´æÔÚÊ±£¬Í¨¹ımembers´´½¨Ò»¸öÈº×éÓë¸Ã¾¯Çé¹ÜÀí¡£
 param out	:response
 */
-int ns__Dispatch_Append_Alert_Request(ns__Alert alert,
-			std::list<ns__Account> acount,
-			ns__Alert &response);
+int ns__Dispatch_Append_Alert_Request(std::string session_id,
+										ns__Alert alert,
+										std::list<ns__Account> members,
+										std::string size,
+										ns__Dispatch_Append_Alert_Request_Response &response);
 
 /*
 brief		:´Ë´¦Ö»Éæ¼°µ½ĞŞ¸Ä¾¯ÇéµÄÅäÖÃĞÅÏ¢¡£Èç¹ûÊÇ¾¯ÇéµÄ³ÉÔ±ĞŞ¸Ä£¬×ªÎªÊ¹ÓÃÈº×éµÄ³ÉÔ±ĞŞ¸ÄÏà¹Ø½Ó¿Ú
@@ -320,8 +314,9 @@ param in	:alert
 param in	:  
 param out	:
 */
-int ns__Dispatch_Modify_Alert_Request(ns__Alert alert,
-			struct ns__Dispatch_Modify_Alert_Request_Response { } *out);
+int ns__Dispatch_Modify_Alert_Request(std::string session_id,
+									ns__Alert alert,
+									ns__Normal_Response &response);
 
 /*
 brief		:½áÊø¾¯Çé£¬²»¿ÉÉ¾³ı£»
@@ -329,8 +324,9 @@ param in	:alert_id
 param in	:  
 param out	:
 */
-int ns__Dispatch_Stop_Alert_Request(ns__Entity alert_id,
-			struct ns__Dispatch_Stop_Alert_Request_Response { } *out);
+int ns__Dispatch_Stop_Alert_Request(std::string session_id,
+									std::string alert_id,
+									ns__Normal_Response &response);
 
 /*
 brief		:¾¯Çé½áÊøÍ¨Öª
@@ -338,8 +334,8 @@ param in	:alert_id
 param in	:  
 param out	:
 */
-int ns__Dispatch_Alert_Overed_Notification(ns__Entity alert_id,
-			struct ns__Dispatch_Alert_Overed_Notification_Response { } *out);
+int ns__Dispatch_Alert_Overed_Notification(std::string session_id,
+			ns__Dispatch_Alert_Overed_Notification_Response &response);
 
 /*
 brief		:¿ÉÒÔÖ¸¶¨Ê±¼ä·¶Î§£¬Ä£ºıÃû³ÆµÈ²éÑ¯¾¯ÇéÒÑÍê³ÉµÄ¾¯Çé
@@ -349,14 +345,15 @@ param in	:alram_time_from,alram_time_to//¸ù¾İ±¨¾¯Ê±¼ä½øĞĞ²éÑ¯
 param in	:over_time_from,over_time_to//¸ù¾İ¾¯Çé½áÊøÊ±¼ä£¬½øĞĞ²éÑ¯
 param out	:response
 */
-int ns__Dispatch_History_Alert_Request(std::string name,
-			std::string create_time_from,
-			std::string create_time_to,
-			std::string alram_time_from,
-			std::string alram_time_to,
-			std::string over_time_from,
-			std::string over_time_to,
-			std::list<ns__HistoryAlert> &response);
+int ns__Dispatch_History_Alert_Request(std::string session_id,
+										std::string name,
+										std::string create_time_from,
+										std::string create_time_to,
+										std::string alram_time_from,
+										std::string alram_time_to,
+										std::string over_time_from,
+										std::string over_time_to,
+										ns__Dispatch_History_Alert_Request_Reponse &response);
 
 /*
 brief		:²éÑ¯Ä³¸ö¾¯ÇéµÄÃ÷Ï¸ĞÅÏ¢,ÕâÀïÖ»ÊÇ·µ»ØÅäÖÃĞÅÏ¢
@@ -364,8 +361,9 @@ param in	:alert_id
 param in	:  
 param out	:response
 */
-int ns__Dispatch_Alert_Request(uint32 alert_id,
-			ns__Alert &response);
+int ns__Dispatch_Alert_Request(std::string session_id,
+								std::string alert_id,
+								ns__Dispatch_Alert_Request_Response &response);
 /*
 brief		:¾¯ÇéÏûÏ¢²éÑ¯
 param in	:history_alert_id//ÀúÊ·¾¯Çéid
@@ -374,11 +372,12 @@ param in	:from_time//´ÓÏûÏ¢½ÓÊÕµ½µÄÊ±¼ä¿ªÊ¼¡­
 param in	:max_message_count//Ó¦´ğÖĞ£¬×î¶à°üº¬¶àÉÙ¸öÏûÏ¢±ØĞëĞ¡ÓÚ·şÎñÆ÷µÄÄ¬ÈÏÖµ
 param out	:response
 */
-int ns__Dispatch_History_Alert_Message_Request(uint32 history_alert_id,
-			uint32 from_message_id,
-			std::string from_time,
-			uint32 max_message_count,
-			ns__Dispatch_History_Alert_Message &response);
+int ns__Dispatch_History_Alert_Message_Request(std::string session_id,
+												std::string history_alert_id,
+												std::string from_message_id,
+												std::string from_time,
+												std::string max_message_count,
+												ns__Dispatch_History_Alert_Message_Request_Response &response);
 
 /*
 brief		:É¾³ıÖ¸¶¨µÄÀúÊ·¾¯Çé£¬»áÍ¬²½É¾³ı¾¯ÇéµÄÏà¹ØÏûÏ¢¼ÇÂ¼¡£É¾³ı¶ÔÓÚµÄÈº×é
@@ -386,5 +385,6 @@ param in	:history_alert_id
 param in	:  
 param out	:
 */
-int ns__Dispatch_Delete_History_Alert_Request(uint32 history_alert_id,
-			struct ns__Dispatch_Delete_History_Alert_Request_Response { } *out);
+int ns__Dispatch_Delete_History_Alert_Request(std::string session_id,
+											std::string history_alert_id,
+											ns__Normal_Response &response);

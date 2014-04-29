@@ -7,74 +7,53 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-Append-Alert-Request>
+   <session-id></session-id>
    <alert>
     <base>
-     <id>0</id>
+     <id></id>
      <name></name>
+     <parentid></parentid>
      <entity-type>UNIT</entity-type>
-     <parentid>0</parentid>
     </base>
-    <group>
-     <id>0</id>
-     <name></name>
-     <entity-type>UNIT</entity-type>
-     <parentid>0</parentid>
-    </group>
+    <group-id></group-id>
     <describe></describe>
     <level>Exigency</level>
     <alram-time></alram-time>
-    <use-cars>0</use-cars>
+    <use-cars></use-cars>
     <create-time></create-time>
     <status>AlertActive</status>
    </alert>
-   <acount>
+   <members>
     <base>
-     <id>0</id>
+     <id></id>
      <name></name>
+     <parentid></parentid>
      <entity-type>UNIT</entity-type>
-     <parentid>0</parentid>
     </base>
-    <account-type>Dispatcher</account-type>
     <number></number>
     <short-number></short-number>
-    <password></password>
-    <service-status>AccountStop</service-status>
-    <priority>0</priority>
+    <priority></priority>
     <call-privilege>CallForbid</call-privilege>
     <token-privilege>TokenForbid</token-privilege>
-    <gps-report-mode>GpsManualPull</gps-report-mode>
-    <ttl>0</ttl>
     <status>OffLine</status>
     <sip-status>OffLine</sip-status>
-    <address>
-     <ip></ip>
-     <port>0</port>
-    </address>
-   </acount>
-   <acount>
+   </members>
+   <members>
     <base>
-     <id>0</id>
+     <id></id>
      <name></name>
+     <parentid></parentid>
      <entity-type>UNIT</entity-type>
-     <parentid>0</parentid>
     </base>
-    <account-type>Dispatcher</account-type>
     <number></number>
     <short-number></short-number>
-    <password></password>
-    <service-status>AccountStop</service-status>
-    <priority>0</priority>
+    <priority></priority>
     <call-privilege>CallForbid</call-privilege>
     <token-privilege>TokenForbid</token-privilege>
-    <gps-report-mode>GpsManualPull</gps-report-mode>
-    <ttl>0</ttl>
     <status>OffLine</status>
     <sip-status>OffLine</sip-status>
-    <address>
-     <ip></ip>
-     <port>0</port>
-    </address>
-   </acount>
+   </members>
+   <size></size>
   </ns:Dispatch-Append-Alert-Request>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

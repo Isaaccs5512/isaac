@@ -7,6 +7,7 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-History-Alert-Request>
+   <session-id></session-id>
    <name></name>
    <create-time-from></create-time-from>
    <create-time-to></create-time-to>

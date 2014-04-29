@@ -9,7 +9,6 @@
 #include <list>
 #include <set>
 #include <queue>
-#include "debug.h"
 
 
 
@@ -233,8 +232,11 @@ void task::start()
 				{
 					LOG(ERROR)<<"execute job occur semaget flat";
 				}
+				LOG(INFO)<<"job overed, clear job.";
 				job_ = std::function<void()>();
+				LOG(INFO)<<"cleared job";
 				tasks->job_completed( shared_from_this() );
+				LOG(INFO)<<"job recycle";
 			}else{
 				
 				sync_.wait(lock);

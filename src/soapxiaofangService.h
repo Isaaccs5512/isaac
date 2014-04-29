@@ -78,120 +78,111 @@ class SOAP_CMAC xiaofangService : public soap
 	///
 
 	/// Web service operation 'Dispatch-Login' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Login(std::string username, std::string password, ns__Login_Response &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Login(std::string username, std::string password, ns__Dispatch_Login_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Logout' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Logout(std::string name, struct ns__LogOutResponse *out) SOAP_PURE_VIRTUAL;
-
-	/// Web service operation 'Dispatch-Keepalive' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Keepalive(void *_, struct ns__Dispatch_Keepalive_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Logout(std::string session_id, std::string name, std::string password, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Entity-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Entity_Request(ns__Entity id, ns__EntityData &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Entity_Request(std::string session_id, std::string id, ns__Dispatch_Entity_Request_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Entity-Nofitication' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Entity_Nofitication(void *_, ns__Entity_Nofitication_Response &response) SOAP_PURE_VIRTUAL;
-
-	/// Web service operation 'Dispatch-Entity-Status-Notification' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Entity_Status_Notification(void *_, ns__Entity_Status_Notification &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Entity_Nofitication(std::string session_id, ns__Dispatch_Entity_Nofitication_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Append-Group' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Append_Group(ns__Group group, ns__Group &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Append_Group(std::string session_id, ns__Group group, ns__Dispatch_Append_Group_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Modify-Group' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Modify_Group(ns__Group group, ns__Group &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Modify_Group(std::string session_id, ns__Group group, ns__Dispatch_Modify_Group_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Modify-Participants' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Modify_Participants(ns__Modify_Participant request, ns__Group &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Modify_Participants(std::string session_id, ns__Modify_Participant request, ns__Dispatch_Modify_Participants_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Delete-Group' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Delete_Group(ns__Entity group_id, struct ns__Delete_Group_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Delete_Group(std::string session_id, std::string group_id, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Dispatch-Participants-Notification' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Dispatch_Participants_Notification(void *_, ns__Modify_Participant &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Dispatch_Participants_Notification(std::string session_id, ns__Dispatch_Dispatch_Participants_Notification_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Join-Group-Request-Nofitication' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Join_Group_Request_Nofitication(void *_, ns__Join_Group_Request_Nofitication &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Join_Group_Request_Nofitication(std::string session_id, ns__Dispatch_Join_Group_Request_Nofitication_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Participant-Status-Notification' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Participant_Status_Notification(void *_, ns__Participant_Status_Notification &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Participant_Status_Notification(std::string session_id, ns__Dispatch_Participant_Status_Notification_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Media-Message-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Media_Message_Request(ns__Entity id, unsigned long from_message_id, std::string from_time, unsigned long max_message_count, ns__Media_Message &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Media_Message_Request(std::string session_id, std::string group_id, std::string from_message_id, std::string from_time, std::string max_message_count, ns__Dispatch_Media_Message_Request_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Media-Message-Notification' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Media_Message_Notification(void *_, ns__Media_Message_Notification &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Media_Message_Notification(std::string session_id, ns__Dispatch_Media_Message_Notification_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Participant-Connect-Request-Notification' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Participant_Connect_Request_Notification(void *_, ns__Participant_Connect_Request_Notification &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Participant_Connect_Request_Notification(std::string session_id, ns__Dispatch_Participant_Connect_Request_Notification_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Participant-Speak-Request-Notification' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Participant_Speak_Request_Notification(void *_, ns__Participant_Connect_Request_Notification &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Participant_Speak_Request_Notification(std::string session_id, ns__Dispatch_Participant_Speak_Request_Notification_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Invite-Participant-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Invite_Participant_Request(ns__Entity group_id, ns__Entity account_id, struct ns__Dispatch_Invite_Participant_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Invite_Participant_Request(std::string session_id, std::string group_id, std::string account_id, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Drop-Participant-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Drop_Participant_Request(ns__Entity group_id, ns__Entity account_id, struct ns__Dispatch_Drop_Participant_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Drop_Participant_Request(std::string session_id, std::string group_id, std::string account_id, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Release-Participant-Token-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Release_Participant_Token_Request(ns__Entity group_id, ns__Entity account_id, struct ns__Dispatch_Release_Participant_Token_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Release_Participant_Token_Request(std::string session_id, std::string group_id, std::string account_id, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Appoint-Participant-Speak-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Appoint_Participant_Speak_Request(ns__Entity group_id, ns__Entity account_id, struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Appoint_Participant_Speak_Request(std::string session_id, std::string group_id, std::string account_id, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Jion-Group-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Jion_Group_Request(ns__Entity group_id, struct ns__Dispatch_Jion_Group_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Jion_Group_Request(std::string session_id, std::string group_id, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Leave-Group-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Leave_Group_Request(ns__Entity group_id, struct ns__Dispatch_Leave_Group_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Leave_Group_Request(std::string session_id, std::string group_id, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Session-Status-Notification' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Session_Status_Notification(void *_, ns__Session_Status_Notification &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Session_Status_Notification(std::string session_id, ns__Dispatch_Session_Status_Notification_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Send-Message-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Send_Message_Request(unsigned long id, ns__MediaMessage message, struct ns__Dispatch_Send_Message_Request_Response *out) SOAP_PURE_VIRTUAL;
-
-	/// Web service operation 'Dispatch-Kick-Participant-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Kick_Participant_Request(ns__Entity group_id, ns__Entity account_id, struct ns__Dispatch_Kick_Participant_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Send_Message_Request(std::string session_id, std::string group_id, ns__MediaMessage mediamessage, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Start-Record-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Start_Record_Request(ns__Entity group_id, struct ns__Dispatch_Start_Record_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Start_Record_Request(std::string session_id, std::string group_id, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Stop-Record-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Stop_Record_Request(ns__Entity group_id, struct ns__Dispatch_Stop_Record_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Stop_Record_Request(std::string session_id, std::string group_id, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Record-Status-Notification' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Record_Status_Notification(void *_, ns__Dispatch_Record_Status &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Record_Status_Notification(std::string session_id, ns__Dispatch_Record_Status_Notification_Response &response) SOAP_PURE_VIRTUAL;
 
-	/// Web service operation 'Dispatch-Subscribe-Account-Location-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Subscribe_Account_Location_Request(bool subscribing, ns__Entity account_id, unsigned long ttl, struct ns__Dispatch_Subscribe_Account_Location_Request_Response *out) SOAP_PURE_VIRTUAL;
+	/// Web service operation 'Dispatch-Subscribe-Account-Info-Request' (returns error code or SOAP_OK)
+	virtual	int Dispatch_Subscribe_Account_Info_Request(std::string session_id, bool subscribing, std::list<std::string >account_id, enum ns__SubscribeType type, std::string ttl, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
-	/// Web service operation 'Dispatch-Account-Location-Notification' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Account_Location_Notification(void *_, ns__Dispatch_Account_Location_Notification_Response &response) SOAP_PURE_VIRTUAL;
+	/// Web service operation 'Dispatch-Account-Info-Notification' (returns error code or SOAP_OK)
+	virtual	int Dispatch_Account_Info_Notification(std::string session_id, ns__Dispatch_Account_Info_Notification_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Append-Alert-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Append_Alert_Request(ns__Alert alert, std::list<ns__Account >acount, ns__Alert &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Append_Alert_Request(std::string session_id, ns__Alert alert, std::list<ns__Account >members, std::string size, ns__Dispatch_Append_Alert_Request_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Modify-Alert-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Modify_Alert_Request(ns__Alert alert, struct ns__Dispatch_Modify_Alert_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Modify_Alert_Request(std::string session_id, ns__Alert alert, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Stop-Alert-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Stop_Alert_Request(ns__Entity alert_id, struct ns__Dispatch_Stop_Alert_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Stop_Alert_Request(std::string session_id, std::string alert_id, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Alert-Overed-Notification' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Alert_Overed_Notification(ns__Entity alert_id, struct ns__Dispatch_Alert_Overed_Notification_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Alert_Overed_Notification(std::string session_id, ns__Dispatch_Alert_Overed_Notification_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-History-Alert-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_History_Alert_Request(std::string name, std::string create_time_from, std::string create_time_to, std::string alram_time_from, std::string alram_time_to, std::string over_time_from, std::string over_time_to, std::list<ns__HistoryAlert >&response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_History_Alert_Request(std::string session_id, std::string name, std::string create_time_from, std::string create_time_to, std::string alram_time_from, std::string alram_time_to, std::string over_time_from, std::string over_time_to, ns__Dispatch_History_Alert_Request_Reponse &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Alert-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Alert_Request(unsigned long alert_id, ns__Alert &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Alert_Request(std::string session_id, std::string alert_id, ns__Dispatch_Alert_Request_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-History-Alert-Message-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_History_Alert_Message_Request(unsigned long history_alert_id, unsigned long from_message_id, std::string from_time, unsigned long max_message_count, ns__Dispatch_History_Alert_Message &response) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_History_Alert_Message_Request(std::string session_id, std::string history_alert_id, std::string from_message_id, std::string from_time, std::string max_message_count, ns__Dispatch_History_Alert_Message_Request_Response &response) SOAP_PURE_VIRTUAL;
 
 	/// Web service operation 'Dispatch-Delete-History-Alert-Request' (returns error code or SOAP_OK)
-	virtual	int Dispatch_Delete_History_Alert_Request(unsigned long history_alert_id, struct ns__Dispatch_Delete_History_Alert_Request_Response *out) SOAP_PURE_VIRTUAL;
+	virtual	int Dispatch_Delete_History_Alert_Request(std::string session_id, std::string history_alert_id, ns__Normal_Response &response) SOAP_PURE_VIRTUAL;
 };
 #endif

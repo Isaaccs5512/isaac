@@ -7,54 +7,40 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-Modify-Participants>
+   <session-id></session-id>
    <request>
     <group-id>
-     <id>0</id>
+     <id></id>
      <name></name>
+     <parentid></parentid>
      <entity-type>UNIT</entity-type>
-     <parentid>0</parentid>
     </group-id>
     <modify-type>Increased</modify-type>
     <participants>
-     <id>0</id>
-     <group>
-      <id>0</id>
-      <name></name>
-      <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
-     </group>
      <account>
-      <id>0</id>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
      </account>
-     <priority>0</priority>
+     <priority></priority>
      <call-privilege>CallForbid</call-privilege>
-     <toke-privilege>TokenForbid</toke-privilege>
+     <token-privilege>TokenForbid</token-privilege>
      <status>IDLE</status>
-     <sync-added>false</sync-added>
     </participants>
     <participants>
-     <id>0</id>
-     <group>
-      <id>0</id>
-      <name></name>
-      <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
-     </group>
      <account>
-      <id>0</id>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
      </account>
-     <priority>0</priority>
+     <priority></priority>
      <call-privilege>CallForbid</call-privilege>
-     <toke-privilege>TokenForbid</toke-privilege>
+     <token-privilege>TokenForbid</token-privilege>
      <status>IDLE</status>
-     <sync-added>false</sync-added>
     </participants>
+    <size></size>
    </request>
   </ns:Dispatch-Modify-Participants>
  </SOAP-ENV:Body>

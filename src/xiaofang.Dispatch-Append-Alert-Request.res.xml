@@ -6,25 +6,25 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <ns:Alert>
-   <base>
-    <id>0</id>
-    <name></name>
-    <entity-type>UNIT</entity-type>
-    <parentid>0</parentid>
-   </base>
-   <group>
-    <id>0</id>
-    <name></name>
-    <entity-type>UNIT</entity-type>
-    <parentid>0</parentid>
-   </group>
-   <describe></describe>
-   <level>Exigency</level>
-   <alram-time></alram-time>
-   <use-cars>0</use-cars>
-   <create-time></create-time>
-   <status>AlertActive</status>
-  </ns:Alert>
+  <ns:Dispatch-Append-Alert-Request-Response>
+   <data>
+    <base>
+     <id></id>
+     <name></name>
+     <parentid></parentid>
+     <entity-type>UNIT</entity-type>
+    </base>
+    <group-id></group-id>
+    <describe></describe>
+    <level>Exigency</level>
+    <alram-time></alram-time>
+    <use-cars></use-cars>
+    <create-time></create-time>
+    <status>AlertActive</status>
+   </data>
+   <session-id></session-id>
+   <error-describe></error-describe>
+   <result>false</result>
+  </ns:Dispatch-Append-Alert-Request-Response>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

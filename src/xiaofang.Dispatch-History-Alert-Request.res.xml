@@ -6,17 +6,31 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <ns:Dispatch-History-Alert-RequestResponse>
-   <response>
-    <id>0</id>
+  <ns:Dispatch-History-Alert-Request-Reponse>
+   <data>
+    <id></id>
     <name></name>
     <describe></describe>
     <level>Exigency</level>
     <alram-time></alram-time>
-    <use-cars>0</use-cars>
+    <use-cars></use-cars>
     <create-time></create-time>
     <over-time></over-time>
-   </response>
-  </ns:Dispatch-History-Alert-RequestResponse>
+   </data>
+   <data>
+    <id></id>
+    <name></name>
+    <describe></describe>
+    <level>Exigency</level>
+    <alram-time></alram-time>
+    <use-cars></use-cars>
+    <create-time></create-time>
+    <over-time></over-time>
+   </data>
+   <size></size>
+   <session-id></session-id>
+   <error-describe></error-describe>
+   <result>false</result>
+  </ns:Dispatch-History-Alert-Request-Reponse>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

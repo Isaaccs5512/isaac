@@ -6,14 +6,17 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <ns:Dispatch-Record-Status>
+  <ns:Dispatch-Record-Status-Notification-Response>
    <group-id>
-    <id>0</id>
+    <id></id>
     <name></name>
+    <parentid></parentid>
     <entity-type>UNIT</entity-type>
-    <parentid>0</parentid>
    </group-id>
    <recording>false</recording>
-  </ns:Dispatch-Record-Status>
+   <error-describe></error-describe>
+   <session-id></session-id>
+   <result>false</result>
+  </ns:Dispatch-Record-Status-Notification-Response>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

@@ -7,6 +7,7 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-Session-Status-Notification>
+   <session-id></session-id>
   </ns:Dispatch-Session-Status-Notification>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

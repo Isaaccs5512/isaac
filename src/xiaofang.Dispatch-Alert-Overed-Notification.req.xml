@@ -7,12 +7,7 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-Alert-Overed-Notification>
-   <alert-id>
-    <id>0</id>
-    <name></name>
-    <entity-type>UNIT</entity-type>
-    <parentid>0</parentid>
-   </alert-id>
+   <session-id></session-id>
   </ns:Dispatch-Alert-Overed-Notification>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

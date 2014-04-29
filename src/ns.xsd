@@ -18,32 +18,6 @@
     <!-- = 1 -->
    </restriction>
   </simpleType>
-  <simpleType name="UserType"><!-- ns__UserType -->
-
-   <restriction base="xsd:string">
-    <enumeration value="Admin"/><!-- ns__UserType::Admin -->
-    <!-- = 0 -->
-    <enumeration value="Operator"/><!-- ns__UserType::Operator -->
-    <!-- = 1 -->
-   </restriction>
-  </simpleType>
-  <simpleType name="EntityType"><!-- ns__EntityType -->
-
-   <restriction base="xsd:string">
-    <enumeration value="UNIT"/><!-- ns__EntityType::UNIT -->
-    <!-- = 0 -->
-    <enumeration value="ACCOUNT"/><!-- ns__EntityType::ACCOUNT -->
-    <!-- = 1 -->
-    <enumeration value="USER"/><!-- ns__EntityType::USER -->
-    <!-- = 2 -->
-    <enumeration value="GROUP"/><!-- ns__EntityType::GROUP -->
-    <!-- = 3 -->
-    <enumeration value="GATEWAY"/><!-- ns__EntityType::GATEWAY -->
-    <!-- = 4 -->
-    <enumeration value="ORGANIZATION"/><!-- ns__EntityType::ORGANIZATION -->
-    <!-- = 5 -->
-   </restriction>
-  </simpleType>
   <simpleType name="ListModifyType"><!-- ns__ListModifyType -->
 
    <restriction base="xsd:string">
@@ -68,15 +42,6 @@
     <!-- = 3 -->
    </restriction>
   </simpleType>
-  <simpleType name="AccountServiceStatus"><!-- ns__AccountServiceStatus -->
-
-   <restriction base="xsd:string">
-    <enumeration value="AccountStop"/><!-- ns__AccountServiceStatus::AccountStop -->
-    <!-- = 0 -->
-    <enumeration value="AccountActive"/><!-- ns__AccountServiceStatus::AccountActive -->
-    <!-- = 1 -->
-   </restriction>
-  </simpleType>
   <simpleType name="CallPrivilege"><!-- ns__CallPrivilege -->
 
    <restriction base="xsd:string">
@@ -96,17 +61,6 @@
     <enumeration value="TokenFreedom"/><!-- ns__TokenPrivilege::TokenFreedom -->
     <!-- = 1 -->
     <enumeration value="TokenPolicy"/><!-- ns__TokenPrivilege::TokenPolicy -->
-    <!-- = 2 -->
-   </restriction>
-  </simpleType>
-  <simpleType name="GpsReportMode"><!-- ns__GpsReportMode -->
-
-   <restriction base="xsd:string">
-    <enumeration value="GpsManualPull"/><!-- ns__GpsReportMode::GpsManualPull -->
-    <!-- = 0 -->
-    <enumeration value="GpsManualPush"/><!-- ns__GpsReportMode::GpsManualPush -->
-    <!-- = 1 -->
-    <enumeration value="GpsAutoPush"/><!-- ns__GpsReportMode::GpsAutoPush -->
     <!-- = 2 -->
    </restriction>
   </simpleType>
@@ -176,116 +130,200 @@
     <!-- = 3 -->
    </restriction>
   </simpleType>
+  <simpleType name="ProfessionStatus"><!-- ns__ProfessionStatus -->
+
+   <restriction base="xsd:string">
+    <enumeration value="Standby"/><!-- ns__ProfessionStatus::Standby -->
+    <!-- = 0 -->
+    <enumeration value="Duty"/><!-- ns__ProfessionStatus::Duty -->
+    <!-- = 1 -->
+    <enumeration value="Turnout"/><!-- ns__ProfessionStatus::Turnout -->
+    <!-- = 2 -->
+    <enumeration value="Training"/><!-- ns__ProfessionStatus::Training -->
+    <!-- = 3 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="SubscribeType"><!-- ns__SubscribeType -->
+
+   <restriction base="xsd:string">
+    <enumeration value="Gis"/><!-- ns__SubscribeType::Gis -->
+    <!-- = 0 -->
+    <enumeration value="Status"/><!-- ns__SubscribeType::Status -->
+    <!-- = 1 -->
+    <enumeration value="Profession"/><!-- ns__SubscribeType::Profession -->
+    <!-- = 2 -->
+    <enumeration value="Gis-status"/><!-- ns__SubscribeType::Gis_status -->
+    <!-- = 3 -->
+    <enumeration value="Gis-profession"/><!-- ns__SubscribeType::Gis_profession -->
+    <!-- = 4 -->
+    <enumeration value="Status-profession"/><!-- ns__SubscribeType::Status_profession -->
+    <!-- = 5 -->
+    <enumeration value="Gis-status-profession"/><!-- ns__SubscribeType::Gis_status_profession -->
+    <!-- = 6 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="EntityType"><!-- ns__EntityType -->
+
+   <restriction base="xsd:string">
+    <enumeration value="UNIT"/><!-- ns__EntityType::UNIT -->
+    <!-- = 0 -->
+    <enumeration value="ACCOUNT"/><!-- ns__EntityType::ACCOUNT -->
+    <!-- = 1 -->
+    <enumeration value="USER"/><!-- ns__EntityType::USER -->
+    <!-- = 2 -->
+    <enumeration value="GROUP"/><!-- ns__EntityType::GROUP -->
+    <!-- = 3 -->
+   </restriction>
+  </simpleType>
   <complexType name="Entity"><!-- ns__Entity -->
 
    <sequence>
-     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::id -->
+     <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::id -->
      <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::name -->
+     <element name="parentid" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::parentid -->
      <element name="entity-type" type="ns:EntityType" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::entity_type -->
-     <element name="parentid" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::parentid -->
    </sequence>
   </complexType>
   <complexType name="Address"><!-- ns__Address -->
 
    <sequence>
      <element name="ip" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Address::ip -->
-     <element name="port" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Address::port -->
+     <element name="port" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Address::port -->
    </sequence>
   </complexType>
   <complexType name="User"><!-- ns__User -->
 
    <sequence>
      <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__User::base -->
-     <element name="password" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__User::password -->
-     <element name="user-type" type="ns:UserType" minOccurs="1" maxOccurs="1"/><!-- ns__User::user_type -->
      <element name="account" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__User::account -->
      <element name="status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__User::status -->
-     <element name="address" type="ns:Address" minOccurs="1" maxOccurs="1"/><!-- ns__User::address -->
    </sequence>
   </complexType>
   <complexType name="Account"><!-- ns__Account -->
 
    <sequence>
      <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Account::base -->
-     <element name="account-type" type="ns:AccountType" minOccurs="1" maxOccurs="1"/><!-- ns__Account::account_type -->
      <element name="number" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Account::number -->
      <element name="short-number" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Account::short_number -->
-     <element name="password" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Account::password -->
-     <element name="service-status" type="ns:AccountServiceStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Account::service_status -->
-     <element name="priority" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Account::priority -->
+     <element name="priority" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Account::priority -->
      <element name="call-privilege" type="ns:CallPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Account::call_privilege -->
      <element name="token-privilege" type="ns:TokenPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Account::token_privilege -->
-     <element name="gps-report-mode" type="ns:GpsReportMode" minOccurs="1" maxOccurs="1"/><!-- ns__Account::gps_report_mode -->
-     <element name="ttl" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Account::ttl -->
      <element name="status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Account::status -->
      <element name="sip-status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Account::sip_status -->
-     <element name="address" type="ns:Address" minOccurs="1" maxOccurs="1"/><!-- ns__Account::address -->
    </sequence>
   </complexType>
   <complexType name="Unit"><!-- ns__Unit -->
 
    <sequence>
      <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Unit::base -->
-     <element name="include-members" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Unit::include_members -->
-     <element name="members" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Unit::members -->
+     <element name="members" type="ns:Entity" minOccurs="0" maxOccurs="unbounded"/><!-- ns__Unit::members -->
+     <element name="size" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Unit::size -->
    </sequence>
   </complexType>
   <complexType name="Participant"><!-- ns__Participant -->
 
    <sequence>
-     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::id -->
-     <element name="group" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::group -->
      <element name="account" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::account -->
-     <element name="priority" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::priority -->
+     <element name="priority" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::priority -->
      <element name="call-privilege" type="ns:CallPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::call_privilege -->
-     <element name="toke-privilege" type="ns:TokenPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::toke_privilege -->
+     <element name="token-privilege" type="ns:TokenPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::token_privilege -->
      <element name="status" type="ns:SessionStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::status -->
-     <element name="sync-added" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::sync_added -->
    </sequence>
   </complexType>
-  <complexType name="Gateway"><!-- ns__Gateway -->
+  <complexType name="Group"><!-- ns__Group -->
 
    <sequence>
-     <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::base -->
-     <element name="address" type="ns:Address" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::address -->
-     <element name="include-allocate-counts" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::include_allocate_counts -->
-     <element name="allocate-counts" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::allocate_counts -->
-     <element name="include-active-counts" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::include_active_counts -->
-     <element name="active-counts" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::active_counts -->
-     <element name="status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::status -->
+     <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::id -->
+     <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::name -->
+     <element name="owner-id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::owner_id -->
+     <element name="number" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::number -->
+     <element name="short-number" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::short_number -->
+     <element name="participants" type="ns:Participant" minOccurs="0" maxOccurs="unbounded"/><!-- ns__Group::participants -->
+     <element name="size" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::size -->
+     <element name="record-type" type="ns:RecordType" minOccurs="1" maxOccurs="1"/><!-- ns__Group::record_type -->
+     <element name="record-status" type="ns:RecordStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Group::record_status -->
+   </sequence>
+  </complexType>
+  <complexType name="Alert"><!-- ns__Alert -->
+
+   <sequence>
+     <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::base -->
+     <element name="group-id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::group_id -->
+     <element name="describe" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::describe -->
+     <element name="level" type="ns:AlertLevel" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::level -->
+     <element name="alram-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::alram_time -->
+     <element name="use-cars" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::use_cars -->
+     <element name="create-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::create_time -->
+     <element name="status" type="ns:AlertStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::status -->
    </sequence>
   </complexType>
   <complexType name="Organization"><!-- ns__Organization -->
 
    <sequence>
      <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Organization::base -->
-     <element name="include-members" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Organization::include_members -->
      <element name="members" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Organization::members -->
+   </sequence>
+  </complexType>
+  <complexType name="EntityData"><!-- ns__EntityData -->
+
+   <sequence>
+     <element name="id" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::id -->
+     <element name="unit" type="ns:Unit" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::unit -->
+     <element name="account" type="ns:Account" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::account -->
+     <element name="user" type="ns:User" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::user -->
+     <element name="group" type="ns:Group" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::group -->
+     <element name="alert" type="ns:Alert" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::alert -->
+     <element name="organization" type="ns:Organization" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::organization -->
+   </sequence>
+  </complexType>
+  <complexType name="Entity-Status-Notification"><!-- ns__Entity_Status_Notification -->
+
+   <sequence>
+     <element name="id" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Entity_Status_Notification::id -->
+     <element name="status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Entity_Status_Notification::status -->
+     <element name="sip-status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Entity_Status_Notification::sip_status -->
+   </sequence>
+  </complexType>
+  <complexType name="Modify-Participant"><!-- ns__Modify_Participant -->
+
+   <sequence>
+     <element name="group-id" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Modify_Participant::group_id -->
+     <element name="modify-type" type="ns:ListModifyType" minOccurs="1" maxOccurs="1"/><!-- ns__Modify_Participant::modify_type -->
+     <element name="participants" type="ns:Participant" minOccurs="0" maxOccurs="unbounded"/><!-- ns__Modify_Participant::participants -->
+     <element name="size" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Modify_Participant::size -->
    </sequence>
   </complexType>
   <complexType name="MediaMessage"><!-- ns__MediaMessage -->
 
    <sequence>
-     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::id -->
+     <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::id -->
      <element name="sender" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::sender -->
      <element name="text" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::text -->
      <element name="picture-uri" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::picture_uri -->
      <element name="audio-uri" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::audio_uri -->
-     <element name="audio-length" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::audio_length -->
+     <element name="audio-length" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::audio_length -->
      <element name="video-uri" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::video_uri -->
-     <element name="video-length" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::video_length -->
+     <element name="video-length" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::video_length -->
      <element name="timestamp" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::timestamp -->
+   </sequence>
+  </complexType>
+  <complexType name="Media-Message"><!-- ns__Media_Message -->
+
+   <sequence>
+     <element name="id" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Media_Message::id -->
+     <element name="messages" type="ns:MediaMessage" minOccurs="1" maxOccurs="1"/><!-- ns__Media_Message::messages -->
+     <element name="leave-message-count" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Media_Message::leave_message_count -->
    </sequence>
   </complexType>
   <complexType name="HistoryAlert"><!-- ns__HistoryAlert -->
 
    <sequence>
-     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::id -->
+     <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::id -->
      <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::name -->
      <element name="describe" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::describe -->
      <element name="level" type="ns:AlertLevel" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::level -->
      <element name="alram-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::alram_time -->
-     <element name="use-cars" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::use_cars -->
+     <element name="use-cars" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::use_cars -->
      <element name="create-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::create_time -->
      <element name="over-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::over_time -->
    </sequence>

@@ -86,28 +86,8 @@ SOAP_FMAC3 int * SOAP_FMAC4 soap_get_int(struct soap*, int *, const char*, const
 #endif
 
 
-#ifndef SOAP_TYPE_long
-#define SOAP_TYPE_long (9)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_long(struct soap*, long *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_long(struct soap*, const char*, int, const long *, const char*);
-SOAP_FMAC3 long * SOAP_FMAC4 soap_in_long(struct soap*, const char*, long *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_long(struct soap*, const long *, const char*, const char*);
-
-#ifndef soap_write_long
-#define soap_write_long(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_long(soap, data),0) || soap_put_long(soap, data, "long", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 long * SOAP_FMAC4 soap_get_long(struct soap*, long *, const char*, const char*);
-
-#ifndef soap_read_long
-#define soap_read_long(soap, data) ( soap_begin_recv(soap) || !soap_get_long(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
 #ifndef SOAP_TYPE_double
-#define SOAP_TYPE_double (53)
+#define SOAP_TYPE_double (57)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_double(struct soap*, double *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_double(struct soap*, const char*, int, const double *, const char*);
@@ -126,70 +106,8 @@ SOAP_FMAC3 double * SOAP_FMAC4 soap_get_double(struct soap*, double *, const cha
 #endif
 
 
-#ifndef SOAP_TYPE_unsignedInt
-#define SOAP_TYPE_unsignedInt (8)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_unsignedInt(struct soap*, unsigned int *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_unsignedInt(struct soap*, const char*, int, const unsigned int *, const char*);
-SOAP_FMAC3 unsigned int * SOAP_FMAC4 soap_in_unsignedInt(struct soap*, const char*, unsigned int *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_unsignedInt(struct soap*, const unsigned int *, const char*, const char*);
-
-#ifndef soap_write_unsignedInt
-#define soap_write_unsignedInt(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_unsignedInt(soap, data),0) || soap_put_unsignedInt(soap, data, "unsignedInt", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 unsigned int * SOAP_FMAC4 soap_get_unsignedInt(struct soap*, unsigned int *, const char*, const char*);
-
-#ifndef soap_read_unsignedInt
-#define soap_read_unsignedInt(soap, data) ( soap_begin_recv(soap) || !soap_get_unsignedInt(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_uint32
-#define SOAP_TYPE_uint32 (11)
-#endif
-
-#define soap_default_uint32(soap, a) soap_default_unsignedLong(soap, a)
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_uint32(struct soap*, const char*, int, const unsigned long *, const char*);
-SOAP_FMAC3 unsigned long * SOAP_FMAC4 soap_in_uint32(struct soap*, const char*, unsigned long *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_uint32(struct soap*, const unsigned long *, const char*, const char*);
-
-#ifndef soap_write_uint32
-#define soap_write_uint32(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_uint32(soap, data),0) || soap_put_uint32(soap, data, "uint32", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 unsigned long * SOAP_FMAC4 soap_get_uint32(struct soap*, unsigned long *, const char*, const char*);
-
-#ifndef soap_read_uint32
-#define soap_read_uint32(soap, data) ( soap_begin_recv(soap) || !soap_get_uint32(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_unsignedLong
-#define SOAP_TYPE_unsignedLong (10)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_unsignedLong(struct soap*, unsigned long *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_unsignedLong(struct soap*, const char*, int, const unsigned long *, const char*);
-SOAP_FMAC3 unsigned long * SOAP_FMAC4 soap_in_unsignedLong(struct soap*, const char*, unsigned long *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_unsignedLong(struct soap*, const unsigned long *, const char*, const char*);
-
-#ifndef soap_write_unsignedLong
-#define soap_write_unsignedLong(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_unsignedLong(soap, data),0) || soap_put_unsignedLong(soap, data, "unsignedLong", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 unsigned long * SOAP_FMAC4 soap_get_unsignedLong(struct soap*, unsigned long *, const char*, const char*);
-
-#ifndef soap_read_unsignedLong
-#define soap_read_unsignedLong(soap, data) ( soap_begin_recv(soap) || !soap_get_unsignedLong(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
 #ifndef SOAP_TYPE_bool
-#define SOAP_TYPE_bool (34)
+#define SOAP_TYPE_bool (28)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_bool(struct soap*, bool *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_bool(struct soap*, const char*, int, const bool *, const char*);
@@ -212,8 +130,80 @@ SOAP_FMAC3 bool * SOAP_FMAC4 soap_get_bool(struct soap*, bool *, const char*, co
 #endif
 
 
+#ifndef SOAP_TYPE_ns__EntityType
+#define SOAP_TYPE_ns__EntityType (21)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__EntityType(struct soap*, enum ns__EntityType *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__EntityType(struct soap*, const char*, int, const enum ns__EntityType *, const char*);
+
+SOAP_FMAC3S const char* SOAP_FMAC4S soap_ns__EntityType2s(struct soap*, enum ns__EntityType);
+SOAP_FMAC3 enum ns__EntityType * SOAP_FMAC4 soap_in_ns__EntityType(struct soap*, const char*, enum ns__EntityType *, const char*);
+
+SOAP_FMAC3S int SOAP_FMAC4S soap_s2ns__EntityType(struct soap*, const char*, enum ns__EntityType *);
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__EntityType(struct soap*, const enum ns__EntityType *, const char*, const char*);
+
+#ifndef soap_write_ns__EntityType
+#define soap_write_ns__EntityType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__EntityType(soap, data),0) || soap_put_ns__EntityType(soap, data, "ns:EntityType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 enum ns__EntityType * SOAP_FMAC4 soap_get_ns__EntityType(struct soap*, enum ns__EntityType *, const char*, const char*);
+
+#ifndef soap_read_ns__EntityType
+#define soap_read_ns__EntityType(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__EntityType(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_ns__SubscribeType
+#define SOAP_TYPE_ns__SubscribeType (20)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__SubscribeType(struct soap*, enum ns__SubscribeType *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__SubscribeType(struct soap*, const char*, int, const enum ns__SubscribeType *, const char*);
+
+SOAP_FMAC3S const char* SOAP_FMAC4S soap_ns__SubscribeType2s(struct soap*, enum ns__SubscribeType);
+SOAP_FMAC3 enum ns__SubscribeType * SOAP_FMAC4 soap_in_ns__SubscribeType(struct soap*, const char*, enum ns__SubscribeType *, const char*);
+
+SOAP_FMAC3S int SOAP_FMAC4S soap_s2ns__SubscribeType(struct soap*, const char*, enum ns__SubscribeType *);
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__SubscribeType(struct soap*, const enum ns__SubscribeType *, const char*, const char*);
+
+#ifndef soap_write_ns__SubscribeType
+#define soap_write_ns__SubscribeType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__SubscribeType(soap, data),0) || soap_put_ns__SubscribeType(soap, data, "ns:SubscribeType", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 enum ns__SubscribeType * SOAP_FMAC4 soap_get_ns__SubscribeType(struct soap*, enum ns__SubscribeType *, const char*, const char*);
+
+#ifndef soap_read_ns__SubscribeType
+#define soap_read_ns__SubscribeType(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__SubscribeType(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
+#ifndef SOAP_TYPE_ns__ProfessionStatus
+#define SOAP_TYPE_ns__ProfessionStatus (19)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__ProfessionStatus(struct soap*, enum ns__ProfessionStatus *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__ProfessionStatus(struct soap*, const char*, int, const enum ns__ProfessionStatus *, const char*);
+
+SOAP_FMAC3S const char* SOAP_FMAC4S soap_ns__ProfessionStatus2s(struct soap*, enum ns__ProfessionStatus);
+SOAP_FMAC3 enum ns__ProfessionStatus * SOAP_FMAC4 soap_in_ns__ProfessionStatus(struct soap*, const char*, enum ns__ProfessionStatus *, const char*);
+
+SOAP_FMAC3S int SOAP_FMAC4S soap_s2ns__ProfessionStatus(struct soap*, const char*, enum ns__ProfessionStatus *);
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__ProfessionStatus(struct soap*, const enum ns__ProfessionStatus *, const char*, const char*);
+
+#ifndef soap_write_ns__ProfessionStatus
+#define soap_write_ns__ProfessionStatus(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__ProfessionStatus(soap, data),0) || soap_put_ns__ProfessionStatus(soap, data, "ns:ProfessionStatus", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 enum ns__ProfessionStatus * SOAP_FMAC4 soap_get_ns__ProfessionStatus(struct soap*, enum ns__ProfessionStatus *, const char*, const char*);
+
+#ifndef soap_read_ns__ProfessionStatus
+#define soap_read_ns__ProfessionStatus(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__ProfessionStatus(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+
 #ifndef SOAP_TYPE_ns__EntityNotifyType
-#define SOAP_TYPE_ns__EntityNotifyType (26)
+#define SOAP_TYPE_ns__EntityNotifyType (18)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__EntityNotifyType(struct soap*, enum ns__EntityNotifyType *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__EntityNotifyType(struct soap*, const char*, int, const enum ns__EntityNotifyType *, const char*);
@@ -237,7 +227,7 @@ SOAP_FMAC3 enum ns__EntityNotifyType * SOAP_FMAC4 soap_get_ns__EntityNotifyType(
 
 
 #ifndef SOAP_TYPE_ns__AlertLevel
-#define SOAP_TYPE_ns__AlertLevel (25)
+#define SOAP_TYPE_ns__AlertLevel (17)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__AlertLevel(struct soap*, enum ns__AlertLevel *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__AlertLevel(struct soap*, const char*, int, const enum ns__AlertLevel *, const char*);
@@ -261,7 +251,7 @@ SOAP_FMAC3 enum ns__AlertLevel * SOAP_FMAC4 soap_get_ns__AlertLevel(struct soap*
 
 
 #ifndef SOAP_TYPE_ns__AlertStatus
-#define SOAP_TYPE_ns__AlertStatus (24)
+#define SOAP_TYPE_ns__AlertStatus (16)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__AlertStatus(struct soap*, enum ns__AlertStatus *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__AlertStatus(struct soap*, const char*, int, const enum ns__AlertStatus *, const char*);
@@ -285,7 +275,7 @@ SOAP_FMAC3 enum ns__AlertStatus * SOAP_FMAC4 soap_get_ns__AlertStatus(struct soa
 
 
 #ifndef SOAP_TYPE_ns__RecordStatus
-#define SOAP_TYPE_ns__RecordStatus (23)
+#define SOAP_TYPE_ns__RecordStatus (15)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__RecordStatus(struct soap*, enum ns__RecordStatus *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__RecordStatus(struct soap*, const char*, int, const enum ns__RecordStatus *, const char*);
@@ -309,7 +299,7 @@ SOAP_FMAC3 enum ns__RecordStatus * SOAP_FMAC4 soap_get_ns__RecordStatus(struct s
 
 
 #ifndef SOAP_TYPE_ns__RecordType
-#define SOAP_TYPE_ns__RecordType (22)
+#define SOAP_TYPE_ns__RecordType (14)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__RecordType(struct soap*, enum ns__RecordType *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__RecordType(struct soap*, const char*, int, const enum ns__RecordType *, const char*);
@@ -333,7 +323,7 @@ SOAP_FMAC3 enum ns__RecordType * SOAP_FMAC4 soap_get_ns__RecordType(struct soap*
 
 
 #ifndef SOAP_TYPE_ns__SessionStatus
-#define SOAP_TYPE_ns__SessionStatus (21)
+#define SOAP_TYPE_ns__SessionStatus (13)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__SessionStatus(struct soap*, enum ns__SessionStatus *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__SessionStatus(struct soap*, const char*, int, const enum ns__SessionStatus *, const char*);
@@ -356,32 +346,8 @@ SOAP_FMAC3 enum ns__SessionStatus * SOAP_FMAC4 soap_get_ns__SessionStatus(struct
 #endif
 
 
-#ifndef SOAP_TYPE_ns__GpsReportMode
-#define SOAP_TYPE_ns__GpsReportMode (20)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__GpsReportMode(struct soap*, enum ns__GpsReportMode *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__GpsReportMode(struct soap*, const char*, int, const enum ns__GpsReportMode *, const char*);
-
-SOAP_FMAC3S const char* SOAP_FMAC4S soap_ns__GpsReportMode2s(struct soap*, enum ns__GpsReportMode);
-SOAP_FMAC3 enum ns__GpsReportMode * SOAP_FMAC4 soap_in_ns__GpsReportMode(struct soap*, const char*, enum ns__GpsReportMode *, const char*);
-
-SOAP_FMAC3S int SOAP_FMAC4S soap_s2ns__GpsReportMode(struct soap*, const char*, enum ns__GpsReportMode *);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__GpsReportMode(struct soap*, const enum ns__GpsReportMode *, const char*, const char*);
-
-#ifndef soap_write_ns__GpsReportMode
-#define soap_write_ns__GpsReportMode(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__GpsReportMode(soap, data),0) || soap_put_ns__GpsReportMode(soap, data, "ns:GpsReportMode", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 enum ns__GpsReportMode * SOAP_FMAC4 soap_get_ns__GpsReportMode(struct soap*, enum ns__GpsReportMode *, const char*, const char*);
-
-#ifndef soap_read_ns__GpsReportMode
-#define soap_read_ns__GpsReportMode(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__GpsReportMode(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
 #ifndef SOAP_TYPE_ns__TokenPrivilege
-#define SOAP_TYPE_ns__TokenPrivilege (19)
+#define SOAP_TYPE_ns__TokenPrivilege (12)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__TokenPrivilege(struct soap*, enum ns__TokenPrivilege *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__TokenPrivilege(struct soap*, const char*, int, const enum ns__TokenPrivilege *, const char*);
@@ -405,7 +371,7 @@ SOAP_FMAC3 enum ns__TokenPrivilege * SOAP_FMAC4 soap_get_ns__TokenPrivilege(stru
 
 
 #ifndef SOAP_TYPE_ns__CallPrivilege
-#define SOAP_TYPE_ns__CallPrivilege (18)
+#define SOAP_TYPE_ns__CallPrivilege (11)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__CallPrivilege(struct soap*, enum ns__CallPrivilege *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__CallPrivilege(struct soap*, const char*, int, const enum ns__CallPrivilege *, const char*);
@@ -428,32 +394,8 @@ SOAP_FMAC3 enum ns__CallPrivilege * SOAP_FMAC4 soap_get_ns__CallPrivilege(struct
 #endif
 
 
-#ifndef SOAP_TYPE_ns__AccountServiceStatus
-#define SOAP_TYPE_ns__AccountServiceStatus (17)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__AccountServiceStatus(struct soap*, enum ns__AccountServiceStatus *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__AccountServiceStatus(struct soap*, const char*, int, const enum ns__AccountServiceStatus *, const char*);
-
-SOAP_FMAC3S const char* SOAP_FMAC4S soap_ns__AccountServiceStatus2s(struct soap*, enum ns__AccountServiceStatus);
-SOAP_FMAC3 enum ns__AccountServiceStatus * SOAP_FMAC4 soap_in_ns__AccountServiceStatus(struct soap*, const char*, enum ns__AccountServiceStatus *, const char*);
-
-SOAP_FMAC3S int SOAP_FMAC4S soap_s2ns__AccountServiceStatus(struct soap*, const char*, enum ns__AccountServiceStatus *);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__AccountServiceStatus(struct soap*, const enum ns__AccountServiceStatus *, const char*, const char*);
-
-#ifndef soap_write_ns__AccountServiceStatus
-#define soap_write_ns__AccountServiceStatus(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__AccountServiceStatus(soap, data),0) || soap_put_ns__AccountServiceStatus(soap, data, "ns:AccountServiceStatus", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 enum ns__AccountServiceStatus * SOAP_FMAC4 soap_get_ns__AccountServiceStatus(struct soap*, enum ns__AccountServiceStatus *, const char*, const char*);
-
-#ifndef soap_read_ns__AccountServiceStatus
-#define soap_read_ns__AccountServiceStatus(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__AccountServiceStatus(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
 #ifndef SOAP_TYPE_ns__AccountType
-#define SOAP_TYPE_ns__AccountType (16)
+#define SOAP_TYPE_ns__AccountType (10)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__AccountType(struct soap*, enum ns__AccountType *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__AccountType(struct soap*, const char*, int, const enum ns__AccountType *, const char*);
@@ -477,7 +419,7 @@ SOAP_FMAC3 enum ns__AccountType * SOAP_FMAC4 soap_get_ns__AccountType(struct soa
 
 
 #ifndef SOAP_TYPE_ns__ListModifyType
-#define SOAP_TYPE_ns__ListModifyType (15)
+#define SOAP_TYPE_ns__ListModifyType (9)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__ListModifyType(struct soap*, enum ns__ListModifyType *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__ListModifyType(struct soap*, const char*, int, const enum ns__ListModifyType *, const char*);
@@ -500,56 +442,8 @@ SOAP_FMAC3 enum ns__ListModifyType * SOAP_FMAC4 soap_get_ns__ListModifyType(stru
 #endif
 
 
-#ifndef SOAP_TYPE_ns__EntityType
-#define SOAP_TYPE_ns__EntityType (14)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__EntityType(struct soap*, enum ns__EntityType *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__EntityType(struct soap*, const char*, int, const enum ns__EntityType *, const char*);
-
-SOAP_FMAC3S const char* SOAP_FMAC4S soap_ns__EntityType2s(struct soap*, enum ns__EntityType);
-SOAP_FMAC3 enum ns__EntityType * SOAP_FMAC4 soap_in_ns__EntityType(struct soap*, const char*, enum ns__EntityType *, const char*);
-
-SOAP_FMAC3S int SOAP_FMAC4S soap_s2ns__EntityType(struct soap*, const char*, enum ns__EntityType *);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__EntityType(struct soap*, const enum ns__EntityType *, const char*, const char*);
-
-#ifndef soap_write_ns__EntityType
-#define soap_write_ns__EntityType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__EntityType(soap, data),0) || soap_put_ns__EntityType(soap, data, "ns:EntityType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 enum ns__EntityType * SOAP_FMAC4 soap_get_ns__EntityType(struct soap*, enum ns__EntityType *, const char*, const char*);
-
-#ifndef soap_read_ns__EntityType
-#define soap_read_ns__EntityType(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__EntityType(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_ns__UserType
-#define SOAP_TYPE_ns__UserType (13)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__UserType(struct soap*, enum ns__UserType *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__UserType(struct soap*, const char*, int, const enum ns__UserType *, const char*);
-
-SOAP_FMAC3S const char* SOAP_FMAC4S soap_ns__UserType2s(struct soap*, enum ns__UserType);
-SOAP_FMAC3 enum ns__UserType * SOAP_FMAC4 soap_in_ns__UserType(struct soap*, const char*, enum ns__UserType *, const char*);
-
-SOAP_FMAC3S int SOAP_FMAC4S soap_s2ns__UserType(struct soap*, const char*, enum ns__UserType *);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__UserType(struct soap*, const enum ns__UserType *, const char*, const char*);
-
-#ifndef soap_write_ns__UserType
-#define soap_write_ns__UserType(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__UserType(soap, data),0) || soap_put_ns__UserType(soap, data, "ns:UserType", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 enum ns__UserType * SOAP_FMAC4 soap_get_ns__UserType(struct soap*, enum ns__UserType *, const char*, const char*);
-
-#ifndef soap_read_ns__UserType
-#define soap_read_ns__UserType(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__UserType(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
 #ifndef SOAP_TYPE_ns__RegisterStatus
-#define SOAP_TYPE_ns__RegisterStatus (12)
+#define SOAP_TYPE_ns__RegisterStatus (8)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__RegisterStatus(struct soap*, enum ns__RegisterStatus *);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__RegisterStatus(struct soap*, const char*, int, const enum ns__RegisterStatus *, const char*);
@@ -572,66 +466,182 @@ SOAP_FMAC3 enum ns__RegisterStatus * SOAP_FMAC4 soap_get_ns__RegisterStatus(stru
 #endif
 
 
-#ifndef SOAP_TYPE_ns__Dispatch_Record_Status
-#define SOAP_TYPE_ns__Dispatch_Record_Status (57)
+#ifndef SOAP_TYPE_ns__Normal_Response
+#define SOAP_TYPE_ns__Normal_Response (65)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Record_Status(struct soap*, const char*, int, const ns__Dispatch_Record_Status *, const char*);
-SOAP_FMAC3 ns__Dispatch_Record_Status * SOAP_FMAC4 soap_in_ns__Dispatch_Record_Status(struct soap*, const char*, ns__Dispatch_Record_Status *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Normal_Response(struct soap*, const char*, int, const ns__Normal_Response *, const char*);
+SOAP_FMAC3 ns__Normal_Response * SOAP_FMAC4 soap_in_ns__Normal_Response(struct soap*, const char*, ns__Normal_Response *, const char*);
 
-#ifndef soap_write_ns__Dispatch_Record_Status
-#define soap_write_ns__Dispatch_Record_Status(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Record-Status", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns__Normal_Response
+#define soap_write_ns__Normal_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Normal-Response", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns__Dispatch_Record_Status * SOAP_FMAC4 soap_get_ns__Dispatch_Record_Status(struct soap*, ns__Dispatch_Record_Status *, const char*, const char*);
+SOAP_FMAC3 ns__Normal_Response * SOAP_FMAC4 soap_get_ns__Normal_Response(struct soap*, ns__Normal_Response *, const char*, const char*);
 
-#ifndef soap_read_ns__Dispatch_Record_Status
-#define soap_read_ns__Dispatch_Record_Status(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Record_Status(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns__Normal_Response
+#define soap_read_ns__Normal_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Normal_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 ns__Dispatch_Record_Status * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Record_Status(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC1 ns__Normal_Response * SOAP_FMAC2 soap_instantiate_ns__Normal_Response(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns__Dispatch_Record_Status * soap_new_ns__Dispatch_Record_Status(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Record_Status(soap, n, NULL, NULL, NULL); }
+inline ns__Normal_Response * soap_new_ns__Normal_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Normal_Response(soap, n, NULL, NULL, NULL); }
 
-inline ns__Dispatch_Record_Status * soap_new_req_ns__Dispatch_Record_Status(struct soap *soap, ns__Entity& group_id, bool recording) { ns__Dispatch_Record_Status *_p = soap_instantiate_ns__Dispatch_Record_Status(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Record_Status::group_id = group_id; _p->ns__Dispatch_Record_Status::recording = recording; } return _p; }
+inline ns__Normal_Response * soap_new_req_ns__Normal_Response(struct soap *soap, std::string& session_id, std::string& error_describe, bool result) { ns__Normal_Response *_p = soap_instantiate_ns__Normal_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Normal_Response::session_id = session_id; _p->ns__Normal_Response::error_describe = error_describe; _p->ns__Normal_Response::result = result; } return _p; }
 
-inline ns__Dispatch_Record_Status * soap_new_set_ns__Dispatch_Record_Status(struct soap *soap, ns__Entity& group_id, bool recording) { ns__Dispatch_Record_Status *_p = soap_instantiate_ns__Dispatch_Record_Status(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Record_Status::group_id = group_id; _p->ns__Dispatch_Record_Status::recording = recording; } return _p; }
+inline ns__Normal_Response * soap_new_set_ns__Normal_Response(struct soap *soap, std::string& session_id, std::string& error_describe, bool result) { ns__Normal_Response *_p = soap_instantiate_ns__Normal_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Normal_Response::session_id = session_id; _p->ns__Normal_Response::error_describe = error_describe; _p->ns__Normal_Response::result = result; } return _p; }
 
-inline void soap_delete_ns__Dispatch_Record_Status(struct soap *soap, ns__Dispatch_Record_Status *p) { soap_delete(soap, p); }
+inline void soap_delete_ns__Normal_Response(struct soap *soap, ns__Normal_Response *p) { soap_delete(soap, p); }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Record_Status(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Normal_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_History_Alert_Message
-#define SOAP_TYPE_ns__Dispatch_History_Alert_Message (55)
+#ifndef SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification_Response (64)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_History_Alert_Message(struct soap*, const char*, int, const ns__Dispatch_History_Alert_Message *, const char*);
-SOAP_FMAC3 ns__Dispatch_History_Alert_Message * SOAP_FMAC4 soap_in_ns__Dispatch_History_Alert_Message(struct soap*, const char*, ns__Dispatch_History_Alert_Message *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, const char*, int, const ns__Dispatch_Alert_Overed_Notification_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Alert_Overed_Notification_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, const char*, ns__Dispatch_Alert_Overed_Notification_Response *, const char*);
 
-#ifndef soap_write_ns__Dispatch_History_Alert_Message
-#define soap_write_ns__Dispatch_History_Alert_Message(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-History-Alert-Message", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns__Dispatch_Alert_Overed_Notification_Response
+#define soap_write_ns__Dispatch_Alert_Overed_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Alert-Overed-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns__Dispatch_History_Alert_Message * SOAP_FMAC4 soap_get_ns__Dispatch_History_Alert_Message(struct soap*, ns__Dispatch_History_Alert_Message *, const char*, const char*);
+SOAP_FMAC3 ns__Dispatch_Alert_Overed_Notification_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, ns__Dispatch_Alert_Overed_Notification_Response *, const char*, const char*);
 
-#ifndef soap_read_ns__Dispatch_History_Alert_Message
-#define soap_read_ns__Dispatch_History_Alert_Message(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_History_Alert_Message(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Alert_Overed_Notification_Response
+#define soap_read_ns__Dispatch_Alert_Overed_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Alert_Overed_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 ns__Dispatch_History_Alert_Message * SOAP_FMAC2 soap_instantiate_ns__Dispatch_History_Alert_Message(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC1 ns__Dispatch_Alert_Overed_Notification_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns__Dispatch_History_Alert_Message * soap_new_ns__Dispatch_History_Alert_Message(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_History_Alert_Message(soap, n, NULL, NULL, NULL); }
+inline ns__Dispatch_Alert_Overed_Notification_Response * soap_new_ns__Dispatch_Alert_Overed_Notification_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Alert_Overed_Notification_Response(soap, n, NULL, NULL, NULL); }
 
-inline ns__Dispatch_History_Alert_Message * soap_new_req_ns__Dispatch_History_Alert_Message(struct soap *soap, unsigned long history_alert_id, unsigned long leave_message_count) { ns__Dispatch_History_Alert_Message *_p = soap_instantiate_ns__Dispatch_History_Alert_Message(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_History_Alert_Message::history_alert_id = history_alert_id; _p->ns__Dispatch_History_Alert_Message::leave_message_count = leave_message_count; } return _p; }
+inline ns__Dispatch_Alert_Overed_Notification_Response * soap_new_req_ns__Dispatch_Alert_Overed_Notification_Response(struct soap *soap, std::string& alert_id, std::string& error_describe, std::string& session_id, bool result) { ns__Dispatch_Alert_Overed_Notification_Response *_p = soap_instantiate_ns__Dispatch_Alert_Overed_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Alert_Overed_Notification_Response::alert_id = alert_id; _p->ns__Dispatch_Alert_Overed_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Alert_Overed_Notification_Response::session_id = session_id; _p->ns__Dispatch_Alert_Overed_Notification_Response::result = result; } return _p; }
 
-inline ns__Dispatch_History_Alert_Message * soap_new_set_ns__Dispatch_History_Alert_Message(struct soap *soap, unsigned long history_alert_id, std::list<ns__MediaMessage >& messages, unsigned long leave_message_count) { ns__Dispatch_History_Alert_Message *_p = soap_instantiate_ns__Dispatch_History_Alert_Message(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_History_Alert_Message::history_alert_id = history_alert_id; _p->ns__Dispatch_History_Alert_Message::messages = messages; _p->ns__Dispatch_History_Alert_Message::leave_message_count = leave_message_count; } return _p; }
+inline ns__Dispatch_Alert_Overed_Notification_Response * soap_new_set_ns__Dispatch_Alert_Overed_Notification_Response(struct soap *soap, std::string& alert_id, std::string& error_describe, std::string& session_id, bool result) { ns__Dispatch_Alert_Overed_Notification_Response *_p = soap_instantiate_ns__Dispatch_Alert_Overed_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Alert_Overed_Notification_Response::alert_id = alert_id; _p->ns__Dispatch_Alert_Overed_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Alert_Overed_Notification_Response::session_id = session_id; _p->ns__Dispatch_Alert_Overed_Notification_Response::result = result; } return _p; }
 
-inline void soap_delete_ns__Dispatch_History_Alert_Message(struct soap *soap, ns__Dispatch_History_Alert_Message *p) { soap_delete(soap, p); }
+inline void soap_delete_ns__Dispatch_Alert_Overed_Notification_Response(struct soap *soap, ns__Dispatch_Alert_Overed_Notification_Response *p) { soap_delete(soap, p); }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_History_Alert_Message(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ns__Dispatch_Record_Status_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Record_Status_Notification_Response (63)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Record_Status_Notification_Response(struct soap*, const char*, int, const ns__Dispatch_Record_Status_Notification_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Record_Status_Notification_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Record_Status_Notification_Response(struct soap*, const char*, ns__Dispatch_Record_Status_Notification_Response *, const char*);
+
+#ifndef soap_write_ns__Dispatch_Record_Status_Notification_Response
+#define soap_write_ns__Dispatch_Record_Status_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Record-Status-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns__Dispatch_Record_Status_Notification_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Record_Status_Notification_Response(struct soap*, ns__Dispatch_Record_Status_Notification_Response *, const char*, const char*);
+
+#ifndef soap_read_ns__Dispatch_Record_Status_Notification_Response
+#define soap_read_ns__Dispatch_Record_Status_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Record_Status_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+SOAP_FMAC1 ns__Dispatch_Record_Status_Notification_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Record_Status_Notification_Response(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns__Dispatch_Record_Status_Notification_Response * soap_new_ns__Dispatch_Record_Status_Notification_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Record_Status_Notification_Response(soap, n, NULL, NULL, NULL); }
+
+inline ns__Dispatch_Record_Status_Notification_Response * soap_new_req_ns__Dispatch_Record_Status_Notification_Response(struct soap *soap, ns__Entity& group_id, bool recording, std::string& error_describe, std::string& session_id, bool result) { ns__Dispatch_Record_Status_Notification_Response *_p = soap_instantiate_ns__Dispatch_Record_Status_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Record_Status_Notification_Response::group_id = group_id; _p->ns__Dispatch_Record_Status_Notification_Response::recording = recording; _p->ns__Dispatch_Record_Status_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Record_Status_Notification_Response::session_id = session_id; _p->ns__Dispatch_Record_Status_Notification_Response::result = result; } return _p; }
+
+inline ns__Dispatch_Record_Status_Notification_Response * soap_new_set_ns__Dispatch_Record_Status_Notification_Response(struct soap *soap, ns__Entity& group_id, bool recording, std::string& error_describe, std::string& session_id, bool result) { ns__Dispatch_Record_Status_Notification_Response *_p = soap_instantiate_ns__Dispatch_Record_Status_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Record_Status_Notification_Response::group_id = group_id; _p->ns__Dispatch_Record_Status_Notification_Response::recording = recording; _p->ns__Dispatch_Record_Status_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Record_Status_Notification_Response::session_id = session_id; _p->ns__Dispatch_Record_Status_Notification_Response::result = result; } return _p; }
+
+inline void soap_delete_ns__Dispatch_Record_Status_Notification_Response(struct soap *soap, ns__Dispatch_Record_Status_Notification_Response *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Record_Status_Notification_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request_Response
+#define SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request_Response (62)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_History_Alert_Message_Request_Response(struct soap*, const char*, int, const ns__Dispatch_History_Alert_Message_Request_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_History_Alert_Message_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_History_Alert_Message_Request_Response(struct soap*, const char*, ns__Dispatch_History_Alert_Message_Request_Response *, const char*);
+
+#ifndef soap_write_ns__Dispatch_History_Alert_Message_Request_Response
+#define soap_write_ns__Dispatch_History_Alert_Message_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-History-Alert-Message-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns__Dispatch_History_Alert_Message_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_History_Alert_Message_Request_Response(struct soap*, ns__Dispatch_History_Alert_Message_Request_Response *, const char*, const char*);
+
+#ifndef soap_read_ns__Dispatch_History_Alert_Message_Request_Response
+#define soap_read_ns__Dispatch_History_Alert_Message_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_History_Alert_Message_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+SOAP_FMAC1 ns__Dispatch_History_Alert_Message_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_History_Alert_Message_Request_Response(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns__Dispatch_History_Alert_Message_Request_Response * soap_new_ns__Dispatch_History_Alert_Message_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_History_Alert_Message_Request_Response(soap, n, NULL, NULL, NULL); }
+
+inline ns__Dispatch_History_Alert_Message_Request_Response * soap_new_req_ns__Dispatch_History_Alert_Message_Request_Response(struct soap *soap, std::string& history_alert_id, std::string& size, std::string& leave_message_count, std::string& error_describe, std::string& session_id, bool result) { ns__Dispatch_History_Alert_Message_Request_Response *_p = soap_instantiate_ns__Dispatch_History_Alert_Message_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_History_Alert_Message_Request_Response::history_alert_id = history_alert_id; _p->ns__Dispatch_History_Alert_Message_Request_Response::size = size; _p->ns__Dispatch_History_Alert_Message_Request_Response::leave_message_count = leave_message_count; _p->ns__Dispatch_History_Alert_Message_Request_Response::error_describe = error_describe; _p->ns__Dispatch_History_Alert_Message_Request_Response::session_id = session_id; _p->ns__Dispatch_History_Alert_Message_Request_Response::result = result; } return _p; }
+
+inline ns__Dispatch_History_Alert_Message_Request_Response * soap_new_set_ns__Dispatch_History_Alert_Message_Request_Response(struct soap *soap, std::string& history_alert_id, std::list<ns__MediaMessage >& messages, std::string& size, std::string& leave_message_count, std::string& error_describe, std::string& session_id, bool result) { ns__Dispatch_History_Alert_Message_Request_Response *_p = soap_instantiate_ns__Dispatch_History_Alert_Message_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_History_Alert_Message_Request_Response::history_alert_id = history_alert_id; _p->ns__Dispatch_History_Alert_Message_Request_Response::messages = messages; _p->ns__Dispatch_History_Alert_Message_Request_Response::size = size; _p->ns__Dispatch_History_Alert_Message_Request_Response::leave_message_count = leave_message_count; _p->ns__Dispatch_History_Alert_Message_Request_Response::error_describe = error_describe; _p->ns__Dispatch_History_Alert_Message_Request_Response::session_id = session_id; _p->ns__Dispatch_History_Alert_Message_Request_Response::result = result; } return _p; }
+
+inline void soap_delete_ns__Dispatch_History_Alert_Message_Request_Response(struct soap *soap, ns__Dispatch_History_Alert_Message_Request_Response *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_History_Alert_Message_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ns__Dispatch_History_Alert_Request_Reponse
+#define SOAP_TYPE_ns__Dispatch_History_Alert_Request_Reponse (60)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_History_Alert_Request_Reponse(struct soap*, const char*, int, const ns__Dispatch_History_Alert_Request_Reponse *, const char*);
+SOAP_FMAC3 ns__Dispatch_History_Alert_Request_Reponse * SOAP_FMAC4 soap_in_ns__Dispatch_History_Alert_Request_Reponse(struct soap*, const char*, ns__Dispatch_History_Alert_Request_Reponse *, const char*);
+
+#ifndef soap_write_ns__Dispatch_History_Alert_Request_Reponse
+#define soap_write_ns__Dispatch_History_Alert_Request_Reponse(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-History-Alert-Request-Reponse", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns__Dispatch_History_Alert_Request_Reponse * SOAP_FMAC4 soap_get_ns__Dispatch_History_Alert_Request_Reponse(struct soap*, ns__Dispatch_History_Alert_Request_Reponse *, const char*, const char*);
+
+#ifndef soap_read_ns__Dispatch_History_Alert_Request_Reponse
+#define soap_read_ns__Dispatch_History_Alert_Request_Reponse(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_History_Alert_Request_Reponse(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+SOAP_FMAC1 ns__Dispatch_History_Alert_Request_Reponse * SOAP_FMAC2 soap_instantiate_ns__Dispatch_History_Alert_Request_Reponse(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns__Dispatch_History_Alert_Request_Reponse * soap_new_ns__Dispatch_History_Alert_Request_Reponse(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_History_Alert_Request_Reponse(soap, n, NULL, NULL, NULL); }
+
+inline ns__Dispatch_History_Alert_Request_Reponse * soap_new_req_ns__Dispatch_History_Alert_Request_Reponse(struct soap *soap, std::string& size, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_History_Alert_Request_Reponse *_p = soap_instantiate_ns__Dispatch_History_Alert_Request_Reponse(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_History_Alert_Request_Reponse::size = size; _p->ns__Dispatch_History_Alert_Request_Reponse::session_id = session_id; _p->ns__Dispatch_History_Alert_Request_Reponse::error_describe = error_describe; _p->ns__Dispatch_History_Alert_Request_Reponse::result = result; } return _p; }
+
+inline ns__Dispatch_History_Alert_Request_Reponse * soap_new_set_ns__Dispatch_History_Alert_Request_Reponse(struct soap *soap, std::list<ns__HistoryAlert >& data, std::string& size, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_History_Alert_Request_Reponse *_p = soap_instantiate_ns__Dispatch_History_Alert_Request_Reponse(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_History_Alert_Request_Reponse::data = data; _p->ns__Dispatch_History_Alert_Request_Reponse::size = size; _p->ns__Dispatch_History_Alert_Request_Reponse::session_id = session_id; _p->ns__Dispatch_History_Alert_Request_Reponse::error_describe = error_describe; _p->ns__Dispatch_History_Alert_Request_Reponse::result = result; } return _p; }
+
+inline void soap_delete_ns__Dispatch_History_Alert_Request_Reponse(struct soap *soap, ns__Dispatch_History_Alert_Request_Reponse *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_History_Alert_Request_Reponse(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ns__Dispatch_Alert_Request_Response
+#define SOAP_TYPE_ns__Dispatch_Alert_Request_Response (59)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Alert_Request_Response(struct soap*, const char*, int, const ns__Dispatch_Alert_Request_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Alert_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Alert_Request_Response(struct soap*, const char*, ns__Dispatch_Alert_Request_Response *, const char*);
+
+#ifndef soap_write_ns__Dispatch_Alert_Request_Response
+#define soap_write_ns__Dispatch_Alert_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Alert-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns__Dispatch_Alert_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Alert_Request_Response(struct soap*, ns__Dispatch_Alert_Request_Response *, const char*, const char*);
+
+#ifndef soap_read_ns__Dispatch_Alert_Request_Response
+#define soap_read_ns__Dispatch_Alert_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Alert_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+SOAP_FMAC1 ns__Dispatch_Alert_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Alert_Request_Response(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns__Dispatch_Alert_Request_Response * soap_new_ns__Dispatch_Alert_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Alert_Request_Response(soap, n, NULL, NULL, NULL); }
+
+inline ns__Dispatch_Alert_Request_Response * soap_new_req_ns__Dispatch_Alert_Request_Response(struct soap *soap, ns__HistoryAlert& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Alert_Request_Response *_p = soap_instantiate_ns__Dispatch_Alert_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Alert_Request_Response::data = data; _p->ns__Dispatch_Alert_Request_Response::session_id = session_id; _p->ns__Dispatch_Alert_Request_Response::error_describe = error_describe; _p->ns__Dispatch_Alert_Request_Response::result = result; } return _p; }
+
+inline ns__Dispatch_Alert_Request_Response * soap_new_set_ns__Dispatch_Alert_Request_Response(struct soap *soap, ns__HistoryAlert& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Alert_Request_Response *_p = soap_instantiate_ns__Dispatch_Alert_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Alert_Request_Response::data = data; _p->ns__Dispatch_Alert_Request_Response::session_id = session_id; _p->ns__Dispatch_Alert_Request_Response::error_describe = error_describe; _p->ns__Dispatch_Alert_Request_Response::result = result; } return _p; }
+
+inline void soap_delete_ns__Dispatch_Alert_Request_Response(struct soap *soap, ns__Dispatch_Alert_Request_Response *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Alert_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__HistoryAlert
-#define SOAP_TYPE_ns__HistoryAlert (54)
+#define SOAP_TYPE_ns__HistoryAlert (58)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__HistoryAlert(struct soap*, const char*, int, const ns__HistoryAlert *, const char*);
@@ -651,132 +661,161 @@ SOAP_FMAC1 ns__HistoryAlert * SOAP_FMAC2 soap_instantiate_ns__HistoryAlert(struc
 
 inline ns__HistoryAlert * soap_new_ns__HistoryAlert(struct soap *soap, int n = -1) { return soap_instantiate_ns__HistoryAlert(soap, n, NULL, NULL, NULL); }
 
-inline ns__HistoryAlert * soap_new_req_ns__HistoryAlert(struct soap *soap, unsigned long id, std::string& name, std::string& describe, enum ns__AlertLevel level, std::string& alram_time, unsigned long use_cars, std::string& create_time, std::string& over_time) { ns__HistoryAlert *_p = soap_instantiate_ns__HistoryAlert(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__HistoryAlert::id = id; _p->ns__HistoryAlert::name = name; _p->ns__HistoryAlert::describe = describe; _p->ns__HistoryAlert::level = level; _p->ns__HistoryAlert::alram_time = alram_time; _p->ns__HistoryAlert::use_cars = use_cars; _p->ns__HistoryAlert::create_time = create_time; _p->ns__HistoryAlert::over_time = over_time; } return _p; }
+inline ns__HistoryAlert * soap_new_req_ns__HistoryAlert(struct soap *soap, std::string& id, std::string& name, std::string& describe, enum ns__AlertLevel level, std::string& alram_time, std::string& use_cars, std::string& create_time, std::string& over_time) { ns__HistoryAlert *_p = soap_instantiate_ns__HistoryAlert(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__HistoryAlert::id = id; _p->ns__HistoryAlert::name = name; _p->ns__HistoryAlert::describe = describe; _p->ns__HistoryAlert::level = level; _p->ns__HistoryAlert::alram_time = alram_time; _p->ns__HistoryAlert::use_cars = use_cars; _p->ns__HistoryAlert::create_time = create_time; _p->ns__HistoryAlert::over_time = over_time; } return _p; }
 
-inline ns__HistoryAlert * soap_new_set_ns__HistoryAlert(struct soap *soap, unsigned long id, std::string& name, std::string& describe, enum ns__AlertLevel level, std::string& alram_time, unsigned long use_cars, std::string& create_time, std::string& over_time) { ns__HistoryAlert *_p = soap_instantiate_ns__HistoryAlert(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__HistoryAlert::id = id; _p->ns__HistoryAlert::name = name; _p->ns__HistoryAlert::describe = describe; _p->ns__HistoryAlert::level = level; _p->ns__HistoryAlert::alram_time = alram_time; _p->ns__HistoryAlert::use_cars = use_cars; _p->ns__HistoryAlert::create_time = create_time; _p->ns__HistoryAlert::over_time = over_time; } return _p; }
+inline ns__HistoryAlert * soap_new_set_ns__HistoryAlert(struct soap *soap, std::string& id, std::string& name, std::string& describe, enum ns__AlertLevel level, std::string& alram_time, std::string& use_cars, std::string& create_time, std::string& over_time) { ns__HistoryAlert *_p = soap_instantiate_ns__HistoryAlert(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__HistoryAlert::id = id; _p->ns__HistoryAlert::name = name; _p->ns__HistoryAlert::describe = describe; _p->ns__HistoryAlert::level = level; _p->ns__HistoryAlert::alram_time = alram_time; _p->ns__HistoryAlert::use_cars = use_cars; _p->ns__HistoryAlert::create_time = create_time; _p->ns__HistoryAlert::over_time = over_time; } return _p; }
 
 inline void soap_delete_ns__HistoryAlert(struct soap *soap, ns__HistoryAlert *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__HistoryAlert(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Account_Location_Notification_Response
-#define SOAP_TYPE_ns__Dispatch_Account_Location_Notification_Response (52)
+#ifndef SOAP_TYPE_ns__Dispatch_Account_Info_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Account_Info_Notification_Response (56)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Account_Location_Notification_Response(struct soap*, const char*, int, const ns__Dispatch_Account_Location_Notification_Response *, const char*);
-SOAP_FMAC3 ns__Dispatch_Account_Location_Notification_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Account_Location_Notification_Response(struct soap*, const char*, ns__Dispatch_Account_Location_Notification_Response *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Account_Info_Notification_Response(struct soap*, const char*, int, const ns__Dispatch_Account_Info_Notification_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Account_Info_Notification_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Account_Info_Notification_Response(struct soap*, const char*, ns__Dispatch_Account_Info_Notification_Response *, const char*);
 
-#ifndef soap_write_ns__Dispatch_Account_Location_Notification_Response
-#define soap_write_ns__Dispatch_Account_Location_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Account-Location-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns__Dispatch_Account_Info_Notification_Response
+#define soap_write_ns__Dispatch_Account_Info_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Account-Info-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns__Dispatch_Account_Location_Notification_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Account_Location_Notification_Response(struct soap*, ns__Dispatch_Account_Location_Notification_Response *, const char*, const char*);
+SOAP_FMAC3 ns__Dispatch_Account_Info_Notification_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Account_Info_Notification_Response(struct soap*, ns__Dispatch_Account_Info_Notification_Response *, const char*, const char*);
 
-#ifndef soap_read_ns__Dispatch_Account_Location_Notification_Response
-#define soap_read_ns__Dispatch_Account_Location_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Account_Location_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Account_Info_Notification_Response
+#define soap_read_ns__Dispatch_Account_Info_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Account_Info_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 ns__Dispatch_Account_Location_Notification_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Account_Location_Notification_Response(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC1 ns__Dispatch_Account_Info_Notification_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Account_Info_Notification_Response(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns__Dispatch_Account_Location_Notification_Response * soap_new_ns__Dispatch_Account_Location_Notification_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Account_Location_Notification_Response(soap, n, NULL, NULL, NULL); }
+inline ns__Dispatch_Account_Info_Notification_Response * soap_new_ns__Dispatch_Account_Info_Notification_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Account_Info_Notification_Response(soap, n, NULL, NULL, NULL); }
 
-inline ns__Dispatch_Account_Location_Notification_Response * soap_new_req_ns__Dispatch_Account_Location_Notification_Response(struct soap *soap, ns__Entity& account_id, double longitude, double latitude, std::string& timestamp) { ns__Dispatch_Account_Location_Notification_Response *_p = soap_instantiate_ns__Dispatch_Account_Location_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Account_Location_Notification_Response::account_id = account_id; _p->ns__Dispatch_Account_Location_Notification_Response::longitude = longitude; _p->ns__Dispatch_Account_Location_Notification_Response::latitude = latitude; _p->ns__Dispatch_Account_Location_Notification_Response::timestamp = timestamp; } return _p; }
+inline ns__Dispatch_Account_Info_Notification_Response * soap_new_req_ns__Dispatch_Account_Info_Notification_Response(struct soap *soap, ns__Entity& account_id, double longitude, double latitude, std::string& timestamp, enum ns__ProfessionStatus professionstatus, enum ns__RegisterStatus status, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Account_Info_Notification_Response *_p = soap_instantiate_ns__Dispatch_Account_Info_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Account_Info_Notification_Response::account_id = account_id; _p->ns__Dispatch_Account_Info_Notification_Response::longitude = longitude; _p->ns__Dispatch_Account_Info_Notification_Response::latitude = latitude; _p->ns__Dispatch_Account_Info_Notification_Response::timestamp = timestamp; _p->ns__Dispatch_Account_Info_Notification_Response::professionstatus = professionstatus; _p->ns__Dispatch_Account_Info_Notification_Response::status = status; _p->ns__Dispatch_Account_Info_Notification_Response::session_id = session_id; _p->ns__Dispatch_Account_Info_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Account_Info_Notification_Response::result = result; } return _p; }
 
-inline ns__Dispatch_Account_Location_Notification_Response * soap_new_set_ns__Dispatch_Account_Location_Notification_Response(struct soap *soap, ns__Entity& account_id, double longitude, double latitude, std::string& timestamp) { ns__Dispatch_Account_Location_Notification_Response *_p = soap_instantiate_ns__Dispatch_Account_Location_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Account_Location_Notification_Response::account_id = account_id; _p->ns__Dispatch_Account_Location_Notification_Response::longitude = longitude; _p->ns__Dispatch_Account_Location_Notification_Response::latitude = latitude; _p->ns__Dispatch_Account_Location_Notification_Response::timestamp = timestamp; } return _p; }
+inline ns__Dispatch_Account_Info_Notification_Response * soap_new_set_ns__Dispatch_Account_Info_Notification_Response(struct soap *soap, ns__Entity& account_id, double longitude, double latitude, std::string& timestamp, enum ns__ProfessionStatus professionstatus, enum ns__RegisterStatus status, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Account_Info_Notification_Response *_p = soap_instantiate_ns__Dispatch_Account_Info_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Account_Info_Notification_Response::account_id = account_id; _p->ns__Dispatch_Account_Info_Notification_Response::longitude = longitude; _p->ns__Dispatch_Account_Info_Notification_Response::latitude = latitude; _p->ns__Dispatch_Account_Info_Notification_Response::timestamp = timestamp; _p->ns__Dispatch_Account_Info_Notification_Response::professionstatus = professionstatus; _p->ns__Dispatch_Account_Info_Notification_Response::status = status; _p->ns__Dispatch_Account_Info_Notification_Response::session_id = session_id; _p->ns__Dispatch_Account_Info_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Account_Info_Notification_Response::result = result; } return _p; }
 
-inline void soap_delete_ns__Dispatch_Account_Location_Notification_Response(struct soap *soap, ns__Dispatch_Account_Location_Notification_Response *p) { soap_delete(soap, p); }
+inline void soap_delete_ns__Dispatch_Account_Info_Notification_Response(struct soap *soap, ns__Dispatch_Account_Info_Notification_Response *p) { soap_delete(soap, p); }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Account_Location_Notification_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Account_Info_Notification_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Session_Status_Notification
-#define SOAP_TYPE_ns__Session_Status_Notification (51)
+#ifndef SOAP_TYPE_ns__Dispatch_Session_Status_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Session_Status_Notification_Response (55)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Session_Status_Notification(struct soap*, const char*, int, const ns__Session_Status_Notification *, const char*);
-SOAP_FMAC3 ns__Session_Status_Notification * SOAP_FMAC4 soap_in_ns__Session_Status_Notification(struct soap*, const char*, ns__Session_Status_Notification *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Session_Status_Notification_Response(struct soap*, const char*, int, const ns__Dispatch_Session_Status_Notification_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Session_Status_Notification_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Session_Status_Notification_Response(struct soap*, const char*, ns__Dispatch_Session_Status_Notification_Response *, const char*);
 
-#ifndef soap_write_ns__Session_Status_Notification
-#define soap_write_ns__Session_Status_Notification(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Session-Status-Notification", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns__Dispatch_Session_Status_Notification_Response
+#define soap_write_ns__Dispatch_Session_Status_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Session-Status-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns__Session_Status_Notification * SOAP_FMAC4 soap_get_ns__Session_Status_Notification(struct soap*, ns__Session_Status_Notification *, const char*, const char*);
+SOAP_FMAC3 ns__Dispatch_Session_Status_Notification_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Session_Status_Notification_Response(struct soap*, ns__Dispatch_Session_Status_Notification_Response *, const char*, const char*);
 
-#ifndef soap_read_ns__Session_Status_Notification
-#define soap_read_ns__Session_Status_Notification(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Session_Status_Notification(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Session_Status_Notification_Response
+#define soap_read_ns__Dispatch_Session_Status_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Session_Status_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 ns__Session_Status_Notification * SOAP_FMAC2 soap_instantiate_ns__Session_Status_Notification(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC1 ns__Dispatch_Session_Status_Notification_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Session_Status_Notification_Response(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns__Session_Status_Notification * soap_new_ns__Session_Status_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Session_Status_Notification(soap, n, NULL, NULL, NULL); }
+inline ns__Dispatch_Session_Status_Notification_Response * soap_new_ns__Dispatch_Session_Status_Notification_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Session_Status_Notification_Response(soap, n, NULL, NULL, NULL); }
 
-inline ns__Session_Status_Notification * soap_new_req_ns__Session_Status_Notification(struct soap *soap, ns__Entity& group_id, enum ns__SessionStatus status) { ns__Session_Status_Notification *_p = soap_instantiate_ns__Session_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Session_Status_Notification::group_id = group_id; _p->ns__Session_Status_Notification::status = status; } return _p; }
+inline ns__Dispatch_Session_Status_Notification_Response * soap_new_req_ns__Dispatch_Session_Status_Notification_Response(struct soap *soap, ns__Entity& group_id, enum ns__SessionStatus status, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Session_Status_Notification_Response *_p = soap_instantiate_ns__Dispatch_Session_Status_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Session_Status_Notification_Response::group_id = group_id; _p->ns__Dispatch_Session_Status_Notification_Response::status = status; _p->ns__Dispatch_Session_Status_Notification_Response::session_id = session_id; _p->ns__Dispatch_Session_Status_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Session_Status_Notification_Response::result = result; } return _p; }
 
-inline ns__Session_Status_Notification * soap_new_set_ns__Session_Status_Notification(struct soap *soap, ns__Entity& group_id, enum ns__SessionStatus status) { ns__Session_Status_Notification *_p = soap_instantiate_ns__Session_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Session_Status_Notification::group_id = group_id; _p->ns__Session_Status_Notification::status = status; } return _p; }
+inline ns__Dispatch_Session_Status_Notification_Response * soap_new_set_ns__Dispatch_Session_Status_Notification_Response(struct soap *soap, ns__Entity& group_id, enum ns__SessionStatus status, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Session_Status_Notification_Response *_p = soap_instantiate_ns__Dispatch_Session_Status_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Session_Status_Notification_Response::group_id = group_id; _p->ns__Dispatch_Session_Status_Notification_Response::status = status; _p->ns__Dispatch_Session_Status_Notification_Response::session_id = session_id; _p->ns__Dispatch_Session_Status_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Session_Status_Notification_Response::result = result; } return _p; }
 
-inline void soap_delete_ns__Session_Status_Notification(struct soap *soap, ns__Session_Status_Notification *p) { soap_delete(soap, p); }
+inline void soap_delete_ns__Dispatch_Session_Status_Notification_Response(struct soap *soap, ns__Dispatch_Session_Status_Notification_Response *p) { soap_delete(soap, p); }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Session_Status_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Session_Status_Notification_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Participant_Connect_Request_Notification
-#define SOAP_TYPE_ns__Participant_Connect_Request_Notification (50)
+#ifndef SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification_Response (54)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Participant_Connect_Request_Notification(struct soap*, const char*, int, const ns__Participant_Connect_Request_Notification *, const char*);
-SOAP_FMAC3 ns__Participant_Connect_Request_Notification * SOAP_FMAC4 soap_in_ns__Participant_Connect_Request_Notification(struct soap*, const char*, ns__Participant_Connect_Request_Notification *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Participant_Speak_Request_Notification_Response(struct soap*, const char*, int, const ns__Dispatch_Participant_Speak_Request_Notification_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Participant_Speak_Request_Notification_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Participant_Speak_Request_Notification_Response(struct soap*, const char*, ns__Dispatch_Participant_Speak_Request_Notification_Response *, const char*);
 
-#ifndef soap_write_ns__Participant_Connect_Request_Notification
-#define soap_write_ns__Participant_Connect_Request_Notification(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Participant-Connect-Request-Notification", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns__Dispatch_Participant_Speak_Request_Notification_Response
+#define soap_write_ns__Dispatch_Participant_Speak_Request_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Participant-Speak-Request-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns__Participant_Connect_Request_Notification * SOAP_FMAC4 soap_get_ns__Participant_Connect_Request_Notification(struct soap*, ns__Participant_Connect_Request_Notification *, const char*, const char*);
+SOAP_FMAC3 ns__Dispatch_Participant_Speak_Request_Notification_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Participant_Speak_Request_Notification_Response(struct soap*, ns__Dispatch_Participant_Speak_Request_Notification_Response *, const char*, const char*);
 
-#ifndef soap_read_ns__Participant_Connect_Request_Notification
-#define soap_read_ns__Participant_Connect_Request_Notification(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Participant_Connect_Request_Notification(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Participant_Speak_Request_Notification_Response
+#define soap_read_ns__Dispatch_Participant_Speak_Request_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Participant_Speak_Request_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 ns__Participant_Connect_Request_Notification * SOAP_FMAC2 soap_instantiate_ns__Participant_Connect_Request_Notification(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC1 ns__Dispatch_Participant_Speak_Request_Notification_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Participant_Speak_Request_Notification_Response(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns__Participant_Connect_Request_Notification * soap_new_ns__Participant_Connect_Request_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Participant_Connect_Request_Notification(soap, n, NULL, NULL, NULL); }
+inline ns__Dispatch_Participant_Speak_Request_Notification_Response * soap_new_ns__Dispatch_Participant_Speak_Request_Notification_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Participant_Speak_Request_Notification_Response(soap, n, NULL, NULL, NULL); }
 
-inline ns__Participant_Connect_Request_Notification * soap_new_req_ns__Participant_Connect_Request_Notification(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { ns__Participant_Connect_Request_Notification *_p = soap_instantiate_ns__Participant_Connect_Request_Notification(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Participant_Connect_Request_Notification::group_id = group_id; _p->ns__Participant_Connect_Request_Notification::account_id = account_id; } return _p; }
+inline ns__Dispatch_Participant_Speak_Request_Notification_Response * soap_new_req_ns__Dispatch_Participant_Speak_Request_Notification_Response(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Participant_Speak_Request_Notification_Response *_p = soap_instantiate_ns__Dispatch_Participant_Speak_Request_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Participant_Speak_Request_Notification_Response::group_id = group_id; _p->ns__Dispatch_Participant_Speak_Request_Notification_Response::account_id = account_id; _p->ns__Dispatch_Participant_Speak_Request_Notification_Response::session_id = session_id; _p->ns__Dispatch_Participant_Speak_Request_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Participant_Speak_Request_Notification_Response::result = result; } return _p; }
 
-inline ns__Participant_Connect_Request_Notification * soap_new_set_ns__Participant_Connect_Request_Notification(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { ns__Participant_Connect_Request_Notification *_p = soap_instantiate_ns__Participant_Connect_Request_Notification(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Participant_Connect_Request_Notification::group_id = group_id; _p->ns__Participant_Connect_Request_Notification::account_id = account_id; } return _p; }
+inline ns__Dispatch_Participant_Speak_Request_Notification_Response * soap_new_set_ns__Dispatch_Participant_Speak_Request_Notification_Response(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Participant_Speak_Request_Notification_Response *_p = soap_instantiate_ns__Dispatch_Participant_Speak_Request_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Participant_Speak_Request_Notification_Response::group_id = group_id; _p->ns__Dispatch_Participant_Speak_Request_Notification_Response::account_id = account_id; _p->ns__Dispatch_Participant_Speak_Request_Notification_Response::session_id = session_id; _p->ns__Dispatch_Participant_Speak_Request_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Participant_Speak_Request_Notification_Response::result = result; } return _p; }
 
-inline void soap_delete_ns__Participant_Connect_Request_Notification(struct soap *soap, ns__Participant_Connect_Request_Notification *p) { soap_delete(soap, p); }
+inline void soap_delete_ns__Dispatch_Participant_Speak_Request_Notification_Response(struct soap *soap, ns__Dispatch_Participant_Speak_Request_Notification_Response *p) { soap_delete(soap, p); }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Participant_Connect_Request_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Participant_Speak_Request_Notification_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Media_Message_Notification
-#define SOAP_TYPE_ns__Media_Message_Notification (49)
+#ifndef SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification_Response (53)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Media_Message_Notification(struct soap*, const char*, int, const ns__Media_Message_Notification *, const char*);
-SOAP_FMAC3 ns__Media_Message_Notification * SOAP_FMAC4 soap_in_ns__Media_Message_Notification(struct soap*, const char*, ns__Media_Message_Notification *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Participant_Connect_Request_Notification_Response(struct soap*, const char*, int, const ns__Dispatch_Participant_Connect_Request_Notification_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Participant_Connect_Request_Notification_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Participant_Connect_Request_Notification_Response(struct soap*, const char*, ns__Dispatch_Participant_Connect_Request_Notification_Response *, const char*);
 
-#ifndef soap_write_ns__Media_Message_Notification
-#define soap_write_ns__Media_Message_Notification(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Media-Message-Notification", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns__Dispatch_Participant_Connect_Request_Notification_Response
+#define soap_write_ns__Dispatch_Participant_Connect_Request_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Participant-Connect-Request-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns__Media_Message_Notification * SOAP_FMAC4 soap_get_ns__Media_Message_Notification(struct soap*, ns__Media_Message_Notification *, const char*, const char*);
+SOAP_FMAC3 ns__Dispatch_Participant_Connect_Request_Notification_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Participant_Connect_Request_Notification_Response(struct soap*, ns__Dispatch_Participant_Connect_Request_Notification_Response *, const char*, const char*);
 
-#ifndef soap_read_ns__Media_Message_Notification
-#define soap_read_ns__Media_Message_Notification(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Media_Message_Notification(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Participant_Connect_Request_Notification_Response
+#define soap_read_ns__Dispatch_Participant_Connect_Request_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Participant_Connect_Request_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 ns__Media_Message_Notification * SOAP_FMAC2 soap_instantiate_ns__Media_Message_Notification(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC1 ns__Dispatch_Participant_Connect_Request_Notification_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Participant_Connect_Request_Notification_Response(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns__Media_Message_Notification * soap_new_ns__Media_Message_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Media_Message_Notification(soap, n, NULL, NULL, NULL); }
+inline ns__Dispatch_Participant_Connect_Request_Notification_Response * soap_new_ns__Dispatch_Participant_Connect_Request_Notification_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Participant_Connect_Request_Notification_Response(soap, n, NULL, NULL, NULL); }
 
-inline ns__Media_Message_Notification * soap_new_req_ns__Media_Message_Notification(struct soap *soap, unsigned long id, ns__MediaMessage& messages) { ns__Media_Message_Notification *_p = soap_instantiate_ns__Media_Message_Notification(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Media_Message_Notification::id = id; _p->ns__Media_Message_Notification::messages = messages; } return _p; }
+inline ns__Dispatch_Participant_Connect_Request_Notification_Response * soap_new_req_ns__Dispatch_Participant_Connect_Request_Notification_Response(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Participant_Connect_Request_Notification_Response *_p = soap_instantiate_ns__Dispatch_Participant_Connect_Request_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Participant_Connect_Request_Notification_Response::group_id = group_id; _p->ns__Dispatch_Participant_Connect_Request_Notification_Response::account_id = account_id; _p->ns__Dispatch_Participant_Connect_Request_Notification_Response::session_id = session_id; _p->ns__Dispatch_Participant_Connect_Request_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Participant_Connect_Request_Notification_Response::result = result; } return _p; }
 
-inline ns__Media_Message_Notification * soap_new_set_ns__Media_Message_Notification(struct soap *soap, unsigned long id, ns__MediaMessage& messages) { ns__Media_Message_Notification *_p = soap_instantiate_ns__Media_Message_Notification(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Media_Message_Notification::id = id; _p->ns__Media_Message_Notification::messages = messages; } return _p; }
+inline ns__Dispatch_Participant_Connect_Request_Notification_Response * soap_new_set_ns__Dispatch_Participant_Connect_Request_Notification_Response(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Participant_Connect_Request_Notification_Response *_p = soap_instantiate_ns__Dispatch_Participant_Connect_Request_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Participant_Connect_Request_Notification_Response::group_id = group_id; _p->ns__Dispatch_Participant_Connect_Request_Notification_Response::account_id = account_id; _p->ns__Dispatch_Participant_Connect_Request_Notification_Response::session_id = session_id; _p->ns__Dispatch_Participant_Connect_Request_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Participant_Connect_Request_Notification_Response::result = result; } return _p; }
 
-inline void soap_delete_ns__Media_Message_Notification(struct soap *soap, ns__Media_Message_Notification *p) { soap_delete(soap, p); }
+inline void soap_delete_ns__Dispatch_Participant_Connect_Request_Notification_Response(struct soap *soap, ns__Dispatch_Participant_Connect_Request_Notification_Response *p) { soap_delete(soap, p); }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Media_Message_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Participant_Connect_Request_Notification_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ns__Dispatch_Media_Message_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Media_Message_Notification_Response (52)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Media_Message_Notification_Response(struct soap*, const char*, int, const ns__Dispatch_Media_Message_Notification_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Media_Message_Notification_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Media_Message_Notification_Response(struct soap*, const char*, ns__Dispatch_Media_Message_Notification_Response *, const char*);
+
+#ifndef soap_write_ns__Dispatch_Media_Message_Notification_Response
+#define soap_write_ns__Dispatch_Media_Message_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Media-Message-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns__Dispatch_Media_Message_Notification_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Media_Message_Notification_Response(struct soap*, ns__Dispatch_Media_Message_Notification_Response *, const char*, const char*);
+
+#ifndef soap_read_ns__Dispatch_Media_Message_Notification_Response
+#define soap_read_ns__Dispatch_Media_Message_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Media_Message_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+SOAP_FMAC1 ns__Dispatch_Media_Message_Notification_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Media_Message_Notification_Response(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns__Dispatch_Media_Message_Notification_Response * soap_new_ns__Dispatch_Media_Message_Notification_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Media_Message_Notification_Response(soap, n, NULL, NULL, NULL); }
+
+inline ns__Dispatch_Media_Message_Notification_Response * soap_new_req_ns__Dispatch_Media_Message_Notification_Response(struct soap *soap, std::string& id, ns__MediaMessage& messages, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Media_Message_Notification_Response *_p = soap_instantiate_ns__Dispatch_Media_Message_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Media_Message_Notification_Response::id = id; _p->ns__Dispatch_Media_Message_Notification_Response::messages = messages; _p->ns__Dispatch_Media_Message_Notification_Response::session_id = session_id; _p->ns__Dispatch_Media_Message_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Media_Message_Notification_Response::result = result; } return _p; }
+
+inline ns__Dispatch_Media_Message_Notification_Response * soap_new_set_ns__Dispatch_Media_Message_Notification_Response(struct soap *soap, std::string& id, ns__MediaMessage& messages, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Media_Message_Notification_Response *_p = soap_instantiate_ns__Dispatch_Media_Message_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Media_Message_Notification_Response::id = id; _p->ns__Dispatch_Media_Message_Notification_Response::messages = messages; _p->ns__Dispatch_Media_Message_Notification_Response::session_id = session_id; _p->ns__Dispatch_Media_Message_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Media_Message_Notification_Response::result = result; } return _p; }
+
+inline void soap_delete_ns__Dispatch_Media_Message_Notification_Response(struct soap *soap, ns__Dispatch_Media_Message_Notification_Response *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Media_Message_Notification_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Media_Message
-#define SOAP_TYPE_ns__Media_Message (48)
+#define SOAP_TYPE_ns__Media_Message (51)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Media_Message(struct soap*, const char*, int, const ns__Media_Message *, const char*);
@@ -796,16 +835,45 @@ SOAP_FMAC1 ns__Media_Message * SOAP_FMAC2 soap_instantiate_ns__Media_Message(str
 
 inline ns__Media_Message * soap_new_ns__Media_Message(struct soap *soap, int n = -1) { return soap_instantiate_ns__Media_Message(soap, n, NULL, NULL, NULL); }
 
-inline ns__Media_Message * soap_new_req_ns__Media_Message(struct soap *soap, ns__Entity& id, ns__MediaMessage& messages, unsigned long leave_message_count) { ns__Media_Message *_p = soap_instantiate_ns__Media_Message(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Media_Message::id = id; _p->ns__Media_Message::messages = messages; _p->ns__Media_Message::leave_message_count = leave_message_count; } return _p; }
+inline ns__Media_Message * soap_new_req_ns__Media_Message(struct soap *soap, ns__Entity& id, ns__MediaMessage& messages, std::string& leave_message_count) { ns__Media_Message *_p = soap_instantiate_ns__Media_Message(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Media_Message::id = id; _p->ns__Media_Message::messages = messages; _p->ns__Media_Message::leave_message_count = leave_message_count; } return _p; }
 
-inline ns__Media_Message * soap_new_set_ns__Media_Message(struct soap *soap, ns__Entity& id, ns__MediaMessage& messages, unsigned long leave_message_count) { ns__Media_Message *_p = soap_instantiate_ns__Media_Message(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Media_Message::id = id; _p->ns__Media_Message::messages = messages; _p->ns__Media_Message::leave_message_count = leave_message_count; } return _p; }
+inline ns__Media_Message * soap_new_set_ns__Media_Message(struct soap *soap, ns__Entity& id, ns__MediaMessage& messages, std::string& leave_message_count) { ns__Media_Message *_p = soap_instantiate_ns__Media_Message(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Media_Message::id = id; _p->ns__Media_Message::messages = messages; _p->ns__Media_Message::leave_message_count = leave_message_count; } return _p; }
 
 inline void soap_delete_ns__Media_Message(struct soap *soap, ns__Media_Message *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Media_Message(struct soap*, int, int, void*, size_t, const void*, size_t);
 
+#ifndef SOAP_TYPE_ns__Dispatch_Media_Message_Request_Response
+#define SOAP_TYPE_ns__Dispatch_Media_Message_Request_Response (49)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Media_Message_Request_Response(struct soap*, const char*, int, const ns__Dispatch_Media_Message_Request_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Media_Message_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Media_Message_Request_Response(struct soap*, const char*, ns__Dispatch_Media_Message_Request_Response *, const char*);
+
+#ifndef soap_write_ns__Dispatch_Media_Message_Request_Response
+#define soap_write_ns__Dispatch_Media_Message_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Media-Message-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns__Dispatch_Media_Message_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Media_Message_Request_Response(struct soap*, ns__Dispatch_Media_Message_Request_Response *, const char*, const char*);
+
+#ifndef soap_read_ns__Dispatch_Media_Message_Request_Response
+#define soap_read_ns__Dispatch_Media_Message_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Media_Message_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+SOAP_FMAC1 ns__Dispatch_Media_Message_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Media_Message_Request_Response(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns__Dispatch_Media_Message_Request_Response * soap_new_ns__Dispatch_Media_Message_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Media_Message_Request_Response(soap, n, NULL, NULL, NULL); }
+
+inline ns__Dispatch_Media_Message_Request_Response * soap_new_req_ns__Dispatch_Media_Message_Request_Response(struct soap *soap, std::string& size, std::string& leave_message_count, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Media_Message_Request_Response *_p = soap_instantiate_ns__Dispatch_Media_Message_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Media_Message_Request_Response::size = size; _p->ns__Dispatch_Media_Message_Request_Response::leave_message_count = leave_message_count; _p->ns__Dispatch_Media_Message_Request_Response::session_id = session_id; _p->ns__Dispatch_Media_Message_Request_Response::error_describe = error_describe; _p->ns__Dispatch_Media_Message_Request_Response::result = result; } return _p; }
+
+inline ns__Dispatch_Media_Message_Request_Response * soap_new_set_ns__Dispatch_Media_Message_Request_Response(struct soap *soap, std::list<ns__MediaMessage >& data, std::string& size, std::string& leave_message_count, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Media_Message_Request_Response *_p = soap_instantiate_ns__Dispatch_Media_Message_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Media_Message_Request_Response::data = data; _p->ns__Dispatch_Media_Message_Request_Response::size = size; _p->ns__Dispatch_Media_Message_Request_Response::leave_message_count = leave_message_count; _p->ns__Dispatch_Media_Message_Request_Response::session_id = session_id; _p->ns__Dispatch_Media_Message_Request_Response::error_describe = error_describe; _p->ns__Dispatch_Media_Message_Request_Response::result = result; } return _p; }
+
+inline void soap_delete_ns__Dispatch_Media_Message_Request_Response(struct soap *soap, ns__Dispatch_Media_Message_Request_Response *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Media_Message_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+
 #ifndef SOAP_TYPE_ns__MediaMessage
-#define SOAP_TYPE_ns__MediaMessage (47)
+#define SOAP_TYPE_ns__MediaMessage (48)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__MediaMessage(struct soap*, const char*, int, const ns__MediaMessage *, const char*);
@@ -825,71 +893,129 @@ SOAP_FMAC1 ns__MediaMessage * SOAP_FMAC2 soap_instantiate_ns__MediaMessage(struc
 
 inline ns__MediaMessage * soap_new_ns__MediaMessage(struct soap *soap, int n = -1) { return soap_instantiate_ns__MediaMessage(soap, n, NULL, NULL, NULL); }
 
-inline ns__MediaMessage * soap_new_req_ns__MediaMessage(struct soap *soap, unsigned long id, std::string& sender, std::string& text, std::string& picture_uri, std::string& audio_uri, unsigned long audio_length, std::string& video_uri, unsigned long video_length, std::string& timestamp) { ns__MediaMessage *_p = soap_instantiate_ns__MediaMessage(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__MediaMessage::id = id; _p->ns__MediaMessage::sender = sender; _p->ns__MediaMessage::text = text; _p->ns__MediaMessage::picture_uri = picture_uri; _p->ns__MediaMessage::audio_uri = audio_uri; _p->ns__MediaMessage::audio_length = audio_length; _p->ns__MediaMessage::video_uri = video_uri; _p->ns__MediaMessage::video_length = video_length; _p->ns__MediaMessage::timestamp = timestamp; } return _p; }
+inline ns__MediaMessage * soap_new_req_ns__MediaMessage(struct soap *soap, std::string& id, std::string& sender, std::string& text, std::string& picture_uri, std::string& audio_uri, std::string& audio_length, std::string& video_uri, std::string& video_length, std::string& timestamp) { ns__MediaMessage *_p = soap_instantiate_ns__MediaMessage(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__MediaMessage::id = id; _p->ns__MediaMessage::sender = sender; _p->ns__MediaMessage::text = text; _p->ns__MediaMessage::picture_uri = picture_uri; _p->ns__MediaMessage::audio_uri = audio_uri; _p->ns__MediaMessage::audio_length = audio_length; _p->ns__MediaMessage::video_uri = video_uri; _p->ns__MediaMessage::video_length = video_length; _p->ns__MediaMessage::timestamp = timestamp; } return _p; }
 
-inline ns__MediaMessage * soap_new_set_ns__MediaMessage(struct soap *soap, unsigned long id, std::string& sender, std::string& text, std::string& picture_uri, std::string& audio_uri, unsigned long audio_length, std::string& video_uri, unsigned long video_length, std::string& timestamp) { ns__MediaMessage *_p = soap_instantiate_ns__MediaMessage(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__MediaMessage::id = id; _p->ns__MediaMessage::sender = sender; _p->ns__MediaMessage::text = text; _p->ns__MediaMessage::picture_uri = picture_uri; _p->ns__MediaMessage::audio_uri = audio_uri; _p->ns__MediaMessage::audio_length = audio_length; _p->ns__MediaMessage::video_uri = video_uri; _p->ns__MediaMessage::video_length = video_length; _p->ns__MediaMessage::timestamp = timestamp; } return _p; }
+inline ns__MediaMessage * soap_new_set_ns__MediaMessage(struct soap *soap, std::string& id, std::string& sender, std::string& text, std::string& picture_uri, std::string& audio_uri, std::string& audio_length, std::string& video_uri, std::string& video_length, std::string& timestamp) { ns__MediaMessage *_p = soap_instantiate_ns__MediaMessage(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__MediaMessage::id = id; _p->ns__MediaMessage::sender = sender; _p->ns__MediaMessage::text = text; _p->ns__MediaMessage::picture_uri = picture_uri; _p->ns__MediaMessage::audio_uri = audio_uri; _p->ns__MediaMessage::audio_length = audio_length; _p->ns__MediaMessage::video_uri = video_uri; _p->ns__MediaMessage::video_length = video_length; _p->ns__MediaMessage::timestamp = timestamp; } return _p; }
 
 inline void soap_delete_ns__MediaMessage(struct soap *soap, ns__MediaMessage *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__MediaMessage(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Participant_Status_Notification
-#define SOAP_TYPE_ns__Participant_Status_Notification (46)
+#ifndef SOAP_TYPE_ns__Dispatch_Participant_Status_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Participant_Status_Notification_Response (47)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Participant_Status_Notification(struct soap*, const char*, int, const ns__Participant_Status_Notification *, const char*);
-SOAP_FMAC3 ns__Participant_Status_Notification * SOAP_FMAC4 soap_in_ns__Participant_Status_Notification(struct soap*, const char*, ns__Participant_Status_Notification *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Participant_Status_Notification_Response(struct soap*, const char*, int, const ns__Dispatch_Participant_Status_Notification_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Participant_Status_Notification_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Participant_Status_Notification_Response(struct soap*, const char*, ns__Dispatch_Participant_Status_Notification_Response *, const char*);
 
-#ifndef soap_write_ns__Participant_Status_Notification
-#define soap_write_ns__Participant_Status_Notification(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Participant-Status-Notification", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns__Dispatch_Participant_Status_Notification_Response
+#define soap_write_ns__Dispatch_Participant_Status_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Participant-Status-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns__Participant_Status_Notification * SOAP_FMAC4 soap_get_ns__Participant_Status_Notification(struct soap*, ns__Participant_Status_Notification *, const char*, const char*);
+SOAP_FMAC3 ns__Dispatch_Participant_Status_Notification_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Participant_Status_Notification_Response(struct soap*, ns__Dispatch_Participant_Status_Notification_Response *, const char*, const char*);
 
-#ifndef soap_read_ns__Participant_Status_Notification
-#define soap_read_ns__Participant_Status_Notification(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Participant_Status_Notification(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Participant_Status_Notification_Response
+#define soap_read_ns__Dispatch_Participant_Status_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Participant_Status_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 ns__Participant_Status_Notification * SOAP_FMAC2 soap_instantiate_ns__Participant_Status_Notification(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC1 ns__Dispatch_Participant_Status_Notification_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Participant_Status_Notification_Response(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns__Participant_Status_Notification * soap_new_ns__Participant_Status_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Participant_Status_Notification(soap, n, NULL, NULL, NULL); }
+inline ns__Dispatch_Participant_Status_Notification_Response * soap_new_ns__Dispatch_Participant_Status_Notification_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Participant_Status_Notification_Response(soap, n, NULL, NULL, NULL); }
 
-inline ns__Participant_Status_Notification * soap_new_req_ns__Participant_Status_Notification(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id, enum ns__SessionStatus status) { ns__Participant_Status_Notification *_p = soap_instantiate_ns__Participant_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Participant_Status_Notification::group_id = group_id; _p->ns__Participant_Status_Notification::account_id = account_id; _p->ns__Participant_Status_Notification::status = status; } return _p; }
+inline ns__Dispatch_Participant_Status_Notification_Response * soap_new_req_ns__Dispatch_Participant_Status_Notification_Response(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id, enum ns__SessionStatus status, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Participant_Status_Notification_Response *_p = soap_instantiate_ns__Dispatch_Participant_Status_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Participant_Status_Notification_Response::group_id = group_id; _p->ns__Dispatch_Participant_Status_Notification_Response::account_id = account_id; _p->ns__Dispatch_Participant_Status_Notification_Response::status = status; _p->ns__Dispatch_Participant_Status_Notification_Response::session_id = session_id; _p->ns__Dispatch_Participant_Status_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Participant_Status_Notification_Response::result = result; } return _p; }
 
-inline ns__Participant_Status_Notification * soap_new_set_ns__Participant_Status_Notification(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id, enum ns__SessionStatus status) { ns__Participant_Status_Notification *_p = soap_instantiate_ns__Participant_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Participant_Status_Notification::group_id = group_id; _p->ns__Participant_Status_Notification::account_id = account_id; _p->ns__Participant_Status_Notification::status = status; } return _p; }
+inline ns__Dispatch_Participant_Status_Notification_Response * soap_new_set_ns__Dispatch_Participant_Status_Notification_Response(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id, enum ns__SessionStatus status, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Participant_Status_Notification_Response *_p = soap_instantiate_ns__Dispatch_Participant_Status_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Participant_Status_Notification_Response::group_id = group_id; _p->ns__Dispatch_Participant_Status_Notification_Response::account_id = account_id; _p->ns__Dispatch_Participant_Status_Notification_Response::status = status; _p->ns__Dispatch_Participant_Status_Notification_Response::session_id = session_id; _p->ns__Dispatch_Participant_Status_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Participant_Status_Notification_Response::result = result; } return _p; }
 
-inline void soap_delete_ns__Participant_Status_Notification(struct soap *soap, ns__Participant_Status_Notification *p) { soap_delete(soap, p); }
+inline void soap_delete_ns__Dispatch_Participant_Status_Notification_Response(struct soap *soap, ns__Dispatch_Participant_Status_Notification_Response *p) { soap_delete(soap, p); }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Participant_Status_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Participant_Status_Notification_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Join_Group_Request_Nofitication
-#define SOAP_TYPE_ns__Join_Group_Request_Nofitication (45)
+#ifndef SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication_Response
+#define SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication_Response (46)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Join_Group_Request_Nofitication(struct soap*, const char*, int, const ns__Join_Group_Request_Nofitication *, const char*);
-SOAP_FMAC3 ns__Join_Group_Request_Nofitication * SOAP_FMAC4 soap_in_ns__Join_Group_Request_Nofitication(struct soap*, const char*, ns__Join_Group_Request_Nofitication *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Join_Group_Request_Nofitication_Response(struct soap*, const char*, int, const ns__Dispatch_Join_Group_Request_Nofitication_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Join_Group_Request_Nofitication_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Join_Group_Request_Nofitication_Response(struct soap*, const char*, ns__Dispatch_Join_Group_Request_Nofitication_Response *, const char*);
 
-#ifndef soap_write_ns__Join_Group_Request_Nofitication
-#define soap_write_ns__Join_Group_Request_Nofitication(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Join-Group-Request-Nofitication", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns__Dispatch_Join_Group_Request_Nofitication_Response
+#define soap_write_ns__Dispatch_Join_Group_Request_Nofitication_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Join-Group-Request-Nofitication-Response", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns__Join_Group_Request_Nofitication * SOAP_FMAC4 soap_get_ns__Join_Group_Request_Nofitication(struct soap*, ns__Join_Group_Request_Nofitication *, const char*, const char*);
+SOAP_FMAC3 ns__Dispatch_Join_Group_Request_Nofitication_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Join_Group_Request_Nofitication_Response(struct soap*, ns__Dispatch_Join_Group_Request_Nofitication_Response *, const char*, const char*);
 
-#ifndef soap_read_ns__Join_Group_Request_Nofitication
-#define soap_read_ns__Join_Group_Request_Nofitication(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Join_Group_Request_Nofitication(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Join_Group_Request_Nofitication_Response
+#define soap_read_ns__Dispatch_Join_Group_Request_Nofitication_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Join_Group_Request_Nofitication_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 ns__Join_Group_Request_Nofitication * SOAP_FMAC2 soap_instantiate_ns__Join_Group_Request_Nofitication(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC1 ns__Dispatch_Join_Group_Request_Nofitication_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Join_Group_Request_Nofitication_Response(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns__Join_Group_Request_Nofitication * soap_new_ns__Join_Group_Request_Nofitication(struct soap *soap, int n = -1) { return soap_instantiate_ns__Join_Group_Request_Nofitication(soap, n, NULL, NULL, NULL); }
+inline ns__Dispatch_Join_Group_Request_Nofitication_Response * soap_new_ns__Dispatch_Join_Group_Request_Nofitication_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Join_Group_Request_Nofitication_Response(soap, n, NULL, NULL, NULL); }
 
-inline ns__Join_Group_Request_Nofitication * soap_new_req_ns__Join_Group_Request_Nofitication(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { ns__Join_Group_Request_Nofitication *_p = soap_instantiate_ns__Join_Group_Request_Nofitication(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Join_Group_Request_Nofitication::group_id = group_id; _p->ns__Join_Group_Request_Nofitication::account_id = account_id; } return _p; }
+inline ns__Dispatch_Join_Group_Request_Nofitication_Response * soap_new_req_ns__Dispatch_Join_Group_Request_Nofitication_Response(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Join_Group_Request_Nofitication_Response *_p = soap_instantiate_ns__Dispatch_Join_Group_Request_Nofitication_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Join_Group_Request_Nofitication_Response::group_id = group_id; _p->ns__Dispatch_Join_Group_Request_Nofitication_Response::account_id = account_id; _p->ns__Dispatch_Join_Group_Request_Nofitication_Response::session_id = session_id; _p->ns__Dispatch_Join_Group_Request_Nofitication_Response::error_describe = error_describe; _p->ns__Dispatch_Join_Group_Request_Nofitication_Response::result = result; } return _p; }
 
-inline ns__Join_Group_Request_Nofitication * soap_new_set_ns__Join_Group_Request_Nofitication(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { ns__Join_Group_Request_Nofitication *_p = soap_instantiate_ns__Join_Group_Request_Nofitication(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Join_Group_Request_Nofitication::group_id = group_id; _p->ns__Join_Group_Request_Nofitication::account_id = account_id; } return _p; }
+inline ns__Dispatch_Join_Group_Request_Nofitication_Response * soap_new_set_ns__Dispatch_Join_Group_Request_Nofitication_Response(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Join_Group_Request_Nofitication_Response *_p = soap_instantiate_ns__Dispatch_Join_Group_Request_Nofitication_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Join_Group_Request_Nofitication_Response::group_id = group_id; _p->ns__Dispatch_Join_Group_Request_Nofitication_Response::account_id = account_id; _p->ns__Dispatch_Join_Group_Request_Nofitication_Response::session_id = session_id; _p->ns__Dispatch_Join_Group_Request_Nofitication_Response::error_describe = error_describe; _p->ns__Dispatch_Join_Group_Request_Nofitication_Response::result = result; } return _p; }
 
-inline void soap_delete_ns__Join_Group_Request_Nofitication(struct soap *soap, ns__Join_Group_Request_Nofitication *p) { soap_delete(soap, p); }
+inline void soap_delete_ns__Dispatch_Join_Group_Request_Nofitication_Response(struct soap *soap, ns__Dispatch_Join_Group_Request_Nofitication_Response *p) { soap_delete(soap, p); }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Join_Group_Request_Nofitication(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Join_Group_Request_Nofitication_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification_Response (45)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Dispatch_Participants_Notification_Response(struct soap*, const char*, int, const ns__Dispatch_Dispatch_Participants_Notification_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Dispatch_Participants_Notification_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Dispatch_Participants_Notification_Response(struct soap*, const char*, ns__Dispatch_Dispatch_Participants_Notification_Response *, const char*);
+
+#ifndef soap_write_ns__Dispatch_Dispatch_Participants_Notification_Response
+#define soap_write_ns__Dispatch_Dispatch_Participants_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Dispatch-Participants-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns__Dispatch_Dispatch_Participants_Notification_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Dispatch_Participants_Notification_Response(struct soap*, ns__Dispatch_Dispatch_Participants_Notification_Response *, const char*, const char*);
+
+#ifndef soap_read_ns__Dispatch_Dispatch_Participants_Notification_Response
+#define soap_read_ns__Dispatch_Dispatch_Participants_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Dispatch_Participants_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+SOAP_FMAC1 ns__Dispatch_Dispatch_Participants_Notification_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Dispatch_Participants_Notification_Response(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns__Dispatch_Dispatch_Participants_Notification_Response * soap_new_ns__Dispatch_Dispatch_Participants_Notification_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Dispatch_Participants_Notification_Response(soap, n, NULL, NULL, NULL); }
+
+inline ns__Dispatch_Dispatch_Participants_Notification_Response * soap_new_req_ns__Dispatch_Dispatch_Participants_Notification_Response(struct soap *soap, ns__Modify_Participant& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Dispatch_Participants_Notification_Response *_p = soap_instantiate_ns__Dispatch_Dispatch_Participants_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Dispatch_Participants_Notification_Response::data = data; _p->ns__Dispatch_Dispatch_Participants_Notification_Response::session_id = session_id; _p->ns__Dispatch_Dispatch_Participants_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Dispatch_Participants_Notification_Response::result = result; } return _p; }
+
+inline ns__Dispatch_Dispatch_Participants_Notification_Response * soap_new_set_ns__Dispatch_Dispatch_Participants_Notification_Response(struct soap *soap, ns__Modify_Participant& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Dispatch_Participants_Notification_Response *_p = soap_instantiate_ns__Dispatch_Dispatch_Participants_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Dispatch_Participants_Notification_Response::data = data; _p->ns__Dispatch_Dispatch_Participants_Notification_Response::session_id = session_id; _p->ns__Dispatch_Dispatch_Participants_Notification_Response::error_describe = error_describe; _p->ns__Dispatch_Dispatch_Participants_Notification_Response::result = result; } return _p; }
+
+inline void soap_delete_ns__Dispatch_Dispatch_Participants_Notification_Response(struct soap *soap, ns__Dispatch_Dispatch_Participants_Notification_Response *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Dispatch_Participants_Notification_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ns__Dispatch_Modify_Participants_Response
+#define SOAP_TYPE_ns__Dispatch_Modify_Participants_Response (44)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Modify_Participants_Response(struct soap*, const char*, int, const ns__Dispatch_Modify_Participants_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Modify_Participants_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Modify_Participants_Response(struct soap*, const char*, ns__Dispatch_Modify_Participants_Response *, const char*);
+
+#ifndef soap_write_ns__Dispatch_Modify_Participants_Response
+#define soap_write_ns__Dispatch_Modify_Participants_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Modify-Participants-Response", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns__Dispatch_Modify_Participants_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Modify_Participants_Response(struct soap*, ns__Dispatch_Modify_Participants_Response *, const char*, const char*);
+
+#ifndef soap_read_ns__Dispatch_Modify_Participants_Response
+#define soap_read_ns__Dispatch_Modify_Participants_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Modify_Participants_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+SOAP_FMAC1 ns__Dispatch_Modify_Participants_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Modify_Participants_Response(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns__Dispatch_Modify_Participants_Response * soap_new_ns__Dispatch_Modify_Participants_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Modify_Participants_Response(soap, n, NULL, NULL, NULL); }
+
+inline ns__Dispatch_Modify_Participants_Response * soap_new_req_ns__Dispatch_Modify_Participants_Response(struct soap *soap, ns__Modify_Participant& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Modify_Participants_Response *_p = soap_instantiate_ns__Dispatch_Modify_Participants_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Modify_Participants_Response::data = data; _p->ns__Dispatch_Modify_Participants_Response::session_id = session_id; _p->ns__Dispatch_Modify_Participants_Response::error_describe = error_describe; _p->ns__Dispatch_Modify_Participants_Response::result = result; } return _p; }
+
+inline ns__Dispatch_Modify_Participants_Response * soap_new_set_ns__Dispatch_Modify_Participants_Response(struct soap *soap, ns__Modify_Participant& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Modify_Participants_Response *_p = soap_instantiate_ns__Dispatch_Modify_Participants_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Modify_Participants_Response::data = data; _p->ns__Dispatch_Modify_Participants_Response::session_id = session_id; _p->ns__Dispatch_Modify_Participants_Response::error_describe = error_describe; _p->ns__Dispatch_Modify_Participants_Response::result = result; } return _p; }
+
+inline void soap_delete_ns__Dispatch_Modify_Participants_Response(struct soap *soap, ns__Dispatch_Modify_Participants_Response *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Modify_Participants_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Modify_Participant
 #define SOAP_TYPE_ns__Modify_Participant (43)
@@ -912,9 +1038,9 @@ SOAP_FMAC1 ns__Modify_Participant * SOAP_FMAC2 soap_instantiate_ns__Modify_Parti
 
 inline ns__Modify_Participant * soap_new_ns__Modify_Participant(struct soap *soap, int n = -1) { return soap_instantiate_ns__Modify_Participant(soap, n, NULL, NULL, NULL); }
 
-inline ns__Modify_Participant * soap_new_req_ns__Modify_Participant(struct soap *soap, ns__Entity& group_id, enum ns__ListModifyType modify_type) { ns__Modify_Participant *_p = soap_instantiate_ns__Modify_Participant(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Modify_Participant::group_id = group_id; _p->ns__Modify_Participant::modify_type = modify_type; } return _p; }
+inline ns__Modify_Participant * soap_new_req_ns__Modify_Participant(struct soap *soap, ns__Entity& group_id, enum ns__ListModifyType modify_type, std::string& size) { ns__Modify_Participant *_p = soap_instantiate_ns__Modify_Participant(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Modify_Participant::group_id = group_id; _p->ns__Modify_Participant::modify_type = modify_type; _p->ns__Modify_Participant::size = size; } return _p; }
 
-inline ns__Modify_Participant * soap_new_set_ns__Modify_Participant(struct soap *soap, ns__Entity& group_id, enum ns__ListModifyType modify_type, std::list<ns__Participant >& participants) { ns__Modify_Participant *_p = soap_instantiate_ns__Modify_Participant(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Modify_Participant::group_id = group_id; _p->ns__Modify_Participant::modify_type = modify_type; _p->ns__Modify_Participant::participants = participants; } return _p; }
+inline ns__Modify_Participant * soap_new_set_ns__Modify_Participant(struct soap *soap, ns__Entity& group_id, enum ns__ListModifyType modify_type, std::list<ns__Participant >& participants, std::string& size) { ns__Modify_Participant *_p = soap_instantiate_ns__Modify_Participant(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Modify_Participant::group_id = group_id; _p->ns__Modify_Participant::modify_type = modify_type; _p->ns__Modify_Participant::participants = participants; _p->ns__Modify_Participant::size = size; } return _p; }
 
 inline void soap_delete_ns__Modify_Participant(struct soap *soap, ns__Modify_Participant *p) { soap_delete(soap, p); }
 
@@ -949,37 +1075,66 @@ inline void soap_delete_ns__Entity_Status_Notification(struct soap *soap, ns__En
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Entity_Status_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Entity_Nofitication_Response
-#define SOAP_TYPE_ns__Entity_Nofitication_Response (41)
+#ifndef SOAP_TYPE_ns__Dispatch_Entity_Nofitication_Response
+#define SOAP_TYPE_ns__Dispatch_Entity_Nofitication_Response (41)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Entity_Nofitication_Response(struct soap*, const char*, int, const ns__Entity_Nofitication_Response *, const char*);
-SOAP_FMAC3 ns__Entity_Nofitication_Response * SOAP_FMAC4 soap_in_ns__Entity_Nofitication_Response(struct soap*, const char*, ns__Entity_Nofitication_Response *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Entity_Nofitication_Response(struct soap*, const char*, int, const ns__Dispatch_Entity_Nofitication_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Entity_Nofitication_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Entity_Nofitication_Response(struct soap*, const char*, ns__Dispatch_Entity_Nofitication_Response *, const char*);
 
-#ifndef soap_write_ns__Entity_Nofitication_Response
-#define soap_write_ns__Entity_Nofitication_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Entity-Nofitication-Response", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns__Dispatch_Entity_Nofitication_Response
+#define soap_write_ns__Dispatch_Entity_Nofitication_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Entity-Nofitication-Response", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns__Entity_Nofitication_Response * SOAP_FMAC4 soap_get_ns__Entity_Nofitication_Response(struct soap*, ns__Entity_Nofitication_Response *, const char*, const char*);
+SOAP_FMAC3 ns__Dispatch_Entity_Nofitication_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Entity_Nofitication_Response(struct soap*, ns__Dispatch_Entity_Nofitication_Response *, const char*, const char*);
 
-#ifndef soap_read_ns__Entity_Nofitication_Response
-#define soap_read_ns__Entity_Nofitication_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Entity_Nofitication_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Entity_Nofitication_Response
+#define soap_read_ns__Dispatch_Entity_Nofitication_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Entity_Nofitication_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 ns__Entity_Nofitication_Response * SOAP_FMAC2 soap_instantiate_ns__Entity_Nofitication_Response(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC1 ns__Dispatch_Entity_Nofitication_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Entity_Nofitication_Response(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns__Entity_Nofitication_Response * soap_new_ns__Entity_Nofitication_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Entity_Nofitication_Response(soap, n, NULL, NULL, NULL); }
+inline ns__Dispatch_Entity_Nofitication_Response * soap_new_ns__Dispatch_Entity_Nofitication_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Entity_Nofitication_Response(soap, n, NULL, NULL, NULL); }
 
-inline ns__Entity_Nofitication_Response * soap_new_req_ns__Entity_Nofitication_Response(struct soap *soap, enum ns__EntityNotifyType notify_type, ns__EntityData& data) { ns__Entity_Nofitication_Response *_p = soap_instantiate_ns__Entity_Nofitication_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Entity_Nofitication_Response::notify_type = notify_type; _p->ns__Entity_Nofitication_Response::data = data; } return _p; }
+inline ns__Dispatch_Entity_Nofitication_Response * soap_new_req_ns__Dispatch_Entity_Nofitication_Response(struct soap *soap, enum ns__EntityNotifyType notify_type, ns__EntityData& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Entity_Nofitication_Response *_p = soap_instantiate_ns__Dispatch_Entity_Nofitication_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Entity_Nofitication_Response::notify_type = notify_type; _p->ns__Dispatch_Entity_Nofitication_Response::data = data; _p->ns__Dispatch_Entity_Nofitication_Response::session_id = session_id; _p->ns__Dispatch_Entity_Nofitication_Response::error_describe = error_describe; _p->ns__Dispatch_Entity_Nofitication_Response::result = result; } return _p; }
 
-inline ns__Entity_Nofitication_Response * soap_new_set_ns__Entity_Nofitication_Response(struct soap *soap, enum ns__EntityNotifyType notify_type, ns__EntityData& data) { ns__Entity_Nofitication_Response *_p = soap_instantiate_ns__Entity_Nofitication_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Entity_Nofitication_Response::notify_type = notify_type; _p->ns__Entity_Nofitication_Response::data = data; } return _p; }
+inline ns__Dispatch_Entity_Nofitication_Response * soap_new_set_ns__Dispatch_Entity_Nofitication_Response(struct soap *soap, enum ns__EntityNotifyType notify_type, ns__EntityData& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Entity_Nofitication_Response *_p = soap_instantiate_ns__Dispatch_Entity_Nofitication_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Entity_Nofitication_Response::notify_type = notify_type; _p->ns__Dispatch_Entity_Nofitication_Response::data = data; _p->ns__Dispatch_Entity_Nofitication_Response::session_id = session_id; _p->ns__Dispatch_Entity_Nofitication_Response::error_describe = error_describe; _p->ns__Dispatch_Entity_Nofitication_Response::result = result; } return _p; }
 
-inline void soap_delete_ns__Entity_Nofitication_Response(struct soap *soap, ns__Entity_Nofitication_Response *p) { soap_delete(soap, p); }
+inline void soap_delete_ns__Dispatch_Entity_Nofitication_Response(struct soap *soap, ns__Dispatch_Entity_Nofitication_Response *p) { soap_delete(soap, p); }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Entity_Nofitication_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Entity_Nofitication_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ns__Dispatch_Entity_Request_Response
+#define SOAP_TYPE_ns__Dispatch_Entity_Request_Response (40)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Entity_Request_Response(struct soap*, const char*, int, const ns__Dispatch_Entity_Request_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Entity_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Entity_Request_Response(struct soap*, const char*, ns__Dispatch_Entity_Request_Response *, const char*);
+
+#ifndef soap_write_ns__Dispatch_Entity_Request_Response
+#define soap_write_ns__Dispatch_Entity_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Entity-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns__Dispatch_Entity_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Entity_Request_Response(struct soap*, ns__Dispatch_Entity_Request_Response *, const char*, const char*);
+
+#ifndef soap_read_ns__Dispatch_Entity_Request_Response
+#define soap_read_ns__Dispatch_Entity_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Entity_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+SOAP_FMAC1 ns__Dispatch_Entity_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Entity_Request_Response(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns__Dispatch_Entity_Request_Response * soap_new_ns__Dispatch_Entity_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Entity_Request_Response(soap, n, NULL, NULL, NULL); }
+
+inline ns__Dispatch_Entity_Request_Response * soap_new_req_ns__Dispatch_Entity_Request_Response(struct soap *soap, ns__EntityData& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Entity_Request_Response *_p = soap_instantiate_ns__Dispatch_Entity_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Entity_Request_Response::data = data; _p->ns__Dispatch_Entity_Request_Response::session_id = session_id; _p->ns__Dispatch_Entity_Request_Response::error_describe = error_describe; _p->ns__Dispatch_Entity_Request_Response::result = result; } return _p; }
+
+inline ns__Dispatch_Entity_Request_Response * soap_new_set_ns__Dispatch_Entity_Request_Response(struct soap *soap, ns__EntityData& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Entity_Request_Response *_p = soap_instantiate_ns__Dispatch_Entity_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Entity_Request_Response::data = data; _p->ns__Dispatch_Entity_Request_Response::session_id = session_id; _p->ns__Dispatch_Entity_Request_Response::error_describe = error_describe; _p->ns__Dispatch_Entity_Request_Response::result = result; } return _p; }
+
+inline void soap_delete_ns__Dispatch_Entity_Request_Response(struct soap *soap, ns__Dispatch_Entity_Request_Response *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Entity_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__EntityData
-#define SOAP_TYPE_ns__EntityData (40)
+#define SOAP_TYPE_ns__EntityData (39)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__EntityData(struct soap*, const char*, int, const ns__EntityData *, const char*);
@@ -999,16 +1154,16 @@ SOAP_FMAC1 ns__EntityData * SOAP_FMAC2 soap_instantiate_ns__EntityData(struct so
 
 inline ns__EntityData * soap_new_ns__EntityData(struct soap *soap, int n = -1) { return soap_instantiate_ns__EntityData(soap, n, NULL, NULL, NULL); }
 
-inline ns__EntityData * soap_new_req_ns__EntityData(struct soap *soap, ns__Entity& id, ns__Unit& unit, ns__Account& accout, ns__User& user, ns__Group& group, ns__Alert& alert, ns__Gateway& gateway, ns__Organization& organization) { ns__EntityData *_p = soap_instantiate_ns__EntityData(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__EntityData::id = id; _p->ns__EntityData::unit = unit; _p->ns__EntityData::accout = accout; _p->ns__EntityData::user = user; _p->ns__EntityData::group = group; _p->ns__EntityData::alert = alert; _p->ns__EntityData::gateway = gateway; _p->ns__EntityData::organization = organization; } return _p; }
+inline ns__EntityData * soap_new_req_ns__EntityData(struct soap *soap, ns__Entity& id, ns__Unit& unit, ns__Account& account, ns__User& user, ns__Group& group, ns__Alert& alert, ns__Organization& organization) { ns__EntityData *_p = soap_instantiate_ns__EntityData(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__EntityData::id = id; _p->ns__EntityData::unit = unit; _p->ns__EntityData::account = account; _p->ns__EntityData::user = user; _p->ns__EntityData::group = group; _p->ns__EntityData::alert = alert; _p->ns__EntityData::organization = organization; } return _p; }
 
-inline ns__EntityData * soap_new_set_ns__EntityData(struct soap *soap, ns__Entity& id, ns__Unit& unit, ns__Account& accout, ns__User& user, ns__Group& group, ns__Alert& alert, ns__Gateway& gateway, ns__Organization& organization) { ns__EntityData *_p = soap_instantiate_ns__EntityData(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__EntityData::id = id; _p->ns__EntityData::unit = unit; _p->ns__EntityData::accout = accout; _p->ns__EntityData::user = user; _p->ns__EntityData::group = group; _p->ns__EntityData::alert = alert; _p->ns__EntityData::gateway = gateway; _p->ns__EntityData::organization = organization; } return _p; }
+inline ns__EntityData * soap_new_set_ns__EntityData(struct soap *soap, ns__Entity& id, ns__Unit& unit, ns__Account& account, ns__User& user, ns__Group& group, ns__Alert& alert, ns__Organization& organization) { ns__EntityData *_p = soap_instantiate_ns__EntityData(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__EntityData::id = id; _p->ns__EntityData::unit = unit; _p->ns__EntityData::account = account; _p->ns__EntityData::user = user; _p->ns__EntityData::group = group; _p->ns__EntityData::alert = alert; _p->ns__EntityData::organization = organization; } return _p; }
 
 inline void soap_delete_ns__EntityData(struct soap *soap, ns__EntityData *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__EntityData(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Organization
-#define SOAP_TYPE_ns__Organization (39)
+#define SOAP_TYPE_ns__Organization (38)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Organization(struct soap*, const char*, int, const ns__Organization *, const char*);
@@ -1028,16 +1183,45 @@ SOAP_FMAC1 ns__Organization * SOAP_FMAC2 soap_instantiate_ns__Organization(struc
 
 inline ns__Organization * soap_new_ns__Organization(struct soap *soap, int n = -1) { return soap_instantiate_ns__Organization(soap, n, NULL, NULL, NULL); }
 
-inline ns__Organization * soap_new_req_ns__Organization(struct soap *soap, ns__Entity& base, bool include_members, ns__Entity& members) { ns__Organization *_p = soap_instantiate_ns__Organization(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Organization::base = base; _p->ns__Organization::include_members = include_members; _p->ns__Organization::members = members; } return _p; }
+inline ns__Organization * soap_new_req_ns__Organization(struct soap *soap, ns__Entity& base, ns__Entity& members) { ns__Organization *_p = soap_instantiate_ns__Organization(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Organization::base = base; _p->ns__Organization::members = members; } return _p; }
 
-inline ns__Organization * soap_new_set_ns__Organization(struct soap *soap, ns__Entity& base, bool include_members, ns__Entity& members) { ns__Organization *_p = soap_instantiate_ns__Organization(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Organization::base = base; _p->ns__Organization::include_members = include_members; _p->ns__Organization::members = members; } return _p; }
+inline ns__Organization * soap_new_set_ns__Organization(struct soap *soap, ns__Entity& base, ns__Entity& members) { ns__Organization *_p = soap_instantiate_ns__Organization(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Organization::base = base; _p->ns__Organization::members = members; } return _p; }
 
 inline void soap_delete_ns__Organization(struct soap *soap, ns__Organization *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Organization(struct soap*, int, int, void*, size_t, const void*, size_t);
 
+#ifndef SOAP_TYPE_ns__Dispatch_Append_Alert_Request_Response
+#define SOAP_TYPE_ns__Dispatch_Append_Alert_Request_Response (37)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Append_Alert_Request_Response(struct soap*, const char*, int, const ns__Dispatch_Append_Alert_Request_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Append_Alert_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Append_Alert_Request_Response(struct soap*, const char*, ns__Dispatch_Append_Alert_Request_Response *, const char*);
+
+#ifndef soap_write_ns__Dispatch_Append_Alert_Request_Response
+#define soap_write_ns__Dispatch_Append_Alert_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Append-Alert-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns__Dispatch_Append_Alert_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Append_Alert_Request_Response(struct soap*, ns__Dispatch_Append_Alert_Request_Response *, const char*, const char*);
+
+#ifndef soap_read_ns__Dispatch_Append_Alert_Request_Response
+#define soap_read_ns__Dispatch_Append_Alert_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Append_Alert_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+SOAP_FMAC1 ns__Dispatch_Append_Alert_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Append_Alert_Request_Response(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns__Dispatch_Append_Alert_Request_Response * soap_new_ns__Dispatch_Append_Alert_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Append_Alert_Request_Response(soap, n, NULL, NULL, NULL); }
+
+inline ns__Dispatch_Append_Alert_Request_Response * soap_new_req_ns__Dispatch_Append_Alert_Request_Response(struct soap *soap, ns__Alert& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Append_Alert_Request_Response *_p = soap_instantiate_ns__Dispatch_Append_Alert_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Append_Alert_Request_Response::data = data; _p->ns__Dispatch_Append_Alert_Request_Response::session_id = session_id; _p->ns__Dispatch_Append_Alert_Request_Response::error_describe = error_describe; _p->ns__Dispatch_Append_Alert_Request_Response::result = result; } return _p; }
+
+inline ns__Dispatch_Append_Alert_Request_Response * soap_new_set_ns__Dispatch_Append_Alert_Request_Response(struct soap *soap, ns__Alert& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Append_Alert_Request_Response *_p = soap_instantiate_ns__Dispatch_Append_Alert_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Append_Alert_Request_Response::data = data; _p->ns__Dispatch_Append_Alert_Request_Response::session_id = session_id; _p->ns__Dispatch_Append_Alert_Request_Response::error_describe = error_describe; _p->ns__Dispatch_Append_Alert_Request_Response::result = result; } return _p; }
+
+inline void soap_delete_ns__Dispatch_Append_Alert_Request_Response(struct soap *soap, ns__Dispatch_Append_Alert_Request_Response *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Append_Alert_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+
 #ifndef SOAP_TYPE_ns__Alert
-#define SOAP_TYPE_ns__Alert (38)
+#define SOAP_TYPE_ns__Alert (36)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Alert(struct soap*, const char*, int, const ns__Alert *, const char*);
@@ -1057,45 +1241,74 @@ SOAP_FMAC1 ns__Alert * SOAP_FMAC2 soap_instantiate_ns__Alert(struct soap*, int, 
 
 inline ns__Alert * soap_new_ns__Alert(struct soap *soap, int n = -1) { return soap_instantiate_ns__Alert(soap, n, NULL, NULL, NULL); }
 
-inline ns__Alert * soap_new_req_ns__Alert(struct soap *soap, ns__Entity& base, ns__Entity& group, std::string& describe, enum ns__AlertLevel level, std::string& alram_time, unsigned long use_cars, std::string& create_time, enum ns__AlertStatus status) { ns__Alert *_p = soap_instantiate_ns__Alert(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Alert::base = base; _p->ns__Alert::group = group; _p->ns__Alert::describe = describe; _p->ns__Alert::level = level; _p->ns__Alert::alram_time = alram_time; _p->ns__Alert::use_cars = use_cars; _p->ns__Alert::create_time = create_time; _p->ns__Alert::status = status; } return _p; }
+inline ns__Alert * soap_new_req_ns__Alert(struct soap *soap, ns__Entity& base, std::string& group_id, std::string& describe, enum ns__AlertLevel level, std::string& alram_time, std::string& use_cars, std::string& create_time, enum ns__AlertStatus status) { ns__Alert *_p = soap_instantiate_ns__Alert(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Alert::base = base; _p->ns__Alert::group_id = group_id; _p->ns__Alert::describe = describe; _p->ns__Alert::level = level; _p->ns__Alert::alram_time = alram_time; _p->ns__Alert::use_cars = use_cars; _p->ns__Alert::create_time = create_time; _p->ns__Alert::status = status; } return _p; }
 
-inline ns__Alert * soap_new_set_ns__Alert(struct soap *soap, ns__Entity& base, ns__Entity& group, std::string& describe, enum ns__AlertLevel level, std::string& alram_time, unsigned long use_cars, std::string& create_time, enum ns__AlertStatus status) { ns__Alert *_p = soap_instantiate_ns__Alert(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Alert::base = base; _p->ns__Alert::group = group; _p->ns__Alert::describe = describe; _p->ns__Alert::level = level; _p->ns__Alert::alram_time = alram_time; _p->ns__Alert::use_cars = use_cars; _p->ns__Alert::create_time = create_time; _p->ns__Alert::status = status; } return _p; }
+inline ns__Alert * soap_new_set_ns__Alert(struct soap *soap, ns__Entity& base, std::string& group_id, std::string& describe, enum ns__AlertLevel level, std::string& alram_time, std::string& use_cars, std::string& create_time, enum ns__AlertStatus status) { ns__Alert *_p = soap_instantiate_ns__Alert(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Alert::base = base; _p->ns__Alert::group_id = group_id; _p->ns__Alert::describe = describe; _p->ns__Alert::level = level; _p->ns__Alert::alram_time = alram_time; _p->ns__Alert::use_cars = use_cars; _p->ns__Alert::create_time = create_time; _p->ns__Alert::status = status; } return _p; }
 
 inline void soap_delete_ns__Alert(struct soap *soap, ns__Alert *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Alert(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Gateway
-#define SOAP_TYPE_ns__Gateway (37)
+#ifndef SOAP_TYPE_ns__Dispatch_Modify_Group_Response
+#define SOAP_TYPE_ns__Dispatch_Modify_Group_Response (35)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Gateway(struct soap*, const char*, int, const ns__Gateway *, const char*);
-SOAP_FMAC3 ns__Gateway * SOAP_FMAC4 soap_in_ns__Gateway(struct soap*, const char*, ns__Gateway *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Modify_Group_Response(struct soap*, const char*, int, const ns__Dispatch_Modify_Group_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Modify_Group_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Modify_Group_Response(struct soap*, const char*, ns__Dispatch_Modify_Group_Response *, const char*);
 
-#ifndef soap_write_ns__Gateway
-#define soap_write_ns__Gateway(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Gateway", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns__Dispatch_Modify_Group_Response
+#define soap_write_ns__Dispatch_Modify_Group_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Modify-Group-Response", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns__Gateway * SOAP_FMAC4 soap_get_ns__Gateway(struct soap*, ns__Gateway *, const char*, const char*);
+SOAP_FMAC3 ns__Dispatch_Modify_Group_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Modify_Group_Response(struct soap*, ns__Dispatch_Modify_Group_Response *, const char*, const char*);
 
-#ifndef soap_read_ns__Gateway
-#define soap_read_ns__Gateway(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Gateway(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Modify_Group_Response
+#define soap_read_ns__Dispatch_Modify_Group_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Modify_Group_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 ns__Gateway * SOAP_FMAC2 soap_instantiate_ns__Gateway(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC1 ns__Dispatch_Modify_Group_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Modify_Group_Response(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns__Gateway * soap_new_ns__Gateway(struct soap *soap, int n = -1) { return soap_instantiate_ns__Gateway(soap, n, NULL, NULL, NULL); }
+inline ns__Dispatch_Modify_Group_Response * soap_new_ns__Dispatch_Modify_Group_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Modify_Group_Response(soap, n, NULL, NULL, NULL); }
 
-inline ns__Gateway * soap_new_req_ns__Gateway(struct soap *soap, ns__Entity& base, ns__Address& address, bool include_allocate_counts, ns__Entity& allocate_counts, bool include_active_counts, ns__Entity& active_counts, enum ns__RegisterStatus status) { ns__Gateway *_p = soap_instantiate_ns__Gateway(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Gateway::base = base; _p->ns__Gateway::address = address; _p->ns__Gateway::include_allocate_counts = include_allocate_counts; _p->ns__Gateway::allocate_counts = allocate_counts; _p->ns__Gateway::include_active_counts = include_active_counts; _p->ns__Gateway::active_counts = active_counts; _p->ns__Gateway::status = status; } return _p; }
+inline ns__Dispatch_Modify_Group_Response * soap_new_req_ns__Dispatch_Modify_Group_Response(struct soap *soap, ns__Group& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Modify_Group_Response *_p = soap_instantiate_ns__Dispatch_Modify_Group_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Modify_Group_Response::data = data; _p->ns__Dispatch_Modify_Group_Response::session_id = session_id; _p->ns__Dispatch_Modify_Group_Response::error_describe = error_describe; _p->ns__Dispatch_Modify_Group_Response::result = result; } return _p; }
 
-inline ns__Gateway * soap_new_set_ns__Gateway(struct soap *soap, ns__Entity& base, ns__Address& address, bool include_allocate_counts, ns__Entity& allocate_counts, bool include_active_counts, ns__Entity& active_counts, enum ns__RegisterStatus status) { ns__Gateway *_p = soap_instantiate_ns__Gateway(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Gateway::base = base; _p->ns__Gateway::address = address; _p->ns__Gateway::include_allocate_counts = include_allocate_counts; _p->ns__Gateway::allocate_counts = allocate_counts; _p->ns__Gateway::include_active_counts = include_active_counts; _p->ns__Gateway::active_counts = active_counts; _p->ns__Gateway::status = status; } return _p; }
+inline ns__Dispatch_Modify_Group_Response * soap_new_set_ns__Dispatch_Modify_Group_Response(struct soap *soap, ns__Group& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Modify_Group_Response *_p = soap_instantiate_ns__Dispatch_Modify_Group_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Modify_Group_Response::data = data; _p->ns__Dispatch_Modify_Group_Response::session_id = session_id; _p->ns__Dispatch_Modify_Group_Response::error_describe = error_describe; _p->ns__Dispatch_Modify_Group_Response::result = result; } return _p; }
 
-inline void soap_delete_ns__Gateway(struct soap *soap, ns__Gateway *p) { soap_delete(soap, p); }
+inline void soap_delete_ns__Dispatch_Modify_Group_Response(struct soap *soap, ns__Dispatch_Modify_Group_Response *p) { soap_delete(soap, p); }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Gateway(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Modify_Group_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ns__Dispatch_Append_Group_Response
+#define SOAP_TYPE_ns__Dispatch_Append_Group_Response (34)
+#endif
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Append_Group_Response(struct soap*, const char*, int, const ns__Dispatch_Append_Group_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Append_Group_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Append_Group_Response(struct soap*, const char*, ns__Dispatch_Append_Group_Response *, const char*);
+
+#ifndef soap_write_ns__Dispatch_Append_Group_Response
+#define soap_write_ns__Dispatch_Append_Group_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Append-Group-Response", NULL) || soap_end_send(soap), (soap)->error )
+#endif
+
+SOAP_FMAC3 ns__Dispatch_Append_Group_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Append_Group_Response(struct soap*, ns__Dispatch_Append_Group_Response *, const char*, const char*);
+
+#ifndef soap_read_ns__Dispatch_Append_Group_Response
+#define soap_read_ns__Dispatch_Append_Group_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Append_Group_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#endif
+
+SOAP_FMAC1 ns__Dispatch_Append_Group_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Append_Group_Response(struct soap*, int, const char*, const char*, size_t*);
+
+inline ns__Dispatch_Append_Group_Response * soap_new_ns__Dispatch_Append_Group_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Append_Group_Response(soap, n, NULL, NULL, NULL); }
+
+inline ns__Dispatch_Append_Group_Response * soap_new_req_ns__Dispatch_Append_Group_Response(struct soap *soap, ns__Group& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Append_Group_Response *_p = soap_instantiate_ns__Dispatch_Append_Group_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Append_Group_Response::data = data; _p->ns__Dispatch_Append_Group_Response::session_id = session_id; _p->ns__Dispatch_Append_Group_Response::error_describe = error_describe; _p->ns__Dispatch_Append_Group_Response::result = result; } return _p; }
+
+inline ns__Dispatch_Append_Group_Response * soap_new_set_ns__Dispatch_Append_Group_Response(struct soap *soap, ns__Group& data, std::string& session_id, std::string& error_describe, bool result) { ns__Dispatch_Append_Group_Response *_p = soap_instantiate_ns__Dispatch_Append_Group_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Append_Group_Response::data = data; _p->ns__Dispatch_Append_Group_Response::session_id = session_id; _p->ns__Dispatch_Append_Group_Response::error_describe = error_describe; _p->ns__Dispatch_Append_Group_Response::result = result; } return _p; }
+
+inline void soap_delete_ns__Dispatch_Append_Group_Response(struct soap *soap, ns__Dispatch_Append_Group_Response *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Append_Group_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Group
-#define SOAP_TYPE_ns__Group (36)
+#define SOAP_TYPE_ns__Group (32)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Group(struct soap*, const char*, int, const ns__Group *, const char*);
@@ -1115,16 +1328,16 @@ SOAP_FMAC1 ns__Group * SOAP_FMAC2 soap_instantiate_ns__Group(struct soap*, int, 
 
 inline ns__Group * soap_new_ns__Group(struct soap *soap, int n = -1) { return soap_instantiate_ns__Group(soap, n, NULL, NULL, NULL); }
 
-inline ns__Group * soap_new_req_ns__Group(struct soap *soap, ns__Entity& base, ns__Entity& owner, std::string& number, std::string& short_number, bool sealed, bool include_participants, ns__Participant& participants, enum ns__RecordType record_type, ns__Participant& recorder, enum ns__RecordStatus record_status) { ns__Group *_p = soap_instantiate_ns__Group(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Group::base = base; _p->ns__Group::owner = owner; _p->ns__Group::number = number; _p->ns__Group::short_number = short_number; _p->ns__Group::sealed = sealed; _p->ns__Group::include_participants = include_participants; _p->ns__Group::participants = participants; _p->ns__Group::record_type = record_type; _p->ns__Group::recorder = recorder; _p->ns__Group::record_status = record_status; } return _p; }
+inline ns__Group * soap_new_req_ns__Group(struct soap *soap, std::string& id, std::string& name, std::string& owner_id, std::string& number, std::string& short_number, std::string& size, enum ns__RecordType record_type, enum ns__RecordStatus record_status) { ns__Group *_p = soap_instantiate_ns__Group(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Group::id = id; _p->ns__Group::name = name; _p->ns__Group::owner_id = owner_id; _p->ns__Group::number = number; _p->ns__Group::short_number = short_number; _p->ns__Group::size = size; _p->ns__Group::record_type = record_type; _p->ns__Group::record_status = record_status; } return _p; }
 
-inline ns__Group * soap_new_set_ns__Group(struct soap *soap, ns__Entity& base, ns__Entity& owner, std::string& number, std::string& short_number, bool sealed, bool include_participants, ns__Participant& participants, enum ns__RecordType record_type, ns__Participant& recorder, enum ns__RecordStatus record_status) { ns__Group *_p = soap_instantiate_ns__Group(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Group::base = base; _p->ns__Group::owner = owner; _p->ns__Group::number = number; _p->ns__Group::short_number = short_number; _p->ns__Group::sealed = sealed; _p->ns__Group::include_participants = include_participants; _p->ns__Group::participants = participants; _p->ns__Group::record_type = record_type; _p->ns__Group::recorder = recorder; _p->ns__Group::record_status = record_status; } return _p; }
+inline ns__Group * soap_new_set_ns__Group(struct soap *soap, std::string& id, std::string& name, std::string& owner_id, std::string& number, std::string& short_number, std::list<ns__Participant >& participants, std::string& size, enum ns__RecordType record_type, enum ns__RecordStatus record_status) { ns__Group *_p = soap_instantiate_ns__Group(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Group::id = id; _p->ns__Group::name = name; _p->ns__Group::owner_id = owner_id; _p->ns__Group::number = number; _p->ns__Group::short_number = short_number; _p->ns__Group::participants = participants; _p->ns__Group::size = size; _p->ns__Group::record_type = record_type; _p->ns__Group::record_status = record_status; } return _p; }
 
 inline void soap_delete_ns__Group(struct soap *soap, ns__Group *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Group(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Participant
-#define SOAP_TYPE_ns__Participant (35)
+#define SOAP_TYPE_ns__Participant (31)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Participant(struct soap*, const char*, int, const ns__Participant *, const char*);
@@ -1144,16 +1357,16 @@ SOAP_FMAC1 ns__Participant * SOAP_FMAC2 soap_instantiate_ns__Participant(struct 
 
 inline ns__Participant * soap_new_ns__Participant(struct soap *soap, int n = -1) { return soap_instantiate_ns__Participant(soap, n, NULL, NULL, NULL); }
 
-inline ns__Participant * soap_new_req_ns__Participant(struct soap *soap, unsigned long id, ns__Entity& group, ns__Entity& account, unsigned long priority, enum ns__CallPrivilege call_privilege, enum ns__TokenPrivilege toke_privilege, enum ns__SessionStatus status, bool sync_added) { ns__Participant *_p = soap_instantiate_ns__Participant(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Participant::id = id; _p->ns__Participant::group = group; _p->ns__Participant::account = account; _p->ns__Participant::priority = priority; _p->ns__Participant::call_privilege = call_privilege; _p->ns__Participant::toke_privilege = toke_privilege; _p->ns__Participant::status = status; _p->ns__Participant::sync_added = sync_added; } return _p; }
+inline ns__Participant * soap_new_req_ns__Participant(struct soap *soap, ns__Entity& account, std::string& priority, enum ns__CallPrivilege call_privilege, enum ns__TokenPrivilege token_privilege, enum ns__SessionStatus status) { ns__Participant *_p = soap_instantiate_ns__Participant(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Participant::account = account; _p->ns__Participant::priority = priority; _p->ns__Participant::call_privilege = call_privilege; _p->ns__Participant::token_privilege = token_privilege; _p->ns__Participant::status = status; } return _p; }
 
-inline ns__Participant * soap_new_set_ns__Participant(struct soap *soap, unsigned long id, ns__Entity& group, ns__Entity& account, unsigned long priority, enum ns__CallPrivilege call_privilege, enum ns__TokenPrivilege toke_privilege, enum ns__SessionStatus status, bool sync_added) { ns__Participant *_p = soap_instantiate_ns__Participant(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Participant::id = id; _p->ns__Participant::group = group; _p->ns__Participant::account = account; _p->ns__Participant::priority = priority; _p->ns__Participant::call_privilege = call_privilege; _p->ns__Participant::toke_privilege = toke_privilege; _p->ns__Participant::status = status; _p->ns__Participant::sync_added = sync_added; } return _p; }
+inline ns__Participant * soap_new_set_ns__Participant(struct soap *soap, ns__Entity& account, std::string& priority, enum ns__CallPrivilege call_privilege, enum ns__TokenPrivilege token_privilege, enum ns__SessionStatus status) { ns__Participant *_p = soap_instantiate_ns__Participant(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Participant::account = account; _p->ns__Participant::priority = priority; _p->ns__Participant::call_privilege = call_privilege; _p->ns__Participant::token_privilege = token_privilege; _p->ns__Participant::status = status; } return _p; }
 
 inline void soap_delete_ns__Participant(struct soap *soap, ns__Participant *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Participant(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Unit
-#define SOAP_TYPE_ns__Unit (33)
+#define SOAP_TYPE_ns__Unit (29)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Unit(struct soap*, const char*, int, const ns__Unit *, const char*);
@@ -1173,45 +1386,45 @@ SOAP_FMAC1 ns__Unit * SOAP_FMAC2 soap_instantiate_ns__Unit(struct soap*, int, co
 
 inline ns__Unit * soap_new_ns__Unit(struct soap *soap, int n = -1) { return soap_instantiate_ns__Unit(soap, n, NULL, NULL, NULL); }
 
-inline ns__Unit * soap_new_req_ns__Unit(struct soap *soap, ns__Entity& base, bool include_members, ns__Entity& members) { ns__Unit *_p = soap_instantiate_ns__Unit(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Unit::base = base; _p->ns__Unit::include_members = include_members; _p->ns__Unit::members = members; } return _p; }
+inline ns__Unit * soap_new_req_ns__Unit(struct soap *soap, ns__Entity& base, std::string& size) { ns__Unit *_p = soap_instantiate_ns__Unit(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Unit::base = base; _p->ns__Unit::size = size; } return _p; }
 
-inline ns__Unit * soap_new_set_ns__Unit(struct soap *soap, ns__Entity& base, bool include_members, ns__Entity& members) { ns__Unit *_p = soap_instantiate_ns__Unit(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Unit::base = base; _p->ns__Unit::include_members = include_members; _p->ns__Unit::members = members; } return _p; }
+inline ns__Unit * soap_new_set_ns__Unit(struct soap *soap, ns__Entity& base, std::list<ns__Entity >& members, std::string& size) { ns__Unit *_p = soap_instantiate_ns__Unit(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Unit::base = base; _p->ns__Unit::members = members; _p->ns__Unit::size = size; } return _p; }
 
 inline void soap_delete_ns__Unit(struct soap *soap, ns__Unit *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Unit(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Login_Response
-#define SOAP_TYPE_ns__Login_Response (32)
+#ifndef SOAP_TYPE_ns__Dispatch_Login_Response
+#define SOAP_TYPE_ns__Dispatch_Login_Response (27)
 #endif
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Login_Response(struct soap*, const char*, int, const ns__Login_Response *, const char*);
-SOAP_FMAC3 ns__Login_Response * SOAP_FMAC4 soap_in_ns__Login_Response(struct soap*, const char*, ns__Login_Response *, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Login_Response(struct soap*, const char*, int, const ns__Dispatch_Login_Response *, const char*);
+SOAP_FMAC3 ns__Dispatch_Login_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Login_Response(struct soap*, const char*, ns__Dispatch_Login_Response *, const char*);
 
-#ifndef soap_write_ns__Login_Response
-#define soap_write_ns__Login_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Login-Response", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_write_ns__Dispatch_Login_Response
+#define soap_write_ns__Dispatch_Login_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || ((data)->soap_serialize(soap),0) || (data)->soap_put(soap, "ns:Dispatch-Login-Response", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 ns__Login_Response * SOAP_FMAC4 soap_get_ns__Login_Response(struct soap*, ns__Login_Response *, const char*, const char*);
+SOAP_FMAC3 ns__Dispatch_Login_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Login_Response(struct soap*, ns__Dispatch_Login_Response *, const char*, const char*);
 
-#ifndef soap_read_ns__Login_Response
-#define soap_read_ns__Login_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Login_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Login_Response
+#define soap_read_ns__Dispatch_Login_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Login_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 ns__Login_Response * SOAP_FMAC2 soap_instantiate_ns__Login_Response(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC1 ns__Dispatch_Login_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Login_Response(struct soap*, int, const char*, const char*, size_t*);
 
-inline ns__Login_Response * soap_new_ns__Login_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Login_Response(soap, n, NULL, NULL, NULL); }
+inline ns__Dispatch_Login_Response * soap_new_ns__Dispatch_Login_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Login_Response(soap, n, NULL, NULL, NULL); }
 
-inline ns__Login_Response * soap_new_req_ns__Login_Response(struct soap *soap, unsigned long session_id, ns__User& user, unsigned long ttl) { ns__Login_Response *_p = soap_instantiate_ns__Login_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Login_Response::session_id = session_id; _p->ns__Login_Response::user = user; _p->ns__Login_Response::ttl = ttl; } return _p; }
+inline ns__Dispatch_Login_Response * soap_new_req_ns__Dispatch_Login_Response(struct soap *soap, std::string& session_id, std::string& id, std::string& parentid, std::string& error_describe, bool result) { ns__Dispatch_Login_Response *_p = soap_instantiate_ns__Dispatch_Login_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Login_Response::session_id = session_id; _p->ns__Dispatch_Login_Response::id = id; _p->ns__Dispatch_Login_Response::parentid = parentid; _p->ns__Dispatch_Login_Response::error_describe = error_describe; _p->ns__Dispatch_Login_Response::result = result; } return _p; }
 
-inline ns__Login_Response * soap_new_set_ns__Login_Response(struct soap *soap, unsigned long session_id, ns__User& user, unsigned long ttl) { ns__Login_Response *_p = soap_instantiate_ns__Login_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Login_Response::session_id = session_id; _p->ns__Login_Response::user = user; _p->ns__Login_Response::ttl = ttl; } return _p; }
+inline ns__Dispatch_Login_Response * soap_new_set_ns__Dispatch_Login_Response(struct soap *soap, std::string& session_id, std::string& id, std::string& parentid, std::string& error_describe, bool result) { ns__Dispatch_Login_Response *_p = soap_instantiate_ns__Dispatch_Login_Response(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Dispatch_Login_Response::session_id = session_id; _p->ns__Dispatch_Login_Response::id = id; _p->ns__Dispatch_Login_Response::parentid = parentid; _p->ns__Dispatch_Login_Response::error_describe = error_describe; _p->ns__Dispatch_Login_Response::result = result; } return _p; }
 
-inline void soap_delete_ns__Login_Response(struct soap *soap, ns__Login_Response *p) { soap_delete(soap, p); }
+inline void soap_delete_ns__Dispatch_Login_Response(struct soap *soap, ns__Dispatch_Login_Response *p) { soap_delete(soap, p); }
 
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Login_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Login_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Account
-#define SOAP_TYPE_ns__Account (31)
+#define SOAP_TYPE_ns__Account (26)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Account(struct soap*, const char*, int, const ns__Account *, const char*);
@@ -1231,16 +1444,16 @@ SOAP_FMAC1 ns__Account * SOAP_FMAC2 soap_instantiate_ns__Account(struct soap*, i
 
 inline ns__Account * soap_new_ns__Account(struct soap *soap, int n = -1) { return soap_instantiate_ns__Account(soap, n, NULL, NULL, NULL); }
 
-inline ns__Account * soap_new_req_ns__Account(struct soap *soap, ns__Entity& base, enum ns__AccountType account_type, std::string& number, std::string& short_number, std::string& password, enum ns__AccountServiceStatus service_status, unsigned long priority, enum ns__CallPrivilege call_privilege, enum ns__TokenPrivilege token_privilege, enum ns__GpsReportMode gps_report_mode, unsigned long ttl, enum ns__RegisterStatus status, enum ns__RegisterStatus sip_status, ns__Address& address) { ns__Account *_p = soap_instantiate_ns__Account(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Account::base = base; _p->ns__Account::account_type = account_type; _p->ns__Account::number = number; _p->ns__Account::short_number = short_number; _p->ns__Account::password = password; _p->ns__Account::service_status = service_status; _p->ns__Account::priority = priority; _p->ns__Account::call_privilege = call_privilege; _p->ns__Account::token_privilege = token_privilege; _p->ns__Account::gps_report_mode = gps_report_mode; _p->ns__Account::ttl = ttl; _p->ns__Account::status = status; _p->ns__Account::sip_status = sip_status; _p->ns__Account::address = address; } return _p; }
+inline ns__Account * soap_new_req_ns__Account(struct soap *soap, ns__Entity& base, std::string& number, std::string& short_number, std::string& priority, enum ns__CallPrivilege call_privilege, enum ns__TokenPrivilege token_privilege, enum ns__RegisterStatus status, enum ns__RegisterStatus sip_status) { ns__Account *_p = soap_instantiate_ns__Account(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Account::base = base; _p->ns__Account::number = number; _p->ns__Account::short_number = short_number; _p->ns__Account::priority = priority; _p->ns__Account::call_privilege = call_privilege; _p->ns__Account::token_privilege = token_privilege; _p->ns__Account::status = status; _p->ns__Account::sip_status = sip_status; } return _p; }
 
-inline ns__Account * soap_new_set_ns__Account(struct soap *soap, ns__Entity& base, enum ns__AccountType account_type, std::string& number, std::string& short_number, std::string& password, enum ns__AccountServiceStatus service_status, unsigned long priority, enum ns__CallPrivilege call_privilege, enum ns__TokenPrivilege token_privilege, enum ns__GpsReportMode gps_report_mode, unsigned long ttl, enum ns__RegisterStatus status, enum ns__RegisterStatus sip_status, ns__Address& address) { ns__Account *_p = soap_instantiate_ns__Account(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Account::base = base; _p->ns__Account::account_type = account_type; _p->ns__Account::number = number; _p->ns__Account::short_number = short_number; _p->ns__Account::password = password; _p->ns__Account::service_status = service_status; _p->ns__Account::priority = priority; _p->ns__Account::call_privilege = call_privilege; _p->ns__Account::token_privilege = token_privilege; _p->ns__Account::gps_report_mode = gps_report_mode; _p->ns__Account::ttl = ttl; _p->ns__Account::status = status; _p->ns__Account::sip_status = sip_status; _p->ns__Account::address = address; } return _p; }
+inline ns__Account * soap_new_set_ns__Account(struct soap *soap, ns__Entity& base, std::string& number, std::string& short_number, std::string& priority, enum ns__CallPrivilege call_privilege, enum ns__TokenPrivilege token_privilege, enum ns__RegisterStatus status, enum ns__RegisterStatus sip_status) { ns__Account *_p = soap_instantiate_ns__Account(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Account::base = base; _p->ns__Account::number = number; _p->ns__Account::short_number = short_number; _p->ns__Account::priority = priority; _p->ns__Account::call_privilege = call_privilege; _p->ns__Account::token_privilege = token_privilege; _p->ns__Account::status = status; _p->ns__Account::sip_status = sip_status; } return _p; }
 
 inline void soap_delete_ns__Account(struct soap *soap, ns__Account *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Account(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__User
-#define SOAP_TYPE_ns__User (30)
+#define SOAP_TYPE_ns__User (25)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__User(struct soap*, const char*, int, const ns__User *, const char*);
@@ -1260,16 +1473,16 @@ SOAP_FMAC1 ns__User * SOAP_FMAC2 soap_instantiate_ns__User(struct soap*, int, co
 
 inline ns__User * soap_new_ns__User(struct soap *soap, int n = -1) { return soap_instantiate_ns__User(soap, n, NULL, NULL, NULL); }
 
-inline ns__User * soap_new_req_ns__User(struct soap *soap, ns__Entity& base, std::string& password, enum ns__UserType user_type, ns__Entity& account, enum ns__RegisterStatus status, ns__Address& address) { ns__User *_p = soap_instantiate_ns__User(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__User::base = base; _p->ns__User::password = password; _p->ns__User::user_type = user_type; _p->ns__User::account = account; _p->ns__User::status = status; _p->ns__User::address = address; } return _p; }
+inline ns__User * soap_new_req_ns__User(struct soap *soap, ns__Entity& base, ns__Entity& account, enum ns__RegisterStatus status) { ns__User *_p = soap_instantiate_ns__User(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__User::base = base; _p->ns__User::account = account; _p->ns__User::status = status; } return _p; }
 
-inline ns__User * soap_new_set_ns__User(struct soap *soap, ns__Entity& base, std::string& password, enum ns__UserType user_type, ns__Entity& account, enum ns__RegisterStatus status, ns__Address& address) { ns__User *_p = soap_instantiate_ns__User(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__User::base = base; _p->ns__User::password = password; _p->ns__User::user_type = user_type; _p->ns__User::account = account; _p->ns__User::status = status; _p->ns__User::address = address; } return _p; }
+inline ns__User * soap_new_set_ns__User(struct soap *soap, ns__Entity& base, ns__Entity& account, enum ns__RegisterStatus status) { ns__User *_p = soap_instantiate_ns__User(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__User::base = base; _p->ns__User::account = account; _p->ns__User::status = status; } return _p; }
 
 inline void soap_delete_ns__User(struct soap *soap, ns__User *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__User(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Address
-#define SOAP_TYPE_ns__Address (29)
+#define SOAP_TYPE_ns__Address (24)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Address(struct soap*, const char*, int, const ns__Address *, const char*);
@@ -1289,16 +1502,16 @@ SOAP_FMAC1 ns__Address * SOAP_FMAC2 soap_instantiate_ns__Address(struct soap*, i
 
 inline ns__Address * soap_new_ns__Address(struct soap *soap, int n = -1) { return soap_instantiate_ns__Address(soap, n, NULL, NULL, NULL); }
 
-inline ns__Address * soap_new_req_ns__Address(struct soap *soap, std::string& ip, unsigned long port) { ns__Address *_p = soap_instantiate_ns__Address(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Address::ip = ip; _p->ns__Address::port = port; } return _p; }
+inline ns__Address * soap_new_req_ns__Address(struct soap *soap, std::string& ip, std::string& port) { ns__Address *_p = soap_instantiate_ns__Address(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Address::ip = ip; _p->ns__Address::port = port; } return _p; }
 
-inline ns__Address * soap_new_set_ns__Address(struct soap *soap, std::string& ip, unsigned long port) { ns__Address *_p = soap_instantiate_ns__Address(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Address::ip = ip; _p->ns__Address::port = port; } return _p; }
+inline ns__Address * soap_new_set_ns__Address(struct soap *soap, std::string& ip, std::string& port) { ns__Address *_p = soap_instantiate_ns__Address(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Address::ip = ip; _p->ns__Address::port = port; } return _p; }
 
 inline void soap_delete_ns__Address(struct soap *soap, ns__Address *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Address(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_std__string
-#define SOAP_TYPE_std__string (28)
+#define SOAP_TYPE_std__string (23)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__string(struct soap*, std::string *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__string(struct soap*, const std::string *);
@@ -1330,7 +1543,7 @@ inline void soap_delete_std__string(struct soap *soap, std::string *p) { soap_de
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__string(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Entity
-#define SOAP_TYPE_ns__Entity (27)
+#define SOAP_TYPE_ns__Entity (22)
 #endif
 
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Entity(struct soap*, const char*, int, const ns__Entity *, const char*);
@@ -1350,9 +1563,9 @@ SOAP_FMAC1 ns__Entity * SOAP_FMAC2 soap_instantiate_ns__Entity(struct soap*, int
 
 inline ns__Entity * soap_new_ns__Entity(struct soap *soap, int n = -1) { return soap_instantiate_ns__Entity(soap, n, NULL, NULL, NULL); }
 
-inline ns__Entity * soap_new_req_ns__Entity(struct soap *soap, unsigned long id, std::string& name, enum ns__EntityType entity_type, unsigned long parentid) { ns__Entity *_p = soap_instantiate_ns__Entity(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Entity::id = id; _p->ns__Entity::name = name; _p->ns__Entity::entity_type = entity_type; _p->ns__Entity::parentid = parentid; } return _p; }
+inline ns__Entity * soap_new_req_ns__Entity(struct soap *soap, std::string& id, std::string& name, std::string& parentid, enum ns__EntityType entity_type) { ns__Entity *_p = soap_instantiate_ns__Entity(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Entity::id = id; _p->ns__Entity::name = name; _p->ns__Entity::parentid = parentid; _p->ns__Entity::entity_type = entity_type; } return _p; }
 
-inline ns__Entity * soap_new_set_ns__Entity(struct soap *soap, unsigned long id, std::string& name, enum ns__EntityType entity_type, unsigned long parentid) { ns__Entity *_p = soap_instantiate_ns__Entity(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Entity::id = id; _p->ns__Entity::name = name; _p->ns__Entity::entity_type = entity_type; _p->ns__Entity::parentid = parentid; } return _p; }
+inline ns__Entity * soap_new_set_ns__Entity(struct soap *soap, std::string& id, std::string& name, std::string& parentid, enum ns__EntityType entity_type) { ns__Entity *_p = soap_instantiate_ns__Entity(soap, -1, NULL, NULL, NULL); if (_p) { _p->soap_default(soap); _p->ns__Entity::id = id; _p->ns__Entity::name = name; _p->ns__Entity::parentid = parentid; _p->ns__Entity::entity_type = entity_type; } return _p; }
 
 inline void soap_delete_ns__Entity(struct soap *soap, ns__Entity *p) { soap_delete(soap, p); }
 
@@ -1361,7 +1574,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Entity(struct soap*, int, int, void*, s
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_SOAP_ENV__Fault
-#define SOAP_TYPE_SOAP_ENV__Fault (199)
+#define SOAP_TYPE_SOAP_ENV__Fault (169)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_SOAP_ENV__Fault(struct soap*, struct SOAP_ENV__Fault *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_SOAP_ENV__Fault(struct soap*, const struct SOAP_ENV__Fault *);
@@ -1397,7 +1610,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_SOAP_ENV__Fault(struct soap*, int, int, voi
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_SOAP_ENV__Reason
-#define SOAP_TYPE_SOAP_ENV__Reason (198)
+#define SOAP_TYPE_SOAP_ENV__Reason (168)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_SOAP_ENV__Reason(struct soap*, struct SOAP_ENV__Reason *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_SOAP_ENV__Reason(struct soap*, const struct SOAP_ENV__Reason *);
@@ -1433,7 +1646,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_SOAP_ENV__Reason(struct soap*, int, int, vo
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_SOAP_ENV__Detail
-#define SOAP_TYPE_SOAP_ENV__Detail (197)
+#define SOAP_TYPE_SOAP_ENV__Detail (165)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_SOAP_ENV__Detail(struct soap*, struct SOAP_ENV__Detail *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_SOAP_ENV__Detail(struct soap*, const struct SOAP_ENV__Detail *);
@@ -1469,7 +1682,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_SOAP_ENV__Detail(struct soap*, int, int, vo
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_SOAP_ENV__Code
-#define SOAP_TYPE_SOAP_ENV__Code (195)
+#define SOAP_TYPE_SOAP_ENV__Code (163)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_SOAP_ENV__Code(struct soap*, struct SOAP_ENV__Code *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_SOAP_ENV__Code(struct soap*, const struct SOAP_ENV__Code *);
@@ -1505,7 +1718,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_SOAP_ENV__Code(struct soap*, int, int, void
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_SOAP_ENV__Header
-#define SOAP_TYPE_SOAP_ENV__Header (194)
+#define SOAP_TYPE_SOAP_ENV__Header (162)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_SOAP_ENV__Header(struct soap*, struct SOAP_ENV__Header *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_SOAP_ENV__Header(struct soap*, const struct SOAP_ENV__Header *);
@@ -1539,7 +1752,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_SOAP_ENV__Header(struct soap*, int, int, vo
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request (193)
+#define SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request (161)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Delete_History_Alert_Request(struct soap*, struct ns__Dispatch_Delete_History_Alert_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Delete_History_Alert_Request(struct soap*, const struct ns__Dispatch_Delete_History_Alert_Request *);
@@ -1562,48 +1775,16 @@ SOAP_FMAC1 struct ns__Dispatch_Delete_History_Alert_Request * SOAP_FMAC2 soap_in
 
 inline struct ns__Dispatch_Delete_History_Alert_Request * soap_new_ns__Dispatch_Delete_History_Alert_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Delete_History_Alert_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Delete_History_Alert_Request * soap_new_req_ns__Dispatch_Delete_History_Alert_Request(struct soap *soap, unsigned long history_alert_id) { struct ns__Dispatch_Delete_History_Alert_Request *_p = soap_instantiate_ns__Dispatch_Delete_History_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Delete_History_Alert_Request(soap, _p); _p->history_alert_id = history_alert_id; } return _p; }
+inline struct ns__Dispatch_Delete_History_Alert_Request * soap_new_req_ns__Dispatch_Delete_History_Alert_Request(struct soap *soap, std::string& session_id, std::string& history_alert_id) { struct ns__Dispatch_Delete_History_Alert_Request *_p = soap_instantiate_ns__Dispatch_Delete_History_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Delete_History_Alert_Request(soap, _p); _p->session_id = session_id; _p->history_alert_id = history_alert_id; } return _p; }
 
-inline struct ns__Dispatch_Delete_History_Alert_Request * soap_new_set_ns__Dispatch_Delete_History_Alert_Request(struct soap *soap, unsigned long history_alert_id) { struct ns__Dispatch_Delete_History_Alert_Request *_p = soap_instantiate_ns__Dispatch_Delete_History_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Delete_History_Alert_Request(soap, _p); _p->history_alert_id = history_alert_id; } return _p; }
+inline struct ns__Dispatch_Delete_History_Alert_Request * soap_new_set_ns__Dispatch_Delete_History_Alert_Request(struct soap *soap, std::string& session_id, std::string& history_alert_id) { struct ns__Dispatch_Delete_History_Alert_Request *_p = soap_instantiate_ns__Dispatch_Delete_History_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Delete_History_Alert_Request(soap, _p); _p->session_id = session_id; _p->history_alert_id = history_alert_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Delete_History_Alert_Request(struct soap *soap, struct ns__Dispatch_Delete_History_Alert_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Delete_History_Alert_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request_Response (190)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap*, struct ns__Dispatch_Delete_History_Alert_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap*, const struct ns__Dispatch_Delete_History_Alert_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Delete_History_Alert_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Delete_History_Alert_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap*, const char*, struct ns__Dispatch_Delete_History_Alert_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap*, const struct ns__Dispatch_Delete_History_Alert_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Delete_History_Alert_Request_Response
-#define soap_write_ns__Dispatch_Delete_History_Alert_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Delete_History_Alert_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Delete_History_Alert_Request_Response(soap, data, "ns:Dispatch-Delete-History-Alert-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Delete_History_Alert_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap*, struct ns__Dispatch_Delete_History_Alert_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Delete_History_Alert_Request_Response
-#define soap_read_ns__Dispatch_Delete_History_Alert_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Delete_History_Alert_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Delete_History_Alert_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Delete_History_Alert_Request_Response * soap_new_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Delete_History_Alert_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Delete_History_Alert_Request_Response * soap_new_req_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap *soap) { struct ns__Dispatch_Delete_History_Alert_Request_Response *_p = soap_instantiate_ns__Dispatch_Delete_History_Alert_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Delete_History_Alert_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Delete_History_Alert_Request_Response * soap_new_set_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap *soap) { struct ns__Dispatch_Delete_History_Alert_Request_Response *_p = soap_instantiate_ns__Dispatch_Delete_History_Alert_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Delete_History_Alert_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap *soap, struct ns__Dispatch_Delete_History_Alert_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Delete_History_Alert_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request
-#define SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request (189)
+#define SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request (159)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_History_Alert_Message_Request(struct soap*, struct ns__Dispatch_History_Alert_Message_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_History_Alert_Message_Request(struct soap*, const struct ns__Dispatch_History_Alert_Message_Request *);
@@ -1626,16 +1807,16 @@ SOAP_FMAC1 struct ns__Dispatch_History_Alert_Message_Request * SOAP_FMAC2 soap_i
 
 inline struct ns__Dispatch_History_Alert_Message_Request * soap_new_ns__Dispatch_History_Alert_Message_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_History_Alert_Message_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_History_Alert_Message_Request * soap_new_req_ns__Dispatch_History_Alert_Message_Request(struct soap *soap, unsigned long history_alert_id, unsigned long from_message_id, std::string& from_time, unsigned long max_message_count) { struct ns__Dispatch_History_Alert_Message_Request *_p = soap_instantiate_ns__Dispatch_History_Alert_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_History_Alert_Message_Request(soap, _p); _p->history_alert_id = history_alert_id; _p->from_message_id = from_message_id; _p->from_time = from_time; _p->max_message_count = max_message_count; } return _p; }
+inline struct ns__Dispatch_History_Alert_Message_Request * soap_new_req_ns__Dispatch_History_Alert_Message_Request(struct soap *soap, std::string& session_id, std::string& history_alert_id, std::string& from_message_id, std::string& from_time, std::string& max_message_count) { struct ns__Dispatch_History_Alert_Message_Request *_p = soap_instantiate_ns__Dispatch_History_Alert_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_History_Alert_Message_Request(soap, _p); _p->session_id = session_id; _p->history_alert_id = history_alert_id; _p->from_message_id = from_message_id; _p->from_time = from_time; _p->max_message_count = max_message_count; } return _p; }
 
-inline struct ns__Dispatch_History_Alert_Message_Request * soap_new_set_ns__Dispatch_History_Alert_Message_Request(struct soap *soap, unsigned long history_alert_id, unsigned long from_message_id, std::string& from_time, unsigned long max_message_count) { struct ns__Dispatch_History_Alert_Message_Request *_p = soap_instantiate_ns__Dispatch_History_Alert_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_History_Alert_Message_Request(soap, _p); _p->history_alert_id = history_alert_id; _p->from_message_id = from_message_id; _p->from_time = from_time; _p->max_message_count = max_message_count; } return _p; }
+inline struct ns__Dispatch_History_Alert_Message_Request * soap_new_set_ns__Dispatch_History_Alert_Message_Request(struct soap *soap, std::string& session_id, std::string& history_alert_id, std::string& from_message_id, std::string& from_time, std::string& max_message_count) { struct ns__Dispatch_History_Alert_Message_Request *_p = soap_instantiate_ns__Dispatch_History_Alert_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_History_Alert_Message_Request(soap, _p); _p->session_id = session_id; _p->history_alert_id = history_alert_id; _p->from_message_id = from_message_id; _p->from_time = from_time; _p->max_message_count = max_message_count; } return _p; }
 
 inline void soap_delete_ns__Dispatch_History_Alert_Message_Request(struct soap *soap, struct ns__Dispatch_History_Alert_Message_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_History_Alert_Message_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_Alert_Request (186)
+#define SOAP_TYPE_ns__Dispatch_Alert_Request (156)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Alert_Request(struct soap*, struct ns__Dispatch_Alert_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Alert_Request(struct soap*, const struct ns__Dispatch_Alert_Request *);
@@ -1658,16 +1839,16 @@ SOAP_FMAC1 struct ns__Dispatch_Alert_Request * SOAP_FMAC2 soap_instantiate_ns__D
 
 inline struct ns__Dispatch_Alert_Request * soap_new_ns__Dispatch_Alert_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Alert_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Alert_Request * soap_new_req_ns__Dispatch_Alert_Request(struct soap *soap, unsigned long alert_id) { struct ns__Dispatch_Alert_Request *_p = soap_instantiate_ns__Dispatch_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Alert_Request(soap, _p); _p->alert_id = alert_id; } return _p; }
+inline struct ns__Dispatch_Alert_Request * soap_new_req_ns__Dispatch_Alert_Request(struct soap *soap, std::string& session_id, std::string& alert_id) { struct ns__Dispatch_Alert_Request *_p = soap_instantiate_ns__Dispatch_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Alert_Request(soap, _p); _p->session_id = session_id; _p->alert_id = alert_id; } return _p; }
 
-inline struct ns__Dispatch_Alert_Request * soap_new_set_ns__Dispatch_Alert_Request(struct soap *soap, unsigned long alert_id) { struct ns__Dispatch_Alert_Request *_p = soap_instantiate_ns__Dispatch_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Alert_Request(soap, _p); _p->alert_id = alert_id; } return _p; }
+inline struct ns__Dispatch_Alert_Request * soap_new_set_ns__Dispatch_Alert_Request(struct soap *soap, std::string& session_id, std::string& alert_id) { struct ns__Dispatch_Alert_Request *_p = soap_instantiate_ns__Dispatch_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Alert_Request(soap, _p); _p->session_id = session_id; _p->alert_id = alert_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Alert_Request(struct soap *soap, struct ns__Dispatch_Alert_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Alert_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_History_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_History_Alert_Request (184)
+#define SOAP_TYPE_ns__Dispatch_History_Alert_Request (153)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_History_Alert_Request(struct soap*, struct ns__Dispatch_History_Alert_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_History_Alert_Request(struct soap*, const struct ns__Dispatch_History_Alert_Request *);
@@ -1690,48 +1871,16 @@ SOAP_FMAC1 struct ns__Dispatch_History_Alert_Request * SOAP_FMAC2 soap_instantia
 
 inline struct ns__Dispatch_History_Alert_Request * soap_new_ns__Dispatch_History_Alert_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_History_Alert_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_History_Alert_Request * soap_new_req_ns__Dispatch_History_Alert_Request(struct soap *soap, std::string& name, std::string& create_time_from, std::string& create_time_to, std::string& alram_time_from, std::string& alram_time_to, std::string& over_time_from, std::string& over_time_to) { struct ns__Dispatch_History_Alert_Request *_p = soap_instantiate_ns__Dispatch_History_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_History_Alert_Request(soap, _p); _p->name = name; _p->create_time_from = create_time_from; _p->create_time_to = create_time_to; _p->alram_time_from = alram_time_from; _p->alram_time_to = alram_time_to; _p->over_time_from = over_time_from; _p->over_time_to = over_time_to; } return _p; }
+inline struct ns__Dispatch_History_Alert_Request * soap_new_req_ns__Dispatch_History_Alert_Request(struct soap *soap, std::string& session_id, std::string& name, std::string& create_time_from, std::string& create_time_to, std::string& alram_time_from, std::string& alram_time_to, std::string& over_time_from, std::string& over_time_to) { struct ns__Dispatch_History_Alert_Request *_p = soap_instantiate_ns__Dispatch_History_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_History_Alert_Request(soap, _p); _p->session_id = session_id; _p->name = name; _p->create_time_from = create_time_from; _p->create_time_to = create_time_to; _p->alram_time_from = alram_time_from; _p->alram_time_to = alram_time_to; _p->over_time_from = over_time_from; _p->over_time_to = over_time_to; } return _p; }
 
-inline struct ns__Dispatch_History_Alert_Request * soap_new_set_ns__Dispatch_History_Alert_Request(struct soap *soap, std::string& name, std::string& create_time_from, std::string& create_time_to, std::string& alram_time_from, std::string& alram_time_to, std::string& over_time_from, std::string& over_time_to) { struct ns__Dispatch_History_Alert_Request *_p = soap_instantiate_ns__Dispatch_History_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_History_Alert_Request(soap, _p); _p->name = name; _p->create_time_from = create_time_from; _p->create_time_to = create_time_to; _p->alram_time_from = alram_time_from; _p->alram_time_to = alram_time_to; _p->over_time_from = over_time_from; _p->over_time_to = over_time_to; } return _p; }
+inline struct ns__Dispatch_History_Alert_Request * soap_new_set_ns__Dispatch_History_Alert_Request(struct soap *soap, std::string& session_id, std::string& name, std::string& create_time_from, std::string& create_time_to, std::string& alram_time_from, std::string& alram_time_to, std::string& over_time_from, std::string& over_time_to) { struct ns__Dispatch_History_Alert_Request *_p = soap_instantiate_ns__Dispatch_History_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_History_Alert_Request(soap, _p); _p->session_id = session_id; _p->name = name; _p->create_time_from = create_time_from; _p->create_time_to = create_time_to; _p->alram_time_from = alram_time_from; _p->alram_time_to = alram_time_to; _p->over_time_from = over_time_from; _p->over_time_to = over_time_to; } return _p; }
 
 inline void soap_delete_ns__Dispatch_History_Alert_Request(struct soap *soap, struct ns__Dispatch_History_Alert_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_History_Alert_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_History_Alert_RequestResponse
-#define SOAP_TYPE_ns__Dispatch_History_Alert_RequestResponse (183)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_History_Alert_RequestResponse(struct soap*, struct ns__Dispatch_History_Alert_RequestResponse *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_History_Alert_RequestResponse(struct soap*, const struct ns__Dispatch_History_Alert_RequestResponse *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_History_Alert_RequestResponse(struct soap*, const char*, int, const struct ns__Dispatch_History_Alert_RequestResponse *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_History_Alert_RequestResponse * SOAP_FMAC4 soap_in_ns__Dispatch_History_Alert_RequestResponse(struct soap*, const char*, struct ns__Dispatch_History_Alert_RequestResponse *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_History_Alert_RequestResponse(struct soap*, const struct ns__Dispatch_History_Alert_RequestResponse *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_History_Alert_RequestResponse
-#define soap_write_ns__Dispatch_History_Alert_RequestResponse(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_History_Alert_RequestResponse(soap, data),0) || soap_put_ns__Dispatch_History_Alert_RequestResponse(soap, data, "ns:Dispatch-History-Alert-RequestResponse", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_History_Alert_RequestResponse * SOAP_FMAC4 soap_get_ns__Dispatch_History_Alert_RequestResponse(struct soap*, struct ns__Dispatch_History_Alert_RequestResponse *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_History_Alert_RequestResponse
-#define soap_read_ns__Dispatch_History_Alert_RequestResponse(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_History_Alert_RequestResponse(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_History_Alert_RequestResponse * SOAP_FMAC2 soap_instantiate_ns__Dispatch_History_Alert_RequestResponse(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_History_Alert_RequestResponse * soap_new_ns__Dispatch_History_Alert_RequestResponse(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_History_Alert_RequestResponse(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_History_Alert_RequestResponse * soap_new_req_ns__Dispatch_History_Alert_RequestResponse(struct soap *soap, std::list<ns__HistoryAlert >& response) { struct ns__Dispatch_History_Alert_RequestResponse *_p = soap_instantiate_ns__Dispatch_History_Alert_RequestResponse(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_History_Alert_RequestResponse(soap, _p); _p->response = response; } return _p; }
-
-inline struct ns__Dispatch_History_Alert_RequestResponse * soap_new_set_ns__Dispatch_History_Alert_RequestResponse(struct soap *soap, std::list<ns__HistoryAlert >& response) { struct ns__Dispatch_History_Alert_RequestResponse *_p = soap_instantiate_ns__Dispatch_History_Alert_RequestResponse(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_History_Alert_RequestResponse(soap, _p); _p->response = response; } return _p; }
-
-inline void soap_delete_ns__Dispatch_History_Alert_RequestResponse(struct soap *soap, struct ns__Dispatch_History_Alert_RequestResponse *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_History_Alert_RequestResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification
-#define SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification (179)
+#define SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification (150)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Alert_Overed_Notification(struct soap*, struct ns__Dispatch_Alert_Overed_Notification *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Alert_Overed_Notification(struct soap*, const struct ns__Dispatch_Alert_Overed_Notification *);
@@ -1754,48 +1903,16 @@ SOAP_FMAC1 struct ns__Dispatch_Alert_Overed_Notification * SOAP_FMAC2 soap_insta
 
 inline struct ns__Dispatch_Alert_Overed_Notification * soap_new_ns__Dispatch_Alert_Overed_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Alert_Overed_Notification(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Alert_Overed_Notification * soap_new_req_ns__Dispatch_Alert_Overed_Notification(struct soap *soap, ns__Entity& alert_id) { struct ns__Dispatch_Alert_Overed_Notification *_p = soap_instantiate_ns__Dispatch_Alert_Overed_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Alert_Overed_Notification(soap, _p); _p->alert_id = alert_id; } return _p; }
+inline struct ns__Dispatch_Alert_Overed_Notification * soap_new_req_ns__Dispatch_Alert_Overed_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Alert_Overed_Notification *_p = soap_instantiate_ns__Dispatch_Alert_Overed_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Alert_Overed_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
-inline struct ns__Dispatch_Alert_Overed_Notification * soap_new_set_ns__Dispatch_Alert_Overed_Notification(struct soap *soap, ns__Entity& alert_id) { struct ns__Dispatch_Alert_Overed_Notification *_p = soap_instantiate_ns__Dispatch_Alert_Overed_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Alert_Overed_Notification(soap, _p); _p->alert_id = alert_id; } return _p; }
+inline struct ns__Dispatch_Alert_Overed_Notification * soap_new_set_ns__Dispatch_Alert_Overed_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Alert_Overed_Notification *_p = soap_instantiate_ns__Dispatch_Alert_Overed_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Alert_Overed_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Alert_Overed_Notification(struct soap *soap, struct ns__Dispatch_Alert_Overed_Notification *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Alert_Overed_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification_Response
-#define SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification_Response (176)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, struct ns__Dispatch_Alert_Overed_Notification_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, const struct ns__Dispatch_Alert_Overed_Notification_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, const char*, int, const struct ns__Dispatch_Alert_Overed_Notification_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Alert_Overed_Notification_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, const char*, struct ns__Dispatch_Alert_Overed_Notification_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, const struct ns__Dispatch_Alert_Overed_Notification_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Alert_Overed_Notification_Response
-#define soap_write_ns__Dispatch_Alert_Overed_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Alert_Overed_Notification_Response(soap, data),0) || soap_put_ns__Dispatch_Alert_Overed_Notification_Response(soap, data, "ns:Dispatch-Alert-Overed-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Alert_Overed_Notification_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, struct ns__Dispatch_Alert_Overed_Notification_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Alert_Overed_Notification_Response
-#define soap_read_ns__Dispatch_Alert_Overed_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Alert_Overed_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Alert_Overed_Notification_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Alert_Overed_Notification_Response * soap_new_ns__Dispatch_Alert_Overed_Notification_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Alert_Overed_Notification_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Alert_Overed_Notification_Response * soap_new_req_ns__Dispatch_Alert_Overed_Notification_Response(struct soap *soap) { struct ns__Dispatch_Alert_Overed_Notification_Response *_p = soap_instantiate_ns__Dispatch_Alert_Overed_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Alert_Overed_Notification_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Alert_Overed_Notification_Response * soap_new_set_ns__Dispatch_Alert_Overed_Notification_Response(struct soap *soap) { struct ns__Dispatch_Alert_Overed_Notification_Response *_p = soap_instantiate_ns__Dispatch_Alert_Overed_Notification_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Alert_Overed_Notification_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Alert_Overed_Notification_Response(struct soap *soap, struct ns__Dispatch_Alert_Overed_Notification_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Alert_Overed_Notification_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Stop_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_Stop_Alert_Request (175)
+#define SOAP_TYPE_ns__Dispatch_Stop_Alert_Request (147)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Stop_Alert_Request(struct soap*, struct ns__Dispatch_Stop_Alert_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Stop_Alert_Request(struct soap*, const struct ns__Dispatch_Stop_Alert_Request *);
@@ -1818,48 +1935,16 @@ SOAP_FMAC1 struct ns__Dispatch_Stop_Alert_Request * SOAP_FMAC2 soap_instantiate_
 
 inline struct ns__Dispatch_Stop_Alert_Request * soap_new_ns__Dispatch_Stop_Alert_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Stop_Alert_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Stop_Alert_Request * soap_new_req_ns__Dispatch_Stop_Alert_Request(struct soap *soap, ns__Entity& alert_id) { struct ns__Dispatch_Stop_Alert_Request *_p = soap_instantiate_ns__Dispatch_Stop_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Alert_Request(soap, _p); _p->alert_id = alert_id; } return _p; }
+inline struct ns__Dispatch_Stop_Alert_Request * soap_new_req_ns__Dispatch_Stop_Alert_Request(struct soap *soap, std::string& session_id, std::string& alert_id) { struct ns__Dispatch_Stop_Alert_Request *_p = soap_instantiate_ns__Dispatch_Stop_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Alert_Request(soap, _p); _p->session_id = session_id; _p->alert_id = alert_id; } return _p; }
 
-inline struct ns__Dispatch_Stop_Alert_Request * soap_new_set_ns__Dispatch_Stop_Alert_Request(struct soap *soap, ns__Entity& alert_id) { struct ns__Dispatch_Stop_Alert_Request *_p = soap_instantiate_ns__Dispatch_Stop_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Alert_Request(soap, _p); _p->alert_id = alert_id; } return _p; }
+inline struct ns__Dispatch_Stop_Alert_Request * soap_new_set_ns__Dispatch_Stop_Alert_Request(struct soap *soap, std::string& session_id, std::string& alert_id) { struct ns__Dispatch_Stop_Alert_Request *_p = soap_instantiate_ns__Dispatch_Stop_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Alert_Request(soap, _p); _p->session_id = session_id; _p->alert_id = alert_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Stop_Alert_Request(struct soap *soap, struct ns__Dispatch_Stop_Alert_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Stop_Alert_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Stop_Alert_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Stop_Alert_Request_Response (172)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Stop_Alert_Request_Response(struct soap*, struct ns__Dispatch_Stop_Alert_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Stop_Alert_Request_Response(struct soap*, const struct ns__Dispatch_Stop_Alert_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Stop_Alert_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Stop_Alert_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Stop_Alert_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Stop_Alert_Request_Response(struct soap*, const char*, struct ns__Dispatch_Stop_Alert_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Stop_Alert_Request_Response(struct soap*, const struct ns__Dispatch_Stop_Alert_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Stop_Alert_Request_Response
-#define soap_write_ns__Dispatch_Stop_Alert_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Stop_Alert_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Stop_Alert_Request_Response(soap, data, "ns:Dispatch-Stop-Alert-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Stop_Alert_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Stop_Alert_Request_Response(struct soap*, struct ns__Dispatch_Stop_Alert_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Stop_Alert_Request_Response
-#define soap_read_ns__Dispatch_Stop_Alert_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Stop_Alert_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Stop_Alert_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Stop_Alert_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Stop_Alert_Request_Response * soap_new_ns__Dispatch_Stop_Alert_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Stop_Alert_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Stop_Alert_Request_Response * soap_new_req_ns__Dispatch_Stop_Alert_Request_Response(struct soap *soap) { struct ns__Dispatch_Stop_Alert_Request_Response *_p = soap_instantiate_ns__Dispatch_Stop_Alert_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Alert_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Stop_Alert_Request_Response * soap_new_set_ns__Dispatch_Stop_Alert_Request_Response(struct soap *soap) { struct ns__Dispatch_Stop_Alert_Request_Response *_p = soap_instantiate_ns__Dispatch_Stop_Alert_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Alert_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Stop_Alert_Request_Response(struct soap *soap, struct ns__Dispatch_Stop_Alert_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Stop_Alert_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Modify_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_Modify_Alert_Request (171)
+#define SOAP_TYPE_ns__Dispatch_Modify_Alert_Request (145)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Modify_Alert_Request(struct soap*, struct ns__Dispatch_Modify_Alert_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Modify_Alert_Request(struct soap*, const struct ns__Dispatch_Modify_Alert_Request *);
@@ -1882,48 +1967,16 @@ SOAP_FMAC1 struct ns__Dispatch_Modify_Alert_Request * SOAP_FMAC2 soap_instantiat
 
 inline struct ns__Dispatch_Modify_Alert_Request * soap_new_ns__Dispatch_Modify_Alert_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Modify_Alert_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Modify_Alert_Request * soap_new_req_ns__Dispatch_Modify_Alert_Request(struct soap *soap, ns__Alert& alert) { struct ns__Dispatch_Modify_Alert_Request *_p = soap_instantiate_ns__Dispatch_Modify_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Alert_Request(soap, _p); _p->alert = alert; } return _p; }
+inline struct ns__Dispatch_Modify_Alert_Request * soap_new_req_ns__Dispatch_Modify_Alert_Request(struct soap *soap, std::string& session_id, ns__Alert& alert) { struct ns__Dispatch_Modify_Alert_Request *_p = soap_instantiate_ns__Dispatch_Modify_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Alert_Request(soap, _p); _p->session_id = session_id; _p->alert = alert; } return _p; }
 
-inline struct ns__Dispatch_Modify_Alert_Request * soap_new_set_ns__Dispatch_Modify_Alert_Request(struct soap *soap, ns__Alert& alert) { struct ns__Dispatch_Modify_Alert_Request *_p = soap_instantiate_ns__Dispatch_Modify_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Alert_Request(soap, _p); _p->alert = alert; } return _p; }
+inline struct ns__Dispatch_Modify_Alert_Request * soap_new_set_ns__Dispatch_Modify_Alert_Request(struct soap *soap, std::string& session_id, ns__Alert& alert) { struct ns__Dispatch_Modify_Alert_Request *_p = soap_instantiate_ns__Dispatch_Modify_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Alert_Request(soap, _p); _p->session_id = session_id; _p->alert = alert; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Modify_Alert_Request(struct soap *soap, struct ns__Dispatch_Modify_Alert_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Modify_Alert_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Modify_Alert_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Modify_Alert_Request_Response (168)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Modify_Alert_Request_Response(struct soap*, struct ns__Dispatch_Modify_Alert_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Modify_Alert_Request_Response(struct soap*, const struct ns__Dispatch_Modify_Alert_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Modify_Alert_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Modify_Alert_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Modify_Alert_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Modify_Alert_Request_Response(struct soap*, const char*, struct ns__Dispatch_Modify_Alert_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Modify_Alert_Request_Response(struct soap*, const struct ns__Dispatch_Modify_Alert_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Modify_Alert_Request_Response
-#define soap_write_ns__Dispatch_Modify_Alert_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Modify_Alert_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Modify_Alert_Request_Response(soap, data, "ns:Dispatch-Modify-Alert-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Modify_Alert_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Modify_Alert_Request_Response(struct soap*, struct ns__Dispatch_Modify_Alert_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Modify_Alert_Request_Response
-#define soap_read_ns__Dispatch_Modify_Alert_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Modify_Alert_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Modify_Alert_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Modify_Alert_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Modify_Alert_Request_Response * soap_new_ns__Dispatch_Modify_Alert_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Modify_Alert_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Modify_Alert_Request_Response * soap_new_req_ns__Dispatch_Modify_Alert_Request_Response(struct soap *soap) { struct ns__Dispatch_Modify_Alert_Request_Response *_p = soap_instantiate_ns__Dispatch_Modify_Alert_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Alert_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Modify_Alert_Request_Response * soap_new_set_ns__Dispatch_Modify_Alert_Request_Response(struct soap *soap) { struct ns__Dispatch_Modify_Alert_Request_Response *_p = soap_instantiate_ns__Dispatch_Modify_Alert_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Alert_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Modify_Alert_Request_Response(struct soap *soap, struct ns__Dispatch_Modify_Alert_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Modify_Alert_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Append_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_Append_Alert_Request (167)
+#define SOAP_TYPE_ns__Dispatch_Append_Alert_Request (143)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Append_Alert_Request(struct soap*, struct ns__Dispatch_Append_Alert_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Append_Alert_Request(struct soap*, const struct ns__Dispatch_Append_Alert_Request *);
@@ -1946,112 +1999,80 @@ SOAP_FMAC1 struct ns__Dispatch_Append_Alert_Request * SOAP_FMAC2 soap_instantiat
 
 inline struct ns__Dispatch_Append_Alert_Request * soap_new_ns__Dispatch_Append_Alert_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Append_Alert_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Append_Alert_Request * soap_new_req_ns__Dispatch_Append_Alert_Request(struct soap *soap, ns__Alert& alert, std::list<ns__Account >& acount) { struct ns__Dispatch_Append_Alert_Request *_p = soap_instantiate_ns__Dispatch_Append_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Append_Alert_Request(soap, _p); _p->alert = alert; _p->acount = acount; } return _p; }
+inline struct ns__Dispatch_Append_Alert_Request * soap_new_req_ns__Dispatch_Append_Alert_Request(struct soap *soap, std::string& session_id, ns__Alert& alert, std::list<ns__Account >& members, std::string& size) { struct ns__Dispatch_Append_Alert_Request *_p = soap_instantiate_ns__Dispatch_Append_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Append_Alert_Request(soap, _p); _p->session_id = session_id; _p->alert = alert; _p->members = members; _p->size = size; } return _p; }
 
-inline struct ns__Dispatch_Append_Alert_Request * soap_new_set_ns__Dispatch_Append_Alert_Request(struct soap *soap, ns__Alert& alert, std::list<ns__Account >& acount) { struct ns__Dispatch_Append_Alert_Request *_p = soap_instantiate_ns__Dispatch_Append_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Append_Alert_Request(soap, _p); _p->alert = alert; _p->acount = acount; } return _p; }
+inline struct ns__Dispatch_Append_Alert_Request * soap_new_set_ns__Dispatch_Append_Alert_Request(struct soap *soap, std::string& session_id, ns__Alert& alert, std::list<ns__Account >& members, std::string& size) { struct ns__Dispatch_Append_Alert_Request *_p = soap_instantiate_ns__Dispatch_Append_Alert_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Append_Alert_Request(soap, _p); _p->session_id = session_id; _p->alert = alert; _p->members = members; _p->size = size; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Append_Alert_Request(struct soap *soap, struct ns__Dispatch_Append_Alert_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Append_Alert_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Account_Location_Notification
-#define SOAP_TYPE_ns__Dispatch_Account_Location_Notification (163)
+#ifndef SOAP_TYPE_ns__Dispatch_Account_Info_Notification
+#define SOAP_TYPE_ns__Dispatch_Account_Info_Notification (139)
 #endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Account_Location_Notification(struct soap*, struct ns__Dispatch_Account_Location_Notification *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Account_Location_Notification(struct soap*, const struct ns__Dispatch_Account_Location_Notification *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Account_Location_Notification(struct soap*, const char*, int, const struct ns__Dispatch_Account_Location_Notification *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Account_Location_Notification * SOAP_FMAC4 soap_in_ns__Dispatch_Account_Location_Notification(struct soap*, const char*, struct ns__Dispatch_Account_Location_Notification *, const char*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Account_Info_Notification(struct soap*, struct ns__Dispatch_Account_Info_Notification *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Account_Info_Notification(struct soap*, const struct ns__Dispatch_Account_Info_Notification *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Account_Info_Notification(struct soap*, const char*, int, const struct ns__Dispatch_Account_Info_Notification *, const char*);
+SOAP_FMAC3 struct ns__Dispatch_Account_Info_Notification * SOAP_FMAC4 soap_in_ns__Dispatch_Account_Info_Notification(struct soap*, const char*, struct ns__Dispatch_Account_Info_Notification *, const char*);
 
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Account_Location_Notification(struct soap*, const struct ns__Dispatch_Account_Location_Notification *, const char*, const char*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Account_Info_Notification(struct soap*, const struct ns__Dispatch_Account_Info_Notification *, const char*, const char*);
 
-#ifndef soap_write_ns__Dispatch_Account_Location_Notification
-#define soap_write_ns__Dispatch_Account_Location_Notification(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Account_Location_Notification(soap, data),0) || soap_put_ns__Dispatch_Account_Location_Notification(soap, data, "ns:Dispatch-Account-Location-Notification", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Account_Location_Notification * SOAP_FMAC4 soap_get_ns__Dispatch_Account_Location_Notification(struct soap*, struct ns__Dispatch_Account_Location_Notification *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Account_Location_Notification
-#define soap_read_ns__Dispatch_Account_Location_Notification(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Account_Location_Notification(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+#ifndef soap_write_ns__Dispatch_Account_Info_Notification
+#define soap_write_ns__Dispatch_Account_Info_Notification(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Account_Info_Notification(soap, data),0) || soap_put_ns__Dispatch_Account_Info_Notification(soap, data, "ns:Dispatch-Account-Info-Notification", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 struct ns__Dispatch_Account_Location_Notification * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Account_Location_Notification(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 struct ns__Dispatch_Account_Info_Notification * SOAP_FMAC4 soap_get_ns__Dispatch_Account_Info_Notification(struct soap*, struct ns__Dispatch_Account_Info_Notification *, const char*, const char*);
 
-inline struct ns__Dispatch_Account_Location_Notification * soap_new_ns__Dispatch_Account_Location_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Account_Location_Notification(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Account_Location_Notification * soap_new_req_ns__Dispatch_Account_Location_Notification(struct soap *soap) { struct ns__Dispatch_Account_Location_Notification *_p = soap_instantiate_ns__Dispatch_Account_Location_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Account_Location_Notification(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Account_Location_Notification * soap_new_set_ns__Dispatch_Account_Location_Notification(struct soap *soap, void *_) { struct ns__Dispatch_Account_Location_Notification *_p = soap_instantiate_ns__Dispatch_Account_Location_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Account_Location_Notification(soap, _p); _p->_ = _; } return _p; }
-
-inline void soap_delete_ns__Dispatch_Account_Location_Notification(struct soap *soap, struct ns__Dispatch_Account_Location_Notification *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Account_Location_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ns__Dispatch_Subscribe_Account_Location_Request
-#define SOAP_TYPE_ns__Dispatch_Subscribe_Account_Location_Request (160)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Subscribe_Account_Location_Request(struct soap*, struct ns__Dispatch_Subscribe_Account_Location_Request *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Subscribe_Account_Location_Request(struct soap*, const struct ns__Dispatch_Subscribe_Account_Location_Request *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Subscribe_Account_Location_Request(struct soap*, const char*, int, const struct ns__Dispatch_Subscribe_Account_Location_Request *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Subscribe_Account_Location_Request * SOAP_FMAC4 soap_in_ns__Dispatch_Subscribe_Account_Location_Request(struct soap*, const char*, struct ns__Dispatch_Subscribe_Account_Location_Request *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Subscribe_Account_Location_Request(struct soap*, const struct ns__Dispatch_Subscribe_Account_Location_Request *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Subscribe_Account_Location_Request
-#define soap_write_ns__Dispatch_Subscribe_Account_Location_Request(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Subscribe_Account_Location_Request(soap, data),0) || soap_put_ns__Dispatch_Subscribe_Account_Location_Request(soap, data, "ns:Dispatch-Subscribe-Account-Location-Request", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Account_Info_Notification
+#define soap_read_ns__Dispatch_Account_Info_Notification(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Account_Info_Notification(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 struct ns__Dispatch_Subscribe_Account_Location_Request * SOAP_FMAC4 soap_get_ns__Dispatch_Subscribe_Account_Location_Request(struct soap*, struct ns__Dispatch_Subscribe_Account_Location_Request *, const char*, const char*);
+SOAP_FMAC1 struct ns__Dispatch_Account_Info_Notification * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Account_Info_Notification(struct soap*, int, const char*, const char*, size_t*);
 
-#ifndef soap_read_ns__Dispatch_Subscribe_Account_Location_Request
-#define soap_read_ns__Dispatch_Subscribe_Account_Location_Request(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Subscribe_Account_Location_Request(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
+inline struct ns__Dispatch_Account_Info_Notification * soap_new_ns__Dispatch_Account_Info_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Account_Info_Notification(soap, n, NULL, NULL, NULL); }
+
+inline struct ns__Dispatch_Account_Info_Notification * soap_new_req_ns__Dispatch_Account_Info_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Account_Info_Notification *_p = soap_instantiate_ns__Dispatch_Account_Info_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Account_Info_Notification(soap, _p); _p->session_id = session_id; } return _p; }
+
+inline struct ns__Dispatch_Account_Info_Notification * soap_new_set_ns__Dispatch_Account_Info_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Account_Info_Notification *_p = soap_instantiate_ns__Dispatch_Account_Info_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Account_Info_Notification(soap, _p); _p->session_id = session_id; } return _p; }
+
+inline void soap_delete_ns__Dispatch_Account_Info_Notification(struct soap *soap, struct ns__Dispatch_Account_Info_Notification *p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Account_Info_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_ns__Dispatch_Subscribe_Account_Info_Request
+#define SOAP_TYPE_ns__Dispatch_Subscribe_Account_Info_Request (136)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Subscribe_Account_Info_Request(struct soap*, struct ns__Dispatch_Subscribe_Account_Info_Request *);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Subscribe_Account_Info_Request(struct soap*, const struct ns__Dispatch_Subscribe_Account_Info_Request *);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Subscribe_Account_Info_Request(struct soap*, const char*, int, const struct ns__Dispatch_Subscribe_Account_Info_Request *, const char*);
+SOAP_FMAC3 struct ns__Dispatch_Subscribe_Account_Info_Request * SOAP_FMAC4 soap_in_ns__Dispatch_Subscribe_Account_Info_Request(struct soap*, const char*, struct ns__Dispatch_Subscribe_Account_Info_Request *, const char*);
+
+SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Subscribe_Account_Info_Request(struct soap*, const struct ns__Dispatch_Subscribe_Account_Info_Request *, const char*, const char*);
+
+#ifndef soap_write_ns__Dispatch_Subscribe_Account_Info_Request
+#define soap_write_ns__Dispatch_Subscribe_Account_Info_Request(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Subscribe_Account_Info_Request(soap, data),0) || soap_put_ns__Dispatch_Subscribe_Account_Info_Request(soap, data, "ns:Dispatch-Subscribe-Account-Info-Request", NULL) || soap_end_send(soap), (soap)->error )
 #endif
 
-SOAP_FMAC1 struct ns__Dispatch_Subscribe_Account_Location_Request * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Subscribe_Account_Location_Request(struct soap*, int, const char*, const char*, size_t*);
+SOAP_FMAC3 struct ns__Dispatch_Subscribe_Account_Info_Request * SOAP_FMAC4 soap_get_ns__Dispatch_Subscribe_Account_Info_Request(struct soap*, struct ns__Dispatch_Subscribe_Account_Info_Request *, const char*, const char*);
 
-inline struct ns__Dispatch_Subscribe_Account_Location_Request * soap_new_ns__Dispatch_Subscribe_Account_Location_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Subscribe_Account_Location_Request(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Subscribe_Account_Location_Request * soap_new_req_ns__Dispatch_Subscribe_Account_Location_Request(struct soap *soap, bool subscribing, ns__Entity& account_id, unsigned long ttl) { struct ns__Dispatch_Subscribe_Account_Location_Request *_p = soap_instantiate_ns__Dispatch_Subscribe_Account_Location_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Subscribe_Account_Location_Request(soap, _p); _p->subscribing = subscribing; _p->account_id = account_id; _p->ttl = ttl; } return _p; }
-
-inline struct ns__Dispatch_Subscribe_Account_Location_Request * soap_new_set_ns__Dispatch_Subscribe_Account_Location_Request(struct soap *soap, bool subscribing, ns__Entity& account_id, unsigned long ttl) { struct ns__Dispatch_Subscribe_Account_Location_Request *_p = soap_instantiate_ns__Dispatch_Subscribe_Account_Location_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Subscribe_Account_Location_Request(soap, _p); _p->subscribing = subscribing; _p->account_id = account_id; _p->ttl = ttl; } return _p; }
-
-inline void soap_delete_ns__Dispatch_Subscribe_Account_Location_Request(struct soap *soap, struct ns__Dispatch_Subscribe_Account_Location_Request *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Subscribe_Account_Location_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ns__Dispatch_Subscribe_Account_Location_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Subscribe_Account_Location_Request_Response (157)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, struct ns__Dispatch_Subscribe_Account_Location_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, const struct ns__Dispatch_Subscribe_Account_Location_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Subscribe_Account_Location_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Subscribe_Account_Location_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, const char*, struct ns__Dispatch_Subscribe_Account_Location_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, const struct ns__Dispatch_Subscribe_Account_Location_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Subscribe_Account_Location_Request_Response
-#define soap_write_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, data, "ns:Dispatch-Subscribe-Account-Location-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
+#ifndef soap_read_ns__Dispatch_Subscribe_Account_Info_Request
+#define soap_read_ns__Dispatch_Subscribe_Account_Info_Request(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Subscribe_Account_Info_Request(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
 #endif
 
-SOAP_FMAC3 struct ns__Dispatch_Subscribe_Account_Location_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, struct ns__Dispatch_Subscribe_Account_Location_Request_Response *, const char*, const char*);
+SOAP_FMAC1 struct ns__Dispatch_Subscribe_Account_Info_Request * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Subscribe_Account_Info_Request(struct soap*, int, const char*, const char*, size_t*);
 
-#ifndef soap_read_ns__Dispatch_Subscribe_Account_Location_Request_Response
-#define soap_read_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
+inline struct ns__Dispatch_Subscribe_Account_Info_Request * soap_new_ns__Dispatch_Subscribe_Account_Info_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Subscribe_Account_Info_Request(soap, n, NULL, NULL, NULL); }
 
-SOAP_FMAC1 struct ns__Dispatch_Subscribe_Account_Location_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, int, const char*, const char*, size_t*);
+inline struct ns__Dispatch_Subscribe_Account_Info_Request * soap_new_req_ns__Dispatch_Subscribe_Account_Info_Request(struct soap *soap, std::string& session_id, bool subscribing, std::list<std::string >& account_id, enum ns__SubscribeType type, std::string& ttl) { struct ns__Dispatch_Subscribe_Account_Info_Request *_p = soap_instantiate_ns__Dispatch_Subscribe_Account_Info_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Subscribe_Account_Info_Request(soap, _p); _p->session_id = session_id; _p->subscribing = subscribing; _p->account_id = account_id; _p->type = type; _p->ttl = ttl; } return _p; }
 
-inline struct ns__Dispatch_Subscribe_Account_Location_Request_Response * soap_new_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, n, NULL, NULL, NULL); }
+inline struct ns__Dispatch_Subscribe_Account_Info_Request * soap_new_set_ns__Dispatch_Subscribe_Account_Info_Request(struct soap *soap, std::string& session_id, bool subscribing, std::list<std::string >& account_id, enum ns__SubscribeType type, std::string& ttl) { struct ns__Dispatch_Subscribe_Account_Info_Request *_p = soap_instantiate_ns__Dispatch_Subscribe_Account_Info_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Subscribe_Account_Info_Request(soap, _p); _p->session_id = session_id; _p->subscribing = subscribing; _p->account_id = account_id; _p->type = type; _p->ttl = ttl; } return _p; }
 
-inline struct ns__Dispatch_Subscribe_Account_Location_Request_Response * soap_new_req_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap *soap) { struct ns__Dispatch_Subscribe_Account_Location_Request_Response *_p = soap_instantiate_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, _p); } return _p; }
+inline void soap_delete_ns__Dispatch_Subscribe_Account_Info_Request(struct soap *soap, struct ns__Dispatch_Subscribe_Account_Info_Request *p) { soap_delete(soap, p); }
 
-inline struct ns__Dispatch_Subscribe_Account_Location_Request_Response * soap_new_set_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap *soap) { struct ns__Dispatch_Subscribe_Account_Location_Request_Response *_p = soap_instantiate_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap *soap, struct ns__Dispatch_Subscribe_Account_Location_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Subscribe_Account_Info_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Record_Status_Notification
-#define SOAP_TYPE_ns__Dispatch_Record_Status_Notification (156)
+#define SOAP_TYPE_ns__Dispatch_Record_Status_Notification (133)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Record_Status_Notification(struct soap*, struct ns__Dispatch_Record_Status_Notification *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Record_Status_Notification(struct soap*, const struct ns__Dispatch_Record_Status_Notification *);
@@ -2074,16 +2095,16 @@ SOAP_FMAC1 struct ns__Dispatch_Record_Status_Notification * SOAP_FMAC2 soap_inst
 
 inline struct ns__Dispatch_Record_Status_Notification * soap_new_ns__Dispatch_Record_Status_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Record_Status_Notification(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Record_Status_Notification * soap_new_req_ns__Dispatch_Record_Status_Notification(struct soap *soap) { struct ns__Dispatch_Record_Status_Notification *_p = soap_instantiate_ns__Dispatch_Record_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Record_Status_Notification(soap, _p); } return _p; }
+inline struct ns__Dispatch_Record_Status_Notification * soap_new_req_ns__Dispatch_Record_Status_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Record_Status_Notification *_p = soap_instantiate_ns__Dispatch_Record_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Record_Status_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
-inline struct ns__Dispatch_Record_Status_Notification * soap_new_set_ns__Dispatch_Record_Status_Notification(struct soap *soap, void *_) { struct ns__Dispatch_Record_Status_Notification *_p = soap_instantiate_ns__Dispatch_Record_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Record_Status_Notification(soap, _p); _p->_ = _; } return _p; }
+inline struct ns__Dispatch_Record_Status_Notification * soap_new_set_ns__Dispatch_Record_Status_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Record_Status_Notification *_p = soap_instantiate_ns__Dispatch_Record_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Record_Status_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Record_Status_Notification(struct soap *soap, struct ns__Dispatch_Record_Status_Notification *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Record_Status_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Stop_Record_Request
-#define SOAP_TYPE_ns__Dispatch_Stop_Record_Request (153)
+#define SOAP_TYPE_ns__Dispatch_Stop_Record_Request (130)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Stop_Record_Request(struct soap*, struct ns__Dispatch_Stop_Record_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Stop_Record_Request(struct soap*, const struct ns__Dispatch_Stop_Record_Request *);
@@ -2106,48 +2127,16 @@ SOAP_FMAC1 struct ns__Dispatch_Stop_Record_Request * SOAP_FMAC2 soap_instantiate
 
 inline struct ns__Dispatch_Stop_Record_Request * soap_new_ns__Dispatch_Stop_Record_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Stop_Record_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Stop_Record_Request * soap_new_req_ns__Dispatch_Stop_Record_Request(struct soap *soap, ns__Entity& group_id) { struct ns__Dispatch_Stop_Record_Request *_p = soap_instantiate_ns__Dispatch_Stop_Record_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Record_Request(soap, _p); _p->group_id = group_id; } return _p; }
+inline struct ns__Dispatch_Stop_Record_Request * soap_new_req_ns__Dispatch_Stop_Record_Request(struct soap *soap, std::string& session_id, std::string& group_id) { struct ns__Dispatch_Stop_Record_Request *_p = soap_instantiate_ns__Dispatch_Stop_Record_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Record_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; } return _p; }
 
-inline struct ns__Dispatch_Stop_Record_Request * soap_new_set_ns__Dispatch_Stop_Record_Request(struct soap *soap, ns__Entity& group_id) { struct ns__Dispatch_Stop_Record_Request *_p = soap_instantiate_ns__Dispatch_Stop_Record_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Record_Request(soap, _p); _p->group_id = group_id; } return _p; }
+inline struct ns__Dispatch_Stop_Record_Request * soap_new_set_ns__Dispatch_Stop_Record_Request(struct soap *soap, std::string& session_id, std::string& group_id) { struct ns__Dispatch_Stop_Record_Request *_p = soap_instantiate_ns__Dispatch_Stop_Record_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Record_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Stop_Record_Request(struct soap *soap, struct ns__Dispatch_Stop_Record_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Stop_Record_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Stop_Record_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Stop_Record_Request_Response (150)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Stop_Record_Request_Response(struct soap*, struct ns__Dispatch_Stop_Record_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Stop_Record_Request_Response(struct soap*, const struct ns__Dispatch_Stop_Record_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Stop_Record_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Stop_Record_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Stop_Record_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Stop_Record_Request_Response(struct soap*, const char*, struct ns__Dispatch_Stop_Record_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Stop_Record_Request_Response(struct soap*, const struct ns__Dispatch_Stop_Record_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Stop_Record_Request_Response
-#define soap_write_ns__Dispatch_Stop_Record_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Stop_Record_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Stop_Record_Request_Response(soap, data, "ns:Dispatch-Stop-Record-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Stop_Record_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Stop_Record_Request_Response(struct soap*, struct ns__Dispatch_Stop_Record_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Stop_Record_Request_Response
-#define soap_read_ns__Dispatch_Stop_Record_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Stop_Record_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Stop_Record_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Stop_Record_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Stop_Record_Request_Response * soap_new_ns__Dispatch_Stop_Record_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Stop_Record_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Stop_Record_Request_Response * soap_new_req_ns__Dispatch_Stop_Record_Request_Response(struct soap *soap) { struct ns__Dispatch_Stop_Record_Request_Response *_p = soap_instantiate_ns__Dispatch_Stop_Record_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Record_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Stop_Record_Request_Response * soap_new_set_ns__Dispatch_Stop_Record_Request_Response(struct soap *soap) { struct ns__Dispatch_Stop_Record_Request_Response *_p = soap_instantiate_ns__Dispatch_Stop_Record_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Stop_Record_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Stop_Record_Request_Response(struct soap *soap, struct ns__Dispatch_Stop_Record_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Stop_Record_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Start_Record_Request
-#define SOAP_TYPE_ns__Dispatch_Start_Record_Request (149)
+#define SOAP_TYPE_ns__Dispatch_Start_Record_Request (128)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Start_Record_Request(struct soap*, struct ns__Dispatch_Start_Record_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Start_Record_Request(struct soap*, const struct ns__Dispatch_Start_Record_Request *);
@@ -2170,112 +2159,16 @@ SOAP_FMAC1 struct ns__Dispatch_Start_Record_Request * SOAP_FMAC2 soap_instantiat
 
 inline struct ns__Dispatch_Start_Record_Request * soap_new_ns__Dispatch_Start_Record_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Start_Record_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Start_Record_Request * soap_new_req_ns__Dispatch_Start_Record_Request(struct soap *soap, ns__Entity& group_id) { struct ns__Dispatch_Start_Record_Request *_p = soap_instantiate_ns__Dispatch_Start_Record_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Start_Record_Request(soap, _p); _p->group_id = group_id; } return _p; }
+inline struct ns__Dispatch_Start_Record_Request * soap_new_req_ns__Dispatch_Start_Record_Request(struct soap *soap, std::string& session_id, std::string& group_id) { struct ns__Dispatch_Start_Record_Request *_p = soap_instantiate_ns__Dispatch_Start_Record_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Start_Record_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; } return _p; }
 
-inline struct ns__Dispatch_Start_Record_Request * soap_new_set_ns__Dispatch_Start_Record_Request(struct soap *soap, ns__Entity& group_id) { struct ns__Dispatch_Start_Record_Request *_p = soap_instantiate_ns__Dispatch_Start_Record_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Start_Record_Request(soap, _p); _p->group_id = group_id; } return _p; }
+inline struct ns__Dispatch_Start_Record_Request * soap_new_set_ns__Dispatch_Start_Record_Request(struct soap *soap, std::string& session_id, std::string& group_id) { struct ns__Dispatch_Start_Record_Request *_p = soap_instantiate_ns__Dispatch_Start_Record_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Start_Record_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Start_Record_Request(struct soap *soap, struct ns__Dispatch_Start_Record_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Start_Record_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Start_Record_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Start_Record_Request_Response (146)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Start_Record_Request_Response(struct soap*, struct ns__Dispatch_Start_Record_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Start_Record_Request_Response(struct soap*, const struct ns__Dispatch_Start_Record_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Start_Record_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Start_Record_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Start_Record_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Start_Record_Request_Response(struct soap*, const char*, struct ns__Dispatch_Start_Record_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Start_Record_Request_Response(struct soap*, const struct ns__Dispatch_Start_Record_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Start_Record_Request_Response
-#define soap_write_ns__Dispatch_Start_Record_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Start_Record_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Start_Record_Request_Response(soap, data, "ns:Dispatch-Start-Record-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Start_Record_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Start_Record_Request_Response(struct soap*, struct ns__Dispatch_Start_Record_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Start_Record_Request_Response
-#define soap_read_ns__Dispatch_Start_Record_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Start_Record_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Start_Record_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Start_Record_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Start_Record_Request_Response * soap_new_ns__Dispatch_Start_Record_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Start_Record_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Start_Record_Request_Response * soap_new_req_ns__Dispatch_Start_Record_Request_Response(struct soap *soap) { struct ns__Dispatch_Start_Record_Request_Response *_p = soap_instantiate_ns__Dispatch_Start_Record_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Start_Record_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Start_Record_Request_Response * soap_new_set_ns__Dispatch_Start_Record_Request_Response(struct soap *soap) { struct ns__Dispatch_Start_Record_Request_Response *_p = soap_instantiate_ns__Dispatch_Start_Record_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Start_Record_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Start_Record_Request_Response(struct soap *soap, struct ns__Dispatch_Start_Record_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Start_Record_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ns__Dispatch_Kick_Participant_Request
-#define SOAP_TYPE_ns__Dispatch_Kick_Participant_Request (145)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Kick_Participant_Request(struct soap*, struct ns__Dispatch_Kick_Participant_Request *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Kick_Participant_Request(struct soap*, const struct ns__Dispatch_Kick_Participant_Request *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Kick_Participant_Request(struct soap*, const char*, int, const struct ns__Dispatch_Kick_Participant_Request *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Kick_Participant_Request * SOAP_FMAC4 soap_in_ns__Dispatch_Kick_Participant_Request(struct soap*, const char*, struct ns__Dispatch_Kick_Participant_Request *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Kick_Participant_Request(struct soap*, const struct ns__Dispatch_Kick_Participant_Request *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Kick_Participant_Request
-#define soap_write_ns__Dispatch_Kick_Participant_Request(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Kick_Participant_Request(soap, data),0) || soap_put_ns__Dispatch_Kick_Participant_Request(soap, data, "ns:Dispatch-Kick-Participant-Request", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Kick_Participant_Request * SOAP_FMAC4 soap_get_ns__Dispatch_Kick_Participant_Request(struct soap*, struct ns__Dispatch_Kick_Participant_Request *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Kick_Participant_Request
-#define soap_read_ns__Dispatch_Kick_Participant_Request(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Kick_Participant_Request(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Kick_Participant_Request * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Kick_Participant_Request(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Kick_Participant_Request * soap_new_ns__Dispatch_Kick_Participant_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Kick_Participant_Request(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Kick_Participant_Request * soap_new_req_ns__Dispatch_Kick_Participant_Request(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { struct ns__Dispatch_Kick_Participant_Request *_p = soap_instantiate_ns__Dispatch_Kick_Participant_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Kick_Participant_Request(soap, _p); _p->group_id = group_id; _p->account_id = account_id; } return _p; }
-
-inline struct ns__Dispatch_Kick_Participant_Request * soap_new_set_ns__Dispatch_Kick_Participant_Request(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { struct ns__Dispatch_Kick_Participant_Request *_p = soap_instantiate_ns__Dispatch_Kick_Participant_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Kick_Participant_Request(soap, _p); _p->group_id = group_id; _p->account_id = account_id; } return _p; }
-
-inline void soap_delete_ns__Dispatch_Kick_Participant_Request(struct soap *soap, struct ns__Dispatch_Kick_Participant_Request *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Kick_Participant_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ns__Dispatch_Kick_Participant_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Kick_Participant_Request_Response (142)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Kick_Participant_Request_Response(struct soap*, struct ns__Dispatch_Kick_Participant_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Kick_Participant_Request_Response(struct soap*, const struct ns__Dispatch_Kick_Participant_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Kick_Participant_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Kick_Participant_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Kick_Participant_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Kick_Participant_Request_Response(struct soap*, const char*, struct ns__Dispatch_Kick_Participant_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Kick_Participant_Request_Response(struct soap*, const struct ns__Dispatch_Kick_Participant_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Kick_Participant_Request_Response
-#define soap_write_ns__Dispatch_Kick_Participant_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Kick_Participant_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Kick_Participant_Request_Response(soap, data, "ns:Dispatch-Kick-Participant-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Kick_Participant_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Kick_Participant_Request_Response(struct soap*, struct ns__Dispatch_Kick_Participant_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Kick_Participant_Request_Response
-#define soap_read_ns__Dispatch_Kick_Participant_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Kick_Participant_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Kick_Participant_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Kick_Participant_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Kick_Participant_Request_Response * soap_new_ns__Dispatch_Kick_Participant_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Kick_Participant_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Kick_Participant_Request_Response * soap_new_req_ns__Dispatch_Kick_Participant_Request_Response(struct soap *soap) { struct ns__Dispatch_Kick_Participant_Request_Response *_p = soap_instantiate_ns__Dispatch_Kick_Participant_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Kick_Participant_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Kick_Participant_Request_Response * soap_new_set_ns__Dispatch_Kick_Participant_Request_Response(struct soap *soap) { struct ns__Dispatch_Kick_Participant_Request_Response *_p = soap_instantiate_ns__Dispatch_Kick_Participant_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Kick_Participant_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Kick_Participant_Request_Response(struct soap *soap, struct ns__Dispatch_Kick_Participant_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Kick_Participant_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Send_Message_Request
-#define SOAP_TYPE_ns__Dispatch_Send_Message_Request (141)
+#define SOAP_TYPE_ns__Dispatch_Send_Message_Request (126)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Send_Message_Request(struct soap*, struct ns__Dispatch_Send_Message_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Send_Message_Request(struct soap*, const struct ns__Dispatch_Send_Message_Request *);
@@ -2298,48 +2191,16 @@ SOAP_FMAC1 struct ns__Dispatch_Send_Message_Request * SOAP_FMAC2 soap_instantiat
 
 inline struct ns__Dispatch_Send_Message_Request * soap_new_ns__Dispatch_Send_Message_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Send_Message_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Send_Message_Request * soap_new_req_ns__Dispatch_Send_Message_Request(struct soap *soap, unsigned long id, ns__MediaMessage& message) { struct ns__Dispatch_Send_Message_Request *_p = soap_instantiate_ns__Dispatch_Send_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Send_Message_Request(soap, _p); _p->id = id; _p->message = message; } return _p; }
+inline struct ns__Dispatch_Send_Message_Request * soap_new_req_ns__Dispatch_Send_Message_Request(struct soap *soap, std::string& session_id, std::string& group_id, ns__MediaMessage& mediamessage) { struct ns__Dispatch_Send_Message_Request *_p = soap_instantiate_ns__Dispatch_Send_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Send_Message_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->mediamessage = mediamessage; } return _p; }
 
-inline struct ns__Dispatch_Send_Message_Request * soap_new_set_ns__Dispatch_Send_Message_Request(struct soap *soap, unsigned long id, ns__MediaMessage& message) { struct ns__Dispatch_Send_Message_Request *_p = soap_instantiate_ns__Dispatch_Send_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Send_Message_Request(soap, _p); _p->id = id; _p->message = message; } return _p; }
+inline struct ns__Dispatch_Send_Message_Request * soap_new_set_ns__Dispatch_Send_Message_Request(struct soap *soap, std::string& session_id, std::string& group_id, ns__MediaMessage& mediamessage) { struct ns__Dispatch_Send_Message_Request *_p = soap_instantiate_ns__Dispatch_Send_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Send_Message_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->mediamessage = mediamessage; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Send_Message_Request(struct soap *soap, struct ns__Dispatch_Send_Message_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Send_Message_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Send_Message_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Send_Message_Request_Response (138)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Send_Message_Request_Response(struct soap*, struct ns__Dispatch_Send_Message_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Send_Message_Request_Response(struct soap*, const struct ns__Dispatch_Send_Message_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Send_Message_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Send_Message_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Send_Message_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Send_Message_Request_Response(struct soap*, const char*, struct ns__Dispatch_Send_Message_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Send_Message_Request_Response(struct soap*, const struct ns__Dispatch_Send_Message_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Send_Message_Request_Response
-#define soap_write_ns__Dispatch_Send_Message_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Send_Message_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Send_Message_Request_Response(soap, data, "ns:Dispatch-Send-Message-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Send_Message_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Send_Message_Request_Response(struct soap*, struct ns__Dispatch_Send_Message_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Send_Message_Request_Response
-#define soap_read_ns__Dispatch_Send_Message_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Send_Message_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Send_Message_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Send_Message_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Send_Message_Request_Response * soap_new_ns__Dispatch_Send_Message_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Send_Message_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Send_Message_Request_Response * soap_new_req_ns__Dispatch_Send_Message_Request_Response(struct soap *soap) { struct ns__Dispatch_Send_Message_Request_Response *_p = soap_instantiate_ns__Dispatch_Send_Message_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Send_Message_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Send_Message_Request_Response * soap_new_set_ns__Dispatch_Send_Message_Request_Response(struct soap *soap) { struct ns__Dispatch_Send_Message_Request_Response *_p = soap_instantiate_ns__Dispatch_Send_Message_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Send_Message_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Send_Message_Request_Response(struct soap *soap, struct ns__Dispatch_Send_Message_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Send_Message_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Session_Status_Notification
-#define SOAP_TYPE_ns__Dispatch_Session_Status_Notification (137)
+#define SOAP_TYPE_ns__Dispatch_Session_Status_Notification (124)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Session_Status_Notification(struct soap*, struct ns__Dispatch_Session_Status_Notification *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Session_Status_Notification(struct soap*, const struct ns__Dispatch_Session_Status_Notification *);
@@ -2362,16 +2223,16 @@ SOAP_FMAC1 struct ns__Dispatch_Session_Status_Notification * SOAP_FMAC2 soap_ins
 
 inline struct ns__Dispatch_Session_Status_Notification * soap_new_ns__Dispatch_Session_Status_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Session_Status_Notification(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Session_Status_Notification * soap_new_req_ns__Dispatch_Session_Status_Notification(struct soap *soap) { struct ns__Dispatch_Session_Status_Notification *_p = soap_instantiate_ns__Dispatch_Session_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Session_Status_Notification(soap, _p); } return _p; }
+inline struct ns__Dispatch_Session_Status_Notification * soap_new_req_ns__Dispatch_Session_Status_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Session_Status_Notification *_p = soap_instantiate_ns__Dispatch_Session_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Session_Status_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
-inline struct ns__Dispatch_Session_Status_Notification * soap_new_set_ns__Dispatch_Session_Status_Notification(struct soap *soap, void *_) { struct ns__Dispatch_Session_Status_Notification *_p = soap_instantiate_ns__Dispatch_Session_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Session_Status_Notification(soap, _p); _p->_ = _; } return _p; }
+inline struct ns__Dispatch_Session_Status_Notification * soap_new_set_ns__Dispatch_Session_Status_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Session_Status_Notification *_p = soap_instantiate_ns__Dispatch_Session_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Session_Status_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Session_Status_Notification(struct soap *soap, struct ns__Dispatch_Session_Status_Notification *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Session_Status_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Leave_Group_Request
-#define SOAP_TYPE_ns__Dispatch_Leave_Group_Request (134)
+#define SOAP_TYPE_ns__Dispatch_Leave_Group_Request (121)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Leave_Group_Request(struct soap*, struct ns__Dispatch_Leave_Group_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Leave_Group_Request(struct soap*, const struct ns__Dispatch_Leave_Group_Request *);
@@ -2394,48 +2255,16 @@ SOAP_FMAC1 struct ns__Dispatch_Leave_Group_Request * SOAP_FMAC2 soap_instantiate
 
 inline struct ns__Dispatch_Leave_Group_Request * soap_new_ns__Dispatch_Leave_Group_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Leave_Group_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Leave_Group_Request * soap_new_req_ns__Dispatch_Leave_Group_Request(struct soap *soap, ns__Entity& group_id) { struct ns__Dispatch_Leave_Group_Request *_p = soap_instantiate_ns__Dispatch_Leave_Group_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Leave_Group_Request(soap, _p); _p->group_id = group_id; } return _p; }
+inline struct ns__Dispatch_Leave_Group_Request * soap_new_req_ns__Dispatch_Leave_Group_Request(struct soap *soap, std::string& session_id, std::string& group_id) { struct ns__Dispatch_Leave_Group_Request *_p = soap_instantiate_ns__Dispatch_Leave_Group_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Leave_Group_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; } return _p; }
 
-inline struct ns__Dispatch_Leave_Group_Request * soap_new_set_ns__Dispatch_Leave_Group_Request(struct soap *soap, ns__Entity& group_id) { struct ns__Dispatch_Leave_Group_Request *_p = soap_instantiate_ns__Dispatch_Leave_Group_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Leave_Group_Request(soap, _p); _p->group_id = group_id; } return _p; }
+inline struct ns__Dispatch_Leave_Group_Request * soap_new_set_ns__Dispatch_Leave_Group_Request(struct soap *soap, std::string& session_id, std::string& group_id) { struct ns__Dispatch_Leave_Group_Request *_p = soap_instantiate_ns__Dispatch_Leave_Group_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Leave_Group_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Leave_Group_Request(struct soap *soap, struct ns__Dispatch_Leave_Group_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Leave_Group_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Leave_Group_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Leave_Group_Request_Response (131)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Leave_Group_Request_Response(struct soap*, struct ns__Dispatch_Leave_Group_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Leave_Group_Request_Response(struct soap*, const struct ns__Dispatch_Leave_Group_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Leave_Group_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Leave_Group_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Leave_Group_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Leave_Group_Request_Response(struct soap*, const char*, struct ns__Dispatch_Leave_Group_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Leave_Group_Request_Response(struct soap*, const struct ns__Dispatch_Leave_Group_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Leave_Group_Request_Response
-#define soap_write_ns__Dispatch_Leave_Group_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Leave_Group_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Leave_Group_Request_Response(soap, data, "ns:Dispatch-Leave-Group-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Leave_Group_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Leave_Group_Request_Response(struct soap*, struct ns__Dispatch_Leave_Group_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Leave_Group_Request_Response
-#define soap_read_ns__Dispatch_Leave_Group_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Leave_Group_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Leave_Group_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Leave_Group_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Leave_Group_Request_Response * soap_new_ns__Dispatch_Leave_Group_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Leave_Group_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Leave_Group_Request_Response * soap_new_req_ns__Dispatch_Leave_Group_Request_Response(struct soap *soap) { struct ns__Dispatch_Leave_Group_Request_Response *_p = soap_instantiate_ns__Dispatch_Leave_Group_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Leave_Group_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Leave_Group_Request_Response * soap_new_set_ns__Dispatch_Leave_Group_Request_Response(struct soap *soap) { struct ns__Dispatch_Leave_Group_Request_Response *_p = soap_instantiate_ns__Dispatch_Leave_Group_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Leave_Group_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Leave_Group_Request_Response(struct soap *soap, struct ns__Dispatch_Leave_Group_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Leave_Group_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Jion_Group_Request
-#define SOAP_TYPE_ns__Dispatch_Jion_Group_Request (130)
+#define SOAP_TYPE_ns__Dispatch_Jion_Group_Request (119)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Jion_Group_Request(struct soap*, struct ns__Dispatch_Jion_Group_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Jion_Group_Request(struct soap*, const struct ns__Dispatch_Jion_Group_Request *);
@@ -2458,48 +2287,16 @@ SOAP_FMAC1 struct ns__Dispatch_Jion_Group_Request * SOAP_FMAC2 soap_instantiate_
 
 inline struct ns__Dispatch_Jion_Group_Request * soap_new_ns__Dispatch_Jion_Group_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Jion_Group_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Jion_Group_Request * soap_new_req_ns__Dispatch_Jion_Group_Request(struct soap *soap, ns__Entity& group_id) { struct ns__Dispatch_Jion_Group_Request *_p = soap_instantiate_ns__Dispatch_Jion_Group_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Jion_Group_Request(soap, _p); _p->group_id = group_id; } return _p; }
+inline struct ns__Dispatch_Jion_Group_Request * soap_new_req_ns__Dispatch_Jion_Group_Request(struct soap *soap, std::string& session_id, std::string& group_id) { struct ns__Dispatch_Jion_Group_Request *_p = soap_instantiate_ns__Dispatch_Jion_Group_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Jion_Group_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; } return _p; }
 
-inline struct ns__Dispatch_Jion_Group_Request * soap_new_set_ns__Dispatch_Jion_Group_Request(struct soap *soap, ns__Entity& group_id) { struct ns__Dispatch_Jion_Group_Request *_p = soap_instantiate_ns__Dispatch_Jion_Group_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Jion_Group_Request(soap, _p); _p->group_id = group_id; } return _p; }
+inline struct ns__Dispatch_Jion_Group_Request * soap_new_set_ns__Dispatch_Jion_Group_Request(struct soap *soap, std::string& session_id, std::string& group_id) { struct ns__Dispatch_Jion_Group_Request *_p = soap_instantiate_ns__Dispatch_Jion_Group_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Jion_Group_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Jion_Group_Request(struct soap *soap, struct ns__Dispatch_Jion_Group_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Jion_Group_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Jion_Group_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Jion_Group_Request_Response (127)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Jion_Group_Request_Response(struct soap*, struct ns__Dispatch_Jion_Group_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Jion_Group_Request_Response(struct soap*, const struct ns__Dispatch_Jion_Group_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Jion_Group_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Jion_Group_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Jion_Group_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Jion_Group_Request_Response(struct soap*, const char*, struct ns__Dispatch_Jion_Group_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Jion_Group_Request_Response(struct soap*, const struct ns__Dispatch_Jion_Group_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Jion_Group_Request_Response
-#define soap_write_ns__Dispatch_Jion_Group_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Jion_Group_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Jion_Group_Request_Response(soap, data, "ns:Dispatch-Jion-Group-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Jion_Group_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Jion_Group_Request_Response(struct soap*, struct ns__Dispatch_Jion_Group_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Jion_Group_Request_Response
-#define soap_read_ns__Dispatch_Jion_Group_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Jion_Group_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Jion_Group_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Jion_Group_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Jion_Group_Request_Response * soap_new_ns__Dispatch_Jion_Group_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Jion_Group_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Jion_Group_Request_Response * soap_new_req_ns__Dispatch_Jion_Group_Request_Response(struct soap *soap) { struct ns__Dispatch_Jion_Group_Request_Response *_p = soap_instantiate_ns__Dispatch_Jion_Group_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Jion_Group_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Jion_Group_Request_Response * soap_new_set_ns__Dispatch_Jion_Group_Request_Response(struct soap *soap) { struct ns__Dispatch_Jion_Group_Request_Response *_p = soap_instantiate_ns__Dispatch_Jion_Group_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Jion_Group_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Jion_Group_Request_Response(struct soap *soap, struct ns__Dispatch_Jion_Group_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Jion_Group_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request
-#define SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request (126)
+#define SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request (117)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Appoint_Participant_Speak_Request(struct soap*, struct ns__Dispatch_Appoint_Participant_Speak_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Appoint_Participant_Speak_Request(struct soap*, const struct ns__Dispatch_Appoint_Participant_Speak_Request *);
@@ -2522,48 +2319,16 @@ SOAP_FMAC1 struct ns__Dispatch_Appoint_Participant_Speak_Request * SOAP_FMAC2 so
 
 inline struct ns__Dispatch_Appoint_Participant_Speak_Request * soap_new_ns__Dispatch_Appoint_Participant_Speak_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Appoint_Participant_Speak_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Appoint_Participant_Speak_Request * soap_new_req_ns__Dispatch_Appoint_Participant_Speak_Request(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { struct ns__Dispatch_Appoint_Participant_Speak_Request *_p = soap_instantiate_ns__Dispatch_Appoint_Participant_Speak_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Appoint_Participant_Speak_Request(soap, _p); _p->group_id = group_id; _p->account_id = account_id; } return _p; }
+inline struct ns__Dispatch_Appoint_Participant_Speak_Request * soap_new_req_ns__Dispatch_Appoint_Participant_Speak_Request(struct soap *soap, std::string& session_id, std::string& group_id, std::string& account_id) { struct ns__Dispatch_Appoint_Participant_Speak_Request *_p = soap_instantiate_ns__Dispatch_Appoint_Participant_Speak_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Appoint_Participant_Speak_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->account_id = account_id; } return _p; }
 
-inline struct ns__Dispatch_Appoint_Participant_Speak_Request * soap_new_set_ns__Dispatch_Appoint_Participant_Speak_Request(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { struct ns__Dispatch_Appoint_Participant_Speak_Request *_p = soap_instantiate_ns__Dispatch_Appoint_Participant_Speak_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Appoint_Participant_Speak_Request(soap, _p); _p->group_id = group_id; _p->account_id = account_id; } return _p; }
+inline struct ns__Dispatch_Appoint_Participant_Speak_Request * soap_new_set_ns__Dispatch_Appoint_Participant_Speak_Request(struct soap *soap, std::string& session_id, std::string& group_id, std::string& account_id) { struct ns__Dispatch_Appoint_Participant_Speak_Request *_p = soap_instantiate_ns__Dispatch_Appoint_Participant_Speak_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Appoint_Participant_Speak_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->account_id = account_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Appoint_Participant_Speak_Request(struct soap *soap, struct ns__Dispatch_Appoint_Participant_Speak_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Appoint_Participant_Speak_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request_Response (123)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, const struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Appoint_Participant_Speak_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, const char*, struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, const struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Appoint_Participant_Speak_Request_Response
-#define soap_write_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, data, "ns:Dispatch-Appoint-Participant-Speak-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Appoint_Participant_Speak_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Appoint_Participant_Speak_Request_Response
-#define soap_read_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Appoint_Participant_Speak_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Appoint_Participant_Speak_Request_Response * soap_new_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Appoint_Participant_Speak_Request_Response * soap_new_req_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap *soap) { struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *_p = soap_instantiate_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Appoint_Participant_Speak_Request_Response * soap_new_set_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap *soap) { struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *_p = soap_instantiate_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap *soap, struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request
-#define SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request (122)
+#define SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request (115)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Release_Participant_Token_Request(struct soap*, struct ns__Dispatch_Release_Participant_Token_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Release_Participant_Token_Request(struct soap*, const struct ns__Dispatch_Release_Participant_Token_Request *);
@@ -2586,48 +2351,16 @@ SOAP_FMAC1 struct ns__Dispatch_Release_Participant_Token_Request * SOAP_FMAC2 so
 
 inline struct ns__Dispatch_Release_Participant_Token_Request * soap_new_ns__Dispatch_Release_Participant_Token_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Release_Participant_Token_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Release_Participant_Token_Request * soap_new_req_ns__Dispatch_Release_Participant_Token_Request(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { struct ns__Dispatch_Release_Participant_Token_Request *_p = soap_instantiate_ns__Dispatch_Release_Participant_Token_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Release_Participant_Token_Request(soap, _p); _p->group_id = group_id; _p->account_id = account_id; } return _p; }
+inline struct ns__Dispatch_Release_Participant_Token_Request * soap_new_req_ns__Dispatch_Release_Participant_Token_Request(struct soap *soap, std::string& session_id, std::string& group_id, std::string& account_id) { struct ns__Dispatch_Release_Participant_Token_Request *_p = soap_instantiate_ns__Dispatch_Release_Participant_Token_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Release_Participant_Token_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->account_id = account_id; } return _p; }
 
-inline struct ns__Dispatch_Release_Participant_Token_Request * soap_new_set_ns__Dispatch_Release_Participant_Token_Request(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { struct ns__Dispatch_Release_Participant_Token_Request *_p = soap_instantiate_ns__Dispatch_Release_Participant_Token_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Release_Participant_Token_Request(soap, _p); _p->group_id = group_id; _p->account_id = account_id; } return _p; }
+inline struct ns__Dispatch_Release_Participant_Token_Request * soap_new_set_ns__Dispatch_Release_Participant_Token_Request(struct soap *soap, std::string& session_id, std::string& group_id, std::string& account_id) { struct ns__Dispatch_Release_Participant_Token_Request *_p = soap_instantiate_ns__Dispatch_Release_Participant_Token_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Release_Participant_Token_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->account_id = account_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Release_Participant_Token_Request(struct soap *soap, struct ns__Dispatch_Release_Participant_Token_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Release_Participant_Token_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request_Response (119)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap*, struct ns__Dispatch_Release_Participant_Token_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap*, const struct ns__Dispatch_Release_Participant_Token_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Release_Participant_Token_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Release_Participant_Token_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap*, const char*, struct ns__Dispatch_Release_Participant_Token_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap*, const struct ns__Dispatch_Release_Participant_Token_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Release_Participant_Token_Request_Response
-#define soap_write_ns__Dispatch_Release_Participant_Token_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Release_Participant_Token_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Release_Participant_Token_Request_Response(soap, data, "ns:Dispatch-Release-Participant-Token-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Release_Participant_Token_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap*, struct ns__Dispatch_Release_Participant_Token_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Release_Participant_Token_Request_Response
-#define soap_read_ns__Dispatch_Release_Participant_Token_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Release_Participant_Token_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Release_Participant_Token_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Release_Participant_Token_Request_Response * soap_new_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Release_Participant_Token_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Release_Participant_Token_Request_Response * soap_new_req_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap *soap) { struct ns__Dispatch_Release_Participant_Token_Request_Response *_p = soap_instantiate_ns__Dispatch_Release_Participant_Token_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Release_Participant_Token_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Release_Participant_Token_Request_Response * soap_new_set_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap *soap) { struct ns__Dispatch_Release_Participant_Token_Request_Response *_p = soap_instantiate_ns__Dispatch_Release_Participant_Token_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Release_Participant_Token_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap *soap, struct ns__Dispatch_Release_Participant_Token_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Release_Participant_Token_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Drop_Participant_Request
-#define SOAP_TYPE_ns__Dispatch_Drop_Participant_Request (118)
+#define SOAP_TYPE_ns__Dispatch_Drop_Participant_Request (113)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Drop_Participant_Request(struct soap*, struct ns__Dispatch_Drop_Participant_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Drop_Participant_Request(struct soap*, const struct ns__Dispatch_Drop_Participant_Request *);
@@ -2650,48 +2383,16 @@ SOAP_FMAC1 struct ns__Dispatch_Drop_Participant_Request * SOAP_FMAC2 soap_instan
 
 inline struct ns__Dispatch_Drop_Participant_Request * soap_new_ns__Dispatch_Drop_Participant_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Drop_Participant_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Drop_Participant_Request * soap_new_req_ns__Dispatch_Drop_Participant_Request(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { struct ns__Dispatch_Drop_Participant_Request *_p = soap_instantiate_ns__Dispatch_Drop_Participant_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Drop_Participant_Request(soap, _p); _p->group_id = group_id; _p->account_id = account_id; } return _p; }
+inline struct ns__Dispatch_Drop_Participant_Request * soap_new_req_ns__Dispatch_Drop_Participant_Request(struct soap *soap, std::string& session_id, std::string& group_id, std::string& account_id) { struct ns__Dispatch_Drop_Participant_Request *_p = soap_instantiate_ns__Dispatch_Drop_Participant_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Drop_Participant_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->account_id = account_id; } return _p; }
 
-inline struct ns__Dispatch_Drop_Participant_Request * soap_new_set_ns__Dispatch_Drop_Participant_Request(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { struct ns__Dispatch_Drop_Participant_Request *_p = soap_instantiate_ns__Dispatch_Drop_Participant_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Drop_Participant_Request(soap, _p); _p->group_id = group_id; _p->account_id = account_id; } return _p; }
+inline struct ns__Dispatch_Drop_Participant_Request * soap_new_set_ns__Dispatch_Drop_Participant_Request(struct soap *soap, std::string& session_id, std::string& group_id, std::string& account_id) { struct ns__Dispatch_Drop_Participant_Request *_p = soap_instantiate_ns__Dispatch_Drop_Participant_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Drop_Participant_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->account_id = account_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Drop_Participant_Request(struct soap *soap, struct ns__Dispatch_Drop_Participant_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Drop_Participant_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Drop_Participant_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Drop_Participant_Request_Response (115)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Drop_Participant_Request_Response(struct soap*, struct ns__Dispatch_Drop_Participant_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Drop_Participant_Request_Response(struct soap*, const struct ns__Dispatch_Drop_Participant_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Drop_Participant_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Drop_Participant_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Drop_Participant_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Drop_Participant_Request_Response(struct soap*, const char*, struct ns__Dispatch_Drop_Participant_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Drop_Participant_Request_Response(struct soap*, const struct ns__Dispatch_Drop_Participant_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Drop_Participant_Request_Response
-#define soap_write_ns__Dispatch_Drop_Participant_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Drop_Participant_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Drop_Participant_Request_Response(soap, data, "ns:Dispatch-Drop-Participant-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Drop_Participant_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Drop_Participant_Request_Response(struct soap*, struct ns__Dispatch_Drop_Participant_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Drop_Participant_Request_Response
-#define soap_read_ns__Dispatch_Drop_Participant_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Drop_Participant_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Drop_Participant_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Drop_Participant_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Drop_Participant_Request_Response * soap_new_ns__Dispatch_Drop_Participant_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Drop_Participant_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Drop_Participant_Request_Response * soap_new_req_ns__Dispatch_Drop_Participant_Request_Response(struct soap *soap) { struct ns__Dispatch_Drop_Participant_Request_Response *_p = soap_instantiate_ns__Dispatch_Drop_Participant_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Drop_Participant_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Drop_Participant_Request_Response * soap_new_set_ns__Dispatch_Drop_Participant_Request_Response(struct soap *soap) { struct ns__Dispatch_Drop_Participant_Request_Response *_p = soap_instantiate_ns__Dispatch_Drop_Participant_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Drop_Participant_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Drop_Participant_Request_Response(struct soap *soap, struct ns__Dispatch_Drop_Participant_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Drop_Participant_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Invite_Participant_Request
-#define SOAP_TYPE_ns__Dispatch_Invite_Participant_Request (114)
+#define SOAP_TYPE_ns__Dispatch_Invite_Participant_Request (111)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Invite_Participant_Request(struct soap*, struct ns__Dispatch_Invite_Participant_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Invite_Participant_Request(struct soap*, const struct ns__Dispatch_Invite_Participant_Request *);
@@ -2714,48 +2415,16 @@ SOAP_FMAC1 struct ns__Dispatch_Invite_Participant_Request * SOAP_FMAC2 soap_inst
 
 inline struct ns__Dispatch_Invite_Participant_Request * soap_new_ns__Dispatch_Invite_Participant_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Invite_Participant_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Invite_Participant_Request * soap_new_req_ns__Dispatch_Invite_Participant_Request(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { struct ns__Dispatch_Invite_Participant_Request *_p = soap_instantiate_ns__Dispatch_Invite_Participant_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Invite_Participant_Request(soap, _p); _p->group_id = group_id; _p->account_id = account_id; } return _p; }
+inline struct ns__Dispatch_Invite_Participant_Request * soap_new_req_ns__Dispatch_Invite_Participant_Request(struct soap *soap, std::string& session_id, std::string& group_id, std::string& account_id) { struct ns__Dispatch_Invite_Participant_Request *_p = soap_instantiate_ns__Dispatch_Invite_Participant_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Invite_Participant_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->account_id = account_id; } return _p; }
 
-inline struct ns__Dispatch_Invite_Participant_Request * soap_new_set_ns__Dispatch_Invite_Participant_Request(struct soap *soap, ns__Entity& group_id, ns__Entity& account_id) { struct ns__Dispatch_Invite_Participant_Request *_p = soap_instantiate_ns__Dispatch_Invite_Participant_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Invite_Participant_Request(soap, _p); _p->group_id = group_id; _p->account_id = account_id; } return _p; }
+inline struct ns__Dispatch_Invite_Participant_Request * soap_new_set_ns__Dispatch_Invite_Participant_Request(struct soap *soap, std::string& session_id, std::string& group_id, std::string& account_id) { struct ns__Dispatch_Invite_Participant_Request *_p = soap_instantiate_ns__Dispatch_Invite_Participant_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Invite_Participant_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->account_id = account_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Invite_Participant_Request(struct soap *soap, struct ns__Dispatch_Invite_Participant_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Invite_Participant_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Invite_Participant_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Invite_Participant_Request_Response (111)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Invite_Participant_Request_Response(struct soap*, struct ns__Dispatch_Invite_Participant_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Invite_Participant_Request_Response(struct soap*, const struct ns__Dispatch_Invite_Participant_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Invite_Participant_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Invite_Participant_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Invite_Participant_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Invite_Participant_Request_Response(struct soap*, const char*, struct ns__Dispatch_Invite_Participant_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Invite_Participant_Request_Response(struct soap*, const struct ns__Dispatch_Invite_Participant_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Invite_Participant_Request_Response
-#define soap_write_ns__Dispatch_Invite_Participant_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Invite_Participant_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Invite_Participant_Request_Response(soap, data, "ns:Dispatch-Invite-Participant-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Invite_Participant_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Invite_Participant_Request_Response(struct soap*, struct ns__Dispatch_Invite_Participant_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Invite_Participant_Request_Response
-#define soap_read_ns__Dispatch_Invite_Participant_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Invite_Participant_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Invite_Participant_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Invite_Participant_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Invite_Participant_Request_Response * soap_new_ns__Dispatch_Invite_Participant_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Invite_Participant_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Invite_Participant_Request_Response * soap_new_req_ns__Dispatch_Invite_Participant_Request_Response(struct soap *soap) { struct ns__Dispatch_Invite_Participant_Request_Response *_p = soap_instantiate_ns__Dispatch_Invite_Participant_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Invite_Participant_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Invite_Participant_Request_Response * soap_new_set_ns__Dispatch_Invite_Participant_Request_Response(struct soap *soap) { struct ns__Dispatch_Invite_Participant_Request_Response *_p = soap_instantiate_ns__Dispatch_Invite_Participant_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Invite_Participant_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Invite_Participant_Request_Response(struct soap *soap, struct ns__Dispatch_Invite_Participant_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Invite_Participant_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification
-#define SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification (110)
+#define SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification (109)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Participant_Speak_Request_Notification(struct soap*, struct ns__Dispatch_Participant_Speak_Request_Notification *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Participant_Speak_Request_Notification(struct soap*, const struct ns__Dispatch_Participant_Speak_Request_Notification *);
@@ -2778,16 +2447,16 @@ SOAP_FMAC1 struct ns__Dispatch_Participant_Speak_Request_Notification * SOAP_FMA
 
 inline struct ns__Dispatch_Participant_Speak_Request_Notification * soap_new_ns__Dispatch_Participant_Speak_Request_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Participant_Speak_Request_Notification(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Participant_Speak_Request_Notification * soap_new_req_ns__Dispatch_Participant_Speak_Request_Notification(struct soap *soap) { struct ns__Dispatch_Participant_Speak_Request_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Speak_Request_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Speak_Request_Notification(soap, _p); } return _p; }
+inline struct ns__Dispatch_Participant_Speak_Request_Notification * soap_new_req_ns__Dispatch_Participant_Speak_Request_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Participant_Speak_Request_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Speak_Request_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Speak_Request_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
-inline struct ns__Dispatch_Participant_Speak_Request_Notification * soap_new_set_ns__Dispatch_Participant_Speak_Request_Notification(struct soap *soap, void *_) { struct ns__Dispatch_Participant_Speak_Request_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Speak_Request_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Speak_Request_Notification(soap, _p); _p->_ = _; } return _p; }
+inline struct ns__Dispatch_Participant_Speak_Request_Notification * soap_new_set_ns__Dispatch_Participant_Speak_Request_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Participant_Speak_Request_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Speak_Request_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Speak_Request_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Participant_Speak_Request_Notification(struct soap *soap, struct ns__Dispatch_Participant_Speak_Request_Notification *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Participant_Speak_Request_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification
-#define SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification (108)
+#define SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification (106)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Participant_Connect_Request_Notification(struct soap*, struct ns__Dispatch_Participant_Connect_Request_Notification *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Participant_Connect_Request_Notification(struct soap*, const struct ns__Dispatch_Participant_Connect_Request_Notification *);
@@ -2810,16 +2479,16 @@ SOAP_FMAC1 struct ns__Dispatch_Participant_Connect_Request_Notification * SOAP_F
 
 inline struct ns__Dispatch_Participant_Connect_Request_Notification * soap_new_ns__Dispatch_Participant_Connect_Request_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Participant_Connect_Request_Notification(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Participant_Connect_Request_Notification * soap_new_req_ns__Dispatch_Participant_Connect_Request_Notification(struct soap *soap) { struct ns__Dispatch_Participant_Connect_Request_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Connect_Request_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Connect_Request_Notification(soap, _p); } return _p; }
+inline struct ns__Dispatch_Participant_Connect_Request_Notification * soap_new_req_ns__Dispatch_Participant_Connect_Request_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Participant_Connect_Request_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Connect_Request_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Connect_Request_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
-inline struct ns__Dispatch_Participant_Connect_Request_Notification * soap_new_set_ns__Dispatch_Participant_Connect_Request_Notification(struct soap *soap, void *_) { struct ns__Dispatch_Participant_Connect_Request_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Connect_Request_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Connect_Request_Notification(soap, _p); _p->_ = _; } return _p; }
+inline struct ns__Dispatch_Participant_Connect_Request_Notification * soap_new_set_ns__Dispatch_Participant_Connect_Request_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Participant_Connect_Request_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Connect_Request_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Connect_Request_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Participant_Connect_Request_Notification(struct soap *soap, struct ns__Dispatch_Participant_Connect_Request_Notification *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Participant_Connect_Request_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Media_Message_Notification
-#define SOAP_TYPE_ns__Dispatch_Media_Message_Notification (105)
+#define SOAP_TYPE_ns__Dispatch_Media_Message_Notification (103)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Media_Message_Notification(struct soap*, struct ns__Dispatch_Media_Message_Notification *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Media_Message_Notification(struct soap*, const struct ns__Dispatch_Media_Message_Notification *);
@@ -2842,16 +2511,16 @@ SOAP_FMAC1 struct ns__Dispatch_Media_Message_Notification * SOAP_FMAC2 soap_inst
 
 inline struct ns__Dispatch_Media_Message_Notification * soap_new_ns__Dispatch_Media_Message_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Media_Message_Notification(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Media_Message_Notification * soap_new_req_ns__Dispatch_Media_Message_Notification(struct soap *soap) { struct ns__Dispatch_Media_Message_Notification *_p = soap_instantiate_ns__Dispatch_Media_Message_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Media_Message_Notification(soap, _p); } return _p; }
+inline struct ns__Dispatch_Media_Message_Notification * soap_new_req_ns__Dispatch_Media_Message_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Media_Message_Notification *_p = soap_instantiate_ns__Dispatch_Media_Message_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Media_Message_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
-inline struct ns__Dispatch_Media_Message_Notification * soap_new_set_ns__Dispatch_Media_Message_Notification(struct soap *soap, void *_) { struct ns__Dispatch_Media_Message_Notification *_p = soap_instantiate_ns__Dispatch_Media_Message_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Media_Message_Notification(soap, _p); _p->_ = _; } return _p; }
+inline struct ns__Dispatch_Media_Message_Notification * soap_new_set_ns__Dispatch_Media_Message_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Media_Message_Notification *_p = soap_instantiate_ns__Dispatch_Media_Message_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Media_Message_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Media_Message_Notification(struct soap *soap, struct ns__Dispatch_Media_Message_Notification *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Media_Message_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Media_Message_Request
-#define SOAP_TYPE_ns__Dispatch_Media_Message_Request (102)
+#define SOAP_TYPE_ns__Dispatch_Media_Message_Request (100)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Media_Message_Request(struct soap*, struct ns__Dispatch_Media_Message_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Media_Message_Request(struct soap*, const struct ns__Dispatch_Media_Message_Request *);
@@ -2874,16 +2543,16 @@ SOAP_FMAC1 struct ns__Dispatch_Media_Message_Request * SOAP_FMAC2 soap_instantia
 
 inline struct ns__Dispatch_Media_Message_Request * soap_new_ns__Dispatch_Media_Message_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Media_Message_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Media_Message_Request * soap_new_req_ns__Dispatch_Media_Message_Request(struct soap *soap, ns__Entity& id, unsigned long from_message_id, std::string& from_time, unsigned long max_message_count) { struct ns__Dispatch_Media_Message_Request *_p = soap_instantiate_ns__Dispatch_Media_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Media_Message_Request(soap, _p); _p->id = id; _p->from_message_id = from_message_id; _p->from_time = from_time; _p->max_message_count = max_message_count; } return _p; }
+inline struct ns__Dispatch_Media_Message_Request * soap_new_req_ns__Dispatch_Media_Message_Request(struct soap *soap, std::string& session_id, std::string& group_id, std::string& from_message_id, std::string& from_time, std::string& max_message_count) { struct ns__Dispatch_Media_Message_Request *_p = soap_instantiate_ns__Dispatch_Media_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Media_Message_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->from_message_id = from_message_id; _p->from_time = from_time; _p->max_message_count = max_message_count; } return _p; }
 
-inline struct ns__Dispatch_Media_Message_Request * soap_new_set_ns__Dispatch_Media_Message_Request(struct soap *soap, ns__Entity& id, unsigned long from_message_id, std::string& from_time, unsigned long max_message_count) { struct ns__Dispatch_Media_Message_Request *_p = soap_instantiate_ns__Dispatch_Media_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Media_Message_Request(soap, _p); _p->id = id; _p->from_message_id = from_message_id; _p->from_time = from_time; _p->max_message_count = max_message_count; } return _p; }
+inline struct ns__Dispatch_Media_Message_Request * soap_new_set_ns__Dispatch_Media_Message_Request(struct soap *soap, std::string& session_id, std::string& group_id, std::string& from_message_id, std::string& from_time, std::string& max_message_count) { struct ns__Dispatch_Media_Message_Request *_p = soap_instantiate_ns__Dispatch_Media_Message_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Media_Message_Request(soap, _p); _p->session_id = session_id; _p->group_id = group_id; _p->from_message_id = from_message_id; _p->from_time = from_time; _p->max_message_count = max_message_count; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Media_Message_Request(struct soap *soap, struct ns__Dispatch_Media_Message_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Media_Message_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Participant_Status_Notification
-#define SOAP_TYPE_ns__Dispatch_Participant_Status_Notification (99)
+#define SOAP_TYPE_ns__Dispatch_Participant_Status_Notification (97)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Participant_Status_Notification(struct soap*, struct ns__Dispatch_Participant_Status_Notification *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Participant_Status_Notification(struct soap*, const struct ns__Dispatch_Participant_Status_Notification *);
@@ -2906,16 +2575,16 @@ SOAP_FMAC1 struct ns__Dispatch_Participant_Status_Notification * SOAP_FMAC2 soap
 
 inline struct ns__Dispatch_Participant_Status_Notification * soap_new_ns__Dispatch_Participant_Status_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Participant_Status_Notification(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Participant_Status_Notification * soap_new_req_ns__Dispatch_Participant_Status_Notification(struct soap *soap) { struct ns__Dispatch_Participant_Status_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Status_Notification(soap, _p); } return _p; }
+inline struct ns__Dispatch_Participant_Status_Notification * soap_new_req_ns__Dispatch_Participant_Status_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Participant_Status_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Status_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
-inline struct ns__Dispatch_Participant_Status_Notification * soap_new_set_ns__Dispatch_Participant_Status_Notification(struct soap *soap, void *_) { struct ns__Dispatch_Participant_Status_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Status_Notification(soap, _p); _p->_ = _; } return _p; }
+inline struct ns__Dispatch_Participant_Status_Notification * soap_new_set_ns__Dispatch_Participant_Status_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Participant_Status_Notification *_p = soap_instantiate_ns__Dispatch_Participant_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Participant_Status_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Participant_Status_Notification(struct soap *soap, struct ns__Dispatch_Participant_Status_Notification *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Participant_Status_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication
-#define SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication (96)
+#define SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication (94)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Join_Group_Request_Nofitication(struct soap*, struct ns__Dispatch_Join_Group_Request_Nofitication *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Join_Group_Request_Nofitication(struct soap*, const struct ns__Dispatch_Join_Group_Request_Nofitication *);
@@ -2938,16 +2607,16 @@ SOAP_FMAC1 struct ns__Dispatch_Join_Group_Request_Nofitication * SOAP_FMAC2 soap
 
 inline struct ns__Dispatch_Join_Group_Request_Nofitication * soap_new_ns__Dispatch_Join_Group_Request_Nofitication(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Join_Group_Request_Nofitication(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Join_Group_Request_Nofitication * soap_new_req_ns__Dispatch_Join_Group_Request_Nofitication(struct soap *soap) { struct ns__Dispatch_Join_Group_Request_Nofitication *_p = soap_instantiate_ns__Dispatch_Join_Group_Request_Nofitication(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Join_Group_Request_Nofitication(soap, _p); } return _p; }
+inline struct ns__Dispatch_Join_Group_Request_Nofitication * soap_new_req_ns__Dispatch_Join_Group_Request_Nofitication(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Join_Group_Request_Nofitication *_p = soap_instantiate_ns__Dispatch_Join_Group_Request_Nofitication(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Join_Group_Request_Nofitication(soap, _p); _p->session_id = session_id; } return _p; }
 
-inline struct ns__Dispatch_Join_Group_Request_Nofitication * soap_new_set_ns__Dispatch_Join_Group_Request_Nofitication(struct soap *soap, void *_) { struct ns__Dispatch_Join_Group_Request_Nofitication *_p = soap_instantiate_ns__Dispatch_Join_Group_Request_Nofitication(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Join_Group_Request_Nofitication(soap, _p); _p->_ = _; } return _p; }
+inline struct ns__Dispatch_Join_Group_Request_Nofitication * soap_new_set_ns__Dispatch_Join_Group_Request_Nofitication(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Join_Group_Request_Nofitication *_p = soap_instantiate_ns__Dispatch_Join_Group_Request_Nofitication(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Join_Group_Request_Nofitication(soap, _p); _p->session_id = session_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Join_Group_Request_Nofitication(struct soap *soap, struct ns__Dispatch_Join_Group_Request_Nofitication *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Join_Group_Request_Nofitication(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification
-#define SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification (93)
+#define SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification (91)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Dispatch_Participants_Notification(struct soap*, struct ns__Dispatch_Dispatch_Participants_Notification *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Dispatch_Participants_Notification(struct soap*, const struct ns__Dispatch_Dispatch_Participants_Notification *);
@@ -2970,16 +2639,16 @@ SOAP_FMAC1 struct ns__Dispatch_Dispatch_Participants_Notification * SOAP_FMAC2 s
 
 inline struct ns__Dispatch_Dispatch_Participants_Notification * soap_new_ns__Dispatch_Dispatch_Participants_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Dispatch_Participants_Notification(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Dispatch_Participants_Notification * soap_new_req_ns__Dispatch_Dispatch_Participants_Notification(struct soap *soap) { struct ns__Dispatch_Dispatch_Participants_Notification *_p = soap_instantiate_ns__Dispatch_Dispatch_Participants_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Dispatch_Participants_Notification(soap, _p); } return _p; }
+inline struct ns__Dispatch_Dispatch_Participants_Notification * soap_new_req_ns__Dispatch_Dispatch_Participants_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Dispatch_Participants_Notification *_p = soap_instantiate_ns__Dispatch_Dispatch_Participants_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Dispatch_Participants_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
-inline struct ns__Dispatch_Dispatch_Participants_Notification * soap_new_set_ns__Dispatch_Dispatch_Participants_Notification(struct soap *soap, void *_) { struct ns__Dispatch_Dispatch_Participants_Notification *_p = soap_instantiate_ns__Dispatch_Dispatch_Participants_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Dispatch_Participants_Notification(soap, _p); _p->_ = _; } return _p; }
+inline struct ns__Dispatch_Dispatch_Participants_Notification * soap_new_set_ns__Dispatch_Dispatch_Participants_Notification(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Dispatch_Participants_Notification *_p = soap_instantiate_ns__Dispatch_Dispatch_Participants_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Dispatch_Participants_Notification(soap, _p); _p->session_id = session_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Dispatch_Participants_Notification(struct soap *soap, struct ns__Dispatch_Dispatch_Participants_Notification *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Dispatch_Participants_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Delete_Group
-#define SOAP_TYPE_ns__Dispatch_Delete_Group (90)
+#define SOAP_TYPE_ns__Dispatch_Delete_Group (88)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Delete_Group(struct soap*, struct ns__Dispatch_Delete_Group *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Delete_Group(struct soap*, const struct ns__Dispatch_Delete_Group *);
@@ -3002,45 +2671,13 @@ SOAP_FMAC1 struct ns__Dispatch_Delete_Group * SOAP_FMAC2 soap_instantiate_ns__Di
 
 inline struct ns__Dispatch_Delete_Group * soap_new_ns__Dispatch_Delete_Group(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Delete_Group(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Delete_Group * soap_new_req_ns__Dispatch_Delete_Group(struct soap *soap, ns__Entity& group_id) { struct ns__Dispatch_Delete_Group *_p = soap_instantiate_ns__Dispatch_Delete_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Delete_Group(soap, _p); _p->group_id = group_id; } return _p; }
+inline struct ns__Dispatch_Delete_Group * soap_new_req_ns__Dispatch_Delete_Group(struct soap *soap, std::string& session_id, std::string& group_id) { struct ns__Dispatch_Delete_Group *_p = soap_instantiate_ns__Dispatch_Delete_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Delete_Group(soap, _p); _p->session_id = session_id; _p->group_id = group_id; } return _p; }
 
-inline struct ns__Dispatch_Delete_Group * soap_new_set_ns__Dispatch_Delete_Group(struct soap *soap, ns__Entity& group_id) { struct ns__Dispatch_Delete_Group *_p = soap_instantiate_ns__Dispatch_Delete_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Delete_Group(soap, _p); _p->group_id = group_id; } return _p; }
+inline struct ns__Dispatch_Delete_Group * soap_new_set_ns__Dispatch_Delete_Group(struct soap *soap, std::string& session_id, std::string& group_id) { struct ns__Dispatch_Delete_Group *_p = soap_instantiate_ns__Dispatch_Delete_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Delete_Group(soap, _p); _p->session_id = session_id; _p->group_id = group_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Delete_Group(struct soap *soap, struct ns__Dispatch_Delete_Group *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Delete_Group(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ns__Delete_Group_Response
-#define SOAP_TYPE_ns__Delete_Group_Response (87)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Delete_Group_Response(struct soap*, struct ns__Delete_Group_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Delete_Group_Response(struct soap*, const struct ns__Delete_Group_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Delete_Group_Response(struct soap*, const char*, int, const struct ns__Delete_Group_Response *, const char*);
-SOAP_FMAC3 struct ns__Delete_Group_Response * SOAP_FMAC4 soap_in_ns__Delete_Group_Response(struct soap*, const char*, struct ns__Delete_Group_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Delete_Group_Response(struct soap*, const struct ns__Delete_Group_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Delete_Group_Response
-#define soap_write_ns__Delete_Group_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Delete_Group_Response(soap, data),0) || soap_put_ns__Delete_Group_Response(soap, data, "ns:Delete-Group-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Delete_Group_Response * SOAP_FMAC4 soap_get_ns__Delete_Group_Response(struct soap*, struct ns__Delete_Group_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Delete_Group_Response
-#define soap_read_ns__Delete_Group_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Delete_Group_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Delete_Group_Response * SOAP_FMAC2 soap_instantiate_ns__Delete_Group_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Delete_Group_Response * soap_new_ns__Delete_Group_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Delete_Group_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Delete_Group_Response * soap_new_req_ns__Delete_Group_Response(struct soap *soap) { struct ns__Delete_Group_Response *_p = soap_instantiate_ns__Delete_Group_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Delete_Group_Response(soap, _p); } return _p; }
-
-inline struct ns__Delete_Group_Response * soap_new_set_ns__Delete_Group_Response(struct soap *soap) { struct ns__Delete_Group_Response *_p = soap_instantiate_ns__Delete_Group_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Delete_Group_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Delete_Group_Response(struct soap *soap, struct ns__Delete_Group_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Delete_Group_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Modify_Participants
 #define SOAP_TYPE_ns__Dispatch_Modify_Participants (86)
@@ -3066,16 +2703,16 @@ SOAP_FMAC1 struct ns__Dispatch_Modify_Participants * SOAP_FMAC2 soap_instantiate
 
 inline struct ns__Dispatch_Modify_Participants * soap_new_ns__Dispatch_Modify_Participants(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Modify_Participants(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Modify_Participants * soap_new_req_ns__Dispatch_Modify_Participants(struct soap *soap, ns__Modify_Participant& request) { struct ns__Dispatch_Modify_Participants *_p = soap_instantiate_ns__Dispatch_Modify_Participants(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Participants(soap, _p); _p->request = request; } return _p; }
+inline struct ns__Dispatch_Modify_Participants * soap_new_req_ns__Dispatch_Modify_Participants(struct soap *soap, std::string& session_id, ns__Modify_Participant& request) { struct ns__Dispatch_Modify_Participants *_p = soap_instantiate_ns__Dispatch_Modify_Participants(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Participants(soap, _p); _p->session_id = session_id; _p->request = request; } return _p; }
 
-inline struct ns__Dispatch_Modify_Participants * soap_new_set_ns__Dispatch_Modify_Participants(struct soap *soap, ns__Modify_Participant& request) { struct ns__Dispatch_Modify_Participants *_p = soap_instantiate_ns__Dispatch_Modify_Participants(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Participants(soap, _p); _p->request = request; } return _p; }
+inline struct ns__Dispatch_Modify_Participants * soap_new_set_ns__Dispatch_Modify_Participants(struct soap *soap, std::string& session_id, ns__Modify_Participant& request) { struct ns__Dispatch_Modify_Participants *_p = soap_instantiate_ns__Dispatch_Modify_Participants(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Participants(soap, _p); _p->session_id = session_id; _p->request = request; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Modify_Participants(struct soap *soap, struct ns__Dispatch_Modify_Participants *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Modify_Participants(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Modify_Group
-#define SOAP_TYPE_ns__Dispatch_Modify_Group (84)
+#define SOAP_TYPE_ns__Dispatch_Modify_Group (83)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Modify_Group(struct soap*, struct ns__Dispatch_Modify_Group *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Modify_Group(struct soap*, const struct ns__Dispatch_Modify_Group *);
@@ -3098,16 +2735,16 @@ SOAP_FMAC1 struct ns__Dispatch_Modify_Group * SOAP_FMAC2 soap_instantiate_ns__Di
 
 inline struct ns__Dispatch_Modify_Group * soap_new_ns__Dispatch_Modify_Group(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Modify_Group(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Modify_Group * soap_new_req_ns__Dispatch_Modify_Group(struct soap *soap, ns__Group& group) { struct ns__Dispatch_Modify_Group *_p = soap_instantiate_ns__Dispatch_Modify_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Group(soap, _p); _p->group = group; } return _p; }
+inline struct ns__Dispatch_Modify_Group * soap_new_req_ns__Dispatch_Modify_Group(struct soap *soap, std::string& session_id, ns__Group& group) { struct ns__Dispatch_Modify_Group *_p = soap_instantiate_ns__Dispatch_Modify_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Group(soap, _p); _p->session_id = session_id; _p->group = group; } return _p; }
 
-inline struct ns__Dispatch_Modify_Group * soap_new_set_ns__Dispatch_Modify_Group(struct soap *soap, ns__Group& group) { struct ns__Dispatch_Modify_Group *_p = soap_instantiate_ns__Dispatch_Modify_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Group(soap, _p); _p->group = group; } return _p; }
+inline struct ns__Dispatch_Modify_Group * soap_new_set_ns__Dispatch_Modify_Group(struct soap *soap, std::string& session_id, ns__Group& group) { struct ns__Dispatch_Modify_Group *_p = soap_instantiate_ns__Dispatch_Modify_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Modify_Group(soap, _p); _p->session_id = session_id; _p->group = group; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Modify_Group(struct soap *soap, struct ns__Dispatch_Modify_Group *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Modify_Group(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Append_Group
-#define SOAP_TYPE_ns__Dispatch_Append_Group (82)
+#define SOAP_TYPE_ns__Dispatch_Append_Group (80)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Append_Group(struct soap*, struct ns__Dispatch_Append_Group *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Append_Group(struct soap*, const struct ns__Dispatch_Append_Group *);
@@ -3130,48 +2767,16 @@ SOAP_FMAC1 struct ns__Dispatch_Append_Group * SOAP_FMAC2 soap_instantiate_ns__Di
 
 inline struct ns__Dispatch_Append_Group * soap_new_ns__Dispatch_Append_Group(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Append_Group(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Append_Group * soap_new_req_ns__Dispatch_Append_Group(struct soap *soap, ns__Group& group) { struct ns__Dispatch_Append_Group *_p = soap_instantiate_ns__Dispatch_Append_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Append_Group(soap, _p); _p->group = group; } return _p; }
+inline struct ns__Dispatch_Append_Group * soap_new_req_ns__Dispatch_Append_Group(struct soap *soap, std::string& session_id, ns__Group& group) { struct ns__Dispatch_Append_Group *_p = soap_instantiate_ns__Dispatch_Append_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Append_Group(soap, _p); _p->session_id = session_id; _p->group = group; } return _p; }
 
-inline struct ns__Dispatch_Append_Group * soap_new_set_ns__Dispatch_Append_Group(struct soap *soap, ns__Group& group) { struct ns__Dispatch_Append_Group *_p = soap_instantiate_ns__Dispatch_Append_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Append_Group(soap, _p); _p->group = group; } return _p; }
+inline struct ns__Dispatch_Append_Group * soap_new_set_ns__Dispatch_Append_Group(struct soap *soap, std::string& session_id, ns__Group& group) { struct ns__Dispatch_Append_Group *_p = soap_instantiate_ns__Dispatch_Append_Group(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Append_Group(soap, _p); _p->session_id = session_id; _p->group = group; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Append_Group(struct soap *soap, struct ns__Dispatch_Append_Group *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Append_Group(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Entity_Status_Notification
-#define SOAP_TYPE_ns__Dispatch_Entity_Status_Notification (79)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Entity_Status_Notification(struct soap*, struct ns__Dispatch_Entity_Status_Notification *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Entity_Status_Notification(struct soap*, const struct ns__Dispatch_Entity_Status_Notification *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Entity_Status_Notification(struct soap*, const char*, int, const struct ns__Dispatch_Entity_Status_Notification *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Entity_Status_Notification * SOAP_FMAC4 soap_in_ns__Dispatch_Entity_Status_Notification(struct soap*, const char*, struct ns__Dispatch_Entity_Status_Notification *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Entity_Status_Notification(struct soap*, const struct ns__Dispatch_Entity_Status_Notification *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Entity_Status_Notification
-#define soap_write_ns__Dispatch_Entity_Status_Notification(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Entity_Status_Notification(soap, data),0) || soap_put_ns__Dispatch_Entity_Status_Notification(soap, data, "ns:Dispatch-Entity-Status-Notification", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Entity_Status_Notification * SOAP_FMAC4 soap_get_ns__Dispatch_Entity_Status_Notification(struct soap*, struct ns__Dispatch_Entity_Status_Notification *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Entity_Status_Notification
-#define soap_read_ns__Dispatch_Entity_Status_Notification(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Entity_Status_Notification(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Entity_Status_Notification * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Entity_Status_Notification(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Entity_Status_Notification * soap_new_ns__Dispatch_Entity_Status_Notification(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Entity_Status_Notification(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Entity_Status_Notification * soap_new_req_ns__Dispatch_Entity_Status_Notification(struct soap *soap) { struct ns__Dispatch_Entity_Status_Notification *_p = soap_instantiate_ns__Dispatch_Entity_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Entity_Status_Notification(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Entity_Status_Notification * soap_new_set_ns__Dispatch_Entity_Status_Notification(struct soap *soap, void *_) { struct ns__Dispatch_Entity_Status_Notification *_p = soap_instantiate_ns__Dispatch_Entity_Status_Notification(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Entity_Status_Notification(soap, _p); _p->_ = _; } return _p; }
-
-inline void soap_delete_ns__Dispatch_Entity_Status_Notification(struct soap *soap, struct ns__Dispatch_Entity_Status_Notification *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Entity_Status_Notification(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Entity_Nofitication
-#define SOAP_TYPE_ns__Dispatch_Entity_Nofitication (76)
+#define SOAP_TYPE_ns__Dispatch_Entity_Nofitication (77)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Entity_Nofitication(struct soap*, struct ns__Dispatch_Entity_Nofitication *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Entity_Nofitication(struct soap*, const struct ns__Dispatch_Entity_Nofitication *);
@@ -3194,16 +2799,16 @@ SOAP_FMAC1 struct ns__Dispatch_Entity_Nofitication * SOAP_FMAC2 soap_instantiate
 
 inline struct ns__Dispatch_Entity_Nofitication * soap_new_ns__Dispatch_Entity_Nofitication(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Entity_Nofitication(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Entity_Nofitication * soap_new_req_ns__Dispatch_Entity_Nofitication(struct soap *soap) { struct ns__Dispatch_Entity_Nofitication *_p = soap_instantiate_ns__Dispatch_Entity_Nofitication(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Entity_Nofitication(soap, _p); } return _p; }
+inline struct ns__Dispatch_Entity_Nofitication * soap_new_req_ns__Dispatch_Entity_Nofitication(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Entity_Nofitication *_p = soap_instantiate_ns__Dispatch_Entity_Nofitication(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Entity_Nofitication(soap, _p); _p->session_id = session_id; } return _p; }
 
-inline struct ns__Dispatch_Entity_Nofitication * soap_new_set_ns__Dispatch_Entity_Nofitication(struct soap *soap, void *_) { struct ns__Dispatch_Entity_Nofitication *_p = soap_instantiate_ns__Dispatch_Entity_Nofitication(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Entity_Nofitication(soap, _p); _p->_ = _; } return _p; }
+inline struct ns__Dispatch_Entity_Nofitication * soap_new_set_ns__Dispatch_Entity_Nofitication(struct soap *soap, std::string& session_id) { struct ns__Dispatch_Entity_Nofitication *_p = soap_instantiate_ns__Dispatch_Entity_Nofitication(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Entity_Nofitication(soap, _p); _p->session_id = session_id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Entity_Nofitication(struct soap *soap, struct ns__Dispatch_Entity_Nofitication *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Entity_Nofitication(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_ns__Dispatch_Entity_Request
-#define SOAP_TYPE_ns__Dispatch_Entity_Request (73)
+#define SOAP_TYPE_ns__Dispatch_Entity_Request (74)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Entity_Request(struct soap*, struct ns__Dispatch_Entity_Request *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Entity_Request(struct soap*, const struct ns__Dispatch_Entity_Request *);
@@ -3226,80 +2831,16 @@ SOAP_FMAC1 struct ns__Dispatch_Entity_Request * SOAP_FMAC2 soap_instantiate_ns__
 
 inline struct ns__Dispatch_Entity_Request * soap_new_ns__Dispatch_Entity_Request(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Entity_Request(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Entity_Request * soap_new_req_ns__Dispatch_Entity_Request(struct soap *soap, ns__Entity& id) { struct ns__Dispatch_Entity_Request *_p = soap_instantiate_ns__Dispatch_Entity_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Entity_Request(soap, _p); _p->id = id; } return _p; }
+inline struct ns__Dispatch_Entity_Request * soap_new_req_ns__Dispatch_Entity_Request(struct soap *soap, std::string& session_id, std::string& id) { struct ns__Dispatch_Entity_Request *_p = soap_instantiate_ns__Dispatch_Entity_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Entity_Request(soap, _p); _p->session_id = session_id; _p->id = id; } return _p; }
 
-inline struct ns__Dispatch_Entity_Request * soap_new_set_ns__Dispatch_Entity_Request(struct soap *soap, ns__Entity& id) { struct ns__Dispatch_Entity_Request *_p = soap_instantiate_ns__Dispatch_Entity_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Entity_Request(soap, _p); _p->id = id; } return _p; }
+inline struct ns__Dispatch_Entity_Request * soap_new_set_ns__Dispatch_Entity_Request(struct soap *soap, std::string& session_id, std::string& id) { struct ns__Dispatch_Entity_Request *_p = soap_instantiate_ns__Dispatch_Entity_Request(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Entity_Request(soap, _p); _p->session_id = session_id; _p->id = id; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Entity_Request(struct soap *soap, struct ns__Dispatch_Entity_Request *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Entity_Request(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__Dispatch_Keepalive
-#define SOAP_TYPE_ns__Dispatch_Keepalive (70)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Keepalive(struct soap*, struct ns__Dispatch_Keepalive *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Keepalive(struct soap*, const struct ns__Dispatch_Keepalive *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Keepalive(struct soap*, const char*, int, const struct ns__Dispatch_Keepalive *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Keepalive * SOAP_FMAC4 soap_in_ns__Dispatch_Keepalive(struct soap*, const char*, struct ns__Dispatch_Keepalive *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Keepalive(struct soap*, const struct ns__Dispatch_Keepalive *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Keepalive
-#define soap_write_ns__Dispatch_Keepalive(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Keepalive(soap, data),0) || soap_put_ns__Dispatch_Keepalive(soap, data, "ns:Dispatch-Keepalive", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Keepalive * SOAP_FMAC4 soap_get_ns__Dispatch_Keepalive(struct soap*, struct ns__Dispatch_Keepalive *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Keepalive
-#define soap_read_ns__Dispatch_Keepalive(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Keepalive(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Keepalive * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Keepalive(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Keepalive * soap_new_ns__Dispatch_Keepalive(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Keepalive(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Keepalive * soap_new_req_ns__Dispatch_Keepalive(struct soap *soap) { struct ns__Dispatch_Keepalive *_p = soap_instantiate_ns__Dispatch_Keepalive(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Keepalive(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Keepalive * soap_new_set_ns__Dispatch_Keepalive(struct soap *soap, void *_) { struct ns__Dispatch_Keepalive *_p = soap_instantiate_ns__Dispatch_Keepalive(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Keepalive(soap, _p); _p->_ = _; } return _p; }
-
-inline void soap_delete_ns__Dispatch_Keepalive(struct soap *soap, struct ns__Dispatch_Keepalive *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Keepalive(struct soap*, int, int, void*, size_t, const void*, size_t);
-
-#ifndef SOAP_TYPE_ns__Dispatch_Keepalive_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Keepalive_Request_Response (67)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Keepalive_Request_Response(struct soap*, struct ns__Dispatch_Keepalive_Request_Response *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Keepalive_Request_Response(struct soap*, const struct ns__Dispatch_Keepalive_Request_Response *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__Dispatch_Keepalive_Request_Response(struct soap*, const char*, int, const struct ns__Dispatch_Keepalive_Request_Response *, const char*);
-SOAP_FMAC3 struct ns__Dispatch_Keepalive_Request_Response * SOAP_FMAC4 soap_in_ns__Dispatch_Keepalive_Request_Response(struct soap*, const char*, struct ns__Dispatch_Keepalive_Request_Response *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__Dispatch_Keepalive_Request_Response(struct soap*, const struct ns__Dispatch_Keepalive_Request_Response *, const char*, const char*);
-
-#ifndef soap_write_ns__Dispatch_Keepalive_Request_Response
-#define soap_write_ns__Dispatch_Keepalive_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__Dispatch_Keepalive_Request_Response(soap, data),0) || soap_put_ns__Dispatch_Keepalive_Request_Response(soap, data, "ns:Dispatch-Keepalive-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Keepalive_Request_Response * SOAP_FMAC4 soap_get_ns__Dispatch_Keepalive_Request_Response(struct soap*, struct ns__Dispatch_Keepalive_Request_Response *, const char*, const char*);
-
-#ifndef soap_read_ns__Dispatch_Keepalive_Request_Response
-#define soap_read_ns__Dispatch_Keepalive_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__Dispatch_Keepalive_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__Dispatch_Keepalive_Request_Response * SOAP_FMAC2 soap_instantiate_ns__Dispatch_Keepalive_Request_Response(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__Dispatch_Keepalive_Request_Response * soap_new_ns__Dispatch_Keepalive_Request_Response(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Keepalive_Request_Response(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__Dispatch_Keepalive_Request_Response * soap_new_req_ns__Dispatch_Keepalive_Request_Response(struct soap *soap) { struct ns__Dispatch_Keepalive_Request_Response *_p = soap_instantiate_ns__Dispatch_Keepalive_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Keepalive_Request_Response(soap, _p); } return _p; }
-
-inline struct ns__Dispatch_Keepalive_Request_Response * soap_new_set_ns__Dispatch_Keepalive_Request_Response(struct soap *soap) { struct ns__Dispatch_Keepalive_Request_Response *_p = soap_instantiate_ns__Dispatch_Keepalive_Request_Response(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Keepalive_Request_Response(soap, _p); } return _p; }
-
-inline void soap_delete_ns__Dispatch_Keepalive_Request_Response(struct soap *soap, struct ns__Dispatch_Keepalive_Request_Response *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Keepalive_Request_Response(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Logout
-#define SOAP_TYPE_ns__Dispatch_Logout (64)
+#define SOAP_TYPE_ns__Dispatch_Logout (71)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Logout(struct soap*, struct ns__Dispatch_Logout *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Logout(struct soap*, const struct ns__Dispatch_Logout *);
@@ -3322,48 +2863,16 @@ SOAP_FMAC1 struct ns__Dispatch_Logout * SOAP_FMAC2 soap_instantiate_ns__Dispatch
 
 inline struct ns__Dispatch_Logout * soap_new_ns__Dispatch_Logout(struct soap *soap, int n = -1) { return soap_instantiate_ns__Dispatch_Logout(soap, n, NULL, NULL, NULL); }
 
-inline struct ns__Dispatch_Logout * soap_new_req_ns__Dispatch_Logout(struct soap *soap, std::string& name) { struct ns__Dispatch_Logout *_p = soap_instantiate_ns__Dispatch_Logout(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Logout(soap, _p); _p->name = name; } return _p; }
+inline struct ns__Dispatch_Logout * soap_new_req_ns__Dispatch_Logout(struct soap *soap, std::string& session_id, std::string& name, std::string& password) { struct ns__Dispatch_Logout *_p = soap_instantiate_ns__Dispatch_Logout(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Logout(soap, _p); _p->session_id = session_id; _p->name = name; _p->password = password; } return _p; }
 
-inline struct ns__Dispatch_Logout * soap_new_set_ns__Dispatch_Logout(struct soap *soap, std::string& name) { struct ns__Dispatch_Logout *_p = soap_instantiate_ns__Dispatch_Logout(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Logout(soap, _p); _p->name = name; } return _p; }
+inline struct ns__Dispatch_Logout * soap_new_set_ns__Dispatch_Logout(struct soap *soap, std::string& session_id, std::string& name, std::string& password) { struct ns__Dispatch_Logout *_p = soap_instantiate_ns__Dispatch_Logout(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__Dispatch_Logout(soap, _p); _p->session_id = session_id; _p->name = name; _p->password = password; } return _p; }
 
 inline void soap_delete_ns__Dispatch_Logout(struct soap *soap, struct ns__Dispatch_Logout *p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Logout(struct soap*, int, int, void*, size_t, const void*, size_t);
 
-#ifndef SOAP_TYPE_ns__LogOutResponse
-#define SOAP_TYPE_ns__LogOutResponse (61)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__LogOutResponse(struct soap*, struct ns__LogOutResponse *);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__LogOutResponse(struct soap*, const struct ns__LogOutResponse *);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_ns__LogOutResponse(struct soap*, const char*, int, const struct ns__LogOutResponse *, const char*);
-SOAP_FMAC3 struct ns__LogOutResponse * SOAP_FMAC4 soap_in_ns__LogOutResponse(struct soap*, const char*, struct ns__LogOutResponse *, const char*);
-
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_ns__LogOutResponse(struct soap*, const struct ns__LogOutResponse *, const char*, const char*);
-
-#ifndef soap_write_ns__LogOutResponse
-#define soap_write_ns__LogOutResponse(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_ns__LogOutResponse(soap, data),0) || soap_put_ns__LogOutResponse(soap, data, "ns:LogOutResponse", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__LogOutResponse * SOAP_FMAC4 soap_get_ns__LogOutResponse(struct soap*, struct ns__LogOutResponse *, const char*, const char*);
-
-#ifndef soap_read_ns__LogOutResponse
-#define soap_read_ns__LogOutResponse(soap, data) ( soap_begin_recv(soap) || !soap_get_ns__LogOutResponse(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-SOAP_FMAC1 struct ns__LogOutResponse * SOAP_FMAC2 soap_instantiate_ns__LogOutResponse(struct soap*, int, const char*, const char*, size_t*);
-
-inline struct ns__LogOutResponse * soap_new_ns__LogOutResponse(struct soap *soap, int n = -1) { return soap_instantiate_ns__LogOutResponse(soap, n, NULL, NULL, NULL); }
-
-inline struct ns__LogOutResponse * soap_new_req_ns__LogOutResponse(struct soap *soap) { struct ns__LogOutResponse *_p = soap_instantiate_ns__LogOutResponse(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__LogOutResponse(soap, _p); } return _p; }
-
-inline struct ns__LogOutResponse * soap_new_set_ns__LogOutResponse(struct soap *soap) { struct ns__LogOutResponse *_p = soap_instantiate_ns__LogOutResponse(soap, -1, NULL, NULL, NULL); if (_p) { soap_default_ns__LogOutResponse(soap, _p); } return _p; }
-
-inline void soap_delete_ns__LogOutResponse(struct soap *soap, struct ns__LogOutResponse *p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__LogOutResponse(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_ns__Dispatch_Login
-#define SOAP_TYPE_ns__Dispatch_Login (60)
+#define SOAP_TYPE_ns__Dispatch_Login (68)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_ns__Dispatch_Login(struct soap*, struct ns__Dispatch_Login *);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_ns__Dispatch_Login(struct soap*, const struct ns__Dispatch_Login *);
@@ -3397,7 +2906,7 @@ SOAP_FMAC3 void SOAP_FMAC4 soap_copy_ns__Dispatch_Login(struct soap*, int, int, 
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_PointerToSOAP_ENV__Reason
-#define SOAP_TYPE_PointerToSOAP_ENV__Reason (201)
+#define SOAP_TYPE_PointerToSOAP_ENV__Reason (171)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerToSOAP_ENV__Reason(struct soap*, struct SOAP_ENV__Reason *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerToSOAP_ENV__Reason(struct soap*, const char *, int, struct SOAP_ENV__Reason *const*, const char *);
@@ -3420,7 +2929,7 @@ SOAP_FMAC3 struct SOAP_ENV__Reason ** SOAP_FMAC4 soap_get_PointerToSOAP_ENV__Rea
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_PointerToSOAP_ENV__Detail
-#define SOAP_TYPE_PointerToSOAP_ENV__Detail (200)
+#define SOAP_TYPE_PointerToSOAP_ENV__Detail (170)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerToSOAP_ENV__Detail(struct soap*, struct SOAP_ENV__Detail *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerToSOAP_ENV__Detail(struct soap*, const char *, int, struct SOAP_ENV__Detail *const*, const char *);
@@ -3443,7 +2952,7 @@ SOAP_FMAC3 struct SOAP_ENV__Detail ** SOAP_FMAC4 soap_get_PointerToSOAP_ENV__Det
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_PointerToSOAP_ENV__Code
-#define SOAP_TYPE_PointerToSOAP_ENV__Code (196)
+#define SOAP_TYPE_PointerToSOAP_ENV__Code (164)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerToSOAP_ENV__Code(struct soap*, struct SOAP_ENV__Code *const*);
 SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerToSOAP_ENV__Code(struct soap*, const char *, int, struct SOAP_ENV__Code *const*, const char *);
@@ -3462,348 +2971,6 @@ SOAP_FMAC3 struct SOAP_ENV__Code ** SOAP_FMAC4 soap_get_PointerToSOAP_ENV__Code(
 
 
 #endif
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Delete_History_Alert_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Delete_History_Alert_Request_Response (191)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Delete_History_Alert_Request_Response(struct soap*, struct ns__Dispatch_Delete_History_Alert_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Delete_History_Alert_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Delete_History_Alert_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Delete_History_Alert_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Delete_History_Alert_Request_Response(struct soap*, const char*, struct ns__Dispatch_Delete_History_Alert_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Delete_History_Alert_Request_Response(struct soap*, struct ns__Dispatch_Delete_History_Alert_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Delete_History_Alert_Request_Response
-#define soap_write_PointerTons__Dispatch_Delete_History_Alert_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Delete_History_Alert_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Delete_History_Alert_Request_Response(soap, data, "ns:Dispatch-Delete-History-Alert-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Delete_History_Alert_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Delete_History_Alert_Request_Response(struct soap*, struct ns__Dispatch_Delete_History_Alert_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Delete_History_Alert_Request_Response
-#define soap_read_PointerTons__Dispatch_Delete_History_Alert_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Delete_History_Alert_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Alert_Overed_Notification_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Alert_Overed_Notification_Response (177)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Alert_Overed_Notification_Response(struct soap*, struct ns__Dispatch_Alert_Overed_Notification_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Alert_Overed_Notification_Response(struct soap*, const char *, int, struct ns__Dispatch_Alert_Overed_Notification_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Alert_Overed_Notification_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Alert_Overed_Notification_Response(struct soap*, const char*, struct ns__Dispatch_Alert_Overed_Notification_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Alert_Overed_Notification_Response(struct soap*, struct ns__Dispatch_Alert_Overed_Notification_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Alert_Overed_Notification_Response
-#define soap_write_PointerTons__Dispatch_Alert_Overed_Notification_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Alert_Overed_Notification_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Alert_Overed_Notification_Response(soap, data, "ns:Dispatch-Alert-Overed-Notification-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Alert_Overed_Notification_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Alert_Overed_Notification_Response(struct soap*, struct ns__Dispatch_Alert_Overed_Notification_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Alert_Overed_Notification_Response
-#define soap_read_PointerTons__Dispatch_Alert_Overed_Notification_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Alert_Overed_Notification_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Stop_Alert_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Stop_Alert_Request_Response (173)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Stop_Alert_Request_Response(struct soap*, struct ns__Dispatch_Stop_Alert_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Stop_Alert_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Stop_Alert_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Stop_Alert_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Stop_Alert_Request_Response(struct soap*, const char*, struct ns__Dispatch_Stop_Alert_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Stop_Alert_Request_Response(struct soap*, struct ns__Dispatch_Stop_Alert_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Stop_Alert_Request_Response
-#define soap_write_PointerTons__Dispatch_Stop_Alert_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Stop_Alert_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Stop_Alert_Request_Response(soap, data, "ns:Dispatch-Stop-Alert-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Stop_Alert_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Stop_Alert_Request_Response(struct soap*, struct ns__Dispatch_Stop_Alert_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Stop_Alert_Request_Response
-#define soap_read_PointerTons__Dispatch_Stop_Alert_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Stop_Alert_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Modify_Alert_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Modify_Alert_Request_Response (169)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Modify_Alert_Request_Response(struct soap*, struct ns__Dispatch_Modify_Alert_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Modify_Alert_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Modify_Alert_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Modify_Alert_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Modify_Alert_Request_Response(struct soap*, const char*, struct ns__Dispatch_Modify_Alert_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Modify_Alert_Request_Response(struct soap*, struct ns__Dispatch_Modify_Alert_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Modify_Alert_Request_Response
-#define soap_write_PointerTons__Dispatch_Modify_Alert_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Modify_Alert_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Modify_Alert_Request_Response(soap, data, "ns:Dispatch-Modify-Alert-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Modify_Alert_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Modify_Alert_Request_Response(struct soap*, struct ns__Dispatch_Modify_Alert_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Modify_Alert_Request_Response
-#define soap_read_PointerTons__Dispatch_Modify_Alert_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Modify_Alert_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response (158)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, struct ns__Dispatch_Subscribe_Account_Location_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Subscribe_Account_Location_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Subscribe_Account_Location_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, const char*, struct ns__Dispatch_Subscribe_Account_Location_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, struct ns__Dispatch_Subscribe_Account_Location_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response
-#define soap_write_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response(soap, data, "ns:Dispatch-Subscribe-Account-Location-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Subscribe_Account_Location_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response(struct soap*, struct ns__Dispatch_Subscribe_Account_Location_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response
-#define soap_read_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Subscribe_Account_Location_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Stop_Record_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Stop_Record_Request_Response (151)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Stop_Record_Request_Response(struct soap*, struct ns__Dispatch_Stop_Record_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Stop_Record_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Stop_Record_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Stop_Record_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Stop_Record_Request_Response(struct soap*, const char*, struct ns__Dispatch_Stop_Record_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Stop_Record_Request_Response(struct soap*, struct ns__Dispatch_Stop_Record_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Stop_Record_Request_Response
-#define soap_write_PointerTons__Dispatch_Stop_Record_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Stop_Record_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Stop_Record_Request_Response(soap, data, "ns:Dispatch-Stop-Record-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Stop_Record_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Stop_Record_Request_Response(struct soap*, struct ns__Dispatch_Stop_Record_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Stop_Record_Request_Response
-#define soap_read_PointerTons__Dispatch_Stop_Record_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Stop_Record_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Start_Record_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Start_Record_Request_Response (147)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Start_Record_Request_Response(struct soap*, struct ns__Dispatch_Start_Record_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Start_Record_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Start_Record_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Start_Record_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Start_Record_Request_Response(struct soap*, const char*, struct ns__Dispatch_Start_Record_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Start_Record_Request_Response(struct soap*, struct ns__Dispatch_Start_Record_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Start_Record_Request_Response
-#define soap_write_PointerTons__Dispatch_Start_Record_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Start_Record_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Start_Record_Request_Response(soap, data, "ns:Dispatch-Start-Record-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Start_Record_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Start_Record_Request_Response(struct soap*, struct ns__Dispatch_Start_Record_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Start_Record_Request_Response
-#define soap_read_PointerTons__Dispatch_Start_Record_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Start_Record_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Kick_Participant_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Kick_Participant_Request_Response (143)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Kick_Participant_Request_Response(struct soap*, struct ns__Dispatch_Kick_Participant_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Kick_Participant_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Kick_Participant_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Kick_Participant_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Kick_Participant_Request_Response(struct soap*, const char*, struct ns__Dispatch_Kick_Participant_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Kick_Participant_Request_Response(struct soap*, struct ns__Dispatch_Kick_Participant_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Kick_Participant_Request_Response
-#define soap_write_PointerTons__Dispatch_Kick_Participant_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Kick_Participant_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Kick_Participant_Request_Response(soap, data, "ns:Dispatch-Kick-Participant-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Kick_Participant_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Kick_Participant_Request_Response(struct soap*, struct ns__Dispatch_Kick_Participant_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Kick_Participant_Request_Response
-#define soap_read_PointerTons__Dispatch_Kick_Participant_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Kick_Participant_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Send_Message_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Send_Message_Request_Response (139)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Send_Message_Request_Response(struct soap*, struct ns__Dispatch_Send_Message_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Send_Message_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Send_Message_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Send_Message_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Send_Message_Request_Response(struct soap*, const char*, struct ns__Dispatch_Send_Message_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Send_Message_Request_Response(struct soap*, struct ns__Dispatch_Send_Message_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Send_Message_Request_Response
-#define soap_write_PointerTons__Dispatch_Send_Message_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Send_Message_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Send_Message_Request_Response(soap, data, "ns:Dispatch-Send-Message-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Send_Message_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Send_Message_Request_Response(struct soap*, struct ns__Dispatch_Send_Message_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Send_Message_Request_Response
-#define soap_read_PointerTons__Dispatch_Send_Message_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Send_Message_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Leave_Group_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Leave_Group_Request_Response (132)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Leave_Group_Request_Response(struct soap*, struct ns__Dispatch_Leave_Group_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Leave_Group_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Leave_Group_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Leave_Group_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Leave_Group_Request_Response(struct soap*, const char*, struct ns__Dispatch_Leave_Group_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Leave_Group_Request_Response(struct soap*, struct ns__Dispatch_Leave_Group_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Leave_Group_Request_Response
-#define soap_write_PointerTons__Dispatch_Leave_Group_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Leave_Group_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Leave_Group_Request_Response(soap, data, "ns:Dispatch-Leave-Group-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Leave_Group_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Leave_Group_Request_Response(struct soap*, struct ns__Dispatch_Leave_Group_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Leave_Group_Request_Response
-#define soap_read_PointerTons__Dispatch_Leave_Group_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Leave_Group_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Jion_Group_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Jion_Group_Request_Response (128)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Jion_Group_Request_Response(struct soap*, struct ns__Dispatch_Jion_Group_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Jion_Group_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Jion_Group_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Jion_Group_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Jion_Group_Request_Response(struct soap*, const char*, struct ns__Dispatch_Jion_Group_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Jion_Group_Request_Response(struct soap*, struct ns__Dispatch_Jion_Group_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Jion_Group_Request_Response
-#define soap_write_PointerTons__Dispatch_Jion_Group_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Jion_Group_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Jion_Group_Request_Response(soap, data, "ns:Dispatch-Jion-Group-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Jion_Group_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Jion_Group_Request_Response(struct soap*, struct ns__Dispatch_Jion_Group_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Jion_Group_Request_Response
-#define soap_read_PointerTons__Dispatch_Jion_Group_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Jion_Group_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response (124)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Appoint_Participant_Speak_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, const char*, struct ns__Dispatch_Appoint_Participant_Speak_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response
-#define soap_write_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response(soap, data, "ns:Dispatch-Appoint-Participant-Speak-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Appoint_Participant_Speak_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response(struct soap*, struct ns__Dispatch_Appoint_Participant_Speak_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response
-#define soap_read_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Appoint_Participant_Speak_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Release_Participant_Token_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Release_Participant_Token_Request_Response (120)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Release_Participant_Token_Request_Response(struct soap*, struct ns__Dispatch_Release_Participant_Token_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Release_Participant_Token_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Release_Participant_Token_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Release_Participant_Token_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Release_Participant_Token_Request_Response(struct soap*, const char*, struct ns__Dispatch_Release_Participant_Token_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Release_Participant_Token_Request_Response(struct soap*, struct ns__Dispatch_Release_Participant_Token_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Release_Participant_Token_Request_Response
-#define soap_write_PointerTons__Dispatch_Release_Participant_Token_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Release_Participant_Token_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Release_Participant_Token_Request_Response(soap, data, "ns:Dispatch-Release-Participant-Token-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Release_Participant_Token_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Release_Participant_Token_Request_Response(struct soap*, struct ns__Dispatch_Release_Participant_Token_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Release_Participant_Token_Request_Response
-#define soap_read_PointerTons__Dispatch_Release_Participant_Token_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Release_Participant_Token_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Drop_Participant_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Drop_Participant_Request_Response (116)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Drop_Participant_Request_Response(struct soap*, struct ns__Dispatch_Drop_Participant_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Drop_Participant_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Drop_Participant_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Drop_Participant_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Drop_Participant_Request_Response(struct soap*, const char*, struct ns__Dispatch_Drop_Participant_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Drop_Participant_Request_Response(struct soap*, struct ns__Dispatch_Drop_Participant_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Drop_Participant_Request_Response
-#define soap_write_PointerTons__Dispatch_Drop_Participant_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Drop_Participant_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Drop_Participant_Request_Response(soap, data, "ns:Dispatch-Drop-Participant-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Drop_Participant_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Drop_Participant_Request_Response(struct soap*, struct ns__Dispatch_Drop_Participant_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Drop_Participant_Request_Response
-#define soap_read_PointerTons__Dispatch_Drop_Participant_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Drop_Participant_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Invite_Participant_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Invite_Participant_Request_Response (112)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Invite_Participant_Request_Response(struct soap*, struct ns__Dispatch_Invite_Participant_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Invite_Participant_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Invite_Participant_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Invite_Participant_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Invite_Participant_Request_Response(struct soap*, const char*, struct ns__Dispatch_Invite_Participant_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Invite_Participant_Request_Response(struct soap*, struct ns__Dispatch_Invite_Participant_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Invite_Participant_Request_Response
-#define soap_write_PointerTons__Dispatch_Invite_Participant_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Invite_Participant_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Invite_Participant_Request_Response(soap, data, "ns:Dispatch-Invite-Participant-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Invite_Participant_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Invite_Participant_Request_Response(struct soap*, struct ns__Dispatch_Invite_Participant_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Invite_Participant_Request_Response
-#define soap_read_PointerTons__Dispatch_Invite_Participant_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Invite_Participant_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Delete_Group_Response
-#define SOAP_TYPE_PointerTons__Delete_Group_Response (88)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Delete_Group_Response(struct soap*, struct ns__Delete_Group_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Delete_Group_Response(struct soap*, const char *, int, struct ns__Delete_Group_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Delete_Group_Response ** SOAP_FMAC4 soap_in_PointerTons__Delete_Group_Response(struct soap*, const char*, struct ns__Delete_Group_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Delete_Group_Response(struct soap*, struct ns__Delete_Group_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Delete_Group_Response
-#define soap_write_PointerTons__Delete_Group_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Delete_Group_Response(soap, data),0) || soap_put_PointerTons__Delete_Group_Response(soap, data, "ns:Delete-Group-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Delete_Group_Response ** SOAP_FMAC4 soap_get_PointerTons__Delete_Group_Response(struct soap*, struct ns__Delete_Group_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Delete_Group_Response
-#define soap_read_PointerTons__Delete_Group_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Delete_Group_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__Dispatch_Keepalive_Request_Response
-#define SOAP_TYPE_PointerTons__Dispatch_Keepalive_Request_Response (68)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__Dispatch_Keepalive_Request_Response(struct soap*, struct ns__Dispatch_Keepalive_Request_Response *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__Dispatch_Keepalive_Request_Response(struct soap*, const char *, int, struct ns__Dispatch_Keepalive_Request_Response *const*, const char *);
-SOAP_FMAC3 struct ns__Dispatch_Keepalive_Request_Response ** SOAP_FMAC4 soap_in_PointerTons__Dispatch_Keepalive_Request_Response(struct soap*, const char*, struct ns__Dispatch_Keepalive_Request_Response **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__Dispatch_Keepalive_Request_Response(struct soap*, struct ns__Dispatch_Keepalive_Request_Response *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__Dispatch_Keepalive_Request_Response
-#define soap_write_PointerTons__Dispatch_Keepalive_Request_Response(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__Dispatch_Keepalive_Request_Response(soap, data),0) || soap_put_PointerTons__Dispatch_Keepalive_Request_Response(soap, data, "ns:Dispatch-Keepalive-Request-Response", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__Dispatch_Keepalive_Request_Response ** SOAP_FMAC4 soap_get_PointerTons__Dispatch_Keepalive_Request_Response(struct soap*, struct ns__Dispatch_Keepalive_Request_Response **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__Dispatch_Keepalive_Request_Response
-#define soap_read_PointerTons__Dispatch_Keepalive_Request_Response(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__Dispatch_Keepalive_Request_Response(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
-
-#ifndef SOAP_TYPE_PointerTons__LogOutResponse
-#define SOAP_TYPE_PointerTons__LogOutResponse (62)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_PointerTons__LogOutResponse(struct soap*, struct ns__LogOutResponse *const*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_PointerTons__LogOutResponse(struct soap*, const char *, int, struct ns__LogOutResponse *const*, const char *);
-SOAP_FMAC3 struct ns__LogOutResponse ** SOAP_FMAC4 soap_in_PointerTons__LogOutResponse(struct soap*, const char*, struct ns__LogOutResponse **, const char*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_put_PointerTons__LogOutResponse(struct soap*, struct ns__LogOutResponse *const*, const char*, const char*);
-
-#ifndef soap_write_PointerTons__LogOutResponse
-#define soap_write_PointerTons__LogOutResponse(soap, data) ( soap_free_temp(soap), soap_begin_send(soap) || (soap_serialize_PointerTons__LogOutResponse(soap, data),0) || soap_put_PointerTons__LogOutResponse(soap, data, "ns:LogOutResponse", NULL) || soap_end_send(soap), (soap)->error )
-#endif
-
-SOAP_FMAC3 struct ns__LogOutResponse ** SOAP_FMAC4 soap_get_PointerTons__LogOutResponse(struct soap*, struct ns__LogOutResponse **, const char*, const char*);
-
-#ifndef soap_read_PointerTons__LogOutResponse
-#define soap_read_PointerTons__LogOutResponse(soap, data) ( soap_begin_recv(soap) || !soap_get_PointerTons__LogOutResponse(soap, data, NULL, NULL) || soap_end_recv(soap), (soap)->error )
-#endif
-
 
 #ifndef SOAP_TYPE__QName
 #define SOAP_TYPE__QName (5)
@@ -3847,23 +3014,8 @@ SOAP_FMAC3 char ** SOAP_FMAC4 soap_get_string(struct soap*, char **, const char*
 #endif
 
 
-#ifndef SOAP_TYPE_std__listTemplateOfns__HistoryAlert
-#define SOAP_TYPE_std__listTemplateOfns__HistoryAlert (180)
-#endif
-SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__listTemplateOfns__HistoryAlert(struct soap*, std::list<ns__HistoryAlert >*);
-SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__listTemplateOfns__HistoryAlert(struct soap*, const std::list<ns__HistoryAlert >*);
-SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__listTemplateOfns__HistoryAlert(struct soap*, const char*, int, const std::list<ns__HistoryAlert >*, const char*);
-SOAP_FMAC3 std::list<ns__HistoryAlert >* SOAP_FMAC4 soap_in_std__listTemplateOfns__HistoryAlert(struct soap*, const char*, std::list<ns__HistoryAlert >*, const char*);
-SOAP_FMAC1 std::list<ns__HistoryAlert > * SOAP_FMAC2 soap_instantiate_std__listTemplateOfns__HistoryAlert(struct soap*, int, const char*, const char*, size_t*);
-
-inline std::list<ns__HistoryAlert > * soap_new_std__listTemplateOfns__HistoryAlert(struct soap *soap, int n = -1) { return soap_instantiate_std__listTemplateOfns__HistoryAlert(soap, n, NULL, NULL, NULL); }
-
-inline void soap_delete_std__listTemplateOfns__HistoryAlert(struct soap *soap, std::list<ns__HistoryAlert >*p) { soap_delete(soap, p); }
-
-SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__listTemplateOfns__HistoryAlert(struct soap*, int, int, void*, size_t, const void*, size_t);
-
 #ifndef SOAP_TYPE_std__listTemplateOfns__Account
-#define SOAP_TYPE_std__listTemplateOfns__Account (164)
+#define SOAP_TYPE_std__listTemplateOfns__Account (140)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__listTemplateOfns__Account(struct soap*, std::list<ns__Account >*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__listTemplateOfns__Account(struct soap*, const std::list<ns__Account >*);
@@ -3877,8 +3029,38 @@ inline void soap_delete_std__listTemplateOfns__Account(struct soap *soap, std::l
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__listTemplateOfns__Account(struct soap*, int, int, void*, size_t, const void*, size_t);
 
+#ifndef SOAP_TYPE_std__listTemplateOfstd__string
+#define SOAP_TYPE_std__listTemplateOfstd__string (134)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__listTemplateOfstd__string(struct soap*, std::list<std::string >*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__listTemplateOfstd__string(struct soap*, const std::list<std::string >*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__listTemplateOfstd__string(struct soap*, const char*, int, const std::list<std::string >*, const char*);
+SOAP_FMAC3 std::list<std::string >* SOAP_FMAC4 soap_in_std__listTemplateOfstd__string(struct soap*, const char*, std::list<std::string >*, const char*);
+SOAP_FMAC1 std::list<std::string > * SOAP_FMAC2 soap_instantiate_std__listTemplateOfstd__string(struct soap*, int, const char*, const char*, size_t*);
+
+inline std::list<std::string > * soap_new_std__listTemplateOfstd__string(struct soap *soap, int n = -1) { return soap_instantiate_std__listTemplateOfstd__string(soap, n, NULL, NULL, NULL); }
+
+inline void soap_delete_std__listTemplateOfstd__string(struct soap *soap, std::list<std::string >*p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__listTemplateOfstd__string(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_std__listTemplateOfns__HistoryAlert
+#define SOAP_TYPE_std__listTemplateOfns__HistoryAlert (61)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__listTemplateOfns__HistoryAlert(struct soap*, std::list<ns__HistoryAlert >*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__listTemplateOfns__HistoryAlert(struct soap*, const std::list<ns__HistoryAlert >*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__listTemplateOfns__HistoryAlert(struct soap*, const char*, int, const std::list<ns__HistoryAlert >*, const char*);
+SOAP_FMAC3 std::list<ns__HistoryAlert >* SOAP_FMAC4 soap_in_std__listTemplateOfns__HistoryAlert(struct soap*, const char*, std::list<ns__HistoryAlert >*, const char*);
+SOAP_FMAC1 std::list<ns__HistoryAlert > * SOAP_FMAC2 soap_instantiate_std__listTemplateOfns__HistoryAlert(struct soap*, int, const char*, const char*, size_t*);
+
+inline std::list<ns__HistoryAlert > * soap_new_std__listTemplateOfns__HistoryAlert(struct soap *soap, int n = -1) { return soap_instantiate_std__listTemplateOfns__HistoryAlert(soap, n, NULL, NULL, NULL); }
+
+inline void soap_delete_std__listTemplateOfns__HistoryAlert(struct soap *soap, std::list<ns__HistoryAlert >*p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__listTemplateOfns__HistoryAlert(struct soap*, int, int, void*, size_t, const void*, size_t);
+
 #ifndef SOAP_TYPE_std__listTemplateOfns__MediaMessage
-#define SOAP_TYPE_std__listTemplateOfns__MediaMessage (56)
+#define SOAP_TYPE_std__listTemplateOfns__MediaMessage (50)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__listTemplateOfns__MediaMessage(struct soap*, std::list<ns__MediaMessage >*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__listTemplateOfns__MediaMessage(struct soap*, const std::list<ns__MediaMessage >*);
@@ -3893,7 +3075,7 @@ inline void soap_delete_std__listTemplateOfns__MediaMessage(struct soap *soap, s
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__listTemplateOfns__MediaMessage(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #ifndef SOAP_TYPE_std__listTemplateOfns__Participant
-#define SOAP_TYPE_std__listTemplateOfns__Participant (44)
+#define SOAP_TYPE_std__listTemplateOfns__Participant (33)
 #endif
 SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__listTemplateOfns__Participant(struct soap*, std::list<ns__Participant >*);
 SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__listTemplateOfns__Participant(struct soap*, const std::list<ns__Participant >*);
@@ -3906,6 +3088,21 @@ inline std::list<ns__Participant > * soap_new_std__listTemplateOfns__Participant
 inline void soap_delete_std__listTemplateOfns__Participant(struct soap *soap, std::list<ns__Participant >*p) { soap_delete(soap, p); }
 
 SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__listTemplateOfns__Participant(struct soap*, int, int, void*, size_t, const void*, size_t);
+
+#ifndef SOAP_TYPE_std__listTemplateOfns__Entity
+#define SOAP_TYPE_std__listTemplateOfns__Entity (30)
+#endif
+SOAP_FMAC3 void SOAP_FMAC4 soap_default_std__listTemplateOfns__Entity(struct soap*, std::list<ns__Entity >*);
+SOAP_FMAC3 void SOAP_FMAC4 soap_serialize_std__listTemplateOfns__Entity(struct soap*, const std::list<ns__Entity >*);
+SOAP_FMAC3 int SOAP_FMAC4 soap_out_std__listTemplateOfns__Entity(struct soap*, const char*, int, const std::list<ns__Entity >*, const char*);
+SOAP_FMAC3 std::list<ns__Entity >* SOAP_FMAC4 soap_in_std__listTemplateOfns__Entity(struct soap*, const char*, std::list<ns__Entity >*, const char*);
+SOAP_FMAC1 std::list<ns__Entity > * SOAP_FMAC2 soap_instantiate_std__listTemplateOfns__Entity(struct soap*, int, const char*, const char*, size_t*);
+
+inline std::list<ns__Entity > * soap_new_std__listTemplateOfns__Entity(struct soap *soap, int n = -1) { return soap_instantiate_std__listTemplateOfns__Entity(soap, n, NULL, NULL, NULL); }
+
+inline void soap_delete_std__listTemplateOfns__Entity(struct soap *soap, std::list<ns__Entity >*p) { soap_delete(soap, p); }
+
+SOAP_FMAC3 void SOAP_FMAC4 soap_copy_std__listTemplateOfns__Entity(struct soap*, int, int, void*, size_t, const void*, size_t);
 
 #endif
 

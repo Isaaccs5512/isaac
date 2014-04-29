@@ -7,64 +7,39 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-Modify-Group>
+   <session-id></session-id>
    <group>
-    <base>
-     <id>0</id>
-     <name></name>
-     <entity-type>UNIT</entity-type>
-     <parentid>0</parentid>
-    </base>
-    <owner>
-     <id>0</id>
-     <name></name>
-     <entity-type>UNIT</entity-type>
-     <parentid>0</parentid>
-    </owner>
+    <id></id>
+    <name></name>
+    <owner-id></owner-id>
     <number></number>
     <short-number></short-number>
-    <sealed>false</sealed>
-    <include-participants>false</include-participants>
     <participants>
-     <id>0</id>
-     <group>
-      <id>0</id>
-      <name></name>
-      <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
-     </group>
      <account>
-      <id>0</id>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
      </account>
-     <priority>0</priority>
+     <priority></priority>
      <call-privilege>CallForbid</call-privilege>
-     <toke-privilege>TokenForbid</toke-privilege>
+     <token-privilege>TokenForbid</token-privilege>
      <status>IDLE</status>
-     <sync-added>false</sync-added>
     </participants>
-    <record-type>DontRecord</record-type>
-    <recorder>
-     <id>0</id>
-     <group>
-      <id>0</id>
-      <name></name>
-      <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
-     </group>
+    <participants>
      <account>
-      <id>0</id>
+      <id></id>
       <name></name>
+      <parentid></parentid>
       <entity-type>UNIT</entity-type>
-      <parentid>0</parentid>
      </account>
-     <priority>0</priority>
+     <priority></priority>
      <call-privilege>CallForbid</call-privilege>
-     <toke-privilege>TokenForbid</toke-privilege>
+     <token-privilege>TokenForbid</token-privilege>
      <status>IDLE</status>
-     <sync-added>false</sync-added>
-    </recorder>
+    </participants>
+    <size></size>
+    <record-type>DontRecord</record-type>
     <record-status>RecordStop</record-status>
    </group>
   </ns:Dispatch-Modify-Group>

@@ -1,10 +1,11 @@
 #include "connectToAppServer.h"
 #include <memory>
 #include <iostream>
-#include "debug.h"
+#include <exception>
+#include <string>
+#include <array>
 
-
-std::string get_recstr()
+std::string ConnectToAppServer::get_recstr()
 {
 	return recstr;
 }
@@ -23,34 +24,56 @@ std::string ConnectToAppServer::packData(std::string msg,int len)
 	return str;
 }
 
-void ConnectToAppServer::transportData(std::string msg,int len)
+int ConnectToAppServer::transportData(std::string msg,int len)
 {
 	asio::io_service io_service;
-	debug();
+	char *buf;
+	char *lenbuf = new char[4];
+	int reclen=0;
+	asio::error_code ec;
 	asio::ip::tcp::endpoint end_point(asio::ip::address::from_string(SERVERIP), SERVPORT);
-	debug();
 
 	asio::ip::tcp::socket socket(io_service);
-	debug();
-	try{
-		socket.connect(end_point);
-	}catch(...){
-		debug();
-		throw;
+	
+	socket.connect(end_point,ec);
+	if(ec)
+	{
+		LOG(ERROR)<<ec.message();
+		return -1;
 	}
-	debug();
-	try{
-		socket.write_some(asio::buffer(packData(msg,len)));
-	}catch(...){
-		debug();
-		throw;
+	LOG(INFO)<<"Send request to server";	
+	//socket.write_some(asio::buffer(packData(msg,len)),ec);
+	packData(msg,len);
+	asio::write(socket,asio::buffer(str,len+4),ec);
+	if(ec)
+	{
+		LOG(ERROR)<<ec.message();
+		return -2;
 	}
 
-	try{
-		socket.read_some(asio::buffer(recstr))>0);
-	}catch(...){
-		debug();
-		throw;
+	LOG(INFO)<<"Recive response data from server";
+	asio::read(socket,asio::buffer(lenbuf,4),ec);
+	if(ec)
+	{
+		LOG(ERROR)<<ec.message();
+		return -3;
 	}
-debug();
+	reclen |= ((lenbuf[3])&0x000000ff);
+	reclen |= ((lenbuf[2])&0x000000ff) << 8;
+	reclen |= ((lenbuf[1])&0x000000ff) << 16;
+	reclen |= ((lenbuf[0])&0x000000ff) << 24;
+
+	LOG(INFO)<<"Datalen is:"<<reclen;
+	buf = new char[reclen];
+	asio::read(socket,asio::buffer(buf,reclen),ec);
+
+	if(ec)
+	{
+		LOG(ERROR)<<ec.message();
+		return -4;
+	}
+	recstr = std::string(buf,reclen);
+	delete []buf;
+	delete []lenbuf;
+	return 0;
 }

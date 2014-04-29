@@ -7,23 +7,19 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-Modify-Alert-Request>
+   <session-id></session-id>
    <alert>
     <base>
-     <id>0</id>
+     <id></id>
      <name></name>
+     <parentid></parentid>
      <entity-type>UNIT</entity-type>
-     <parentid>0</parentid>
     </base>
-    <group>
-     <id>0</id>
-     <name></name>
-     <entity-type>UNIT</entity-type>
-     <parentid>0</parentid>
-    </group>
+    <group-id></group-id>
     <describe></describe>
     <level>Exigency</level>
     <alram-time></alram-time>
-    <use-cars>0</use-cars>
+    <use-cars></use-cars>
     <create-time></create-time>
     <status>AlertActive</status>
    </alert>

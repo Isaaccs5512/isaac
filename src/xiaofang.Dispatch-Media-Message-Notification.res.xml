@@ -6,19 +6,22 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <ns:Media-Message-Notification>
-   <id>0</id>
+  <ns:Dispatch-Media-Message-Notification-Response>
+   <id></id>
    <messages>
-    <id>0</id>
+    <id></id>
     <sender></sender>
     <text></text>
     <picture-uri></picture-uri>
     <audio-uri></audio-uri>
-    <audio-length>0</audio-length>
+    <audio-length></audio-length>
     <video-uri></video-uri>
-    <video-length>0</video-length>
+    <video-length></video-length>
     <timestamp></timestamp>
    </messages>
-  </ns:Media-Message-Notification>
+   <session-id></session-id>
+   <error-describe></error-describe>
+   <result>false</result>
+  </ns:Dispatch-Media-Message-Notification-Response>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

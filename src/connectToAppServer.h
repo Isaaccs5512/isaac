@@ -20,6 +20,7 @@ private:
 	std::string packData(std::string msg,int len);
 	std::string recstr;
 public:
-	void transportData(std::string msg,int len);
+	ConnectToAppServer():str(""),recstr(""){}
+	int transportData(std::string msg,int len);
 	std::string get_recstr();
 };

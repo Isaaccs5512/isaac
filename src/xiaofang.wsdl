@@ -35,32 +35,6 @@
     <!-- = 1 -->
    </restriction>
   </simpleType>
-  <simpleType name="UserType"><!-- ns__UserType -->
-
-   <restriction base="xsd:string">
-    <enumeration value="Admin"/><!-- ns__UserType::Admin -->
-    <!-- = 0 -->
-    <enumeration value="Operator"/><!-- ns__UserType::Operator -->
-    <!-- = 1 -->
-   </restriction>
-  </simpleType>
-  <simpleType name="EntityType"><!-- ns__EntityType -->
-
-   <restriction base="xsd:string">
-    <enumeration value="UNIT"/><!-- ns__EntityType::UNIT -->
-    <!-- = 0 -->
-    <enumeration value="ACCOUNT"/><!-- ns__EntityType::ACCOUNT -->
-    <!-- = 1 -->
-    <enumeration value="USER"/><!-- ns__EntityType::USER -->
-    <!-- = 2 -->
-    <enumeration value="GROUP"/><!-- ns__EntityType::GROUP -->
-    <!-- = 3 -->
-    <enumeration value="GATEWAY"/><!-- ns__EntityType::GATEWAY -->
-    <!-- = 4 -->
-    <enumeration value="ORGANIZATION"/><!-- ns__EntityType::ORGANIZATION -->
-    <!-- = 5 -->
-   </restriction>
-  </simpleType>
   <simpleType name="ListModifyType"><!-- ns__ListModifyType -->
 
    <restriction base="xsd:string">
@@ -85,15 +59,6 @@
     <!-- = 3 -->
    </restriction>
   </simpleType>
-  <simpleType name="AccountServiceStatus"><!-- ns__AccountServiceStatus -->
-
-   <restriction base="xsd:string">
-    <enumeration value="AccountStop"/><!-- ns__AccountServiceStatus::AccountStop -->
-    <!-- = 0 -->
-    <enumeration value="AccountActive"/><!-- ns__AccountServiceStatus::AccountActive -->
-    <!-- = 1 -->
-   </restriction>
-  </simpleType>
   <simpleType name="CallPrivilege"><!-- ns__CallPrivilege -->
 
    <restriction base="xsd:string">
@@ -113,17 +78,6 @@
     <enumeration value="TokenFreedom"/><!-- ns__TokenPrivilege::TokenFreedom -->
     <!-- = 1 -->
     <enumeration value="TokenPolicy"/><!-- ns__TokenPrivilege::TokenPolicy -->
-    <!-- = 2 -->
-   </restriction>
-  </simpleType>
-  <simpleType name="GpsReportMode"><!-- ns__GpsReportMode -->
-
-   <restriction base="xsd:string">
-    <enumeration value="GpsManualPull"/><!-- ns__GpsReportMode::GpsManualPull -->
-    <!-- = 0 -->
-    <enumeration value="GpsManualPush"/><!-- ns__GpsReportMode::GpsManualPush -->
-    <!-- = 1 -->
-    <enumeration value="GpsAutoPush"/><!-- ns__GpsReportMode::GpsAutoPush -->
     <!-- = 2 -->
    </restriction>
   </simpleType>
@@ -193,116 +147,200 @@
     <!-- = 3 -->
    </restriction>
   </simpleType>
+  <simpleType name="ProfessionStatus"><!-- ns__ProfessionStatus -->
+
+   <restriction base="xsd:string">
+    <enumeration value="Standby"/><!-- ns__ProfessionStatus::Standby -->
+    <!-- = 0 -->
+    <enumeration value="Duty"/><!-- ns__ProfessionStatus::Duty -->
+    <!-- = 1 -->
+    <enumeration value="Turnout"/><!-- ns__ProfessionStatus::Turnout -->
+    <!-- = 2 -->
+    <enumeration value="Training"/><!-- ns__ProfessionStatus::Training -->
+    <!-- = 3 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="SubscribeType"><!-- ns__SubscribeType -->
+
+   <restriction base="xsd:string">
+    <enumeration value="Gis"/><!-- ns__SubscribeType::Gis -->
+    <!-- = 0 -->
+    <enumeration value="Status"/><!-- ns__SubscribeType::Status -->
+    <!-- = 1 -->
+    <enumeration value="Profession"/><!-- ns__SubscribeType::Profession -->
+    <!-- = 2 -->
+    <enumeration value="Gis-status"/><!-- ns__SubscribeType::Gis_status -->
+    <!-- = 3 -->
+    <enumeration value="Gis-profession"/><!-- ns__SubscribeType::Gis_profession -->
+    <!-- = 4 -->
+    <enumeration value="Status-profession"/><!-- ns__SubscribeType::Status_profession -->
+    <!-- = 5 -->
+    <enumeration value="Gis-status-profession"/><!-- ns__SubscribeType::Gis_status_profession -->
+    <!-- = 6 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="EntityType"><!-- ns__EntityType -->
+
+   <restriction base="xsd:string">
+    <enumeration value="UNIT"/><!-- ns__EntityType::UNIT -->
+    <!-- = 0 -->
+    <enumeration value="ACCOUNT"/><!-- ns__EntityType::ACCOUNT -->
+    <!-- = 1 -->
+    <enumeration value="USER"/><!-- ns__EntityType::USER -->
+    <!-- = 2 -->
+    <enumeration value="GROUP"/><!-- ns__EntityType::GROUP -->
+    <!-- = 3 -->
+   </restriction>
+  </simpleType>
   <complexType name="Entity"><!-- ns__Entity -->
 
    <sequence>
-     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::id -->
+     <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::id -->
      <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::name -->
+     <element name="parentid" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::parentid -->
      <element name="entity-type" type="ns:EntityType" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::entity_type -->
-     <element name="parentid" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Entity::parentid -->
    </sequence>
   </complexType>
   <complexType name="Address"><!-- ns__Address -->
 
    <sequence>
      <element name="ip" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Address::ip -->
-     <element name="port" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Address::port -->
+     <element name="port" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Address::port -->
    </sequence>
   </complexType>
   <complexType name="User"><!-- ns__User -->
 
    <sequence>
      <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__User::base -->
-     <element name="password" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__User::password -->
-     <element name="user-type" type="ns:UserType" minOccurs="1" maxOccurs="1"/><!-- ns__User::user_type -->
      <element name="account" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__User::account -->
      <element name="status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__User::status -->
-     <element name="address" type="ns:Address" minOccurs="1" maxOccurs="1"/><!-- ns__User::address -->
    </sequence>
   </complexType>
   <complexType name="Account"><!-- ns__Account -->
 
    <sequence>
      <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Account::base -->
-     <element name="account-type" type="ns:AccountType" minOccurs="1" maxOccurs="1"/><!-- ns__Account::account_type -->
      <element name="number" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Account::number -->
      <element name="short-number" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Account::short_number -->
-     <element name="password" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Account::password -->
-     <element name="service-status" type="ns:AccountServiceStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Account::service_status -->
-     <element name="priority" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Account::priority -->
+     <element name="priority" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Account::priority -->
      <element name="call-privilege" type="ns:CallPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Account::call_privilege -->
      <element name="token-privilege" type="ns:TokenPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Account::token_privilege -->
-     <element name="gps-report-mode" type="ns:GpsReportMode" minOccurs="1" maxOccurs="1"/><!-- ns__Account::gps_report_mode -->
-     <element name="ttl" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Account::ttl -->
      <element name="status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Account::status -->
      <element name="sip-status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Account::sip_status -->
-     <element name="address" type="ns:Address" minOccurs="1" maxOccurs="1"/><!-- ns__Account::address -->
    </sequence>
   </complexType>
   <complexType name="Unit"><!-- ns__Unit -->
 
    <sequence>
      <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Unit::base -->
-     <element name="include-members" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Unit::include_members -->
-     <element name="members" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Unit::members -->
+     <element name="members" type="ns:Entity" minOccurs="0" maxOccurs="unbounded"/><!-- ns__Unit::members -->
+     <element name="size" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Unit::size -->
    </sequence>
   </complexType>
   <complexType name="Participant"><!-- ns__Participant -->
 
    <sequence>
-     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::id -->
-     <element name="group" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::group -->
      <element name="account" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::account -->
-     <element name="priority" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::priority -->
+     <element name="priority" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::priority -->
      <element name="call-privilege" type="ns:CallPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::call_privilege -->
-     <element name="toke-privilege" type="ns:TokenPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::toke_privilege -->
+     <element name="token-privilege" type="ns:TokenPrivilege" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::token_privilege -->
      <element name="status" type="ns:SessionStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::status -->
-     <element name="sync-added" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Participant::sync_added -->
    </sequence>
   </complexType>
-  <complexType name="Gateway"><!-- ns__Gateway -->
+  <complexType name="Group"><!-- ns__Group -->
 
    <sequence>
-     <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::base -->
-     <element name="address" type="ns:Address" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::address -->
-     <element name="include-allocate-counts" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::include_allocate_counts -->
-     <element name="allocate-counts" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::allocate_counts -->
-     <element name="include-active-counts" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::include_active_counts -->
-     <element name="active-counts" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::active_counts -->
-     <element name="status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Gateway::status -->
+     <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::id -->
+     <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::name -->
+     <element name="owner-id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::owner_id -->
+     <element name="number" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::number -->
+     <element name="short-number" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::short_number -->
+     <element name="participants" type="ns:Participant" minOccurs="0" maxOccurs="unbounded"/><!-- ns__Group::participants -->
+     <element name="size" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Group::size -->
+     <element name="record-type" type="ns:RecordType" minOccurs="1" maxOccurs="1"/><!-- ns__Group::record_type -->
+     <element name="record-status" type="ns:RecordStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Group::record_status -->
+   </sequence>
+  </complexType>
+  <complexType name="Alert"><!-- ns__Alert -->
+
+   <sequence>
+     <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::base -->
+     <element name="group-id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::group_id -->
+     <element name="describe" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::describe -->
+     <element name="level" type="ns:AlertLevel" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::level -->
+     <element name="alram-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::alram_time -->
+     <element name="use-cars" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::use_cars -->
+     <element name="create-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::create_time -->
+     <element name="status" type="ns:AlertStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Alert::status -->
    </sequence>
   </complexType>
   <complexType name="Organization"><!-- ns__Organization -->
 
    <sequence>
      <element name="base" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Organization::base -->
-     <element name="include-members" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Organization::include_members -->
      <element name="members" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Organization::members -->
+   </sequence>
+  </complexType>
+  <complexType name="EntityData"><!-- ns__EntityData -->
+
+   <sequence>
+     <element name="id" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::id -->
+     <element name="unit" type="ns:Unit" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::unit -->
+     <element name="account" type="ns:Account" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::account -->
+     <element name="user" type="ns:User" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::user -->
+     <element name="group" type="ns:Group" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::group -->
+     <element name="alert" type="ns:Alert" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::alert -->
+     <element name="organization" type="ns:Organization" minOccurs="1" maxOccurs="1"/><!-- ns__EntityData::organization -->
+   </sequence>
+  </complexType>
+  <complexType name="Entity-Status-Notification"><!-- ns__Entity_Status_Notification -->
+
+   <sequence>
+     <element name="id" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Entity_Status_Notification::id -->
+     <element name="status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Entity_Status_Notification::status -->
+     <element name="sip-status" type="ns:RegisterStatus" minOccurs="1" maxOccurs="1"/><!-- ns__Entity_Status_Notification::sip_status -->
+   </sequence>
+  </complexType>
+  <complexType name="Modify-Participant"><!-- ns__Modify_Participant -->
+
+   <sequence>
+     <element name="group-id" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Modify_Participant::group_id -->
+     <element name="modify-type" type="ns:ListModifyType" minOccurs="1" maxOccurs="1"/><!-- ns__Modify_Participant::modify_type -->
+     <element name="participants" type="ns:Participant" minOccurs="0" maxOccurs="unbounded"/><!-- ns__Modify_Participant::participants -->
+     <element name="size" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Modify_Participant::size -->
    </sequence>
   </complexType>
   <complexType name="MediaMessage"><!-- ns__MediaMessage -->
 
    <sequence>
-     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::id -->
+     <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::id -->
      <element name="sender" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::sender -->
      <element name="text" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::text -->
      <element name="picture-uri" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::picture_uri -->
      <element name="audio-uri" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::audio_uri -->
-     <element name="audio-length" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::audio_length -->
+     <element name="audio-length" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::audio_length -->
      <element name="video-uri" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::video_uri -->
-     <element name="video-length" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::video_length -->
+     <element name="video-length" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::video_length -->
      <element name="timestamp" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__MediaMessage::timestamp -->
+   </sequence>
+  </complexType>
+  <complexType name="Media-Message"><!-- ns__Media_Message -->
+
+   <sequence>
+     <element name="id" type="ns:Entity" minOccurs="1" maxOccurs="1"/><!-- ns__Media_Message::id -->
+     <element name="messages" type="ns:MediaMessage" minOccurs="1" maxOccurs="1"/><!-- ns__Media_Message::messages -->
+     <element name="leave-message-count" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__Media_Message::leave_message_count -->
    </sequence>
   </complexType>
   <complexType name="HistoryAlert"><!-- ns__HistoryAlert -->
 
    <sequence>
-     <element name="id" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::id -->
+     <element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::id -->
      <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::name -->
      <element name="describe" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::describe -->
      <element name="level" type="ns:AlertLevel" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::level -->
      <element name="alram-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::alram_time -->
-     <element name="use-cars" type="uint32" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::use_cars -->
+     <element name="use-cars" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::use_cars -->
      <element name="create-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::create_time -->
      <element name="over-time" type="xsd:string" minOccurs="1" maxOccurs="1"/><!-- ns__HistoryAlert::over_time -->
    </sequence>
@@ -316,296 +354,315 @@
  <part name="password" type="xsd:string"/><!-- ns__Dispatch_Login::password -->
 </message>
 
-<message name="Login-Response">
- <part name="session-id" type="uint32"/><!-- ns__Dispatch_Login::session_id -->
- <part name="user" type="ns:User"/><!-- ns__Dispatch_Login::user -->
- <part name="ttl" type="uint32"/><!-- ns__Dispatch_Login::ttl -->
+<message name="Dispatch-Login-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Login::session_id -->
+ <part name="id" type="xsd:string"/><!-- ns__Dispatch_Login::id -->
+ <part name="parentid" type="xsd:string"/><!-- ns__Dispatch_Login::parentid -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Login::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Login::result -->
 </message>
 
 <message name="Dispatch-Logout">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Logout::session_id -->
  <part name="name" type="xsd:string"/><!-- ns__Dispatch_Logout::name -->
+ <part name="password" type="xsd:string"/><!-- ns__Dispatch_Logout::password -->
 </message>
 
-<message name="LogOutResponse">
-</message>
-
-<message name="Dispatch-Keepalive">
-</message>
-
-<message name="Dispatch-Keepalive-Request-Response">
+<message name="Normal-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Logout::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Logout::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Logout::result -->
 </message>
 
 <message name="Dispatch-Entity-Request">
- <part name="id" type="ns:Entity"/><!-- ns__Dispatch_Entity_Request::id -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Entity_Request::session_id -->
+ <part name="id" type="xsd:string"/><!-- ns__Dispatch_Entity_Request::id -->
 </message>
 
-<message name="EntityData">
- <part name="id" type="ns:Entity"/><!-- ns__Dispatch_Entity_Request::id -->
- <part name="unit" type="ns:Unit"/><!-- ns__Dispatch_Entity_Request::unit -->
- <part name="accout" type="ns:Account"/><!-- ns__Dispatch_Entity_Request::accout -->
- <part name="user" type="ns:User"/><!-- ns__Dispatch_Entity_Request::user -->
- <part name="group" type="ns:Group"/><!-- ns__Dispatch_Entity_Request::group -->
- <part name="alert" type="ns:Alert"/><!-- ns__Dispatch_Entity_Request::alert -->
- <part name="gateway" type="ns:Gateway"/><!-- ns__Dispatch_Entity_Request::gateway -->
- <part name="organization" type="ns:Organization"/><!-- ns__Dispatch_Entity_Request::organization -->
+<message name="Dispatch-Entity-Request-Response">
+ <part name="data" type="ns:EntityData"/><!-- ns__Dispatch_Entity_Request::data -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Entity_Request::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Entity_Request::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Entity_Request::result -->
 </message>
 
 <message name="Dispatch-Entity-Nofitication">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Entity_Nofitication::session_id -->
 </message>
 
-<message name="Entity-Nofitication-Response">
+<message name="Dispatch-Entity-Nofitication-Response">
  <part name="notify-type" type="ns:EntityNotifyType"/><!-- ns__Dispatch_Entity_Nofitication::notify_type -->
  <part name="data" type="ns:EntityData"/><!-- ns__Dispatch_Entity_Nofitication::data -->
-</message>
-
-<message name="Dispatch-Entity-Status-Notification">
-</message>
-
-<message name="Entity-Status-Notification">
- <part name="id" type="ns:Entity"/><!-- ns__Dispatch_Entity_Status_Notification::id -->
- <part name="status" type="ns:RegisterStatus"/><!-- ns__Dispatch_Entity_Status_Notification::status -->
- <part name="sip-status" type="ns:RegisterStatus"/><!-- ns__Dispatch_Entity_Status_Notification::sip_status -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Entity_Nofitication::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Entity_Nofitication::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Entity_Nofitication::result -->
 </message>
 
 <message name="Dispatch-Append-Group">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Append_Group::session_id -->
  <part name="group" type="ns:Group"/><!-- ns__Dispatch_Append_Group::group -->
 </message>
 
-<message name="Group">
- <part name="base" type="ns:Entity"/><!-- ns__Dispatch_Append_Group::base -->
- <part name="owner" type="ns:Entity"/><!-- ns__Dispatch_Append_Group::owner -->
- <part name="number" type="xsd:string"/><!-- ns__Dispatch_Append_Group::number -->
- <part name="short-number" type="xsd:string"/><!-- ns__Dispatch_Append_Group::short_number -->
- <part name="sealed" type="xsd:boolean"/><!-- ns__Dispatch_Append_Group::sealed -->
- <part name="include-participants" type="xsd:boolean"/><!-- ns__Dispatch_Append_Group::include_participants -->
- <part name="participants" type="ns:Participant"/><!-- ns__Dispatch_Append_Group::participants -->
- <part name="record-type" type="ns:RecordType"/><!-- ns__Dispatch_Append_Group::record_type -->
- <part name="recorder" type="ns:Participant"/><!-- ns__Dispatch_Append_Group::recorder -->
- <part name="record-status" type="ns:RecordStatus"/><!-- ns__Dispatch_Append_Group::record_status -->
+<message name="Dispatch-Append-Group-Response">
+ <part name="data" type="ns:Group"/><!-- ns__Dispatch_Append_Group::data -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Append_Group::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Append_Group::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Append_Group::result -->
 </message>
 
 <message name="Dispatch-Modify-Group">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Modify_Group::session_id -->
  <part name="group" type="ns:Group"/><!-- ns__Dispatch_Modify_Group::group -->
 </message>
 
+<message name="Dispatch-Modify-Group-Response">
+ <part name="data" type="ns:Group"/><!-- ns__Dispatch_Modify_Group::data -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Modify_Group::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Modify_Group::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Modify_Group::result -->
+</message>
+
 <message name="Dispatch-Modify-Participants">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Modify_Participants::session_id -->
  <part name="request" type="ns:Modify-Participant"/><!-- ns__Dispatch_Modify_Participants::request -->
 </message>
 
-<message name="Dispatch-Delete-Group">
- <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Delete_Group::group_id -->
+<message name="Dispatch-Modify-Participants-Response">
+ <part name="data" type="ns:Modify-Participant"/><!-- ns__Dispatch_Modify_Participants::data -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Modify_Participants::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Modify_Participants::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Modify_Participants::result -->
 </message>
 
-<message name="Delete-Group-Response">
+<message name="Dispatch-Delete-Group">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Delete_Group::session_id -->
+ <part name="group-id" type="xsd:string"/><!-- ns__Dispatch_Delete_Group::group_id -->
 </message>
 
 <message name="Dispatch-Dispatch-Participants-Notification">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Dispatch_Participants_Notification::session_id -->
 </message>
 
-<message name="Modify-Participant">
- <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Dispatch_Participants_Notification::group_id -->
- <part name="modify-type" type="ns:ListModifyType"/><!-- ns__Dispatch_Dispatch_Participants_Notification::modify_type -->
- <part name="participants" type="ns:Participant"/><!-- ns__Dispatch_Dispatch_Participants_Notification::participants -->
+<message name="Dispatch-Dispatch-Participants-Notification-Response">
+ <part name="data" type="ns:Modify-Participant"/><!-- ns__Dispatch_Dispatch_Participants_Notification::data -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Dispatch_Participants_Notification::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Dispatch_Participants_Notification::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Dispatch_Participants_Notification::result -->
 </message>
 
 <message name="Dispatch-Join-Group-Request-Nofitication">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Join_Group_Request_Nofitication::session_id -->
 </message>
 
-<message name="Join-Group-Request-Nofitication">
+<message name="Dispatch-Join-Group-Request-Nofitication-Response">
  <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Join_Group_Request_Nofitication::group_id -->
  <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Join_Group_Request_Nofitication::account_id -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Join_Group_Request_Nofitication::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Join_Group_Request_Nofitication::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Join_Group_Request_Nofitication::result -->
 </message>
 
 <message name="Dispatch-Participant-Status-Notification">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Participant_Status_Notification::session_id -->
 </message>
 
-<message name="Participant-Status-Notification">
+<message name="Dispatch-Participant-Status-Notification-Response">
  <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Participant_Status_Notification::group_id -->
  <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Participant_Status_Notification::account_id -->
  <part name="status" type="ns:SessionStatus"/><!-- ns__Dispatch_Participant_Status_Notification::status -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Participant_Status_Notification::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Participant_Status_Notification::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Participant_Status_Notification::result -->
 </message>
 
 <message name="Dispatch-Media-Message-Request">
- <part name="id" type="ns:Entity"/><!-- ns__Dispatch_Media_Message_Request::id -->
- <part name="from-message-id" type="uint32"/><!-- ns__Dispatch_Media_Message_Request::from_message_id -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Request::session_id -->
+ <part name="group-id" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Request::group_id -->
+ <part name="from-message-id" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Request::from_message_id -->
  <part name="from-time" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Request::from_time -->
- <part name="max-message-count" type="uint32"/><!-- ns__Dispatch_Media_Message_Request::max_message_count -->
+ <part name="max-message-count" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Request::max_message_count -->
 </message>
 
-<message name="Media-Message">
- <part name="id" type="ns:Entity"/><!-- ns__Dispatch_Media_Message_Request::id -->
- <part name="messages" type="ns:MediaMessage"/><!-- ns__Dispatch_Media_Message_Request::messages -->
- <part name="leave-message-count" type="uint32"/><!-- ns__Dispatch_Media_Message_Request::leave_message_count -->
+<message name="Dispatch-Media-Message-Request-Response">
+ <part name="data" type="ns:MediaMessage"/><!-- ns__Dispatch_Media_Message_Request::data -->
+ <part name="size" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Request::size -->
+ <part name="leave-message-count" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Request::leave_message_count -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Request::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Request::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Media_Message_Request::result -->
 </message>
 
 <message name="Dispatch-Media-Message-Notification">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Notification::session_id -->
 </message>
 
-<message name="Media-Message-Notification">
- <part name="id" type="uint32"/><!-- ns__Dispatch_Media_Message_Notification::id -->
+<message name="Dispatch-Media-Message-Notification-Response">
+ <part name="id" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Notification::id -->
  <part name="messages" type="ns:MediaMessage"/><!-- ns__Dispatch_Media_Message_Notification::messages -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Notification::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Media_Message_Notification::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Media_Message_Notification::result -->
 </message>
 
 <message name="Dispatch-Participant-Connect-Request-Notification">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Participant_Connect_Request_Notification::session_id -->
 </message>
 
-<message name="Participant-Connect-Request-Notification">
+<message name="Dispatch-Participant-Connect-Request-Notification-Response">
  <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Participant_Connect_Request_Notification::group_id -->
  <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Participant_Connect_Request_Notification::account_id -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Participant_Connect_Request_Notification::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Participant_Connect_Request_Notification::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Participant_Connect_Request_Notification::result -->
 </message>
 
 <message name="Dispatch-Participant-Speak-Request-Notification">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Participant_Speak_Request_Notification::session_id -->
+</message>
+
+<message name="Dispatch-Participant-Speak-Request-Notification-Response">
+ <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Participant_Speak_Request_Notification::group_id -->
+ <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Participant_Speak_Request_Notification::account_id -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Participant_Speak_Request_Notification::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Participant_Speak_Request_Notification::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Participant_Speak_Request_Notification::result -->
 </message>
 
 <message name="Dispatch-Invite-Participant-Request">
- <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Invite_Participant_Request::group_id -->
- <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Invite_Participant_Request::account_id -->
-</message>
-
-<message name="Dispatch-Invite-Participant-Request-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Invite_Participant_Request::session_id -->
+ <part name="group-id" type="xsd:string"/><!-- ns__Dispatch_Invite_Participant_Request::group_id -->
+ <part name="account-id" type="xsd:string"/><!-- ns__Dispatch_Invite_Participant_Request::account_id -->
 </message>
 
 <message name="Dispatch-Drop-Participant-Request">
- <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Drop_Participant_Request::group_id -->
- <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Drop_Participant_Request::account_id -->
-</message>
-
-<message name="Dispatch-Drop-Participant-Request-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Drop_Participant_Request::session_id -->
+ <part name="group-id" type="xsd:string"/><!-- ns__Dispatch_Drop_Participant_Request::group_id -->
+ <part name="account-id" type="xsd:string"/><!-- ns__Dispatch_Drop_Participant_Request::account_id -->
 </message>
 
 <message name="Dispatch-Release-Participant-Token-Request">
- <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Release_Participant_Token_Request::group_id -->
- <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Release_Participant_Token_Request::account_id -->
-</message>
-
-<message name="Dispatch-Release-Participant-Token-Request-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Release_Participant_Token_Request::session_id -->
+ <part name="group-id" type="xsd:string"/><!-- ns__Dispatch_Release_Participant_Token_Request::group_id -->
+ <part name="account-id" type="xsd:string"/><!-- ns__Dispatch_Release_Participant_Token_Request::account_id -->
 </message>
 
 <message name="Dispatch-Appoint-Participant-Speak-Request">
- <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Appoint_Participant_Speak_Request::group_id -->
- <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Appoint_Participant_Speak_Request::account_id -->
-</message>
-
-<message name="Dispatch-Appoint-Participant-Speak-Request-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Appoint_Participant_Speak_Request::session_id -->
+ <part name="group-id" type="xsd:string"/><!-- ns__Dispatch_Appoint_Participant_Speak_Request::group_id -->
+ <part name="account-id" type="xsd:string"/><!-- ns__Dispatch_Appoint_Participant_Speak_Request::account_id -->
 </message>
 
 <message name="Dispatch-Jion-Group-Request">
- <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Jion_Group_Request::group_id -->
-</message>
-
-<message name="Dispatch-Jion-Group-Request-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Jion_Group_Request::session_id -->
+ <part name="group-id" type="xsd:string"/><!-- ns__Dispatch_Jion_Group_Request::group_id -->
 </message>
 
 <message name="Dispatch-Leave-Group-Request">
- <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Leave_Group_Request::group_id -->
-</message>
-
-<message name="Dispatch-Leave-Group-Request-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Leave_Group_Request::session_id -->
+ <part name="group-id" type="xsd:string"/><!-- ns__Dispatch_Leave_Group_Request::group_id -->
 </message>
 
 <message name="Dispatch-Session-Status-Notification">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Session_Status_Notification::session_id -->
 </message>
 
-<message name="Session-Status-Notification">
+<message name="Dispatch-Session-Status-Notification-Response">
  <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Session_Status_Notification::group_id -->
  <part name="status" type="ns:SessionStatus"/><!-- ns__Dispatch_Session_Status_Notification::status -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Session_Status_Notification::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Session_Status_Notification::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Session_Status_Notification::result -->
 </message>
 
 <message name="Dispatch-Send-Message-Request">
- <part name="id" type="uint32"/><!-- ns__Dispatch_Send_Message_Request::id -->
- <part name="message" type="ns:MediaMessage"/><!-- ns__Dispatch_Send_Message_Request::message -->
-</message>
-
-<message name="Dispatch-Send-Message-Request-Response">
-</message>
-
-<message name="Dispatch-Kick-Participant-Request">
- <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Kick_Participant_Request::group_id -->
- <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Kick_Participant_Request::account_id -->
-</message>
-
-<message name="Dispatch-Kick-Participant-Request-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Send_Message_Request::session_id -->
+ <part name="group-id" type="xsd:string"/><!-- ns__Dispatch_Send_Message_Request::group_id -->
+ <part name="mediamessage" type="ns:MediaMessage"/><!-- ns__Dispatch_Send_Message_Request::mediamessage -->
 </message>
 
 <message name="Dispatch-Start-Record-Request">
- <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Start_Record_Request::group_id -->
-</message>
-
-<message name="Dispatch-Start-Record-Request-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Start_Record_Request::session_id -->
+ <part name="group-id" type="xsd:string"/><!-- ns__Dispatch_Start_Record_Request::group_id -->
 </message>
 
 <message name="Dispatch-Stop-Record-Request">
- <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Stop_Record_Request::group_id -->
-</message>
-
-<message name="Dispatch-Stop-Record-Request-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Stop_Record_Request::session_id -->
+ <part name="group-id" type="xsd:string"/><!-- ns__Dispatch_Stop_Record_Request::group_id -->
 </message>
 
 <message name="Dispatch-Record-Status-Notification">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Record_Status_Notification::session_id -->
 </message>
 
-<message name="Dispatch-Record-Status">
+<message name="Dispatch-Record-Status-Notification-Response">
  <part name="group-id" type="ns:Entity"/><!-- ns__Dispatch_Record_Status_Notification::group_id -->
  <part name="recording" type="xsd:boolean"/><!-- ns__Dispatch_Record_Status_Notification::recording -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Record_Status_Notification::error_describe -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Record_Status_Notification::session_id -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Record_Status_Notification::result -->
 </message>
 
-<message name="Dispatch-Subscribe-Account-Location-Request">
- <part name="subscribing" type="xsd:boolean"/><!-- ns__Dispatch_Subscribe_Account_Location_Request::subscribing -->
- <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Subscribe_Account_Location_Request::account_id -->
- <part name="ttl" type="uint32"/><!-- ns__Dispatch_Subscribe_Account_Location_Request::ttl -->
+<message name="Dispatch-Subscribe-Account-Info-Request">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Subscribe_Account_Info_Request::session_id -->
+ <part name="subscribing" type="xsd:boolean"/><!-- ns__Dispatch_Subscribe_Account_Info_Request::subscribing -->
+ <part name="account-id" type="xsd:string"/><!-- ns__Dispatch_Subscribe_Account_Info_Request::account_id -->
+ <part name="type" type="ns:SubscribeType"/><!-- ns__Dispatch_Subscribe_Account_Info_Request::type -->
+ <part name="ttl" type="xsd:string"/><!-- ns__Dispatch_Subscribe_Account_Info_Request::ttl -->
 </message>
 
-<message name="Dispatch-Subscribe-Account-Location-Request-Response">
+<message name="Dispatch-Account-Info-Notification">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Account_Info_Notification::session_id -->
 </message>
 
-<message name="Dispatch-Account-Location-Notification">
-</message>
-
-<message name="Dispatch-Account-Location-Notification-Response">
- <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Account_Location_Notification::account_id -->
- <part name="longitude" type="xsd:double"/><!-- ns__Dispatch_Account_Location_Notification::longitude -->
- <part name="latitude" type="xsd:double"/><!-- ns__Dispatch_Account_Location_Notification::latitude -->
- <part name="timestamp" type="xsd:string"/><!-- ns__Dispatch_Account_Location_Notification::timestamp -->
+<message name="Dispatch-Account-Info-Notification-Response">
+ <part name="account-id" type="ns:Entity"/><!-- ns__Dispatch_Account_Info_Notification::account_id -->
+ <part name="longitude" type="xsd:double"/><!-- ns__Dispatch_Account_Info_Notification::longitude -->
+ <part name="latitude" type="xsd:double"/><!-- ns__Dispatch_Account_Info_Notification::latitude -->
+ <part name="timestamp" type="xsd:string"/><!-- ns__Dispatch_Account_Info_Notification::timestamp -->
+ <part name="professionstatus" type="ns:ProfessionStatus"/><!-- ns__Dispatch_Account_Info_Notification::professionstatus -->
+ <part name="status" type="ns:RegisterStatus"/><!-- ns__Dispatch_Account_Info_Notification::status -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Account_Info_Notification::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Account_Info_Notification::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Account_Info_Notification::result -->
 </message>
 
 <message name="Dispatch-Append-Alert-Request">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Append_Alert_Request::session_id -->
  <part name="alert" type="ns:Alert"/><!-- ns__Dispatch_Append_Alert_Request::alert -->
- <part name="acount" type="ns:Account"/><!-- ns__Dispatch_Append_Alert_Request::acount -->
+ <part name="members" type="ns:Account"/><!-- ns__Dispatch_Append_Alert_Request::members -->
+ <part name="size" type="xsd:string"/><!-- ns__Dispatch_Append_Alert_Request::size -->
 </message>
 
-<message name="Alert">
- <part name="base" type="ns:Entity"/><!-- ns__Dispatch_Append_Alert_Request::base -->
- <part name="group" type="ns:Entity"/><!-- ns__Dispatch_Append_Alert_Request::group -->
- <part name="describe" type="xsd:string"/><!-- ns__Dispatch_Append_Alert_Request::describe -->
- <part name="level" type="ns:AlertLevel"/><!-- ns__Dispatch_Append_Alert_Request::level -->
- <part name="alram-time" type="xsd:string"/><!-- ns__Dispatch_Append_Alert_Request::alram_time -->
- <part name="use-cars" type="uint32"/><!-- ns__Dispatch_Append_Alert_Request::use_cars -->
- <part name="create-time" type="xsd:string"/><!-- ns__Dispatch_Append_Alert_Request::create_time -->
- <part name="status" type="ns:AlertStatus"/><!-- ns__Dispatch_Append_Alert_Request::status -->
+<message name="Dispatch-Append-Alert-Request-Response">
+ <part name="data" type="ns:Alert"/><!-- ns__Dispatch_Append_Alert_Request::data -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Append_Alert_Request::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Append_Alert_Request::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Append_Alert_Request::result -->
 </message>
 
 <message name="Dispatch-Modify-Alert-Request">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Modify_Alert_Request::session_id -->
  <part name="alert" type="ns:Alert"/><!-- ns__Dispatch_Modify_Alert_Request::alert -->
 </message>
 
-<message name="Dispatch-Modify-Alert-Request-Response">
-</message>
-
 <message name="Dispatch-Stop-Alert-Request">
- <part name="alert-id" type="ns:Entity"/><!-- ns__Dispatch_Stop_Alert_Request::alert_id -->
-</message>
-
-<message name="Dispatch-Stop-Alert-Request-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Stop_Alert_Request::session_id -->
+ <part name="alert-id" type="xsd:string"/><!-- ns__Dispatch_Stop_Alert_Request::alert_id -->
 </message>
 
 <message name="Dispatch-Alert-Overed-Notification">
- <part name="alert-id" type="ns:Entity"/><!-- ns__Dispatch_Alert_Overed_Notification::alert_id -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Alert_Overed_Notification::session_id -->
 </message>
 
 <message name="Dispatch-Alert-Overed-Notification-Response">
+ <part name="alert-id" type="xsd:string"/><!-- ns__Dispatch_Alert_Overed_Notification::alert_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Alert_Overed_Notification::error_describe -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Alert_Overed_Notification::session_id -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Alert_Overed_Notification::result -->
 </message>
 
-<message name="Dispatch-History-Alert-RequestRequest">
+<message name="Dispatch-History-Alert-Request">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Request::session_id -->
  <part name="name" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Request::name -->
  <part name="create-time-from" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Request::create_time_from -->
  <part name="create-time-to" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Request::create_time_to -->
@@ -615,204 +672,204 @@
  <part name="over-time-to" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Request::over_time_to -->
 </message>
 
-<message name="Dispatch-History-Alert-RequestResponse">
- <part name="response" type="ns:HistoryAlert"/><!-- ns__Dispatch_History_Alert_Request::response -->
+<message name="Dispatch-History-Alert-Request-Reponse">
+ <part name="data" type="ns:HistoryAlert"/><!-- ns__Dispatch_History_Alert_Request::data -->
+ <part name="size" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Request::size -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Request::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Request::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_History_Alert_Request::result -->
 </message>
 
 <message name="Dispatch-Alert-Request">
- <part name="alert-id" type="uint32"/><!-- ns__Dispatch_Alert_Request::alert_id -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Alert_Request::session_id -->
+ <part name="alert-id" type="xsd:string"/><!-- ns__Dispatch_Alert_Request::alert_id -->
+</message>
+
+<message name="Dispatch-Alert-Request-Response">
+ <part name="data" type="ns:HistoryAlert"/><!-- ns__Dispatch_Alert_Request::data -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Alert_Request::session_id -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_Alert_Request::error_describe -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_Alert_Request::result -->
 </message>
 
 <message name="Dispatch-History-Alert-Message-Request">
- <part name="history-alert-id" type="uint32"/><!-- ns__Dispatch_History_Alert_Message_Request::history_alert_id -->
- <part name="from-message-id" type="uint32"/><!-- ns__Dispatch_History_Alert_Message_Request::from_message_id -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Message_Request::session_id -->
+ <part name="history-alert-id" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Message_Request::history_alert_id -->
+ <part name="from-message-id" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Message_Request::from_message_id -->
  <part name="from-time" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Message_Request::from_time -->
- <part name="max-message-count" type="uint32"/><!-- ns__Dispatch_History_Alert_Message_Request::max_message_count -->
+ <part name="max-message-count" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Message_Request::max_message_count -->
 </message>
 
-<message name="Dispatch-History-Alert-Message">
- <part name="history-alert-id" type="uint32"/><!-- ns__Dispatch_History_Alert_Message_Request::history_alert_id -->
+<message name="Dispatch-History-Alert-Message-Request-Response">
+ <part name="history-alert-id" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Message_Request::history_alert_id -->
  <part name="messages" type="ns:MediaMessage"/><!-- ns__Dispatch_History_Alert_Message_Request::messages -->
- <part name="leave-message-count" type="uint32"/><!-- ns__Dispatch_History_Alert_Message_Request::leave_message_count -->
+ <part name="size" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Message_Request::size -->
+ <part name="leave-message-count" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Message_Request::leave_message_count -->
+ <part name="error-describe" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Message_Request::error_describe -->
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_History_Alert_Message_Request::session_id -->
+ <part name="result" type="xsd:boolean"/><!-- ns__Dispatch_History_Alert_Message_Request::result -->
 </message>
 
 <message name="Dispatch-Delete-History-Alert-Request">
- <part name="history-alert-id" type="uint32"/><!-- ns__Dispatch_Delete_History_Alert_Request::history_alert_id -->
-</message>
-
-<message name="Dispatch-Delete-History-Alert-Request-Response">
+ <part name="session-id" type="xsd:string"/><!-- ns__Dispatch_Delete_History_Alert_Request::session_id -->
+ <part name="history-alert-id" type="xsd:string"/><!-- ns__Dispatch_Delete_History_Alert_Request::history_alert_id -->
 </message>
 
 <portType name="xiaofangPortType">
  <operation name="Dispatch-Login">
   <documentation>Service definition of function ns__Dispatch_Login</documentation>
   <input message="tns:Dispatch-Login"/>
-  <output message="tns:Login-Response"/>
+  <output message="tns:Dispatch-Login-Response"/>
  </operation>
  <operation name="Dispatch-Logout">
   <documentation>Service definition of function ns__Dispatch_Logout</documentation>
   <input message="tns:Dispatch-Logout"/>
-  <output message="tns:LogOutResponse"/>
- </operation>
- <operation name="Dispatch-Keepalive">
-  <documentation>Service definition of function ns__Dispatch_Keepalive</documentation>
-  <input message="tns:Dispatch-Keepalive"/>
-  <output message="tns:Dispatch-Keepalive-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Entity-Request">
   <documentation>Service definition of function ns__Dispatch_Entity_Request</documentation>
   <input message="tns:Dispatch-Entity-Request"/>
-  <output message="tns:EntityData"/>
+  <output message="tns:Dispatch-Entity-Request-Response"/>
  </operation>
  <operation name="Dispatch-Entity-Nofitication">
   <documentation>Service definition of function ns__Dispatch_Entity_Nofitication</documentation>
   <input message="tns:Dispatch-Entity-Nofitication"/>
-  <output message="tns:Entity-Nofitication-Response"/>
- </operation>
- <operation name="Dispatch-Entity-Status-Notification">
-  <documentation>Service definition of function ns__Dispatch_Entity_Status_Notification</documentation>
-  <input message="tns:Dispatch-Entity-Status-Notification"/>
-  <output message="tns:Entity-Status-Notification"/>
+  <output message="tns:Dispatch-Entity-Nofitication-Response"/>
  </operation>
  <operation name="Dispatch-Append-Group">
   <documentation>Service definition of function ns__Dispatch_Append_Group</documentation>
   <input message="tns:Dispatch-Append-Group"/>
-  <output message="tns:Group"/>
+  <output message="tns:Dispatch-Append-Group-Response"/>
  </operation>
  <operation name="Dispatch-Modify-Group">
   <documentation>Service definition of function ns__Dispatch_Modify_Group</documentation>
   <input message="tns:Dispatch-Modify-Group"/>
-  <output message="tns:Group"/>
+  <output message="tns:Dispatch-Modify-Group-Response"/>
  </operation>
  <operation name="Dispatch-Modify-Participants">
   <documentation>Service definition of function ns__Dispatch_Modify_Participants</documentation>
   <input message="tns:Dispatch-Modify-Participants"/>
-  <output message="tns:Group"/>
+  <output message="tns:Dispatch-Modify-Participants-Response"/>
  </operation>
  <operation name="Dispatch-Delete-Group">
   <documentation>Service definition of function ns__Dispatch_Delete_Group</documentation>
   <input message="tns:Dispatch-Delete-Group"/>
-  <output message="tns:Delete-Group-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Dispatch-Participants-Notification">
   <documentation>Service definition of function ns__Dispatch_Dispatch_Participants_Notification</documentation>
   <input message="tns:Dispatch-Dispatch-Participants-Notification"/>
-  <output message="tns:Modify-Participant"/>
+  <output message="tns:Dispatch-Dispatch-Participants-Notification-Response"/>
  </operation>
  <operation name="Dispatch-Join-Group-Request-Nofitication">
   <documentation>Service definition of function ns__Dispatch_Join_Group_Request_Nofitication</documentation>
   <input message="tns:Dispatch-Join-Group-Request-Nofitication"/>
-  <output message="tns:Join-Group-Request-Nofitication"/>
+  <output message="tns:Dispatch-Join-Group-Request-Nofitication-Response"/>
  </operation>
  <operation name="Dispatch-Participant-Status-Notification">
   <documentation>Service definition of function ns__Dispatch_Participant_Status_Notification</documentation>
   <input message="tns:Dispatch-Participant-Status-Notification"/>
-  <output message="tns:Participant-Status-Notification"/>
+  <output message="tns:Dispatch-Participant-Status-Notification-Response"/>
  </operation>
  <operation name="Dispatch-Media-Message-Request">
   <documentation>Service definition of function ns__Dispatch_Media_Message_Request</documentation>
   <input message="tns:Dispatch-Media-Message-Request"/>
-  <output message="tns:Media-Message"/>
+  <output message="tns:Dispatch-Media-Message-Request-Response"/>
  </operation>
  <operation name="Dispatch-Media-Message-Notification">
   <documentation>Service definition of function ns__Dispatch_Media_Message_Notification</documentation>
   <input message="tns:Dispatch-Media-Message-Notification"/>
-  <output message="tns:Media-Message-Notification"/>
+  <output message="tns:Dispatch-Media-Message-Notification-Response"/>
  </operation>
  <operation name="Dispatch-Participant-Connect-Request-Notification">
   <documentation>Service definition of function ns__Dispatch_Participant_Connect_Request_Notification</documentation>
   <input message="tns:Dispatch-Participant-Connect-Request-Notification"/>
-  <output message="tns:Participant-Connect-Request-Notification"/>
+  <output message="tns:Dispatch-Participant-Connect-Request-Notification-Response"/>
  </operation>
  <operation name="Dispatch-Participant-Speak-Request-Notification">
   <documentation>Service definition of function ns__Dispatch_Participant_Speak_Request_Notification</documentation>
   <input message="tns:Dispatch-Participant-Speak-Request-Notification"/>
-  <output message="tns:Participant-Connect-Request-Notification"/>
+  <output message="tns:Dispatch-Participant-Speak-Request-Notification-Response"/>
  </operation>
  <operation name="Dispatch-Invite-Participant-Request">
   <documentation>Service definition of function ns__Dispatch_Invite_Participant_Request</documentation>
   <input message="tns:Dispatch-Invite-Participant-Request"/>
-  <output message="tns:Dispatch-Invite-Participant-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Drop-Participant-Request">
   <documentation>Service definition of function ns__Dispatch_Drop_Participant_Request</documentation>
   <input message="tns:Dispatch-Drop-Participant-Request"/>
-  <output message="tns:Dispatch-Drop-Participant-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Release-Participant-Token-Request">
   <documentation>Service definition of function ns__Dispatch_Release_Participant_Token_Request</documentation>
   <input message="tns:Dispatch-Release-Participant-Token-Request"/>
-  <output message="tns:Dispatch-Release-Participant-Token-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Appoint-Participant-Speak-Request">
   <documentation>Service definition of function ns__Dispatch_Appoint_Participant_Speak_Request</documentation>
   <input message="tns:Dispatch-Appoint-Participant-Speak-Request"/>
-  <output message="tns:Dispatch-Appoint-Participant-Speak-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Jion-Group-Request">
   <documentation>Service definition of function ns__Dispatch_Jion_Group_Request</documentation>
   <input message="tns:Dispatch-Jion-Group-Request"/>
-  <output message="tns:Dispatch-Jion-Group-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Leave-Group-Request">
   <documentation>Service definition of function ns__Dispatch_Leave_Group_Request</documentation>
   <input message="tns:Dispatch-Leave-Group-Request"/>
-  <output message="tns:Dispatch-Leave-Group-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Session-Status-Notification">
   <documentation>Service definition of function ns__Dispatch_Session_Status_Notification</documentation>
   <input message="tns:Dispatch-Session-Status-Notification"/>
-  <output message="tns:Session-Status-Notification"/>
+  <output message="tns:Dispatch-Session-Status-Notification-Response"/>
  </operation>
  <operation name="Dispatch-Send-Message-Request">
   <documentation>Service definition of function ns__Dispatch_Send_Message_Request</documentation>
   <input message="tns:Dispatch-Send-Message-Request"/>
-  <output message="tns:Dispatch-Send-Message-Request-Response"/>
- </operation>
- <operation name="Dispatch-Kick-Participant-Request">
-  <documentation>Service definition of function ns__Dispatch_Kick_Participant_Request</documentation>
-  <input message="tns:Dispatch-Kick-Participant-Request"/>
-  <output message="tns:Dispatch-Kick-Participant-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Start-Record-Request">
   <documentation>Service definition of function ns__Dispatch_Start_Record_Request</documentation>
   <input message="tns:Dispatch-Start-Record-Request"/>
-  <output message="tns:Dispatch-Start-Record-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Stop-Record-Request">
   <documentation>Service definition of function ns__Dispatch_Stop_Record_Request</documentation>
   <input message="tns:Dispatch-Stop-Record-Request"/>
-  <output message="tns:Dispatch-Stop-Record-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Record-Status-Notification">
   <documentation>Service definition of function ns__Dispatch_Record_Status_Notification</documentation>
   <input message="tns:Dispatch-Record-Status-Notification"/>
-  <output message="tns:Dispatch-Record-Status"/>
+  <output message="tns:Dispatch-Record-Status-Notification-Response"/>
  </operation>
- <operation name="Dispatch-Subscribe-Account-Location-Request">
-  <documentation>Service definition of function ns__Dispatch_Subscribe_Account_Location_Request</documentation>
-  <input message="tns:Dispatch-Subscribe-Account-Location-Request"/>
-  <output message="tns:Dispatch-Subscribe-Account-Location-Request-Response"/>
+ <operation name="Dispatch-Subscribe-Account-Info-Request">
+  <documentation>Service definition of function ns__Dispatch_Subscribe_Account_Info_Request</documentation>
+  <input message="tns:Dispatch-Subscribe-Account-Info-Request"/>
+  <output message="tns:Normal-Response"/>
  </operation>
- <operation name="Dispatch-Account-Location-Notification">
-  <documentation>Service definition of function ns__Dispatch_Account_Location_Notification</documentation>
-  <input message="tns:Dispatch-Account-Location-Notification"/>
-  <output message="tns:Dispatch-Account-Location-Notification-Response"/>
+ <operation name="Dispatch-Account-Info-Notification">
+  <documentation>Service definition of function ns__Dispatch_Account_Info_Notification</documentation>
+  <input message="tns:Dispatch-Account-Info-Notification"/>
+  <output message="tns:Dispatch-Account-Info-Notification-Response"/>
  </operation>
  <operation name="Dispatch-Append-Alert-Request">
   <documentation>Service definition of function ns__Dispatch_Append_Alert_Request</documentation>
   <input message="tns:Dispatch-Append-Alert-Request"/>
-  <output message="tns:Alert"/>
+  <output message="tns:Dispatch-Append-Alert-Request-Response"/>
  </operation>
  <operation name="Dispatch-Modify-Alert-Request">
   <documentation>Service definition of function ns__Dispatch_Modify_Alert_Request</documentation>
   <input message="tns:Dispatch-Modify-Alert-Request"/>
-  <output message="tns:Dispatch-Modify-Alert-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Stop-Alert-Request">
   <documentation>Service definition of function ns__Dispatch_Stop_Alert_Request</documentation>
   <input message="tns:Dispatch-Stop-Alert-Request"/>
-  <output message="tns:Dispatch-Stop-Alert-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
  <operation name="Dispatch-Alert-Overed-Notification">
   <documentation>Service definition of function ns__Dispatch_Alert_Overed_Notification</documentation>
@@ -821,23 +878,23 @@
  </operation>
  <operation name="Dispatch-History-Alert-Request">
   <documentation>Service definition of function ns__Dispatch_History_Alert_Request</documentation>
-  <input message="tns:Dispatch-History-Alert-RequestRequest"/>
-  <output message="tns:Dispatch-History-Alert-RequestResponse"/>
+  <input message="tns:Dispatch-History-Alert-Request"/>
+  <output message="tns:Dispatch-History-Alert-Request-Reponse"/>
  </operation>
  <operation name="Dispatch-Alert-Request">
   <documentation>Service definition of function ns__Dispatch_Alert_Request</documentation>
   <input message="tns:Dispatch-Alert-Request"/>
-  <output message="tns:Alert"/>
+  <output message="tns:Dispatch-Alert-Request-Response"/>
  </operation>
  <operation name="Dispatch-History-Alert-Message-Request">
   <documentation>Service definition of function ns__Dispatch_History_Alert_Message_Request</documentation>
   <input message="tns:Dispatch-History-Alert-Message-Request"/>
-  <output message="tns:Dispatch-History-Alert-Message"/>
+  <output message="tns:Dispatch-History-Alert-Message-Request-Response"/>
  </operation>
  <operation name="Dispatch-Delete-History-Alert-Request">
   <documentation>Service definition of function ns__Dispatch_Delete_History_Alert_Request</documentation>
   <input message="tns:Dispatch-Delete-History-Alert-Request"/>
-  <output message="tns:Dispatch-Delete-History-Alert-Request-Response"/>
+  <output message="tns:Normal-Response"/>
  </operation>
 </portType>
 
@@ -861,15 +918,6 @@
      <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
   </output>
  </operation>
- <operation name="Dispatch-Keepalive">
-  <SOAP:operation style="rpc" soapAction=""/>
-  <input>
-     <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-  </input>
-  <output>
-     <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-  </output>
- </operation>
  <operation name="Dispatch-Entity-Request">
   <SOAP:operation style="rpc" soapAction=""/>
   <input>
@@ -880,15 +928,6 @@
   </output>
  </operation>
  <operation name="Dispatch-Entity-Nofitication">
-  <SOAP:operation style="rpc" soapAction=""/>
-  <input>
-     <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-  </input>
-  <output>
-     <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-  </output>
- </operation>
- <operation name="Dispatch-Entity-Status-Notification">
   <SOAP:operation style="rpc" soapAction=""/>
   <input>
      <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
@@ -1068,15 +1107,6 @@
      <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
   </output>
  </operation>
- <operation name="Dispatch-Kick-Participant-Request">
-  <SOAP:operation style="rpc" soapAction=""/>
-  <input>
-     <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-  </input>
-  <output>
-     <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
-  </output>
- </operation>
  <operation name="Dispatch-Start-Record-Request">
   <SOAP:operation style="rpc" soapAction=""/>
   <input>
@@ -1104,7 +1134,7 @@
      <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
   </output>
  </operation>
- <operation name="Dispatch-Subscribe-Account-Location-Request">
+ <operation name="Dispatch-Subscribe-Account-Info-Request">
   <SOAP:operation style="rpc" soapAction=""/>
   <input>
      <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
@@ -1113,7 +1143,7 @@
      <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
   </output>
  </operation>
- <operation name="Dispatch-Account-Location-Notification">
+ <operation name="Dispatch-Account-Info-Notification">
   <SOAP:operation style="rpc" soapAction=""/>
   <input>
      <SOAP:body use="encoded" namespace="urn:xiaofang" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
@@ -1199,7 +1229,7 @@
 <service name="xiaofang">
  <documentation>gSOAP 2.8.17r generated service definition</documentation>
  <port name="xiaofang" binding="tns:xiaofang">
-  <SOAP:address location="http://192.168.146.128:18881"/>
+  <SOAP:address location="http://192.168.1.184:18881"/>
  </port>
 </service>
 

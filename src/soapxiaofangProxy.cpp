@@ -110,13 +110,13 @@ char *xiaofangProxy::soap_sprint_fault(char *buf, size_t len)
 }
 #endif
 
-int xiaofangProxy::Dispatch_Login(const char *endpoint, const char *soap_action, std::string username, std::string password, ns__Login_Response &response)
+int xiaofangProxy::Dispatch_Login(const char *endpoint, const char *soap_action, std::string username, std::string password, ns__Dispatch_Login_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Login soap_tmp_ns__Dispatch_Login;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
 	soap_tmp_ns__Dispatch_Login.username = username;
@@ -165,16 +165,18 @@ int xiaofangProxy::Dispatch_Login(const char *endpoint, const char *soap_action,
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Logout(const char *endpoint, const char *soap_action, std::string name, struct ns__LogOutResponse *out)
+int xiaofangProxy::Dispatch_Logout(const char *endpoint, const char *soap_action, std::string session_id, std::string name, std::string password, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Logout soap_tmp_ns__Dispatch_Logout;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Logout.session_id = session_id;
 	soap_tmp_ns__Dispatch_Logout.name = name;
+	soap_tmp_ns__Dispatch_Logout.password = password;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Logout(soap, &soap_tmp_ns__Dispatch_Logout);
 	if (soap_begin_count(soap))
@@ -199,9 +201,9 @@ int xiaofangProxy::Dispatch_Logout(const char *endpoint, const char *soap_action
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__LogOutResponse(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -209,7 +211,7 @@ int xiaofangProxy::Dispatch_Logout(const char *endpoint, const char *soap_action
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__LogOutResponse(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -219,69 +221,16 @@ int xiaofangProxy::Dispatch_Logout(const char *endpoint, const char *soap_action
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Keepalive(const char *endpoint, const char *soap_action, void *_, struct ns__Dispatch_Keepalive_Request_Response *out)
-{	struct soap *soap = this;
-	struct ns__Dispatch_Keepalive soap_tmp_ns__Dispatch_Keepalive;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
-	soap_begin(soap);
-	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Keepalive._ = _;
-	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Keepalive(soap, &soap_tmp_ns__Dispatch_Keepalive);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Keepalive(soap, &soap_tmp_ns__Dispatch_Keepalive, "ns:Dispatch-Keepalive", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_url(soap, soap_endpoint, NULL), soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Keepalive(soap, &soap_tmp_ns__Dispatch_Keepalive, "ns:Dispatch-Keepalive", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!out)
-		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Keepalive_Request_Response(soap, out);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	if (soap_recv_fault(soap, 1))
-		return soap->error;
-	soap_get_ns__Dispatch_Keepalive_Request_Response(soap, out, "", "");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int xiaofangProxy::Dispatch_Entity_Request(const char *endpoint, const char *soap_action, ns__Entity id, ns__EntityData &response)
+int xiaofangProxy::Dispatch_Entity_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string id, ns__Dispatch_Entity_Request_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Entity_Request soap_tmp_ns__Dispatch_Entity_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Entity_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Entity_Request.id = id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Entity_Request(soap, &soap_tmp_ns__Dispatch_Entity_Request);
@@ -327,16 +276,16 @@ int xiaofangProxy::Dispatch_Entity_Request(const char *endpoint, const char *soa
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Entity_Nofitication(const char *endpoint, const char *soap_action, void *_, ns__Entity_Nofitication_Response &response)
+int xiaofangProxy::Dispatch_Entity_Nofitication(const char *endpoint, const char *soap_action, std::string session_id, ns__Dispatch_Entity_Nofitication_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Entity_Nofitication soap_tmp_ns__Dispatch_Entity_Nofitication;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Entity_Nofitication._ = _;
+	soap_tmp_ns__Dispatch_Entity_Nofitication.session_id = session_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Entity_Nofitication(soap, &soap_tmp_ns__Dispatch_Entity_Nofitication);
 	if (soap_begin_count(soap))
@@ -381,69 +330,16 @@ int xiaofangProxy::Dispatch_Entity_Nofitication(const char *endpoint, const char
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Entity_Status_Notification(const char *endpoint, const char *soap_action, void *_, ns__Entity_Status_Notification &response)
-{	struct soap *soap = this;
-	struct ns__Dispatch_Entity_Status_Notification soap_tmp_ns__Dispatch_Entity_Status_Notification;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
-	soap_begin(soap);
-	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Entity_Status_Notification._ = _;
-	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Entity_Status_Notification(soap, &soap_tmp_ns__Dispatch_Entity_Status_Notification);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Entity_Status_Notification(soap, &soap_tmp_ns__Dispatch_Entity_Status_Notification, "ns:Dispatch-Entity-Status-Notification", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_url(soap, soap_endpoint, NULL), soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Entity_Status_Notification(soap, &soap_tmp_ns__Dispatch_Entity_Status_Notification, "ns:Dispatch-Entity-Status-Notification", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!&response)
-		return soap_closesock(soap);
-	response.soap_default(soap);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	if (soap_recv_fault(soap, 1))
-		return soap->error;
-	response.soap_get(soap, "", "");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int xiaofangProxy::Dispatch_Append_Group(const char *endpoint, const char *soap_action, ns__Group group, ns__Group &response)
+int xiaofangProxy::Dispatch_Append_Group(const char *endpoint, const char *soap_action, std::string session_id, ns__Group group, ns__Dispatch_Append_Group_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Append_Group soap_tmp_ns__Dispatch_Append_Group;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Append_Group.session_id = session_id;
 	soap_tmp_ns__Dispatch_Append_Group.group = group;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Append_Group(soap, &soap_tmp_ns__Dispatch_Append_Group);
@@ -489,15 +385,16 @@ int xiaofangProxy::Dispatch_Append_Group(const char *endpoint, const char *soap_
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Modify_Group(const char *endpoint, const char *soap_action, ns__Group group, ns__Group &response)
+int xiaofangProxy::Dispatch_Modify_Group(const char *endpoint, const char *soap_action, std::string session_id, ns__Group group, ns__Dispatch_Modify_Group_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Modify_Group soap_tmp_ns__Dispatch_Modify_Group;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Modify_Group.session_id = session_id;
 	soap_tmp_ns__Dispatch_Modify_Group.group = group;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Modify_Group(soap, &soap_tmp_ns__Dispatch_Modify_Group);
@@ -543,15 +440,16 @@ int xiaofangProxy::Dispatch_Modify_Group(const char *endpoint, const char *soap_
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Modify_Participants(const char *endpoint, const char *soap_action, ns__Modify_Participant request, ns__Group &response)
+int xiaofangProxy::Dispatch_Modify_Participants(const char *endpoint, const char *soap_action, std::string session_id, ns__Modify_Participant request, ns__Dispatch_Modify_Participants_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Modify_Participants soap_tmp_ns__Dispatch_Modify_Participants;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Modify_Participants.session_id = session_id;
 	soap_tmp_ns__Dispatch_Modify_Participants.request = request;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Modify_Participants(soap, &soap_tmp_ns__Dispatch_Modify_Participants);
@@ -597,15 +495,16 @@ int xiaofangProxy::Dispatch_Modify_Participants(const char *endpoint, const char
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Delete_Group(const char *endpoint, const char *soap_action, ns__Entity group_id, struct ns__Delete_Group_Response *out)
+int xiaofangProxy::Dispatch_Delete_Group(const char *endpoint, const char *soap_action, std::string session_id, std::string group_id, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Delete_Group soap_tmp_ns__Dispatch_Delete_Group;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Delete_Group.session_id = session_id;
 	soap_tmp_ns__Dispatch_Delete_Group.group_id = group_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Delete_Group(soap, &soap_tmp_ns__Dispatch_Delete_Group);
@@ -631,9 +530,9 @@ int xiaofangProxy::Dispatch_Delete_Group(const char *endpoint, const char *soap_
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Delete_Group_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -641,7 +540,7 @@ int xiaofangProxy::Dispatch_Delete_Group(const char *endpoint, const char *soap_
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Delete_Group_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -651,16 +550,16 @@ int xiaofangProxy::Dispatch_Delete_Group(const char *endpoint, const char *soap_
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Dispatch_Participants_Notification(const char *endpoint, const char *soap_action, void *_, ns__Modify_Participant &response)
+int xiaofangProxy::Dispatch_Dispatch_Participants_Notification(const char *endpoint, const char *soap_action, std::string session_id, ns__Dispatch_Dispatch_Participants_Notification_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Dispatch_Participants_Notification soap_tmp_ns__Dispatch_Dispatch_Participants_Notification;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Dispatch_Participants_Notification._ = _;
+	soap_tmp_ns__Dispatch_Dispatch_Participants_Notification.session_id = session_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Dispatch_Participants_Notification(soap, &soap_tmp_ns__Dispatch_Dispatch_Participants_Notification);
 	if (soap_begin_count(soap))
@@ -705,16 +604,16 @@ int xiaofangProxy::Dispatch_Dispatch_Participants_Notification(const char *endpo
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Join_Group_Request_Nofitication(const char *endpoint, const char *soap_action, void *_, ns__Join_Group_Request_Nofitication &response)
+int xiaofangProxy::Dispatch_Join_Group_Request_Nofitication(const char *endpoint, const char *soap_action, std::string session_id, ns__Dispatch_Join_Group_Request_Nofitication_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Join_Group_Request_Nofitication soap_tmp_ns__Dispatch_Join_Group_Request_Nofitication;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Join_Group_Request_Nofitication._ = _;
+	soap_tmp_ns__Dispatch_Join_Group_Request_Nofitication.session_id = session_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Join_Group_Request_Nofitication(soap, &soap_tmp_ns__Dispatch_Join_Group_Request_Nofitication);
 	if (soap_begin_count(soap))
@@ -759,16 +658,16 @@ int xiaofangProxy::Dispatch_Join_Group_Request_Nofitication(const char *endpoint
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Participant_Status_Notification(const char *endpoint, const char *soap_action, void *_, ns__Participant_Status_Notification &response)
+int xiaofangProxy::Dispatch_Participant_Status_Notification(const char *endpoint, const char *soap_action, std::string session_id, ns__Dispatch_Participant_Status_Notification_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Participant_Status_Notification soap_tmp_ns__Dispatch_Participant_Status_Notification;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Participant_Status_Notification._ = _;
+	soap_tmp_ns__Dispatch_Participant_Status_Notification.session_id = session_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Participant_Status_Notification(soap, &soap_tmp_ns__Dispatch_Participant_Status_Notification);
 	if (soap_begin_count(soap))
@@ -813,16 +712,17 @@ int xiaofangProxy::Dispatch_Participant_Status_Notification(const char *endpoint
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Media_Message_Request(const char *endpoint, const char *soap_action, ns__Entity id, unsigned long from_message_id, std::string from_time, unsigned long max_message_count, ns__Media_Message &response)
+int xiaofangProxy::Dispatch_Media_Message_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string group_id, std::string from_message_id, std::string from_time, std::string max_message_count, ns__Dispatch_Media_Message_Request_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Media_Message_Request soap_tmp_ns__Dispatch_Media_Message_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Media_Message_Request.id = id;
+	soap_tmp_ns__Dispatch_Media_Message_Request.session_id = session_id;
+	soap_tmp_ns__Dispatch_Media_Message_Request.group_id = group_id;
 	soap_tmp_ns__Dispatch_Media_Message_Request.from_message_id = from_message_id;
 	soap_tmp_ns__Dispatch_Media_Message_Request.from_time = from_time;
 	soap_tmp_ns__Dispatch_Media_Message_Request.max_message_count = max_message_count;
@@ -870,16 +770,16 @@ int xiaofangProxy::Dispatch_Media_Message_Request(const char *endpoint, const ch
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Media_Message_Notification(const char *endpoint, const char *soap_action, void *_, ns__Media_Message_Notification &response)
+int xiaofangProxy::Dispatch_Media_Message_Notification(const char *endpoint, const char *soap_action, std::string session_id, ns__Dispatch_Media_Message_Notification_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Media_Message_Notification soap_tmp_ns__Dispatch_Media_Message_Notification;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Media_Message_Notification._ = _;
+	soap_tmp_ns__Dispatch_Media_Message_Notification.session_id = session_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Media_Message_Notification(soap, &soap_tmp_ns__Dispatch_Media_Message_Notification);
 	if (soap_begin_count(soap))
@@ -924,16 +824,16 @@ int xiaofangProxy::Dispatch_Media_Message_Notification(const char *endpoint, con
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Participant_Connect_Request_Notification(const char *endpoint, const char *soap_action, void *_, ns__Participant_Connect_Request_Notification &response)
+int xiaofangProxy::Dispatch_Participant_Connect_Request_Notification(const char *endpoint, const char *soap_action, std::string session_id, ns__Dispatch_Participant_Connect_Request_Notification_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Participant_Connect_Request_Notification soap_tmp_ns__Dispatch_Participant_Connect_Request_Notification;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Participant_Connect_Request_Notification._ = _;
+	soap_tmp_ns__Dispatch_Participant_Connect_Request_Notification.session_id = session_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Participant_Connect_Request_Notification(soap, &soap_tmp_ns__Dispatch_Participant_Connect_Request_Notification);
 	if (soap_begin_count(soap))
@@ -978,16 +878,16 @@ int xiaofangProxy::Dispatch_Participant_Connect_Request_Notification(const char 
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Participant_Speak_Request_Notification(const char *endpoint, const char *soap_action, void *_, ns__Participant_Connect_Request_Notification &response)
+int xiaofangProxy::Dispatch_Participant_Speak_Request_Notification(const char *endpoint, const char *soap_action, std::string session_id, ns__Dispatch_Participant_Speak_Request_Notification_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Participant_Speak_Request_Notification soap_tmp_ns__Dispatch_Participant_Speak_Request_Notification;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Participant_Speak_Request_Notification._ = _;
+	soap_tmp_ns__Dispatch_Participant_Speak_Request_Notification.session_id = session_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Participant_Speak_Request_Notification(soap, &soap_tmp_ns__Dispatch_Participant_Speak_Request_Notification);
 	if (soap_begin_count(soap))
@@ -1032,15 +932,16 @@ int xiaofangProxy::Dispatch_Participant_Speak_Request_Notification(const char *e
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Invite_Participant_Request(const char *endpoint, const char *soap_action, ns__Entity group_id, ns__Entity account_id, struct ns__Dispatch_Invite_Participant_Request_Response *out)
+int xiaofangProxy::Dispatch_Invite_Participant_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string group_id, std::string account_id, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Invite_Participant_Request soap_tmp_ns__Dispatch_Invite_Participant_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Invite_Participant_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Invite_Participant_Request.group_id = group_id;
 	soap_tmp_ns__Dispatch_Invite_Participant_Request.account_id = account_id;
 	soap_serializeheader(soap);
@@ -1067,9 +968,9 @@ int xiaofangProxy::Dispatch_Invite_Participant_Request(const char *endpoint, con
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Invite_Participant_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -1077,7 +978,7 @@ int xiaofangProxy::Dispatch_Invite_Participant_Request(const char *endpoint, con
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Invite_Participant_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1087,15 +988,16 @@ int xiaofangProxy::Dispatch_Invite_Participant_Request(const char *endpoint, con
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Drop_Participant_Request(const char *endpoint, const char *soap_action, ns__Entity group_id, ns__Entity account_id, struct ns__Dispatch_Drop_Participant_Request_Response *out)
+int xiaofangProxy::Dispatch_Drop_Participant_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string group_id, std::string account_id, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Drop_Participant_Request soap_tmp_ns__Dispatch_Drop_Participant_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Drop_Participant_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Drop_Participant_Request.group_id = group_id;
 	soap_tmp_ns__Dispatch_Drop_Participant_Request.account_id = account_id;
 	soap_serializeheader(soap);
@@ -1122,9 +1024,9 @@ int xiaofangProxy::Dispatch_Drop_Participant_Request(const char *endpoint, const
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Drop_Participant_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -1132,7 +1034,7 @@ int xiaofangProxy::Dispatch_Drop_Participant_Request(const char *endpoint, const
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Drop_Participant_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1142,15 +1044,16 @@ int xiaofangProxy::Dispatch_Drop_Participant_Request(const char *endpoint, const
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Release_Participant_Token_Request(const char *endpoint, const char *soap_action, ns__Entity group_id, ns__Entity account_id, struct ns__Dispatch_Release_Participant_Token_Request_Response *out)
+int xiaofangProxy::Dispatch_Release_Participant_Token_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string group_id, std::string account_id, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Release_Participant_Token_Request soap_tmp_ns__Dispatch_Release_Participant_Token_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Release_Participant_Token_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Release_Participant_Token_Request.group_id = group_id;
 	soap_tmp_ns__Dispatch_Release_Participant_Token_Request.account_id = account_id;
 	soap_serializeheader(soap);
@@ -1177,9 +1080,9 @@ int xiaofangProxy::Dispatch_Release_Participant_Token_Request(const char *endpoi
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Release_Participant_Token_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -1187,7 +1090,7 @@ int xiaofangProxy::Dispatch_Release_Participant_Token_Request(const char *endpoi
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Release_Participant_Token_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1197,15 +1100,16 @@ int xiaofangProxy::Dispatch_Release_Participant_Token_Request(const char *endpoi
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Appoint_Participant_Speak_Request(const char *endpoint, const char *soap_action, ns__Entity group_id, ns__Entity account_id, struct ns__Dispatch_Appoint_Participant_Speak_Request_Response *out)
+int xiaofangProxy::Dispatch_Appoint_Participant_Speak_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string group_id, std::string account_id, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Appoint_Participant_Speak_Request soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request.group_id = group_id;
 	soap_tmp_ns__Dispatch_Appoint_Participant_Speak_Request.account_id = account_id;
 	soap_serializeheader(soap);
@@ -1232,9 +1136,9 @@ int xiaofangProxy::Dispatch_Appoint_Participant_Speak_Request(const char *endpoi
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -1242,7 +1146,7 @@ int xiaofangProxy::Dispatch_Appoint_Participant_Speak_Request(const char *endpoi
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Appoint_Participant_Speak_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1252,15 +1156,16 @@ int xiaofangProxy::Dispatch_Appoint_Participant_Speak_Request(const char *endpoi
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Jion_Group_Request(const char *endpoint, const char *soap_action, ns__Entity group_id, struct ns__Dispatch_Jion_Group_Request_Response *out)
+int xiaofangProxy::Dispatch_Jion_Group_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string group_id, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Jion_Group_Request soap_tmp_ns__Dispatch_Jion_Group_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Jion_Group_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Jion_Group_Request.group_id = group_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Jion_Group_Request(soap, &soap_tmp_ns__Dispatch_Jion_Group_Request);
@@ -1286,9 +1191,9 @@ int xiaofangProxy::Dispatch_Jion_Group_Request(const char *endpoint, const char 
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Jion_Group_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -1296,7 +1201,7 @@ int xiaofangProxy::Dispatch_Jion_Group_Request(const char *endpoint, const char 
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Jion_Group_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1306,15 +1211,16 @@ int xiaofangProxy::Dispatch_Jion_Group_Request(const char *endpoint, const char 
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Leave_Group_Request(const char *endpoint, const char *soap_action, ns__Entity group_id, struct ns__Dispatch_Leave_Group_Request_Response *out)
+int xiaofangProxy::Dispatch_Leave_Group_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string group_id, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Leave_Group_Request soap_tmp_ns__Dispatch_Leave_Group_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Leave_Group_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Leave_Group_Request.group_id = group_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Leave_Group_Request(soap, &soap_tmp_ns__Dispatch_Leave_Group_Request);
@@ -1340,9 +1246,9 @@ int xiaofangProxy::Dispatch_Leave_Group_Request(const char *endpoint, const char
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Leave_Group_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -1350,7 +1256,7 @@ int xiaofangProxy::Dispatch_Leave_Group_Request(const char *endpoint, const char
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Leave_Group_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1360,16 +1266,16 @@ int xiaofangProxy::Dispatch_Leave_Group_Request(const char *endpoint, const char
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Session_Status_Notification(const char *endpoint, const char *soap_action, void *_, ns__Session_Status_Notification &response)
+int xiaofangProxy::Dispatch_Session_Status_Notification(const char *endpoint, const char *soap_action, std::string session_id, ns__Dispatch_Session_Status_Notification_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Session_Status_Notification soap_tmp_ns__Dispatch_Session_Status_Notification;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Session_Status_Notification._ = _;
+	soap_tmp_ns__Dispatch_Session_Status_Notification.session_id = session_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Session_Status_Notification(soap, &soap_tmp_ns__Dispatch_Session_Status_Notification);
 	if (soap_begin_count(soap))
@@ -1414,17 +1320,18 @@ int xiaofangProxy::Dispatch_Session_Status_Notification(const char *endpoint, co
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Send_Message_Request(const char *endpoint, const char *soap_action, unsigned long id, ns__MediaMessage message, struct ns__Dispatch_Send_Message_Request_Response *out)
+int xiaofangProxy::Dispatch_Send_Message_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string group_id, ns__MediaMessage mediamessage, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Send_Message_Request soap_tmp_ns__Dispatch_Send_Message_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Send_Message_Request.id = id;
-	soap_tmp_ns__Dispatch_Send_Message_Request.message = message;
+	soap_tmp_ns__Dispatch_Send_Message_Request.session_id = session_id;
+	soap_tmp_ns__Dispatch_Send_Message_Request.group_id = group_id;
+	soap_tmp_ns__Dispatch_Send_Message_Request.mediamessage = mediamessage;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Send_Message_Request(soap, &soap_tmp_ns__Dispatch_Send_Message_Request);
 	if (soap_begin_count(soap))
@@ -1449,9 +1356,9 @@ int xiaofangProxy::Dispatch_Send_Message_Request(const char *endpoint, const cha
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Send_Message_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -1459,7 +1366,7 @@ int xiaofangProxy::Dispatch_Send_Message_Request(const char *endpoint, const cha
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Send_Message_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1469,70 +1376,16 @@ int xiaofangProxy::Dispatch_Send_Message_Request(const char *endpoint, const cha
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Kick_Participant_Request(const char *endpoint, const char *soap_action, ns__Entity group_id, ns__Entity account_id, struct ns__Dispatch_Kick_Participant_Request_Response *out)
-{	struct soap *soap = this;
-	struct ns__Dispatch_Kick_Participant_Request soap_tmp_ns__Dispatch_Kick_Participant_Request;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
-	soap_begin(soap);
-	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Kick_Participant_Request.group_id = group_id;
-	soap_tmp_ns__Dispatch_Kick_Participant_Request.account_id = account_id;
-	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Kick_Participant_Request(soap, &soap_tmp_ns__Dispatch_Kick_Participant_Request);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Kick_Participant_Request(soap, &soap_tmp_ns__Dispatch_Kick_Participant_Request, "ns:Dispatch-Kick-Participant-Request", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_url(soap, soap_endpoint, NULL), soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Kick_Participant_Request(soap, &soap_tmp_ns__Dispatch_Kick_Participant_Request, "ns:Dispatch-Kick-Participant-Request", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!out)
-		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Kick_Participant_Request_Response(soap, out);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	if (soap_recv_fault(soap, 1))
-		return soap->error;
-	soap_get_ns__Dispatch_Kick_Participant_Request_Response(soap, out, "", "");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int xiaofangProxy::Dispatch_Start_Record_Request(const char *endpoint, const char *soap_action, ns__Entity group_id, struct ns__Dispatch_Start_Record_Request_Response *out)
+int xiaofangProxy::Dispatch_Start_Record_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string group_id, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Start_Record_Request soap_tmp_ns__Dispatch_Start_Record_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Start_Record_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Start_Record_Request.group_id = group_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Start_Record_Request(soap, &soap_tmp_ns__Dispatch_Start_Record_Request);
@@ -1558,9 +1411,9 @@ int xiaofangProxy::Dispatch_Start_Record_Request(const char *endpoint, const cha
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Start_Record_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -1568,7 +1421,7 @@ int xiaofangProxy::Dispatch_Start_Record_Request(const char *endpoint, const cha
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Start_Record_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1578,15 +1431,16 @@ int xiaofangProxy::Dispatch_Start_Record_Request(const char *endpoint, const cha
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Stop_Record_Request(const char *endpoint, const char *soap_action, ns__Entity group_id, struct ns__Dispatch_Stop_Record_Request_Response *out)
+int xiaofangProxy::Dispatch_Stop_Record_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string group_id, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Stop_Record_Request soap_tmp_ns__Dispatch_Stop_Record_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Stop_Record_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Stop_Record_Request.group_id = group_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Stop_Record_Request(soap, &soap_tmp_ns__Dispatch_Stop_Record_Request);
@@ -1612,9 +1466,9 @@ int xiaofangProxy::Dispatch_Stop_Record_Request(const char *endpoint, const char
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Stop_Record_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -1622,7 +1476,7 @@ int xiaofangProxy::Dispatch_Stop_Record_Request(const char *endpoint, const char
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Stop_Record_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1632,16 +1486,16 @@ int xiaofangProxy::Dispatch_Stop_Record_Request(const char *endpoint, const char
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Record_Status_Notification(const char *endpoint, const char *soap_action, void *_, ns__Dispatch_Record_Status &response)
+int xiaofangProxy::Dispatch_Record_Status_Notification(const char *endpoint, const char *soap_action, std::string session_id, ns__Dispatch_Record_Status_Notification_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Record_Status_Notification soap_tmp_ns__Dispatch_Record_Status_Notification;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Record_Status_Notification._ = _;
+	soap_tmp_ns__Dispatch_Record_Status_Notification.session_id = session_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Record_Status_Notification(soap, &soap_tmp_ns__Dispatch_Record_Status_Notification);
 	if (soap_begin_count(soap))
@@ -1686,27 +1540,29 @@ int xiaofangProxy::Dispatch_Record_Status_Notification(const char *endpoint, con
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Subscribe_Account_Location_Request(const char *endpoint, const char *soap_action, bool subscribing, ns__Entity account_id, unsigned long ttl, struct ns__Dispatch_Subscribe_Account_Location_Request_Response *out)
+int xiaofangProxy::Dispatch_Subscribe_Account_Info_Request(const char *endpoint, const char *soap_action, std::string session_id, bool subscribing, std::list<std::string >account_id, enum ns__SubscribeType type, std::string ttl, ns__Normal_Response &response)
 {	struct soap *soap = this;
-	struct ns__Dispatch_Subscribe_Account_Location_Request soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request;
+	struct ns__Dispatch_Subscribe_Account_Info_Request soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request.subscribing = subscribing;
-	soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request.account_id = account_id;
-	soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request.ttl = ttl;
+	soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request.session_id = session_id;
+	soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request.subscribing = subscribing;
+	soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request.account_id = account_id;
+	soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request.type = type;
+	soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request.ttl = ttl;
 	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Subscribe_Account_Location_Request(soap, &soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request);
+	soap_serialize_ns__Dispatch_Subscribe_Account_Info_Request(soap, &soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request);
 	if (soap_begin_count(soap))
 		return soap->error;
 	if (soap->mode & SOAP_IO_LENGTH)
 	{	if (soap_envelope_begin_out(soap)
 		 || soap_putheader(soap)
 		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Subscribe_Account_Location_Request(soap, &soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request, "ns:Dispatch-Subscribe-Account-Location-Request", NULL)
+		 || soap_put_ns__Dispatch_Subscribe_Account_Info_Request(soap, &soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request, "ns:Dispatch-Subscribe-Account-Info-Request", NULL)
 		 || soap_body_end_out(soap)
 		 || soap_envelope_end_out(soap))
 			 return soap->error;
@@ -1717,61 +1573,7 @@ int xiaofangProxy::Dispatch_Subscribe_Account_Location_Request(const char *endpo
 	 || soap_envelope_begin_out(soap)
 	 || soap_putheader(soap)
 	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Subscribe_Account_Location_Request(soap, &soap_tmp_ns__Dispatch_Subscribe_Account_Location_Request, "ns:Dispatch-Subscribe-Account-Location-Request", NULL)
-	 || soap_body_end_out(soap)
-	 || soap_envelope_end_out(soap)
-	 || soap_end_send(soap))
-		return soap_closesock(soap);
-	if (!out)
-		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, out);
-	if (soap_begin_recv(soap)
-	 || soap_envelope_begin_in(soap)
-	 || soap_recv_header(soap)
-	 || soap_body_begin_in(soap))
-		return soap_closesock(soap);
-	if (soap_recv_fault(soap, 1))
-		return soap->error;
-	soap_get_ns__Dispatch_Subscribe_Account_Location_Request_Response(soap, out, "", "");
-	if (soap->error)
-		return soap_recv_fault(soap, 0);
-	if (soap_body_end_in(soap)
-	 || soap_envelope_end_in(soap)
-	 || soap_end_recv(soap))
-		return soap_closesock(soap);
-	return soap_closesock(soap);
-}
-
-int xiaofangProxy::Dispatch_Account_Location_Notification(const char *endpoint, const char *soap_action, void *_, ns__Dispatch_Account_Location_Notification_Response &response)
-{	struct soap *soap = this;
-	struct ns__Dispatch_Account_Location_Notification soap_tmp_ns__Dispatch_Account_Location_Notification;
-	if (endpoint)
-		soap_endpoint = endpoint;
-	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
-	soap_begin(soap);
-	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Account_Location_Notification._ = _;
-	soap_serializeheader(soap);
-	soap_serialize_ns__Dispatch_Account_Location_Notification(soap, &soap_tmp_ns__Dispatch_Account_Location_Notification);
-	if (soap_begin_count(soap))
-		return soap->error;
-	if (soap->mode & SOAP_IO_LENGTH)
-	{	if (soap_envelope_begin_out(soap)
-		 || soap_putheader(soap)
-		 || soap_body_begin_out(soap)
-		 || soap_put_ns__Dispatch_Account_Location_Notification(soap, &soap_tmp_ns__Dispatch_Account_Location_Notification, "ns:Dispatch-Account-Location-Notification", NULL)
-		 || soap_body_end_out(soap)
-		 || soap_envelope_end_out(soap))
-			 return soap->error;
-	}
-	if (soap_end_count(soap))
-		return soap->error;
-	if (soap_connect(soap, soap_url(soap, soap_endpoint, NULL), soap_action)
-	 || soap_envelope_begin_out(soap)
-	 || soap_putheader(soap)
-	 || soap_body_begin_out(soap)
-	 || soap_put_ns__Dispatch_Account_Location_Notification(soap, &soap_tmp_ns__Dispatch_Account_Location_Notification, "ns:Dispatch-Account-Location-Notification", NULL)
+	 || soap_put_ns__Dispatch_Subscribe_Account_Info_Request(soap, &soap_tmp_ns__Dispatch_Subscribe_Account_Info_Request, "ns:Dispatch-Subscribe-Account-Info-Request", NULL)
 	 || soap_body_end_out(soap)
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
@@ -1796,17 +1598,73 @@ int xiaofangProxy::Dispatch_Account_Location_Notification(const char *endpoint, 
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Append_Alert_Request(const char *endpoint, const char *soap_action, ns__Alert alert, std::list<ns__Account >acount, ns__Alert &response)
+int xiaofangProxy::Dispatch_Account_Info_Notification(const char *endpoint, const char *soap_action, std::string session_id, ns__Dispatch_Account_Info_Notification_Response &response)
+{	struct soap *soap = this;
+	struct ns__Dispatch_Account_Info_Notification soap_tmp_ns__Dispatch_Account_Info_Notification;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "http://192.168.1.184:18881";
+	soap_begin(soap);
+	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Account_Info_Notification.session_id = session_id;
+	soap_serializeheader(soap);
+	soap_serialize_ns__Dispatch_Account_Info_Notification(soap, &soap_tmp_ns__Dispatch_Account_Info_Notification);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put_ns__Dispatch_Account_Info_Notification(soap, &soap_tmp_ns__Dispatch_Account_Info_Notification, "ns:Dispatch-Account-Info-Notification", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_url(soap, soap_endpoint, NULL), soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put_ns__Dispatch_Account_Info_Notification(soap, &soap_tmp_ns__Dispatch_Account_Info_Notification, "ns:Dispatch-Account-Info-Notification", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&response)
+		return soap_closesock(soap);
+	response.soap_default(soap);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	if (soap_recv_fault(soap, 1))
+		return soap->error;
+	response.soap_get(soap, "", "");
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int xiaofangProxy::Dispatch_Append_Alert_Request(const char *endpoint, const char *soap_action, std::string session_id, ns__Alert alert, std::list<ns__Account >members, std::string size, ns__Dispatch_Append_Alert_Request_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Append_Alert_Request soap_tmp_ns__Dispatch_Append_Alert_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Append_Alert_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Append_Alert_Request.alert = alert;
-	soap_tmp_ns__Dispatch_Append_Alert_Request.acount = acount;
+	soap_tmp_ns__Dispatch_Append_Alert_Request.members = members;
+	soap_tmp_ns__Dispatch_Append_Alert_Request.size = size;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Append_Alert_Request(soap, &soap_tmp_ns__Dispatch_Append_Alert_Request);
 	if (soap_begin_count(soap))
@@ -1851,15 +1709,16 @@ int xiaofangProxy::Dispatch_Append_Alert_Request(const char *endpoint, const cha
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Modify_Alert_Request(const char *endpoint, const char *soap_action, ns__Alert alert, struct ns__Dispatch_Modify_Alert_Request_Response *out)
+int xiaofangProxy::Dispatch_Modify_Alert_Request(const char *endpoint, const char *soap_action, std::string session_id, ns__Alert alert, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Modify_Alert_Request soap_tmp_ns__Dispatch_Modify_Alert_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Modify_Alert_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Modify_Alert_Request.alert = alert;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Modify_Alert_Request(soap, &soap_tmp_ns__Dispatch_Modify_Alert_Request);
@@ -1885,9 +1744,9 @@ int xiaofangProxy::Dispatch_Modify_Alert_Request(const char *endpoint, const cha
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Modify_Alert_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -1895,7 +1754,7 @@ int xiaofangProxy::Dispatch_Modify_Alert_Request(const char *endpoint, const cha
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Modify_Alert_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1905,15 +1764,16 @@ int xiaofangProxy::Dispatch_Modify_Alert_Request(const char *endpoint, const cha
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Stop_Alert_Request(const char *endpoint, const char *soap_action, ns__Entity alert_id, struct ns__Dispatch_Stop_Alert_Request_Response *out)
+int xiaofangProxy::Dispatch_Stop_Alert_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string alert_id, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Stop_Alert_Request soap_tmp_ns__Dispatch_Stop_Alert_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Stop_Alert_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Stop_Alert_Request.alert_id = alert_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Stop_Alert_Request(soap, &soap_tmp_ns__Dispatch_Stop_Alert_Request);
@@ -1939,9 +1799,9 @@ int xiaofangProxy::Dispatch_Stop_Alert_Request(const char *endpoint, const char 
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Stop_Alert_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -1949,7 +1809,7 @@ int xiaofangProxy::Dispatch_Stop_Alert_Request(const char *endpoint, const char 
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Stop_Alert_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -1959,16 +1819,16 @@ int xiaofangProxy::Dispatch_Stop_Alert_Request(const char *endpoint, const char 
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Alert_Overed_Notification(const char *endpoint, const char *soap_action, ns__Entity alert_id, struct ns__Dispatch_Alert_Overed_Notification_Response *out)
+int xiaofangProxy::Dispatch_Alert_Overed_Notification(const char *endpoint, const char *soap_action, std::string session_id, ns__Dispatch_Alert_Overed_Notification_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Alert_Overed_Notification soap_tmp_ns__Dispatch_Alert_Overed_Notification;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
-	soap_tmp_ns__Dispatch_Alert_Overed_Notification.alert_id = alert_id;
+	soap_tmp_ns__Dispatch_Alert_Overed_Notification.session_id = session_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Alert_Overed_Notification(soap, &soap_tmp_ns__Dispatch_Alert_Overed_Notification);
 	if (soap_begin_count(soap))
@@ -1993,9 +1853,9 @@ int xiaofangProxy::Dispatch_Alert_Overed_Notification(const char *endpoint, cons
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Alert_Overed_Notification_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -2003,7 +1863,7 @@ int xiaofangProxy::Dispatch_Alert_Overed_Notification(const char *endpoint, cons
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Alert_Overed_Notification_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
@@ -2013,16 +1873,16 @@ int xiaofangProxy::Dispatch_Alert_Overed_Notification(const char *endpoint, cons
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_History_Alert_Request(const char *endpoint, const char *soap_action, std::string name, std::string create_time_from, std::string create_time_to, std::string alram_time_from, std::string alram_time_to, std::string over_time_from, std::string over_time_to, std::list<ns__HistoryAlert >&response)
+int xiaofangProxy::Dispatch_History_Alert_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string name, std::string create_time_from, std::string create_time_to, std::string alram_time_from, std::string alram_time_to, std::string over_time_from, std::string over_time_to, ns__Dispatch_History_Alert_Request_Reponse &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_History_Alert_Request soap_tmp_ns__Dispatch_History_Alert_Request;
-	struct ns__Dispatch_History_Alert_RequestResponse *soap_tmp_ns__Dispatch_History_Alert_RequestResponse;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_History_Alert_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_History_Alert_Request.name = name;
 	soap_tmp_ns__Dispatch_History_Alert_Request.create_time_from = create_time_from;
 	soap_tmp_ns__Dispatch_History_Alert_Request.create_time_to = create_time_to;
@@ -2056,7 +1916,7 @@ int xiaofangProxy::Dispatch_History_Alert_Request(const char *endpoint, const ch
 		return soap_closesock(soap);
 	if (!&response)
 		return soap_closesock(soap);
-	soap_default_std__listTemplateOfns__HistoryAlert(soap, &response);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -2064,26 +1924,26 @@ int xiaofangProxy::Dispatch_History_Alert_Request(const char *endpoint, const ch
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_tmp_ns__Dispatch_History_Alert_RequestResponse = soap_get_ns__Dispatch_History_Alert_RequestResponse(soap, NULL, "", "");
-	if (!soap_tmp_ns__Dispatch_History_Alert_RequestResponse || soap->error)
+	response.soap_get(soap, "", "");
+	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)
 	 || soap_envelope_end_in(soap)
 	 || soap_end_recv(soap))
 		return soap_closesock(soap);
-	response = soap_tmp_ns__Dispatch_History_Alert_RequestResponse->response;
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Alert_Request(const char *endpoint, const char *soap_action, unsigned long alert_id, ns__Alert &response)
+int xiaofangProxy::Dispatch_Alert_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string alert_id, ns__Dispatch_Alert_Request_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Alert_Request soap_tmp_ns__Dispatch_Alert_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Alert_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Alert_Request.alert_id = alert_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Alert_Request(soap, &soap_tmp_ns__Dispatch_Alert_Request);
@@ -2129,15 +1989,16 @@ int xiaofangProxy::Dispatch_Alert_Request(const char *endpoint, const char *soap
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_History_Alert_Message_Request(const char *endpoint, const char *soap_action, unsigned long history_alert_id, unsigned long from_message_id, std::string from_time, unsigned long max_message_count, ns__Dispatch_History_Alert_Message &response)
+int xiaofangProxy::Dispatch_History_Alert_Message_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string history_alert_id, std::string from_message_id, std::string from_time, std::string max_message_count, ns__Dispatch_History_Alert_Message_Request_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_History_Alert_Message_Request soap_tmp_ns__Dispatch_History_Alert_Message_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_History_Alert_Message_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_History_Alert_Message_Request.history_alert_id = history_alert_id;
 	soap_tmp_ns__Dispatch_History_Alert_Message_Request.from_message_id = from_message_id;
 	soap_tmp_ns__Dispatch_History_Alert_Message_Request.from_time = from_time;
@@ -2186,15 +2047,16 @@ int xiaofangProxy::Dispatch_History_Alert_Message_Request(const char *endpoint, 
 	return soap_closesock(soap);
 }
 
-int xiaofangProxy::Dispatch_Delete_History_Alert_Request(const char *endpoint, const char *soap_action, unsigned long history_alert_id, struct ns__Dispatch_Delete_History_Alert_Request_Response *out)
+int xiaofangProxy::Dispatch_Delete_History_Alert_Request(const char *endpoint, const char *soap_action, std::string session_id, std::string history_alert_id, ns__Normal_Response &response)
 {	struct soap *soap = this;
 	struct ns__Dispatch_Delete_History_Alert_Request soap_tmp_ns__Dispatch_Delete_History_Alert_Request;
 	if (endpoint)
 		soap_endpoint = endpoint;
 	if (soap_endpoint == NULL)
-		soap_endpoint = "http://192.168.146.128:18881";
+		soap_endpoint = "http://192.168.1.184:18881";
 	soap_begin(soap);
 	soap->encodingStyle = "";
+	soap_tmp_ns__Dispatch_Delete_History_Alert_Request.session_id = session_id;
 	soap_tmp_ns__Dispatch_Delete_History_Alert_Request.history_alert_id = history_alert_id;
 	soap_serializeheader(soap);
 	soap_serialize_ns__Dispatch_Delete_History_Alert_Request(soap, &soap_tmp_ns__Dispatch_Delete_History_Alert_Request);
@@ -2220,9 +2082,9 @@ int xiaofangProxy::Dispatch_Delete_History_Alert_Request(const char *endpoint, c
 	 || soap_envelope_end_out(soap)
 	 || soap_end_send(soap))
 		return soap_closesock(soap);
-	if (!out)
+	if (!&response)
 		return soap_closesock(soap);
-	soap_default_ns__Dispatch_Delete_History_Alert_Request_Response(soap, out);
+	response.soap_default(soap);
 	if (soap_begin_recv(soap)
 	 || soap_envelope_begin_in(soap)
 	 || soap_recv_header(soap)
@@ -2230,7 +2092,7 @@ int xiaofangProxy::Dispatch_Delete_History_Alert_Request(const char *endpoint, c
 		return soap_closesock(soap);
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
-	soap_get_ns__Dispatch_Delete_History_Alert_Request_Response(soap, out, "", "");
+	response.soap_get(soap, "", "");
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)

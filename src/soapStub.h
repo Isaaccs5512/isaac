@@ -29,93 +29,87 @@ compiling, linking, and/or using OpenSSL is allowed.
 
 
 #ifndef SOAP_TYPE_ns__RegisterStatus
-#define SOAP_TYPE_ns__RegisterStatus (12)
+#define SOAP_TYPE_ns__RegisterStatus (8)
 /* ns:RegisterStatus */
 enum ns__RegisterStatus { OffLine = 0, OnLine = 1 };
 #endif
 
-#ifndef SOAP_TYPE_ns__UserType
-#define SOAP_TYPE_ns__UserType (13)
-/* ns:UserType */
-enum ns__UserType { Admin = 0, Operator = 1 };
-#endif
-
-#ifndef SOAP_TYPE_ns__EntityType
-#define SOAP_TYPE_ns__EntityType (14)
-/* ns:EntityType */
-enum ns__EntityType { UNIT = 0, ACCOUNT = 1, USER = 2, GROUP = 3, GATEWAY = 4, ORGANIZATION = 5 };
-#endif
-
 #ifndef SOAP_TYPE_ns__ListModifyType
-#define SOAP_TYPE_ns__ListModifyType (15)
+#define SOAP_TYPE_ns__ListModifyType (9)
 /* ns:ListModifyType */
 enum ns__ListModifyType { Increased = 0, Decrease = 1, Replace = 2 };
 #endif
 
 #ifndef SOAP_TYPE_ns__AccountType
-#define SOAP_TYPE_ns__AccountType (16)
+#define SOAP_TYPE_ns__AccountType (10)
 /* ns:AccountType */
 enum ns__AccountType { Dispatcher = 0, Terminal = 1, Record = 2, MediaGateway = 3 };
 #endif
 
-#ifndef SOAP_TYPE_ns__AccountServiceStatus
-#define SOAP_TYPE_ns__AccountServiceStatus (17)
-/* ns:AccountServiceStatus */
-enum ns__AccountServiceStatus { AccountStop = 0, AccountActive = 1 };
-#endif
-
 #ifndef SOAP_TYPE_ns__CallPrivilege
-#define SOAP_TYPE_ns__CallPrivilege (18)
+#define SOAP_TYPE_ns__CallPrivilege (11)
 /* ns:CallPrivilege */
 enum ns__CallPrivilege { CallForbid = 0, CallFreedom = 1, CallPolicy = 2 };
 #endif
 
 #ifndef SOAP_TYPE_ns__TokenPrivilege
-#define SOAP_TYPE_ns__TokenPrivilege (19)
+#define SOAP_TYPE_ns__TokenPrivilege (12)
 /* ns:TokenPrivilege */
 enum ns__TokenPrivilege { TokenForbid = 0, TokenFreedom = 1, TokenPolicy = 2 };
 #endif
 
-#ifndef SOAP_TYPE_ns__GpsReportMode
-#define SOAP_TYPE_ns__GpsReportMode (20)
-/* ns:GpsReportMode */
-enum ns__GpsReportMode { GpsManualPull = 0, GpsManualPush = 1, GpsAutoPush = 2 };
-#endif
-
 #ifndef SOAP_TYPE_ns__SessionStatus
-#define SOAP_TYPE_ns__SessionStatus (21)
+#define SOAP_TYPE_ns__SessionStatus (13)
 /* ns:SessionStatus */
 enum ns__SessionStatus { IDLE = 0, InGroup = 1, Talking = 2 };
 #endif
 
 #ifndef SOAP_TYPE_ns__RecordType
-#define SOAP_TYPE_ns__RecordType (22)
+#define SOAP_TYPE_ns__RecordType (14)
 /* ns:RecordType */
 enum ns__RecordType { DontRecord = 0, AutoRecord = 1, ManualRecord = 2 };
 #endif
 
 #ifndef SOAP_TYPE_ns__RecordStatus
-#define SOAP_TYPE_ns__RecordStatus (23)
+#define SOAP_TYPE_ns__RecordStatus (15)
 /* ns:RecordStatus */
 enum ns__RecordStatus { RecordStop = 0, RecordStart = 1 };
 #endif
 
 #ifndef SOAP_TYPE_ns__AlertStatus
-#define SOAP_TYPE_ns__AlertStatus (24)
+#define SOAP_TYPE_ns__AlertStatus (16)
 /* ns:AlertStatus */
 enum ns__AlertStatus { AlertActive = 0, AlertOver = 1 };
 #endif
 
 #ifndef SOAP_TYPE_ns__AlertLevel
-#define SOAP_TYPE_ns__AlertLevel (25)
+#define SOAP_TYPE_ns__AlertLevel (17)
 /* ns:AlertLevel */
 enum ns__AlertLevel { Exigency = 0, Importance = 1, Subordination = 2, Ordinary = 3 };
 #endif
 
 #ifndef SOAP_TYPE_ns__EntityNotifyType
-#define SOAP_TYPE_ns__EntityNotifyType (26)
+#define SOAP_TYPE_ns__EntityNotifyType (18)
 /* ns:EntityNotifyType */
 enum ns__EntityNotifyType { Created = 0, Modify = 1, Update = 2, Deleted = 3 };
+#endif
+
+#ifndef SOAP_TYPE_ns__ProfessionStatus
+#define SOAP_TYPE_ns__ProfessionStatus (19)
+/* ns:ProfessionStatus */
+enum ns__ProfessionStatus { Standby = 0, Duty = 1, Turnout = 2, Training = 3 };
+#endif
+
+#ifndef SOAP_TYPE_ns__SubscribeType
+#define SOAP_TYPE_ns__SubscribeType (20)
+/* ns:SubscribeType */
+enum ns__SubscribeType { Gis = 0, Status = 1, Profession = 2, Gis_status = 3, Gis_profession = 4, Status_profession = 5, Gis_status_profession = 6 };
+#endif
+
+#ifndef SOAP_TYPE_ns__EntityType
+#define SOAP_TYPE_ns__EntityType (21)
+/* ns:EntityType */
+enum ns__EntityType { UNIT = 0, ACCOUNT = 1, USER = 2, GROUP = 3 };
 #endif
 
 /******************************************************************************\
@@ -141,17 +135,17 @@ enum ns__EntityNotifyType { Created = 0, Modify = 1, Update = 2, Deleted = 3 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Entity
-#define SOAP_TYPE_ns__Entity (27)
+#define SOAP_TYPE_ns__Entity (22)
 /* ns:Entity */
 class SOAP_CMAC ns__Entity
 {
 public:
-	unsigned long id;	/* required element of type uint32 */
+	std::string id;	/* required element of type xsd:string */
 	std::string name;	/* required element of type xsd:string */
+	std::string parentid;	/* required element of type xsd:string */
 	enum ns__EntityType entity_type;	/* required element of type ns:EntityType */
-	unsigned long parentid;	/* required element of type uint32 */
 public:
-	virtual int soap_type() const { return 27; } /* = unique type id SOAP_TYPE_ns__Entity */
+	virtual int soap_type() const { return 22; } /* = unique type id SOAP_TYPE_ns__Entity */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -164,15 +158,15 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ns__Address
-#define SOAP_TYPE_ns__Address (29)
+#define SOAP_TYPE_ns__Address (24)
 /* ns:Address */
 class SOAP_CMAC ns__Address
 {
 public:
 	std::string ip;	/* required element of type xsd:string */
-	unsigned long port;	/* required element of type uint32 */
+	std::string port;	/* required element of type xsd:string */
 public:
-	virtual int soap_type() const { return 29; } /* = unique type id SOAP_TYPE_ns__Address */
+	virtual int soap_type() const { return 24; } /* = unique type id SOAP_TYPE_ns__Address */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -185,19 +179,16 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ns__User
-#define SOAP_TYPE_ns__User (30)
+#define SOAP_TYPE_ns__User (25)
 /* ns:User */
 class SOAP_CMAC ns__User
 {
 public:
 	ns__Entity base;	/* required element of type ns:Entity */
-	std::string password;	/* required element of type xsd:string */
-	enum ns__UserType user_type;	/* required element of type ns:UserType */
 	ns__Entity account;	/* required element of type ns:Entity */
 	enum ns__RegisterStatus status;	/* required element of type ns:RegisterStatus */
-	ns__Address address;	/* required element of type ns:Address */
 public:
-	virtual int soap_type() const { return 30; } /* = unique type id SOAP_TYPE_ns__User */
+	virtual int soap_type() const { return 25; } /* = unique type id SOAP_TYPE_ns__User */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -210,27 +201,21 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ns__Account
-#define SOAP_TYPE_ns__Account (31)
+#define SOAP_TYPE_ns__Account (26)
 /* ns:Account */
 class SOAP_CMAC ns__Account
 {
 public:
 	ns__Entity base;	/* required element of type ns:Entity */
-	enum ns__AccountType account_type;	/* required element of type ns:AccountType */
 	std::string number;	/* required element of type xsd:string */
 	std::string short_number;	/* required element of type xsd:string */
-	std::string password;	/* required element of type xsd:string */
-	enum ns__AccountServiceStatus service_status;	/* required element of type ns:AccountServiceStatus */
-	unsigned long priority;	/* required element of type uint32 */
+	std::string priority;	/* required element of type xsd:string */
 	enum ns__CallPrivilege call_privilege;	/* required element of type ns:CallPrivilege */
 	enum ns__TokenPrivilege token_privilege;	/* required element of type ns:TokenPrivilege */
-	enum ns__GpsReportMode gps_report_mode;	/* required element of type ns:GpsReportMode */
-	unsigned long ttl;	/* required element of type uint32 */
 	enum ns__RegisterStatus status;	/* required element of type ns:RegisterStatus */
 	enum ns__RegisterStatus sip_status;	/* required element of type ns:RegisterStatus */
-	ns__Address address;	/* required element of type ns:Address */
 public:
-	virtual int soap_type() const { return 31; } /* = unique type id SOAP_TYPE_ns__Account */
+	virtual int soap_type() const { return 26; } /* = unique type id SOAP_TYPE_ns__Account */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -242,39 +227,41 @@ public:
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Login_Response
-#define SOAP_TYPE_ns__Login_Response (32)
-/* ns:Login-Response */
-class SOAP_CMAC ns__Login_Response
+#ifndef SOAP_TYPE_ns__Dispatch_Login_Response
+#define SOAP_TYPE_ns__Dispatch_Login_Response (27)
+/* ns:Dispatch-Login-Response */
+class SOAP_CMAC ns__Dispatch_Login_Response
 {
 public:
-	unsigned long session_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type uint32 */
-	ns__User user;	/* required element of type ns:User */
-	unsigned long ttl;	/* required element of type uint32 */
+	std::string session_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:string */
+	std::string id;	/* required element of type xsd:string */
+	std::string parentid;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 32; } /* = unique type id SOAP_TYPE_ns__Login_Response */
+	virtual int soap_type() const { return 27; } /* = unique type id SOAP_TYPE_ns__Dispatch_Login_Response */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
 	virtual int soap_out(struct soap*, const char*, int, const char*) const;
 	virtual void *soap_get(struct soap*, const char*, const char*);
 	virtual void *soap_in(struct soap*, const char*, const char*);
-	         ns__Login_Response() { ns__Login_Response::soap_default(NULL); }
-	virtual ~ns__Login_Response() { }
+	         ns__Dispatch_Login_Response() { ns__Dispatch_Login_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Login_Response() { }
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Unit
-#define SOAP_TYPE_ns__Unit (33)
+#define SOAP_TYPE_ns__Unit (29)
 /* ns:Unit */
 class SOAP_CMAC ns__Unit
 {
 public:
 	ns__Entity base;	/* required element of type ns:Entity */
-	bool include_members;	/* required element of type xsd:boolean */
-	ns__Entity members;	/* required element of type ns:Entity */
+	std::list<ns__Entity >members;	/* optional element of type ns:Entity */
+	std::string size;	/* required element of type xsd:string */
 public:
-	virtual int soap_type() const { return 33; } /* = unique type id SOAP_TYPE_ns__Unit */
+	virtual int soap_type() const { return 29; } /* = unique type id SOAP_TYPE_ns__Unit */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -287,21 +274,18 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ns__Participant
-#define SOAP_TYPE_ns__Participant (35)
+#define SOAP_TYPE_ns__Participant (31)
 /* ns:Participant */
 class SOAP_CMAC ns__Participant
 {
 public:
-	unsigned long id;	/* required element of type uint32 */
-	ns__Entity group;	/* required element of type ns:Entity */
 	ns__Entity account;	/* required element of type ns:Entity */
-	unsigned long priority;	/* required element of type uint32 */
+	std::string priority;	/* required element of type xsd:string */
 	enum ns__CallPrivilege call_privilege;	/* required element of type ns:CallPrivilege */
-	enum ns__TokenPrivilege toke_privilege;	/* required element of type ns:TokenPrivilege */
+	enum ns__TokenPrivilege token_privilege;	/* required element of type ns:TokenPrivilege */
 	enum ns__SessionStatus status;	/* required element of type ns:SessionStatus */
-	bool sync_added;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 35; } /* = unique type id SOAP_TYPE_ns__Participant */
+	virtual int soap_type() const { return 31; } /* = unique type id SOAP_TYPE_ns__Participant */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -314,23 +298,22 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ns__Group
-#define SOAP_TYPE_ns__Group (36)
+#define SOAP_TYPE_ns__Group (32)
 /* ns:Group */
 class SOAP_CMAC ns__Group
 {
 public:
-	ns__Entity base;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
-	ns__Entity owner;	/* required element of type ns:Entity */
+	std::string id;	/* required element of type xsd:string */
+	std::string name;	/* required element of type xsd:string */
+	std::string owner_id;	/* required element of type xsd:string */
 	std::string number;	/* required element of type xsd:string */
 	std::string short_number;	/* required element of type xsd:string */
-	bool sealed;	/* required element of type xsd:boolean */
-	bool include_participants;	/* required element of type xsd:boolean */
-	ns__Participant participants;	/* required element of type ns:Participant */
+	std::list<ns__Participant >participants;	/* optional element of type ns:Participant */
+	std::string size;	/* required element of type xsd:string */
 	enum ns__RecordType record_type;	/* required element of type ns:RecordType */
-	ns__Participant recorder;	/* required element of type ns:Participant */
 	enum ns__RecordStatus record_status;	/* required element of type ns:RecordStatus */
 public:
-	virtual int soap_type() const { return 36; } /* = unique type id SOAP_TYPE_ns__Group */
+	virtual int soap_type() const { return 32; } /* = unique type id SOAP_TYPE_ns__Group */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -342,48 +325,68 @@ public:
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Gateway
-#define SOAP_TYPE_ns__Gateway (37)
-/* ns:Gateway */
-class SOAP_CMAC ns__Gateway
+#ifndef SOAP_TYPE_ns__Dispatch_Append_Group_Response
+#define SOAP_TYPE_ns__Dispatch_Append_Group_Response (34)
+/* ns:Dispatch-Append-Group-Response */
+class SOAP_CMAC ns__Dispatch_Append_Group_Response
 {
 public:
-	ns__Entity base;	/* required element of type ns:Entity */
-	ns__Address address;	/* required element of type ns:Address */
-	bool include_allocate_counts;	/* required element of type xsd:boolean */
-	ns__Entity allocate_counts;	/* required element of type ns:Entity */
-	bool include_active_counts;	/* required element of type xsd:boolean */
-	ns__Entity active_counts;	/* required element of type ns:Entity */
-	enum ns__RegisterStatus status;	/* required element of type ns:RegisterStatus */
+	ns__Group data;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Group */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 37; } /* = unique type id SOAP_TYPE_ns__Gateway */
+	virtual int soap_type() const { return 34; } /* = unique type id SOAP_TYPE_ns__Dispatch_Append_Group_Response */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
 	virtual int soap_out(struct soap*, const char*, int, const char*) const;
 	virtual void *soap_get(struct soap*, const char*, const char*);
 	virtual void *soap_in(struct soap*, const char*, const char*);
-	         ns__Gateway() { ns__Gateway::soap_default(NULL); }
-	virtual ~ns__Gateway() { }
+	         ns__Dispatch_Append_Group_Response() { ns__Dispatch_Append_Group_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Append_Group_Response() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_ns__Dispatch_Modify_Group_Response
+#define SOAP_TYPE_ns__Dispatch_Modify_Group_Response (35)
+/* ns:Dispatch-Modify-Group-Response */
+class SOAP_CMAC ns__Dispatch_Modify_Group_Response
+{
+public:
+	ns__Group data;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Group */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
+public:
+	virtual int soap_type() const { return 35; } /* = unique type id SOAP_TYPE_ns__Dispatch_Modify_Group_Response */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         ns__Dispatch_Modify_Group_Response() { ns__Dispatch_Modify_Group_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Modify_Group_Response() { }
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Alert
-#define SOAP_TYPE_ns__Alert (38)
+#define SOAP_TYPE_ns__Alert (36)
 /* ns:Alert */
 class SOAP_CMAC ns__Alert
 {
 public:
-	ns__Entity base;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
-	ns__Entity group;	/* required element of type ns:Entity */
+	ns__Entity base;	/* required element of type ns:Entity */
+	std::string group_id;	/* required element of type xsd:string */
 	std::string describe;	/* required element of type xsd:string */
 	enum ns__AlertLevel level;	/* required element of type ns:AlertLevel */
 	std::string alram_time;	/* required element of type xsd:string */
-	unsigned long use_cars;	/* required element of type uint32 */
+	std::string use_cars;	/* required element of type xsd:string */
 	std::string create_time;	/* required element of type xsd:string */
 	enum ns__AlertStatus status;	/* required element of type ns:AlertStatus */
 public:
-	virtual int soap_type() const { return 38; } /* = unique type id SOAP_TYPE_ns__Alert */
+	virtual int soap_type() const { return 36; } /* = unique type id SOAP_TYPE_ns__Alert */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -395,17 +398,39 @@ public:
 };
 #endif
 
+#ifndef SOAP_TYPE_ns__Dispatch_Append_Alert_Request_Response
+#define SOAP_TYPE_ns__Dispatch_Append_Alert_Request_Response (37)
+/* ns:Dispatch-Append-Alert-Request-Response */
+class SOAP_CMAC ns__Dispatch_Append_Alert_Request_Response
+{
+public:
+	ns__Alert data;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Alert */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
+public:
+	virtual int soap_type() const { return 37; } /* = unique type id SOAP_TYPE_ns__Dispatch_Append_Alert_Request_Response */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         ns__Dispatch_Append_Alert_Request_Response() { ns__Dispatch_Append_Alert_Request_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Append_Alert_Request_Response() { }
+};
+#endif
+
 #ifndef SOAP_TYPE_ns__Organization
-#define SOAP_TYPE_ns__Organization (39)
+#define SOAP_TYPE_ns__Organization (38)
 /* ns:Organization */
 class SOAP_CMAC ns__Organization
 {
 public:
 	ns__Entity base;	/* required element of type ns:Entity */
-	bool include_members;	/* required element of type xsd:boolean */
 	ns__Entity members;	/* required element of type ns:Entity */
 public:
-	virtual int soap_type() const { return 39; } /* = unique type id SOAP_TYPE_ns__Organization */
+	virtual int soap_type() const { return 38; } /* = unique type id SOAP_TYPE_ns__Organization */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -418,21 +443,20 @@ public:
 #endif
 
 #ifndef SOAP_TYPE_ns__EntityData
-#define SOAP_TYPE_ns__EntityData (40)
+#define SOAP_TYPE_ns__EntityData (39)
 /* ns:EntityData */
 class SOAP_CMAC ns__EntityData
 {
 public:
-	ns__Entity id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
+	ns__Entity id;	/* required element of type ns:Entity */
 	ns__Unit unit;	/* required element of type ns:Unit */
-	ns__Account accout;	/* required element of type ns:Account */
+	ns__Account account;	/* required element of type ns:Account */
 	ns__User user;	/* required element of type ns:User */
 	ns__Group group;	/* required element of type ns:Group */
 	ns__Alert alert;	/* required element of type ns:Alert */
-	ns__Gateway gateway;	/* required element of type ns:Gateway */
 	ns__Organization organization;	/* required element of type ns:Organization */
 public:
-	virtual int soap_type() const { return 40; } /* = unique type id SOAP_TYPE_ns__EntityData */
+	virtual int soap_type() const { return 39; } /* = unique type id SOAP_TYPE_ns__EntityData */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -444,24 +468,50 @@ public:
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Entity_Nofitication_Response
-#define SOAP_TYPE_ns__Entity_Nofitication_Response (41)
-/* ns:Entity-Nofitication-Response */
-class SOAP_CMAC ns__Entity_Nofitication_Response
+#ifndef SOAP_TYPE_ns__Dispatch_Entity_Request_Response
+#define SOAP_TYPE_ns__Dispatch_Entity_Request_Response (40)
+/* ns:Dispatch-Entity-Request-Response */
+class SOAP_CMAC ns__Dispatch_Entity_Request_Response
 {
 public:
-	enum ns__EntityNotifyType notify_type;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:EntityNotifyType */
-	ns__EntityData data;	/* required element of type ns:EntityData */
+	ns__EntityData data;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:EntityData */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 41; } /* = unique type id SOAP_TYPE_ns__Entity_Nofitication_Response */
+	virtual int soap_type() const { return 40; } /* = unique type id SOAP_TYPE_ns__Dispatch_Entity_Request_Response */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
 	virtual int soap_out(struct soap*, const char*, int, const char*) const;
 	virtual void *soap_get(struct soap*, const char*, const char*);
 	virtual void *soap_in(struct soap*, const char*, const char*);
-	         ns__Entity_Nofitication_Response() { ns__Entity_Nofitication_Response::soap_default(NULL); }
-	virtual ~ns__Entity_Nofitication_Response() { }
+	         ns__Dispatch_Entity_Request_Response() { ns__Dispatch_Entity_Request_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Entity_Request_Response() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_ns__Dispatch_Entity_Nofitication_Response
+#define SOAP_TYPE_ns__Dispatch_Entity_Nofitication_Response (41)
+/* ns:Dispatch-Entity-Nofitication-Response */
+class SOAP_CMAC ns__Dispatch_Entity_Nofitication_Response
+{
+public:
+	enum ns__EntityNotifyType notify_type;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:EntityNotifyType */
+	ns__EntityData data;	/* required element of type ns:EntityData */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
+public:
+	virtual int soap_type() const { return 41; } /* = unique type id SOAP_TYPE_ns__Dispatch_Entity_Nofitication_Response */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         ns__Dispatch_Entity_Nofitication_Response() { ns__Dispatch_Entity_Nofitication_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Entity_Nofitication_Response() { }
 };
 #endif
 
@@ -471,7 +521,7 @@ public:
 class SOAP_CMAC ns__Entity_Status_Notification
 {
 public:
-	ns__Entity id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
+	ns__Entity id;	/* required element of type ns:Entity */
 	enum ns__RegisterStatus status;	/* required element of type ns:RegisterStatus */
 	enum ns__RegisterStatus sip_status;	/* required element of type ns:RegisterStatus */
 public:
@@ -493,9 +543,10 @@ public:
 class SOAP_CMAC ns__Modify_Participant
 {
 public:
-	ns__Entity group_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
+	ns__Entity group_id;	/* required element of type ns:Entity */
 	enum ns__ListModifyType modify_type;	/* required element of type ns:ListModifyType */
 	std::list<ns__Participant >participants;	/* optional element of type ns:Participant */
+	std::string size;	/* required element of type xsd:string */
 public:
 	virtual int soap_type() const { return 43; } /* = unique type id SOAP_TYPE_ns__Modify_Participant */
 	virtual void soap_default(struct soap*);
@@ -509,66 +560,118 @@ public:
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Join_Group_Request_Nofitication
-#define SOAP_TYPE_ns__Join_Group_Request_Nofitication (45)
-/* ns:Join-Group-Request-Nofitication */
-class SOAP_CMAC ns__Join_Group_Request_Nofitication
+#ifndef SOAP_TYPE_ns__Dispatch_Modify_Participants_Response
+#define SOAP_TYPE_ns__Dispatch_Modify_Participants_Response (44)
+/* ns:Dispatch-Modify-Participants-Response */
+class SOAP_CMAC ns__Dispatch_Modify_Participants_Response
 {
 public:
-	ns__Entity group_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
-	ns__Entity account_id;	/* required element of type ns:Entity */
+	ns__Modify_Participant data;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Modify-Participant */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 45; } /* = unique type id SOAP_TYPE_ns__Join_Group_Request_Nofitication */
+	virtual int soap_type() const { return 44; } /* = unique type id SOAP_TYPE_ns__Dispatch_Modify_Participants_Response */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
 	virtual int soap_out(struct soap*, const char*, int, const char*) const;
 	virtual void *soap_get(struct soap*, const char*, const char*);
 	virtual void *soap_in(struct soap*, const char*, const char*);
-	         ns__Join_Group_Request_Nofitication() { ns__Join_Group_Request_Nofitication::soap_default(NULL); }
-	virtual ~ns__Join_Group_Request_Nofitication() { }
+	         ns__Dispatch_Modify_Participants_Response() { ns__Dispatch_Modify_Participants_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Modify_Participants_Response() { }
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Participant_Status_Notification
-#define SOAP_TYPE_ns__Participant_Status_Notification (46)
-/* ns:Participant-Status-Notification */
-class SOAP_CMAC ns__Participant_Status_Notification
+#ifndef SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification_Response (45)
+/* ns:Dispatch-Dispatch-Participants-Notification-Response */
+class SOAP_CMAC ns__Dispatch_Dispatch_Participants_Notification_Response
+{
+public:
+	ns__Modify_Participant data;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Modify-Participant */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
+public:
+	virtual int soap_type() const { return 45; } /* = unique type id SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification_Response */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         ns__Dispatch_Dispatch_Participants_Notification_Response() { ns__Dispatch_Dispatch_Participants_Notification_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Dispatch_Participants_Notification_Response() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication_Response
+#define SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication_Response (46)
+/* ns:Dispatch-Join-Group-Request-Nofitication-Response */
+class SOAP_CMAC ns__Dispatch_Join_Group_Request_Nofitication_Response
+{
+public:
+	ns__Entity group_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
+	ns__Entity account_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
+public:
+	virtual int soap_type() const { return 46; } /* = unique type id SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication_Response */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         ns__Dispatch_Join_Group_Request_Nofitication_Response() { ns__Dispatch_Join_Group_Request_Nofitication_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Join_Group_Request_Nofitication_Response() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_ns__Dispatch_Participant_Status_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Participant_Status_Notification_Response (47)
+/* ns:Dispatch-Participant-Status-Notification-Response */
+class SOAP_CMAC ns__Dispatch_Participant_Status_Notification_Response
 {
 public:
 	ns__Entity group_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
 	ns__Entity account_id;	/* required element of type ns:Entity */
 	enum ns__SessionStatus status;	/* required element of type ns:SessionStatus */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 46; } /* = unique type id SOAP_TYPE_ns__Participant_Status_Notification */
+	virtual int soap_type() const { return 47; } /* = unique type id SOAP_TYPE_ns__Dispatch_Participant_Status_Notification_Response */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
 	virtual int soap_out(struct soap*, const char*, int, const char*) const;
 	virtual void *soap_get(struct soap*, const char*, const char*);
 	virtual void *soap_in(struct soap*, const char*, const char*);
-	         ns__Participant_Status_Notification() { ns__Participant_Status_Notification::soap_default(NULL); }
-	virtual ~ns__Participant_Status_Notification() { }
+	         ns__Dispatch_Participant_Status_Notification_Response() { ns__Dispatch_Participant_Status_Notification_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Participant_Status_Notification_Response() { }
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__MediaMessage
-#define SOAP_TYPE_ns__MediaMessage (47)
+#define SOAP_TYPE_ns__MediaMessage (48)
 /* ns:MediaMessage */
 class SOAP_CMAC ns__MediaMessage
 {
 public:
-	unsigned long id;	/* required element of type uint32 */
+	std::string id;	/* required element of type xsd:string */
 	std::string sender;	/* required element of type xsd:string */
 	std::string text;	/* required element of type xsd:string */
 	std::string picture_uri;	/* required element of type xsd:string */
 	std::string audio_uri;	/* required element of type xsd:string */
-	unsigned long audio_length;	/* required element of type uint32 */
+	std::string audio_length;	/* required element of type xsd:string */
 	std::string video_uri;	/* required element of type xsd:string */
-	unsigned long video_length;	/* required element of type uint32 */
+	std::string video_length;	/* required element of type xsd:string */
 	std::string timestamp;	/* required element of type xsd:string */
 public:
-	virtual int soap_type() const { return 47; } /* = unique type id SOAP_TYPE_ns__MediaMessage */
+	virtual int soap_type() const { return 48; } /* = unique type id SOAP_TYPE_ns__MediaMessage */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -580,17 +683,42 @@ public:
 };
 #endif
 
+#ifndef SOAP_TYPE_ns__Dispatch_Media_Message_Request_Response
+#define SOAP_TYPE_ns__Dispatch_Media_Message_Request_Response (49)
+/* ns:Dispatch-Media-Message-Request-Response */
+class SOAP_CMAC ns__Dispatch_Media_Message_Request_Response
+{
+public:
+	std::list<ns__MediaMessage >data;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type ns:MediaMessage */
+	std::string size;	/* required element of type xsd:string */
+	std::string leave_message_count;	/* required element of type xsd:string */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
+public:
+	virtual int soap_type() const { return 49; } /* = unique type id SOAP_TYPE_ns__Dispatch_Media_Message_Request_Response */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         ns__Dispatch_Media_Message_Request_Response() { ns__Dispatch_Media_Message_Request_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Media_Message_Request_Response() { }
+};
+#endif
+
 #ifndef SOAP_TYPE_ns__Media_Message
-#define SOAP_TYPE_ns__Media_Message (48)
+#define SOAP_TYPE_ns__Media_Message (51)
 /* ns:Media-Message */
 class SOAP_CMAC ns__Media_Message
 {
 public:
-	ns__Entity id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
+	ns__Entity id;	/* required element of type ns:Entity */
 	ns__MediaMessage messages;	/* required element of type ns:MediaMessage */
-	unsigned long leave_message_count;	/* required element of type uint32 */
+	std::string leave_message_count;	/* required element of type xsd:string */
 public:
-	virtual int soap_type() const { return 48; } /* = unique type id SOAP_TYPE_ns__Media_Message */
+	virtual int soap_type() const { return 51; } /* = unique type id SOAP_TYPE_ns__Media_Message */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -602,108 +730,146 @@ public:
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Media_Message_Notification
-#define SOAP_TYPE_ns__Media_Message_Notification (49)
-/* ns:Media-Message-Notification */
-class SOAP_CMAC ns__Media_Message_Notification
+#ifndef SOAP_TYPE_ns__Dispatch_Media_Message_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Media_Message_Notification_Response (52)
+/* ns:Dispatch-Media-Message-Notification-Response */
+class SOAP_CMAC ns__Dispatch_Media_Message_Notification_Response
 {
 public:
-	unsigned long id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type uint32 */
+	std::string id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:string */
 	ns__MediaMessage messages;	/* required element of type ns:MediaMessage */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 49; } /* = unique type id SOAP_TYPE_ns__Media_Message_Notification */
+	virtual int soap_type() const { return 52; } /* = unique type id SOAP_TYPE_ns__Dispatch_Media_Message_Notification_Response */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
 	virtual int soap_out(struct soap*, const char*, int, const char*) const;
 	virtual void *soap_get(struct soap*, const char*, const char*);
 	virtual void *soap_in(struct soap*, const char*, const char*);
-	         ns__Media_Message_Notification() { ns__Media_Message_Notification::soap_default(NULL); }
-	virtual ~ns__Media_Message_Notification() { }
+	         ns__Dispatch_Media_Message_Notification_Response() { ns__Dispatch_Media_Message_Notification_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Media_Message_Notification_Response() { }
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Participant_Connect_Request_Notification
-#define SOAP_TYPE_ns__Participant_Connect_Request_Notification (50)
-/* ns:Participant-Connect-Request-Notification */
-class SOAP_CMAC ns__Participant_Connect_Request_Notification
+#ifndef SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification_Response (53)
+/* ns:Dispatch-Participant-Connect-Request-Notification-Response */
+class SOAP_CMAC ns__Dispatch_Participant_Connect_Request_Notification_Response
 {
 public:
 	ns__Entity group_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
 	ns__Entity account_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 50; } /* = unique type id SOAP_TYPE_ns__Participant_Connect_Request_Notification */
+	virtual int soap_type() const { return 53; } /* = unique type id SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification_Response */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
 	virtual int soap_out(struct soap*, const char*, int, const char*) const;
 	virtual void *soap_get(struct soap*, const char*, const char*);
 	virtual void *soap_in(struct soap*, const char*, const char*);
-	         ns__Participant_Connect_Request_Notification() { ns__Participant_Connect_Request_Notification::soap_default(NULL); }
-	virtual ~ns__Participant_Connect_Request_Notification() { }
+	         ns__Dispatch_Participant_Connect_Request_Notification_Response() { ns__Dispatch_Participant_Connect_Request_Notification_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Participant_Connect_Request_Notification_Response() { }
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Session_Status_Notification
-#define SOAP_TYPE_ns__Session_Status_Notification (51)
-/* ns:Session-Status-Notification */
-class SOAP_CMAC ns__Session_Status_Notification
+#ifndef SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification_Response (54)
+/* ns:Dispatch-Participant-Speak-Request-Notification-Response */
+class SOAP_CMAC ns__Dispatch_Participant_Speak_Request_Notification_Response
+{
+public:
+	ns__Entity group_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
+	ns__Entity account_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
+public:
+	virtual int soap_type() const { return 54; } /* = unique type id SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification_Response */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         ns__Dispatch_Participant_Speak_Request_Notification_Response() { ns__Dispatch_Participant_Speak_Request_Notification_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Participant_Speak_Request_Notification_Response() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_ns__Dispatch_Session_Status_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Session_Status_Notification_Response (55)
+/* ns:Dispatch-Session-Status-Notification-Response */
+class SOAP_CMAC ns__Dispatch_Session_Status_Notification_Response
 {
 public:
 	ns__Entity group_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
 	enum ns__SessionStatus status;	/* required element of type ns:SessionStatus */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 51; } /* = unique type id SOAP_TYPE_ns__Session_Status_Notification */
+	virtual int soap_type() const { return 55; } /* = unique type id SOAP_TYPE_ns__Dispatch_Session_Status_Notification_Response */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
 	virtual int soap_out(struct soap*, const char*, int, const char*) const;
 	virtual void *soap_get(struct soap*, const char*, const char*);
 	virtual void *soap_in(struct soap*, const char*, const char*);
-	         ns__Session_Status_Notification() { ns__Session_Status_Notification::soap_default(NULL); }
-	virtual ~ns__Session_Status_Notification() { }
+	         ns__Dispatch_Session_Status_Notification_Response() { ns__Dispatch_Session_Status_Notification_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Session_Status_Notification_Response() { }
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Dispatch_Account_Location_Notification_Response
-#define SOAP_TYPE_ns__Dispatch_Account_Location_Notification_Response (52)
-/* ns:Dispatch-Account-Location-Notification-Response */
-class SOAP_CMAC ns__Dispatch_Account_Location_Notification_Response
+#ifndef SOAP_TYPE_ns__Dispatch_Account_Info_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Account_Info_Notification_Response (56)
+/* ns:Dispatch-Account-Info-Notification-Response */
+class SOAP_CMAC ns__Dispatch_Account_Info_Notification_Response
 {
 public:
 	ns__Entity account_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
 	double longitude;	/* required element of type xsd:double */
 	double latitude;	/* required element of type xsd:double */
 	std::string timestamp;	/* required element of type xsd:string */
+	enum ns__ProfessionStatus professionstatus;	/* required element of type ns:ProfessionStatus */
+	enum ns__RegisterStatus status;	/* required element of type ns:RegisterStatus */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 52; } /* = unique type id SOAP_TYPE_ns__Dispatch_Account_Location_Notification_Response */
+	virtual int soap_type() const { return 56; } /* = unique type id SOAP_TYPE_ns__Dispatch_Account_Info_Notification_Response */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
 	virtual int soap_out(struct soap*, const char*, int, const char*) const;
 	virtual void *soap_get(struct soap*, const char*, const char*);
 	virtual void *soap_in(struct soap*, const char*, const char*);
-	         ns__Dispatch_Account_Location_Notification_Response() { ns__Dispatch_Account_Location_Notification_Response::soap_default(NULL); }
-	virtual ~ns__Dispatch_Account_Location_Notification_Response() { }
+	         ns__Dispatch_Account_Info_Notification_Response() { ns__Dispatch_Account_Info_Notification_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Account_Info_Notification_Response() { }
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__HistoryAlert
-#define SOAP_TYPE_ns__HistoryAlert (54)
+#define SOAP_TYPE_ns__HistoryAlert (58)
 /* ns:HistoryAlert */
 class SOAP_CMAC ns__HistoryAlert
 {
 public:
-	unsigned long id;	/* required element of type uint32 */
+	std::string id;	/* required element of type xsd:string */
 	std::string name;	/* required element of type xsd:string */
 	std::string describe;	/* required element of type xsd:string */
 	enum ns__AlertLevel level;	/* required element of type ns:AlertLevel */
 	std::string alram_time;	/* required element of type xsd:string */
-	unsigned long use_cars;	/* required element of type uint32 */
+	std::string use_cars;	/* required element of type xsd:string */
 	std::string create_time;	/* required element of type xsd:string */
 	std::string over_time;	/* required element of type xsd:string */
 public:
-	virtual int soap_type() const { return 54; } /* = unique type id SOAP_TYPE_ns__HistoryAlert */
+	virtual int soap_type() const { return 58; } /* = unique type id SOAP_TYPE_ns__HistoryAlert */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
@@ -715,51 +881,150 @@ public:
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Dispatch_History_Alert_Message
-#define SOAP_TYPE_ns__Dispatch_History_Alert_Message (55)
-/* ns:Dispatch-History-Alert-Message */
-class SOAP_CMAC ns__Dispatch_History_Alert_Message
+#ifndef SOAP_TYPE_ns__Dispatch_Alert_Request_Response
+#define SOAP_TYPE_ns__Dispatch_Alert_Request_Response (59)
+/* ns:Dispatch-Alert-Request-Response */
+class SOAP_CMAC ns__Dispatch_Alert_Request_Response
 {
 public:
-	unsigned long history_alert_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type uint32 */
-	std::list<ns__MediaMessage >messages;	/* optional element of type ns:MediaMessage */
-	unsigned long leave_message_count;	/* required element of type uint32 */
+	ns__HistoryAlert data;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:HistoryAlert */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 55; } /* = unique type id SOAP_TYPE_ns__Dispatch_History_Alert_Message */
+	virtual int soap_type() const { return 59; } /* = unique type id SOAP_TYPE_ns__Dispatch_Alert_Request_Response */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
 	virtual int soap_out(struct soap*, const char*, int, const char*) const;
 	virtual void *soap_get(struct soap*, const char*, const char*);
 	virtual void *soap_in(struct soap*, const char*, const char*);
-	         ns__Dispatch_History_Alert_Message() { ns__Dispatch_History_Alert_Message::soap_default(NULL); }
-	virtual ~ns__Dispatch_History_Alert_Message() { }
+	         ns__Dispatch_Alert_Request_Response() { ns__Dispatch_Alert_Request_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Alert_Request_Response() { }
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Dispatch_Record_Status
-#define SOAP_TYPE_ns__Dispatch_Record_Status (57)
-/* ns:Dispatch-Record-Status */
-class SOAP_CMAC ns__Dispatch_Record_Status
+#ifndef SOAP_TYPE_ns__Dispatch_History_Alert_Request_Reponse
+#define SOAP_TYPE_ns__Dispatch_History_Alert_Request_Reponse (60)
+/* ns:Dispatch-History-Alert-Request-Reponse */
+class SOAP_CMAC ns__Dispatch_History_Alert_Request_Reponse
+{
+public:
+	std::list<ns__HistoryAlert >data;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* optional element of type ns:HistoryAlert */
+	std::string size;	/* required element of type xsd:string */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
+public:
+	virtual int soap_type() const { return 60; } /* = unique type id SOAP_TYPE_ns__Dispatch_History_Alert_Request_Reponse */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         ns__Dispatch_History_Alert_Request_Reponse() { ns__Dispatch_History_Alert_Request_Reponse::soap_default(NULL); }
+	virtual ~ns__Dispatch_History_Alert_Request_Reponse() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request_Response
+#define SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request_Response (62)
+/* ns:Dispatch-History-Alert-Message-Request-Response */
+class SOAP_CMAC ns__Dispatch_History_Alert_Message_Request_Response
+{
+public:
+	std::string history_alert_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:string */
+	std::list<ns__MediaMessage >messages;	/* optional element of type ns:MediaMessage */
+	std::string size;	/* required element of type xsd:string */
+	std::string leave_message_count;	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	std::string session_id;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
+public:
+	virtual int soap_type() const { return 62; } /* = unique type id SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request_Response */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         ns__Dispatch_History_Alert_Message_Request_Response() { ns__Dispatch_History_Alert_Message_Request_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_History_Alert_Message_Request_Response() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_ns__Dispatch_Record_Status_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Record_Status_Notification_Response (63)
+/* ns:Dispatch-Record-Status-Notification-Response */
+class SOAP_CMAC ns__Dispatch_Record_Status_Notification_Response
 {
 public:
 	ns__Entity group_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:Entity */
 	bool recording;	/* required element of type xsd:boolean */
+	std::string error_describe;	/* required element of type xsd:string */
+	std::string session_id;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
 public:
-	virtual int soap_type() const { return 57; } /* = unique type id SOAP_TYPE_ns__Dispatch_Record_Status */
+	virtual int soap_type() const { return 63; } /* = unique type id SOAP_TYPE_ns__Dispatch_Record_Status_Notification_Response */
 	virtual void soap_default(struct soap*);
 	virtual void soap_serialize(struct soap*) const;
 	virtual int soap_put(struct soap*, const char*, const char*) const;
 	virtual int soap_out(struct soap*, const char*, int, const char*) const;
 	virtual void *soap_get(struct soap*, const char*, const char*);
 	virtual void *soap_in(struct soap*, const char*, const char*);
-	         ns__Dispatch_Record_Status() { ns__Dispatch_Record_Status::soap_default(NULL); }
-	virtual ~ns__Dispatch_Record_Status() { }
+	         ns__Dispatch_Record_Status_Notification_Response() { ns__Dispatch_Record_Status_Notification_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Record_Status_Notification_Response() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification_Response
+#define SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification_Response (64)
+/* ns:Dispatch-Alert-Overed-Notification-Response */
+class SOAP_CMAC ns__Dispatch_Alert_Overed_Notification_Response
+{
+public:
+	std::string alert_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	std::string session_id;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
+public:
+	virtual int soap_type() const { return 64; } /* = unique type id SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification_Response */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         ns__Dispatch_Alert_Overed_Notification_Response() { ns__Dispatch_Alert_Overed_Notification_Response::soap_default(NULL); }
+	virtual ~ns__Dispatch_Alert_Overed_Notification_Response() { }
+};
+#endif
+
+#ifndef SOAP_TYPE_ns__Normal_Response
+#define SOAP_TYPE_ns__Normal_Response (65)
+/* ns:Normal-Response */
+class SOAP_CMAC ns__Normal_Response
+{
+public:
+	std::string session_id;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type xsd:string */
+	std::string error_describe;	/* required element of type xsd:string */
+	bool result;	/* required element of type xsd:boolean */
+public:
+	virtual int soap_type() const { return 65; } /* = unique type id SOAP_TYPE_ns__Normal_Response */
+	virtual void soap_default(struct soap*);
+	virtual void soap_serialize(struct soap*) const;
+	virtual int soap_put(struct soap*, const char*, const char*) const;
+	virtual int soap_out(struct soap*, const char*, int, const char*) const;
+	virtual void *soap_get(struct soap*, const char*, const char*);
+	virtual void *soap_in(struct soap*, const char*, const char*);
+	         ns__Normal_Response() { ns__Normal_Response::soap_default(NULL); }
+	virtual ~ns__Normal_Response() { }
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Login
-#define SOAP_TYPE_ns__Dispatch_Login (60)
+#define SOAP_TYPE_ns__Dispatch_Login (68)
 /* ns:Dispatch-Login */
 struct ns__Dispatch_Login
 {
@@ -767,119 +1032,72 @@ public:
 	std::string username;	/* required element of type xsd:string */
 	std::string password;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 60; } /* = unique type id SOAP_TYPE_ns__Dispatch_Login */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__LogOutResponse
-#define SOAP_TYPE_ns__LogOutResponse (61)
-/* ns:LogOutResponse */
-struct ns__LogOutResponse
-{
-public:
-	int soap_type() const { return 61; } /* = unique type id SOAP_TYPE_ns__LogOutResponse */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 68; } /* = unique type id SOAP_TYPE_ns__Dispatch_Login */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Logout
-#define SOAP_TYPE_ns__Dispatch_Logout (64)
+#define SOAP_TYPE_ns__Dispatch_Logout (71)
 /* ns:Dispatch-Logout */
 struct ns__Dispatch_Logout
 {
 public:
+	std::string session_id;	/* required element of type xsd:string */
 	std::string name;	/* required element of type xsd:string */
+	std::string password;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 64; } /* = unique type id SOAP_TYPE_ns__Dispatch_Logout */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Keepalive_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Keepalive_Request_Response (67)
-/* ns:Dispatch-Keepalive-Request-Response */
-struct ns__Dispatch_Keepalive_Request_Response
-{
-public:
-	int soap_type() const { return 67; } /* = unique type id SOAP_TYPE_ns__Dispatch_Keepalive_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Keepalive
-#define SOAP_TYPE_ns__Dispatch_Keepalive (70)
-/* ns:Dispatch-Keepalive */
-struct ns__Dispatch_Keepalive
-{
-public:
-	void *_;	/* transient */
-public:
-	int soap_type() const { return 70; } /* = unique type id SOAP_TYPE_ns__Dispatch_Keepalive */
+	int soap_type() const { return 71; } /* = unique type id SOAP_TYPE_ns__Dispatch_Logout */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Entity_Request
-#define SOAP_TYPE_ns__Dispatch_Entity_Request (73)
+#define SOAP_TYPE_ns__Dispatch_Entity_Request (74)
 /* ns:Dispatch-Entity-Request */
 struct ns__Dispatch_Entity_Request
 {
 public:
-	ns__Entity id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 73; } /* = unique type id SOAP_TYPE_ns__Dispatch_Entity_Request */
+	int soap_type() const { return 74; } /* = unique type id SOAP_TYPE_ns__Dispatch_Entity_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Entity_Nofitication
-#define SOAP_TYPE_ns__Dispatch_Entity_Nofitication (76)
+#define SOAP_TYPE_ns__Dispatch_Entity_Nofitication (77)
 /* ns:Dispatch-Entity-Nofitication */
 struct ns__Dispatch_Entity_Nofitication
 {
 public:
-	void *_;	/* transient */
+	std::string session_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 76; } /* = unique type id SOAP_TYPE_ns__Dispatch_Entity_Nofitication */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Entity_Status_Notification
-#define SOAP_TYPE_ns__Dispatch_Entity_Status_Notification (79)
-/* ns:Dispatch-Entity-Status-Notification */
-struct ns__Dispatch_Entity_Status_Notification
-{
-public:
-	void *_;	/* transient */
-public:
-	int soap_type() const { return 79; } /* = unique type id SOAP_TYPE_ns__Dispatch_Entity_Status_Notification */
+	int soap_type() const { return 77; } /* = unique type id SOAP_TYPE_ns__Dispatch_Entity_Nofitication */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Append_Group
-#define SOAP_TYPE_ns__Dispatch_Append_Group (82)
+#define SOAP_TYPE_ns__Dispatch_Append_Group (80)
 /* ns:Dispatch-Append-Group */
 struct ns__Dispatch_Append_Group
 {
 public:
+	std::string session_id;	/* required element of type xsd:string */
 	ns__Group group;	/* required element of type ns:Group */
 public:
-	int soap_type() const { return 82; } /* = unique type id SOAP_TYPE_ns__Dispatch_Append_Group */
+	int soap_type() const { return 80; } /* = unique type id SOAP_TYPE_ns__Dispatch_Append_Group */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Modify_Group
-#define SOAP_TYPE_ns__Dispatch_Modify_Group (84)
+#define SOAP_TYPE_ns__Dispatch_Modify_Group (83)
 /* ns:Dispatch-Modify-Group */
 struct ns__Dispatch_Modify_Group
 {
 public:
+	std::string session_id;	/* required element of type xsd:string */
 	ns__Group group;	/* required element of type ns:Group */
 public:
-	int soap_type() const { return 84; } /* = unique type id SOAP_TYPE_ns__Dispatch_Modify_Group */
+	int soap_type() const { return 83; } /* = unique type id SOAP_TYPE_ns__Dispatch_Modify_Group */
 };
 #endif
 
@@ -889,564 +1107,348 @@ public:
 struct ns__Dispatch_Modify_Participants
 {
 public:
+	std::string session_id;	/* required element of type xsd:string */
 	ns__Modify_Participant request;	/* required element of type ns:Modify-Participant */
 public:
 	int soap_type() const { return 86; } /* = unique type id SOAP_TYPE_ns__Dispatch_Modify_Participants */
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Delete_Group_Response
-#define SOAP_TYPE_ns__Delete_Group_Response (87)
-/* ns:Delete-Group-Response */
-struct ns__Delete_Group_Response
-{
-public:
-	int soap_type() const { return 87; } /* = unique type id SOAP_TYPE_ns__Delete_Group_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
-};
-#endif
-
 #ifndef SOAP_TYPE_ns__Dispatch_Delete_Group
-#define SOAP_TYPE_ns__Dispatch_Delete_Group (90)
+#define SOAP_TYPE_ns__Dispatch_Delete_Group (88)
 /* ns:Dispatch-Delete-Group */
 struct ns__Dispatch_Delete_Group
 {
 public:
-	ns__Entity group_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string group_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 90; } /* = unique type id SOAP_TYPE_ns__Dispatch_Delete_Group */
+	int soap_type() const { return 88; } /* = unique type id SOAP_TYPE_ns__Dispatch_Delete_Group */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification
-#define SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification (93)
+#define SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification (91)
 /* ns:Dispatch-Dispatch-Participants-Notification */
 struct ns__Dispatch_Dispatch_Participants_Notification
 {
 public:
-	void *_;	/* transient */
+	std::string session_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 93; } /* = unique type id SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification */
+	int soap_type() const { return 91; } /* = unique type id SOAP_TYPE_ns__Dispatch_Dispatch_Participants_Notification */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication
-#define SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication (96)
+#define SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication (94)
 /* ns:Dispatch-Join-Group-Request-Nofitication */
 struct ns__Dispatch_Join_Group_Request_Nofitication
 {
 public:
-	void *_;	/* transient */
+	std::string session_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 96; } /* = unique type id SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication */
+	int soap_type() const { return 94; } /* = unique type id SOAP_TYPE_ns__Dispatch_Join_Group_Request_Nofitication */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Participant_Status_Notification
-#define SOAP_TYPE_ns__Dispatch_Participant_Status_Notification (99)
+#define SOAP_TYPE_ns__Dispatch_Participant_Status_Notification (97)
 /* ns:Dispatch-Participant-Status-Notification */
 struct ns__Dispatch_Participant_Status_Notification
 {
 public:
-	void *_;	/* transient */
+	std::string session_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 99; } /* = unique type id SOAP_TYPE_ns__Dispatch_Participant_Status_Notification */
+	int soap_type() const { return 97; } /* = unique type id SOAP_TYPE_ns__Dispatch_Participant_Status_Notification */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Media_Message_Request
-#define SOAP_TYPE_ns__Dispatch_Media_Message_Request (102)
+#define SOAP_TYPE_ns__Dispatch_Media_Message_Request (100)
 /* ns:Dispatch-Media-Message-Request */
 struct ns__Dispatch_Media_Message_Request
 {
 public:
-	ns__Entity id;	/* required element of type ns:Entity */
-	unsigned long from_message_id;	/* required element of type uint32 */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string group_id;	/* required element of type xsd:string */
+	std::string from_message_id;	/* required element of type xsd:string */
 	std::string from_time;	/* required element of type xsd:string */
-	unsigned long max_message_count;	/* required element of type uint32 */
+	std::string max_message_count;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 102; } /* = unique type id SOAP_TYPE_ns__Dispatch_Media_Message_Request */
+	int soap_type() const { return 100; } /* = unique type id SOAP_TYPE_ns__Dispatch_Media_Message_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Media_Message_Notification
-#define SOAP_TYPE_ns__Dispatch_Media_Message_Notification (105)
+#define SOAP_TYPE_ns__Dispatch_Media_Message_Notification (103)
 /* ns:Dispatch-Media-Message-Notification */
 struct ns__Dispatch_Media_Message_Notification
 {
 public:
-	void *_;	/* transient */
+	std::string session_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 105; } /* = unique type id SOAP_TYPE_ns__Dispatch_Media_Message_Notification */
+	int soap_type() const { return 103; } /* = unique type id SOAP_TYPE_ns__Dispatch_Media_Message_Notification */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification
-#define SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification (108)
+#define SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification (106)
 /* ns:Dispatch-Participant-Connect-Request-Notification */
 struct ns__Dispatch_Participant_Connect_Request_Notification
 {
 public:
-	void *_;	/* transient */
+	std::string session_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 108; } /* = unique type id SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification */
+	int soap_type() const { return 106; } /* = unique type id SOAP_TYPE_ns__Dispatch_Participant_Connect_Request_Notification */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification
-#define SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification (110)
+#define SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification (109)
 /* ns:Dispatch-Participant-Speak-Request-Notification */
 struct ns__Dispatch_Participant_Speak_Request_Notification
 {
 public:
-	void *_;	/* transient */
+	std::string session_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 110; } /* = unique type id SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Invite_Participant_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Invite_Participant_Request_Response (111)
-/* ns:Dispatch-Invite-Participant-Request-Response */
-struct ns__Dispatch_Invite_Participant_Request_Response
-{
-public:
-	int soap_type() const { return 111; } /* = unique type id SOAP_TYPE_ns__Dispatch_Invite_Participant_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 109; } /* = unique type id SOAP_TYPE_ns__Dispatch_Participant_Speak_Request_Notification */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Invite_Participant_Request
-#define SOAP_TYPE_ns__Dispatch_Invite_Participant_Request (114)
+#define SOAP_TYPE_ns__Dispatch_Invite_Participant_Request (111)
 /* ns:Dispatch-Invite-Participant-Request */
 struct ns__Dispatch_Invite_Participant_Request
 {
 public:
-	ns__Entity group_id;	/* required element of type ns:Entity */
-	ns__Entity account_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string group_id;	/* required element of type xsd:string */
+	std::string account_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 114; } /* = unique type id SOAP_TYPE_ns__Dispatch_Invite_Participant_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Drop_Participant_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Drop_Participant_Request_Response (115)
-/* ns:Dispatch-Drop-Participant-Request-Response */
-struct ns__Dispatch_Drop_Participant_Request_Response
-{
-public:
-	int soap_type() const { return 115; } /* = unique type id SOAP_TYPE_ns__Dispatch_Drop_Participant_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 111; } /* = unique type id SOAP_TYPE_ns__Dispatch_Invite_Participant_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Drop_Participant_Request
-#define SOAP_TYPE_ns__Dispatch_Drop_Participant_Request (118)
+#define SOAP_TYPE_ns__Dispatch_Drop_Participant_Request (113)
 /* ns:Dispatch-Drop-Participant-Request */
 struct ns__Dispatch_Drop_Participant_Request
 {
 public:
-	ns__Entity group_id;	/* required element of type ns:Entity */
-	ns__Entity account_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string group_id;	/* required element of type xsd:string */
+	std::string account_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 118; } /* = unique type id SOAP_TYPE_ns__Dispatch_Drop_Participant_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request_Response (119)
-/* ns:Dispatch-Release-Participant-Token-Request-Response */
-struct ns__Dispatch_Release_Participant_Token_Request_Response
-{
-public:
-	int soap_type() const { return 119; } /* = unique type id SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 113; } /* = unique type id SOAP_TYPE_ns__Dispatch_Drop_Participant_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request
-#define SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request (122)
+#define SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request (115)
 /* ns:Dispatch-Release-Participant-Token-Request */
 struct ns__Dispatch_Release_Participant_Token_Request
 {
 public:
-	ns__Entity group_id;	/* required element of type ns:Entity */
-	ns__Entity account_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string group_id;	/* required element of type xsd:string */
+	std::string account_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 122; } /* = unique type id SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request_Response (123)
-/* ns:Dispatch-Appoint-Participant-Speak-Request-Response */
-struct ns__Dispatch_Appoint_Participant_Speak_Request_Response
-{
-public:
-	int soap_type() const { return 123; } /* = unique type id SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 115; } /* = unique type id SOAP_TYPE_ns__Dispatch_Release_Participant_Token_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request
-#define SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request (126)
+#define SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request (117)
 /* ns:Dispatch-Appoint-Participant-Speak-Request */
 struct ns__Dispatch_Appoint_Participant_Speak_Request
 {
 public:
-	ns__Entity group_id;	/* required element of type ns:Entity */
-	ns__Entity account_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string group_id;	/* required element of type xsd:string */
+	std::string account_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 126; } /* = unique type id SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Jion_Group_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Jion_Group_Request_Response (127)
-/* ns:Dispatch-Jion-Group-Request-Response */
-struct ns__Dispatch_Jion_Group_Request_Response
-{
-public:
-	int soap_type() const { return 127; } /* = unique type id SOAP_TYPE_ns__Dispatch_Jion_Group_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 117; } /* = unique type id SOAP_TYPE_ns__Dispatch_Appoint_Participant_Speak_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Jion_Group_Request
-#define SOAP_TYPE_ns__Dispatch_Jion_Group_Request (130)
+#define SOAP_TYPE_ns__Dispatch_Jion_Group_Request (119)
 /* ns:Dispatch-Jion-Group-Request */
 struct ns__Dispatch_Jion_Group_Request
 {
 public:
-	ns__Entity group_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string group_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 130; } /* = unique type id SOAP_TYPE_ns__Dispatch_Jion_Group_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Leave_Group_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Leave_Group_Request_Response (131)
-/* ns:Dispatch-Leave-Group-Request-Response */
-struct ns__Dispatch_Leave_Group_Request_Response
-{
-public:
-	int soap_type() const { return 131; } /* = unique type id SOAP_TYPE_ns__Dispatch_Leave_Group_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 119; } /* = unique type id SOAP_TYPE_ns__Dispatch_Jion_Group_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Leave_Group_Request
-#define SOAP_TYPE_ns__Dispatch_Leave_Group_Request (134)
+#define SOAP_TYPE_ns__Dispatch_Leave_Group_Request (121)
 /* ns:Dispatch-Leave-Group-Request */
 struct ns__Dispatch_Leave_Group_Request
 {
 public:
-	ns__Entity group_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string group_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 134; } /* = unique type id SOAP_TYPE_ns__Dispatch_Leave_Group_Request */
+	int soap_type() const { return 121; } /* = unique type id SOAP_TYPE_ns__Dispatch_Leave_Group_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Session_Status_Notification
-#define SOAP_TYPE_ns__Dispatch_Session_Status_Notification (137)
+#define SOAP_TYPE_ns__Dispatch_Session_Status_Notification (124)
 /* ns:Dispatch-Session-Status-Notification */
 struct ns__Dispatch_Session_Status_Notification
 {
 public:
-	void *_;	/* transient */
+	std::string session_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 137; } /* = unique type id SOAP_TYPE_ns__Dispatch_Session_Status_Notification */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Send_Message_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Send_Message_Request_Response (138)
-/* ns:Dispatch-Send-Message-Request-Response */
-struct ns__Dispatch_Send_Message_Request_Response
-{
-public:
-	int soap_type() const { return 138; } /* = unique type id SOAP_TYPE_ns__Dispatch_Send_Message_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 124; } /* = unique type id SOAP_TYPE_ns__Dispatch_Session_Status_Notification */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Send_Message_Request
-#define SOAP_TYPE_ns__Dispatch_Send_Message_Request (141)
+#define SOAP_TYPE_ns__Dispatch_Send_Message_Request (126)
 /* ns:Dispatch-Send-Message-Request */
 struct ns__Dispatch_Send_Message_Request
 {
 public:
-	unsigned long id;	/* required element of type uint32 */
-	ns__MediaMessage message;	/* required element of type ns:MediaMessage */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string group_id;	/* required element of type xsd:string */
+	ns__MediaMessage mediamessage;	/* required element of type ns:MediaMessage */
 public:
-	int soap_type() const { return 141; } /* = unique type id SOAP_TYPE_ns__Dispatch_Send_Message_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Kick_Participant_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Kick_Participant_Request_Response (142)
-/* ns:Dispatch-Kick-Participant-Request-Response */
-struct ns__Dispatch_Kick_Participant_Request_Response
-{
-public:
-	int soap_type() const { return 142; } /* = unique type id SOAP_TYPE_ns__Dispatch_Kick_Participant_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Kick_Participant_Request
-#define SOAP_TYPE_ns__Dispatch_Kick_Participant_Request (145)
-/* ns:Dispatch-Kick-Participant-Request */
-struct ns__Dispatch_Kick_Participant_Request
-{
-public:
-	ns__Entity group_id;	/* required element of type ns:Entity */
-	ns__Entity account_id;	/* required element of type ns:Entity */
-public:
-	int soap_type() const { return 145; } /* = unique type id SOAP_TYPE_ns__Dispatch_Kick_Participant_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Start_Record_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Start_Record_Request_Response (146)
-/* ns:Dispatch-Start-Record-Request-Response */
-struct ns__Dispatch_Start_Record_Request_Response
-{
-public:
-	int soap_type() const { return 146; } /* = unique type id SOAP_TYPE_ns__Dispatch_Start_Record_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 126; } /* = unique type id SOAP_TYPE_ns__Dispatch_Send_Message_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Start_Record_Request
-#define SOAP_TYPE_ns__Dispatch_Start_Record_Request (149)
+#define SOAP_TYPE_ns__Dispatch_Start_Record_Request (128)
 /* ns:Dispatch-Start-Record-Request */
 struct ns__Dispatch_Start_Record_Request
 {
 public:
-	ns__Entity group_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string group_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 149; } /* = unique type id SOAP_TYPE_ns__Dispatch_Start_Record_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Stop_Record_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Stop_Record_Request_Response (150)
-/* ns:Dispatch-Stop-Record-Request-Response */
-struct ns__Dispatch_Stop_Record_Request_Response
-{
-public:
-	int soap_type() const { return 150; } /* = unique type id SOAP_TYPE_ns__Dispatch_Stop_Record_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 128; } /* = unique type id SOAP_TYPE_ns__Dispatch_Start_Record_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Stop_Record_Request
-#define SOAP_TYPE_ns__Dispatch_Stop_Record_Request (153)
+#define SOAP_TYPE_ns__Dispatch_Stop_Record_Request (130)
 /* ns:Dispatch-Stop-Record-Request */
 struct ns__Dispatch_Stop_Record_Request
 {
 public:
-	ns__Entity group_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string group_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 153; } /* = unique type id SOAP_TYPE_ns__Dispatch_Stop_Record_Request */
+	int soap_type() const { return 130; } /* = unique type id SOAP_TYPE_ns__Dispatch_Stop_Record_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Record_Status_Notification
-#define SOAP_TYPE_ns__Dispatch_Record_Status_Notification (156)
+#define SOAP_TYPE_ns__Dispatch_Record_Status_Notification (133)
 /* ns:Dispatch-Record-Status-Notification */
 struct ns__Dispatch_Record_Status_Notification
 {
 public:
-	void *_;	/* transient */
+	std::string session_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 156; } /* = unique type id SOAP_TYPE_ns__Dispatch_Record_Status_Notification */
+	int soap_type() const { return 133; } /* = unique type id SOAP_TYPE_ns__Dispatch_Record_Status_Notification */
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Dispatch_Subscribe_Account_Location_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Subscribe_Account_Location_Request_Response (157)
-/* ns:Dispatch-Subscribe-Account-Location-Request-Response */
-struct ns__Dispatch_Subscribe_Account_Location_Request_Response
+#ifndef SOAP_TYPE_ns__Dispatch_Subscribe_Account_Info_Request
+#define SOAP_TYPE_ns__Dispatch_Subscribe_Account_Info_Request (136)
+/* ns:Dispatch-Subscribe-Account-Info-Request */
+struct ns__Dispatch_Subscribe_Account_Info_Request
 {
 public:
-	int soap_type() const { return 157; } /* = unique type id SOAP_TYPE_ns__Dispatch_Subscribe_Account_Location_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Subscribe_Account_Location_Request
-#define SOAP_TYPE_ns__Dispatch_Subscribe_Account_Location_Request (160)
-/* ns:Dispatch-Subscribe-Account-Location-Request */
-struct ns__Dispatch_Subscribe_Account_Location_Request
-{
-public:
+	std::string session_id;	/* required element of type xsd:string */
 	bool subscribing;	/* required element of type xsd:boolean */
-	ns__Entity account_id;	/* required element of type ns:Entity */
-	unsigned long ttl;	/* required element of type uint32 */
+	std::list<std::string >account_id;	/* required element of type xsd:string */
+	enum ns__SubscribeType type;	/* required element of type ns:SubscribeType */
+	std::string ttl;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 160; } /* = unique type id SOAP_TYPE_ns__Dispatch_Subscribe_Account_Location_Request */
+	int soap_type() const { return 136; } /* = unique type id SOAP_TYPE_ns__Dispatch_Subscribe_Account_Info_Request */
 };
 #endif
 
-#ifndef SOAP_TYPE_ns__Dispatch_Account_Location_Notification
-#define SOAP_TYPE_ns__Dispatch_Account_Location_Notification (163)
-/* ns:Dispatch-Account-Location-Notification */
-struct ns__Dispatch_Account_Location_Notification
+#ifndef SOAP_TYPE_ns__Dispatch_Account_Info_Notification
+#define SOAP_TYPE_ns__Dispatch_Account_Info_Notification (139)
+/* ns:Dispatch-Account-Info-Notification */
+struct ns__Dispatch_Account_Info_Notification
 {
 public:
-	void *_;	/* transient */
+	std::string session_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 163; } /* = unique type id SOAP_TYPE_ns__Dispatch_Account_Location_Notification */
+	int soap_type() const { return 139; } /* = unique type id SOAP_TYPE_ns__Dispatch_Account_Info_Notification */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Append_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_Append_Alert_Request (167)
+#define SOAP_TYPE_ns__Dispatch_Append_Alert_Request (143)
 /* ns:Dispatch-Append-Alert-Request */
 struct ns__Dispatch_Append_Alert_Request
 {
 public:
+	std::string session_id;	/* required element of type xsd:string */
 	ns__Alert alert;	/* required element of type ns:Alert */
-	std::list<ns__Account >acount;	/* required element of type ns:Account */
+	std::list<ns__Account >members;	/* required element of type ns:Account */
+	std::string size;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 167; } /* = unique type id SOAP_TYPE_ns__Dispatch_Append_Alert_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Modify_Alert_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Modify_Alert_Request_Response (168)
-/* ns:Dispatch-Modify-Alert-Request-Response */
-struct ns__Dispatch_Modify_Alert_Request_Response
-{
-public:
-	int soap_type() const { return 168; } /* = unique type id SOAP_TYPE_ns__Dispatch_Modify_Alert_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 143; } /* = unique type id SOAP_TYPE_ns__Dispatch_Append_Alert_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Modify_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_Modify_Alert_Request (171)
+#define SOAP_TYPE_ns__Dispatch_Modify_Alert_Request (145)
 /* ns:Dispatch-Modify-Alert-Request */
 struct ns__Dispatch_Modify_Alert_Request
 {
 public:
+	std::string session_id;	/* required element of type xsd:string */
 	ns__Alert alert;	/* required element of type ns:Alert */
 public:
-	int soap_type() const { return 171; } /* = unique type id SOAP_TYPE_ns__Dispatch_Modify_Alert_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Stop_Alert_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Stop_Alert_Request_Response (172)
-/* ns:Dispatch-Stop-Alert-Request-Response */
-struct ns__Dispatch_Stop_Alert_Request_Response
-{
-public:
-	int soap_type() const { return 172; } /* = unique type id SOAP_TYPE_ns__Dispatch_Stop_Alert_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 145; } /* = unique type id SOAP_TYPE_ns__Dispatch_Modify_Alert_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Stop_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_Stop_Alert_Request (175)
+#define SOAP_TYPE_ns__Dispatch_Stop_Alert_Request (147)
 /* ns:Dispatch-Stop-Alert-Request */
 struct ns__Dispatch_Stop_Alert_Request
 {
 public:
-	ns__Entity alert_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string alert_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 175; } /* = unique type id SOAP_TYPE_ns__Dispatch_Stop_Alert_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification_Response
-#define SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification_Response (176)
-/* ns:Dispatch-Alert-Overed-Notification-Response */
-struct ns__Dispatch_Alert_Overed_Notification_Response
-{
-public:
-	int soap_type() const { return 176; } /* = unique type id SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 147; } /* = unique type id SOAP_TYPE_ns__Dispatch_Stop_Alert_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification
-#define SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification (179)
+#define SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification (150)
 /* ns:Dispatch-Alert-Overed-Notification */
 struct ns__Dispatch_Alert_Overed_Notification
 {
 public:
-	ns__Entity alert_id;	/* required element of type ns:Entity */
+	std::string session_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 179; } /* = unique type id SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_History_Alert_RequestResponse
-#define SOAP_TYPE_ns__Dispatch_History_Alert_RequestResponse (183)
-/* ns:Dispatch-History-Alert-RequestResponse */
-struct ns__Dispatch_History_Alert_RequestResponse
-{
-public:
-	std::list<ns__HistoryAlert >response;	/* SOAP 1.2 RPC return element (when namespace qualified) */	/* required element of type ns:HistoryAlert */
-public:
-	int soap_type() const { return 183; } /* = unique type id SOAP_TYPE_ns__Dispatch_History_Alert_RequestResponse */
+	int soap_type() const { return 150; } /* = unique type id SOAP_TYPE_ns__Dispatch_Alert_Overed_Notification */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_History_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_History_Alert_Request (184)
+#define SOAP_TYPE_ns__Dispatch_History_Alert_Request (153)
 /* ns:Dispatch-History-Alert-Request */
 struct ns__Dispatch_History_Alert_Request
 {
 public:
+	std::string session_id;	/* required element of type xsd:string */
 	std::string name;	/* required element of type xsd:string */
 	std::string create_time_from;	/* required element of type xsd:string */
 	std::string create_time_to;	/* required element of type xsd:string */
@@ -1455,72 +1457,61 @@ public:
 	std::string over_time_from;	/* required element of type xsd:string */
 	std::string over_time_to;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 184; } /* = unique type id SOAP_TYPE_ns__Dispatch_History_Alert_Request */
+	int soap_type() const { return 153; } /* = unique type id SOAP_TYPE_ns__Dispatch_History_Alert_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_Alert_Request (186)
+#define SOAP_TYPE_ns__Dispatch_Alert_Request (156)
 /* ns:Dispatch-Alert-Request */
 struct ns__Dispatch_Alert_Request
 {
 public:
-	unsigned long alert_id;	/* required element of type uint32 */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string alert_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 186; } /* = unique type id SOAP_TYPE_ns__Dispatch_Alert_Request */
+	int soap_type() const { return 156; } /* = unique type id SOAP_TYPE_ns__Dispatch_Alert_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request
-#define SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request (189)
+#define SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request (159)
 /* ns:Dispatch-History-Alert-Message-Request */
 struct ns__Dispatch_History_Alert_Message_Request
 {
 public:
-	unsigned long history_alert_id;	/* required element of type uint32 */
-	unsigned long from_message_id;	/* required element of type uint32 */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string history_alert_id;	/* required element of type xsd:string */
+	std::string from_message_id;	/* required element of type xsd:string */
 	std::string from_time;	/* required element of type xsd:string */
-	unsigned long max_message_count;	/* required element of type uint32 */
+	std::string max_message_count;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 189; } /* = unique type id SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request */
-};
-#endif
-
-#ifndef SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request_Response
-#define SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request_Response (190)
-/* ns:Dispatch-Delete-History-Alert-Request-Response */
-struct ns__Dispatch_Delete_History_Alert_Request_Response
-{
-public:
-	int soap_type() const { return 190; } /* = unique type id SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request_Response */
-#ifdef WITH_NOEMPTYSTRUCT
-private:
-	char dummy;	/* dummy member to enable compilation */
-#endif
+	int soap_type() const { return 159; } /* = unique type id SOAP_TYPE_ns__Dispatch_History_Alert_Message_Request */
 };
 #endif
 
 #ifndef SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request
-#define SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request (193)
+#define SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request (161)
 /* ns:Dispatch-Delete-History-Alert-Request */
 struct ns__Dispatch_Delete_History_Alert_Request
 {
 public:
-	unsigned long history_alert_id;	/* required element of type uint32 */
+	std::string session_id;	/* required element of type xsd:string */
+	std::string history_alert_id;	/* required element of type xsd:string */
 public:
-	int soap_type() const { return 193; } /* = unique type id SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request */
+	int soap_type() const { return 161; } /* = unique type id SOAP_TYPE_ns__Dispatch_Delete_History_Alert_Request */
 };
 #endif
 
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_SOAP_ENV__Header
-#define SOAP_TYPE_SOAP_ENV__Header (194)
+#define SOAP_TYPE_SOAP_ENV__Header (162)
 /* SOAP Header: */
 struct SOAP_ENV__Header
 {
 public:
-	int soap_type() const { return 194; } /* = unique type id SOAP_TYPE_SOAP_ENV__Header */
+	int soap_type() const { return 162; } /* = unique type id SOAP_TYPE_SOAP_ENV__Header */
 #ifdef WITH_NOEMPTYSTRUCT
 private:
 	char dummy;	/* dummy member to enable compilation */
@@ -1533,7 +1524,7 @@ private:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_SOAP_ENV__Code
-#define SOAP_TYPE_SOAP_ENV__Code (195)
+#define SOAP_TYPE_SOAP_ENV__Code (163)
 /* SOAP Fault Code: */
 struct SOAP_ENV__Code
 {
@@ -1541,7 +1532,7 @@ public:
 	char *SOAP_ENV__Value;	/* optional element of type xsd:QName */
 	struct SOAP_ENV__Code *SOAP_ENV__Subcode;	/* optional element of type SOAP-ENV:Code */
 public:
-	int soap_type() const { return 195; } /* = unique type id SOAP_TYPE_SOAP_ENV__Code */
+	int soap_type() const { return 163; } /* = unique type id SOAP_TYPE_SOAP_ENV__Code */
 };
 #endif
 
@@ -1550,7 +1541,7 @@ public:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_SOAP_ENV__Detail
-#define SOAP_TYPE_SOAP_ENV__Detail (197)
+#define SOAP_TYPE_SOAP_ENV__Detail (165)
 /* SOAP-ENV:Detail */
 struct SOAP_ENV__Detail
 {
@@ -1559,7 +1550,7 @@ public:
 	int __type;	/* any type of element <fault> (defined below) */
 	void *fault;	/* transient */
 public:
-	int soap_type() const { return 197; } /* = unique type id SOAP_TYPE_SOAP_ENV__Detail */
+	int soap_type() const { return 165; } /* = unique type id SOAP_TYPE_SOAP_ENV__Detail */
 };
 #endif
 
@@ -1568,14 +1559,14 @@ public:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_SOAP_ENV__Reason
-#define SOAP_TYPE_SOAP_ENV__Reason (198)
+#define SOAP_TYPE_SOAP_ENV__Reason (168)
 /* SOAP-ENV:Reason */
 struct SOAP_ENV__Reason
 {
 public:
 	char *SOAP_ENV__Text;	/* optional element of type xsd:string */
 public:
-	int soap_type() const { return 198; } /* = unique type id SOAP_TYPE_SOAP_ENV__Reason */
+	int soap_type() const { return 168; } /* = unique type id SOAP_TYPE_SOAP_ENV__Reason */
 };
 #endif
 
@@ -1584,7 +1575,7 @@ public:
 #ifndef WITH_NOGLOBAL
 
 #ifndef SOAP_TYPE_SOAP_ENV__Fault
-#define SOAP_TYPE_SOAP_ENV__Fault (199)
+#define SOAP_TYPE_SOAP_ENV__Fault (169)
 /* SOAP Fault: */
 struct SOAP_ENV__Fault
 {
@@ -1599,7 +1590,7 @@ public:
 	char *SOAP_ENV__Role;	/* optional element of type xsd:string */
 	struct SOAP_ENV__Detail *SOAP_ENV__Detail;	/* optional element of type SOAP-ENV:Detail */
 public:
-	int soap_type() const { return 199; } /* = unique type id SOAP_TYPE_SOAP_ENV__Fault */
+	int soap_type() const { return 169; } /* = unique type id SOAP_TYPE_SOAP_ENV__Fault */
 };
 #endif
 
@@ -1619,11 +1610,6 @@ typedef char *_QName;
 #ifndef SOAP_TYPE__XML
 #define SOAP_TYPE__XML (6)
 typedef char *_XML;
-#endif
-
-#ifndef SOAP_TYPE_uint32
-#define SOAP_TYPE_uint32 (11)
-typedef unsigned long uint32;
 #endif
 
 

@@ -7,10 +7,11 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-History-Alert-Message-Request>
-   <history-alert-id>0</history-alert-id>
-   <from-message-id>0</from-message-id>
+   <session-id></session-id>
+   <history-alert-id></history-alert-id>
+   <from-message-id></from-message-id>
    <from-time></from-time>
-   <max-message-count>0</max-message-count>
+   <max-message-count></max-message-count>
   </ns:Dispatch-History-Alert-Message-Request>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

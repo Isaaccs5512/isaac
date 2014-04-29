@@ -7,15 +7,11 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-Media-Message-Request>
-   <id>
-    <id>0</id>
-    <name></name>
-    <entity-type>UNIT</entity-type>
-    <parentid>0</parentid>
-   </id>
-   <from-message-id>0</from-message-id>
+   <session-id></session-id>
+   <group-id></group-id>
+   <from-message-id></from-message-id>
    <from-time></from-time>
-   <max-message-count>0</max-message-count>
+   <max-message-count></max-message-count>
   </ns:Dispatch-Media-Message-Request>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

@@ -6,19 +6,22 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <ns:Join-Group-Request-Nofitication>
+  <ns:Dispatch-Join-Group-Request-Nofitication-Response>
    <group-id>
-    <id>0</id>
+    <id></id>
     <name></name>
+    <parentid></parentid>
     <entity-type>UNIT</entity-type>
-    <parentid>0</parentid>
    </group-id>
    <account-id>
-    <id>0</id>
+    <id></id>
     <name></name>
+    <parentid></parentid>
     <entity-type>UNIT</entity-type>
-    <parentid>0</parentid>
    </account-id>
-  </ns:Join-Group-Request-Nofitication>
+   <session-id></session-id>
+   <error-describe></error-describe>
+   <result>false</result>
+  </ns:Dispatch-Join-Group-Request-Nofitication-Response>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

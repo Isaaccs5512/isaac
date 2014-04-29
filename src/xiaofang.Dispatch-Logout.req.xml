@@ -7,7 +7,9 @@
   xmlns:ns="urn:xiaofang">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
   <ns:Dispatch-Logout>
+   <session-id></session-id>
    <name></name>
+   <password></password>
   </ns:Dispatch-Logout>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
