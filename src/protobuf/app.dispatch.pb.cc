@@ -265,10 +265,11 @@ void protobuf_AssignDesc_app_2edispatch_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(EntityNotification));
   EntityStatusNotification_descriptor_ = file->message_type(5);
-  static const int EntityStatusNotification_offsets_[3] = {
+  static const int EntityStatusNotification_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EntityStatusNotification, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EntityStatusNotification, status_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EntityStatusNotification, sip_status_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EntityStatusNotification, custom_status_),
   };
   EntityStatusNotification_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -429,7 +430,7 @@ void protobuf_AssignDesc_app_2edispatch_2eproto() {
   static const int MediaMessageRequest_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MediaMessageRequest, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MediaMessageRequest, from_message_id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MediaMessageRequest, from_time_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MediaMessageRequest, from_timestamp_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MediaMessageRequest, max_message_count_),
   };
   MediaMessageRequest_reflection_ =
@@ -945,7 +946,7 @@ void protobuf_AssignDesc_app_2edispatch_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, append_group_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, modify_group_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, modify_participants_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, media_message_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, group_message_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, invite_participant_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, drop_participant_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, release_participant_token_),
@@ -987,7 +988,7 @@ void protobuf_AssignDesc_app_2edispatch_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, append_group_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, modify_group_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, modify_participants_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, media_message_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, group_message_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, append_alert_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, history_alerts_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, history_alert_),
@@ -1295,236 +1296,237 @@ void protobuf_AddDesc_app_2edispatch_2eproto() {
     "\"1\n\016EntityResponse\022\037\n\004data\030\001 \002(\0132\021.pbmsg"
     ".EntityData\"c\n\022EntityNotification\022,\n\013not"
     "ify_type\030\001 \002(\0162\027.pbmsg.EntityNotifyType\022"
-    "\037\n\004data\030\002 \002(\0132\021.pbmsg.EntityData\"\207\001\n\030Ent"
+    "\037\n\004data\030\002 \002(\0132\021.pbmsg.EntityData\"\263\001\n\030Ent"
     "ityStatusNotification\022\031\n\002id\030\001 \002(\0132\r.pbms"
-    "g.Entity\022%\n\006status\030\002 \002(\0162\025.pbmsg.Registe"
+    "g.Entity\022%\n\006status\030\002 \001(\0162\025.pbmsg.Registe"
     "rStatus\022)\n\nsip_status\030\003 \001(\0162\025.pbmsg.Regi"
-    "sterStatus\"1\n\022AppendGroupRequest\022\033\n\005grou"
-    "p\030\001 \002(\0132\014.pbmsg.Group\"2\n\023AppendGroupResp"
-    "onse\022\033\n\005group\030\001 \002(\0132\014.pbmsg.Group\"1\n\022Mod"
-    "ifyGroupRequest\022\033\n\005group\030\001 \002(\0132\014.pbmsg.G"
-    "roup\"2\n\023ModifyGroupResponse\022\033\n\005group\030\001 \002"
-    "(\0132\014.pbmsg.Group\"\222\001\n\031ModifyParticipantsR"
-    "equest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022"
-    "*\n\013modify_type\030\002 \002(\0162\025.pbmsg.ListModifyT"
-    "ype\022(\n\014particiapnts\030\003 \003(\0132\022.pbmsg.Partic"
-    "ipant\"\223\001\n\032ModifyParticipantsResponse\022\037\n\010"
-    "group_id\030\001 \002(\0132\r.pbmsg.Entity\022*\n\013modify_"
-    "type\030\002 \002(\0162\025.pbmsg.ListModifyType\022(\n\014par"
-    "ticiapnts\030\003 \003(\0132\022.pbmsg.Participant\"\221\001\n\030"
-    "ParticipantsNotification\022\037\n\010group_id\030\001 \002"
-    "(\0132\r.pbmsg.Entity\022*\n\013modify_type\030\002 \002(\0162\025"
-    ".pbmsg.ListModifyType\022(\n\014particiapnts\030\003 "
-    "\003(\0132\022.pbmsg.Participant\"b\n\034JoinGroupRequ"
-    "estNotification\022\037\n\010group_id\030\001 \002(\0132\r.pbms"
-    "g.Entity\022!\n\naccount_id\030\002 \002(\0132\r.pbmsg.Ent"
-    "ity\"\211\001\n\035ParticipantStatusNotification\022\037\n"
-    "\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\naccoun"
-    "t_id\030\002 \002(\0132\r.pbmsg.Entity\022$\n\006status\030\003 \002("
-    "\0162\024.pbmsg.SessionStatus\"w\n\023MediaMessageR"
-    "equest\022\031\n\002id\030\001 \002(\0132\r.pbmsg.Entity\022\027\n\017fro"
-    "m_message_id\030\002 \001(\007\022\021\n\tfrom_time\030\003 \001(\t\022\031\n"
-    "\021max_message_count\030\004 \002(\007\"u\n\024MediaMessage"
-    "Response\022\031\n\002id\030\001 \002(\0132\r.pbmsg.Entity\022%\n\010m"
-    "essages\030\002 \003(\0132\023.pbmsg.MediaMessage\022\033\n\023le"
-    "ave_message_count\030\003 \002(\007\"W\n\030MediaMessageN"
-    "otification\022\031\n\002id\030\001 \002(\0132\r.pbmsg.Entity\022 "
-    "\n\003msg\030\002 \002(\0132\023.pbmsg.MediaMessage\"k\n%Part"
-    "icipantConnectRequestNotification\022\037\n\010gro"
-    "up_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\naccount_id"
-    "\030\002 \002(\0132\r.pbmsg.Entity\"i\n#ParticipantSpea"
-    "kRequestNotification\022\037\n\010group_id\030\001 \002(\0132\r"
-    ".pbmsg.Entity\022!\n\naccount_id\030\002 \002(\0132\r.pbms"
-    "g.Entity\"^\n\030InviteParticipantRequest\022\037\n\010"
-    "group_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\naccount"
-    "_id\030\002 \002(\0132\r.pbmsg.Entity\"\\\n\026DropParticip"
-    "antRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Ent"
-    "ity\022!\n\naccount_id\030\002 \002(\0132\r.pbmsg.Entity\"d"
-    "\n\036ReleaseParticipantTokenRequest\022\037\n\010grou"
-    "p_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\naccount_id\030"
-    "\002 \002(\0132\r.pbmsg.Entity\"d\n\036AppointParticipa"
-    "ntSpeakRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg"
-    ".Entity\022!\n\naccount_id\030\002 \002(\0132\r.pbmsg.Enti"
-    "ty\"3\n\020JionGroupRequest\022\037\n\010group_id\030\001 \002(\013"
-    "2\r.pbmsg.Entity\"4\n\021LeaveGroupRequest\022\037\n\010"
-    "group_id\030\001 \002(\0132\r.pbmsg.Entity\"b\n\031Session"
-    "StatusNotification\022\037\n\010group_id\030\001 \002(\0132\r.p"
-    "bmsg.Entity\022$\n\006status\030\002 \002(\0162\024.pbmsg.Sess"
-    "ionStatus\"Q\n\022SendMessageRequest\022\031\n\002id\030\001 "
-    "\002(\0132\r.pbmsg.Entity\022 \n\003msg\030\002 \002(\0132\023.pbmsg."
-    "MediaMessage\"\\\n\026KickParticipantRequest\022\037"
-    "\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\naccou"
-    "nt_id\030\002 \002(\0132\r.pbmsg.Entity\"5\n\022StartRecor"
-    "dRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entit"
-    "y\"4\n\021StopRecordRequest\022\037\n\010group_id\030\001 \002(\013"
-    "2\r.pbmsg.Entity\"N\n\030RecordStatusNotificat"
-    "ion\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022\021\n\t"
-    "recording\030\002 \002(\010\"f\n\037SubscribeAccountLocat"
-    "ionRequest\022\023\n\013subscribing\030\001 \002(\010\022!\n\naccou"
-    "nt_id\030\002 \002(\0132\r.pbmsg.Entity\022\013\n\003ttl\030\003 \002(\007\""
-    "x\n\033AccountLocationNotification\022!\n\naccoun"
-    "t_id\030\001 \002(\0132\r.pbmsg.Entity\022\021\n\tlongitude\030\002"
-    " \002(\001\022\020\n\010latitude\030\003 \002(\001\022\021\n\ttimestamp\030\004 \002("
-    "\t\"Q\n\022AppendAlertRequest\022\033\n\005alert\030\001 \002(\0132\014"
-    ".pbmsg.Alert\022\036\n\007members\030\002 \003(\0132\r.pbmsg.En"
-    "tity\"2\n\023AppendAlertResponse\022\033\n\005alert\030\001 \002"
-    "(\0132\014.pbmsg.Alert\"1\n\022ModifyAlertRequest\022\033"
-    "\n\005alert\030\001 \002(\0132\014.pbmsg.Alert\"3\n\020StopAlert"
-    "Request\022\037\n\010alert_id\030\001 \002(\0132\r.pbmsg.Entity"
-    "\":\n\027AlertOveredNotification\022\037\n\010alert_id\030"
-    "\001 \002(\0132\r.pbmsg.Entity\"\264\001\n\024HistoryAlertsRe"
-    "quest\022\014\n\004name\030\001 \001(\014\022\030\n\020create_time_from\030"
-    "\002 \001(\t\022\026\n\016create_time_to\030\003 \001(\t\022\027\n\017alram_t"
-    "ime_from\030\004 \001(\t\022\025\n\ralram_time_to\030\005 \001(\t\022\026\n"
-    "\016over_time_from\030\006 \001(\t\022\024\n\014over_time_to\030\007 "
-    "\001(\t\"D\n\025HistoryAlertsResponse\022+\n\016history_"
-    "alerts\030\001 \003(\0132\023.pbmsg.HistoryAlert\"/\n\023His"
-    "toryAlertRequest\022\030\n\020history_alert_id\030\001 \002"
-    "(\007\"B\n\024HistoryAlertResponse\022*\n\rhistory_al"
-    "ert\030\001 \002(\0132\023.pbmsg.HistoryAlert\"}\n\032Histor"
-    "yAlertMessageRequest\022\030\n\020history_alert_id"
-    "\030\001 \002(\007\022\027\n\017from_message_id\030\002 \001(\007\022\021\n\tfrom_"
-    "time\030\003 \001(\t\022\031\n\021max_message_count\030\004 \002(\007\"{\n"
-    "\033HistoryAlertMessageResponse\022\030\n\020history_"
-    "alert_id\030\001 \002(\007\022%\n\010messages\030\002 \003(\0132\023.pbmsg"
-    ".MediaMessage\022\033\n\023leave_message_count\030\003 \002"
-    "(\007\"5\n\031DeleteHistoryAlertRequest\022\030\n\020histo"
-    "ry_alert_id\030\001 \002(\007\"5\n\022DeleteGroupRequest\022"
-    "\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\"\374\013\n\007Req"
-    "uest\022)\n\005login\030\001 \001(\0132\032.app.dispatch.Login"
-    "Request\022+\n\006entity\030\002 \001(\0132\033.app.dispatch.E"
-    "ntityRequest\0226\n\014append_group\030\003 \001(\0132 .app"
-    ".dispatch.AppendGroupRequest\0226\n\014modify_g"
-    "roup\030\004 \001(\0132 .app.dispatch.ModifyGroupReq"
-    "uest\022D\n\023modify_participants\030\005 \001(\0132\'.app."
-    "dispatch.ModifyParticipantsRequest\0228\n\rme"
-    "dia_message\030\006 \001(\0132!.app.dispatch.MediaMe"
-    "ssageRequest\022B\n\022invite_participant\030\007 \001(\013"
-    "2&.app.dispatch.InviteParticipantRequest"
-    "\022>\n\020drop_participant\030\010 \001(\0132$.app.dispatc"
-    "h.DropParticipantRequest\022O\n\031release_part"
-    "icipant_token\030\t \001(\0132,.app.dispatch.Relea"
-    "seParticipantTokenRequest\022O\n\031appoint_par"
-    "ticipant_speak\030\n \001(\0132,.app.dispatch.Appo"
-    "intParticipantSpeakRequest\0222\n\njion_group"
-    "\030\013 \001(\0132\036.app.dispatch.JionGroupRequest\0224"
-    "\n\013leave_group\030\014 \001(\0132\037.app.dispatch.Leave"
-    "GroupRequest\0226\n\014send_message\030\r \001(\0132 .app"
-    ".dispatch.SendMessageRequest\022>\n\020kick_par"
-    "ticipant\030\016 \001(\0132$.app.dispatch.KickPartic"
-    "ipantRequest\0226\n\014start_record\030\017 \001(\0132 .app"
-    ".dispatch.StartRecordRequest\0224\n\013stop_rec"
-    "ord\030\020 \001(\0132\037.app.dispatch.StopRecordReque"
-    "st\022Q\n\032subscribe_account_location\030\021 \001(\0132-"
-    ".app.dispatch.SubscribeAccountLocationRe"
-    "quest\0226\n\014append_alert\030\022 \001(\0132 .app.dispat"
-    "ch.AppendAlertRequest\0226\n\014modify_alert\030\023 "
-    "\001(\0132 .app.dispatch.ModifyAlertRequest\0222\n"
-    "\nstop_alert\030\024 \001(\0132\036.app.dispatch.StopAle"
-    "rtRequest\022:\n\016history_alerts\030\025 \001(\0132\".app."
-    "dispatch.HistoryAlertsRequest\0228\n\rhistory"
-    "_alert\030\026 \001(\0132!.app.dispatch.HistoryAlert"
-    "Request\022E\n\024delete_history_alert\030\027 \001(\0132\'."
-    "app.dispatch.DeleteHistoryAlertRequest\0226"
-    "\n\014delete_group\030\030 \001(\0132 .app.dispatch.Dele"
-    "teGroupRequest\022G\n\025history_alert_message\030"
-    "\031 \001(\0132(.app.dispatch.HistoryAlertMessage"
-    "Request\"\222\005\n\010Response\022\016\n\006result\030\001 \002(\010\022\025\n\r"
-    "last_response\030\002 \002(\010\022\026\n\016error_describe\030\003 "
-    "\001(\014\022*\n\005login\030\004 \001(\0132\033.app.dispatch.LoginR"
-    "esponse\022,\n\006entity\030\005 \001(\0132\034.app.dispatch.E"
-    "ntityResponse\0227\n\014append_group\030\006 \001(\0132!.ap"
-    "p.dispatch.AppendGroupResponse\0227\n\014modify"
-    "_group\030\007 \001(\0132!.app.dispatch.ModifyGroupR"
-    "esponse\022E\n\023modify_participants\030\010 \001(\0132(.a"
-    "pp.dispatch.ModifyParticipantsResponse\0229"
-    "\n\rmedia_message\030\t \001(\0132\".app.dispatch.Med"
-    "iaMessageResponse\0227\n\014append_alert\030\n \001(\0132"
-    "!.app.dispatch.AppendAlertResponse\022;\n\016hi"
-    "story_alerts\030\013 \001(\0132#.app.dispatch.Histor"
-    "yAlertsResponse\0229\n\rhistory_alert\030\014 \001(\0132\""
-    ".app.dispatch.HistoryAlertResponse\022H\n\025hi"
-    "story_alert_message\030\r \001(\0132).app.dispatch"
-    ".HistoryAlertMessageResponse\"\275\006\n\nIndicat"
-    "ion\0220\n\006entity\030\001 \001(\0132 .app.dispatch.Entit"
-    "yNotification\022=\n\rentity_status\030\002 \001(\0132&.a"
-    "pp.dispatch.EntityStatusNotification\022<\n\014"
-    "participants\030\003 \001(\0132&.app.dispatch.Partic"
-    "ipantsNotification\022F\n\022join_group_request"
-    "\030\004 \001(\0132*.app.dispatch.JoinGroupRequestNo"
-    "tification\022G\n\022participant_status\030\005 \001(\0132+"
-    ".app.dispatch.ParticipantStatusNotificat"
-    "ion\022=\n\rmedia_message\030\006 \001(\0132&.app.dispatc"
-    "h.MediaMessageNotification\022X\n\033participan"
-    "t_connect_request\030\007 \001(\01323.app.dispatch.P"
-    "articipantConnectRequestNotification\022T\n\031"
-    "participant_speak_request\030\010 \001(\01321.app.di"
-    "spatch.ParticipantSpeakRequestNotificati"
-    "on\022\?\n\016session_status\030\t \001(\0132\'.app.dispatc"
-    "h.SessionStatusNotification\022=\n\rrecord_st"
-    "atus\030\n \001(\0132&.app.dispatch.RecordStatusNo"
-    "tification\022C\n\020account_location\030\013 \001(\0132).a"
-    "pp.dispatch.AccountLocationNotification\022"
-    ";\n\014alert_overed\030\014 \001(\0132%.app.dispatch.Ale"
-    "rtOveredNotification\"\324\001\n\007Message\022#\n\010msg_"
-    "type\030\001 \002(\0162\021.app.dispatch.MSG\022\020\n\010sequenc"
-    "e\030\002 \002(\007\022\022\n\nsession_id\030\003 \001(\007\022&\n\007request\030\004"
-    " \001(\0132\025.app.dispatch.Request\022(\n\010response\030"
-    "\005 \001(\0132\026.app.dispatch.Response\022,\n\nindicat"
-    "ion\030\006 \001(\0132\030.app.dispatch.Indication*\253\020\n\003"
-    "MSG\022\023\n\rLogin_Request\020\301\232\014\022\024\n\016Login_Respon"
-    "se\020\302\232\014\022\024\n\016Logout_Request\020\303\232\014\022\025\n\017Logout_R"
-    "esponse\020\304\232\014\022\027\n\021Keepalive_Request\020\305\232\014\022\030\n\022"
-    "Keepalive_Response\020\306\232\014\022\024\n\016Entity_Request"
-    "\020\307\232\014\022\025\n\017Entity_Response\020\310\232\014\022\032\n\024Append_Gr"
-    "oup_Request\020\311\232\014\022\033\n\025Append_Group_Response"
-    "\020\312\232\014\022\032\n\024Modify_Group_Request\020\313\232\014\022\033\n\025Modi"
-    "fy_Group_Response\020\314\232\014\022!\n\033Modify_Particip"
-    "ants_Request\020\315\232\014\022\"\n\034Modify_Participants_"
-    "Response\020\316\232\014\022\033\n\025Media_Message_Request\020\317\232"
-    "\014\022\034\n\026Media_Message_Response\020\320\232\014\022 \n\032Invit"
-    "e_Participant_Request\020\321\232\014\022!\n\033Invite_Part"
-    "icipant_Response\020\322\232\014\022\036\n\030Drop_Participant"
-    "_Request\020\323\232\014\022\037\n\031Drop_Participant_Respons"
-    "e\020\324\232\014\022\'\n!Release_Participant_Token_Reque"
-    "st\020\325\232\014\022(\n\"Release_Participant_Token_Resp"
-    "onse\020\326\232\014\022\'\n!Appoint_Participant_Speak_Re"
-    "quest\020\327\232\014\022(\n\"Appoint_Participant_Speak_R"
-    "esponse\020\330\232\014\022\030\n\022Jion_Group_Request\020\331\232\014\022\031\n"
-    "\023Jion_Group_Response\020\332\232\014\022\031\n\023Leave_Group_"
-    "Request\020\333\232\014\022\032\n\024Leave_Group_Response\020\334\232\014\022"
-    "\032\n\024Send_Message_Request\020\335\232\014\022\033\n\025Send_Mess"
-    "age_Response\020\336\232\014\022\036\n\030Kick_Participant_Req"
-    "uest\020\337\232\014\022\037\n\031Kick_Participant_Response\020\340\232"
-    "\014\022\032\n\024Start_Record_Request\020\341\232\014\022\033\n\025Start_R"
-    "ecord_Response\020\342\232\014\022\031\n\023Stop_Record_Reques"
-    "t\020\343\232\014\022\032\n\024Stop_Record_Response\020\344\232\014\022(\n\"Sub"
-    "scribe_Account_Location_Request\020\345\232\014\022)\n#S"
-    "ubscribe_Account_Location_Response\020\346\232\014\022\032"
-    "\n\024Append_Alert_Request\020\347\232\014\022\033\n\025Append_Ale"
-    "rt_Response\020\350\232\014\022\032\n\024Modify_Alert_Request\020"
-    "\351\232\014\022\033\n\025Modify_Alert_Response\020\352\232\014\022\030\n\022Stop"
-    "_Alert_Request\020\353\232\014\022\031\n\023Stop_Alert_Respons"
-    "e\020\354\232\014\022\034\n\026History_Alerts_Request\020\355\232\014\022\035\n\027H"
-    "istory_Alerts_Response\020\356\232\014\022\033\n\025History_Al"
-    "ert_Request\020\357\232\014\022\034\n\026History_Alert_Respons"
-    "e\020\360\232\014\022#\n\035History_Alert_Message_Request\020\361"
-    "\232\014\022$\n\036History_Alert_Message_Response\020\362\232\014"
-    "\022\"\n\034Delete_History_Alert_Request\020\363\232\014\022#\n\035"
-    "Delete_History_Alert_Response\020\364\232\014\022\032\n\024Del"
-    "ete_Group_Request\020\365\232\014\022\033\n\025Delete_Group_Re"
-    "sponse\020\366\232\014\022\031\n\023Entity_Notification\020\321\350\014\022 \n"
-    "\032Entity_Status_Notification\020\322\350\014\022\037\n\031Parti"
-    "cipants_Notification\020\323\350\014\022%\n\037Join_Group_R"
-    "equest_Notification\020\324\350\014\022%\n\037Participant_S"
-    "tatus_Notification\020\325\350\014\022 \n\032Media_Message_"
-    "Notification\020\326\350\014\022.\n(Participant_Connect_"
-    "Request_Notification\020\327\350\014\022,\n&Participant_"
-    "Speak_Request_Notification\020\330\350\014\022!\n\033Sessio"
-    "n_Status_Notification\020\331\350\014\022 \n\032Record_Stat"
-    "us_Notification\020\332\350\014\022#\n\035Account_Location_"
-    "Notification\020\333\350\014\022\037\n\031Alert_Overed_Notific"
-    "ation\020\334\350\014", 9569);
+    "sterStatus\022*\n\rcustom_status\030\004 \001(\0162\023.pbms"
+    "g.CustomStatus\"1\n\022AppendGroupRequest\022\033\n\005"
+    "group\030\001 \002(\0132\014.pbmsg.Group\"2\n\023AppendGroup"
+    "Response\022\033\n\005group\030\001 \002(\0132\014.pbmsg.Group\"1\n"
+    "\022ModifyGroupRequest\022\033\n\005group\030\001 \002(\0132\014.pbm"
+    "sg.Group\"2\n\023ModifyGroupResponse\022\033\n\005group"
+    "\030\001 \002(\0132\014.pbmsg.Group\"\222\001\n\031ModifyParticipa"
+    "ntsRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Ent"
+    "ity\022*\n\013modify_type\030\002 \002(\0162\025.pbmsg.ListMod"
+    "ifyType\022(\n\014particiapnts\030\003 \003(\0132\022.pbmsg.Pa"
+    "rticipant\"\223\001\n\032ModifyParticipantsResponse"
+    "\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022*\n\013mod"
+    "ify_type\030\002 \002(\0162\025.pbmsg.ListModifyType\022(\n"
+    "\014particiapnts\030\003 \003(\0132\022.pbmsg.Participant\""
+    "\221\001\n\030ParticipantsNotification\022\037\n\010group_id"
+    "\030\001 \002(\0132\r.pbmsg.Entity\022*\n\013modify_type\030\002 \002"
+    "(\0162\025.pbmsg.ListModifyType\022(\n\014particiapnt"
+    "s\030\003 \003(\0132\022.pbmsg.Participant\"b\n\034JoinGroup"
+    "RequestNotification\022\037\n\010group_id\030\001 \002(\0132\r."
+    "pbmsg.Entity\022!\n\naccount_id\030\002 \002(\0132\r.pbmsg"
+    ".Entity\"\211\001\n\035ParticipantStatusNotificatio"
+    "n\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\nac"
+    "count_id\030\002 \002(\0132\r.pbmsg.Entity\022$\n\006status\030"
+    "\003 \002(\0162\024.pbmsg.SessionStatus\"|\n\023MediaMess"
+    "ageRequest\022\031\n\002id\030\001 \002(\0132\r.pbmsg.Entity\022\027\n"
+    "\017from_message_id\030\002 \001(\007\022\026\n\016from_timestamp"
+    "\030\003 \001(\t\022\031\n\021max_message_count\030\004 \002(\007\"u\n\024Med"
+    "iaMessageResponse\022\031\n\002id\030\001 \002(\0132\r.pbmsg.En"
+    "tity\022%\n\010messages\030\002 \003(\0132\023.pbmsg.MediaMess"
+    "age\022\033\n\023leave_message_count\030\003 \002(\007\"W\n\030Medi"
+    "aMessageNotification\022\031\n\002id\030\001 \002(\0132\r.pbmsg"
+    ".Entity\022 \n\003msg\030\002 \002(\0132\023.pbmsg.MediaMessag"
+    "e\"k\n%ParticipantConnectRequestNotificati"
+    "on\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\na"
+    "ccount_id\030\002 \002(\0132\r.pbmsg.Entity\"i\n#Partic"
+    "ipantSpeakRequestNotification\022\037\n\010group_i"
+    "d\030\001 \002(\0132\r.pbmsg.Entity\022!\n\naccount_id\030\002 \002"
+    "(\0132\r.pbmsg.Entity\"^\n\030InviteParticipantRe"
+    "quest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!"
+    "\n\naccount_id\030\002 \001(\0132\r.pbmsg.Entity\"\\\n\026Dro"
+    "pParticipantRequest\022\037\n\010group_id\030\001 \002(\0132\r."
+    "pbmsg.Entity\022!\n\naccount_id\030\002 \001(\0132\r.pbmsg"
+    ".Entity\"d\n\036ReleaseParticipantTokenReques"
+    "t\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\nac"
+    "count_id\030\002 \002(\0132\r.pbmsg.Entity\"d\n\036Appoint"
+    "ParticipantSpeakRequest\022\037\n\010group_id\030\001 \002("
+    "\0132\r.pbmsg.Entity\022!\n\naccount_id\030\002 \002(\0132\r.p"
+    "bmsg.Entity\"3\n\020JionGroupRequest\022\037\n\010group"
+    "_id\030\001 \002(\0132\r.pbmsg.Entity\"4\n\021LeaveGroupRe"
+    "quest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\"b"
+    "\n\031SessionStatusNotification\022\037\n\010group_id\030"
+    "\001 \002(\0132\r.pbmsg.Entity\022$\n\006status\030\002 \002(\0162\024.p"
+    "bmsg.SessionStatus\"Q\n\022SendMessageRequest"
+    "\022\031\n\002id\030\001 \002(\0132\r.pbmsg.Entity\022 \n\003msg\030\002 \002(\013"
+    "2\023.pbmsg.MediaMessage\"\\\n\026KickParticipant"
+    "Request\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity"
+    "\022!\n\naccount_id\030\002 \001(\0132\r.pbmsg.Entity\"5\n\022S"
+    "tartRecordRequest\022\037\n\010group_id\030\001 \002(\0132\r.pb"
+    "msg.Entity\"4\n\021StopRecordRequest\022\037\n\010group"
+    "_id\030\001 \002(\0132\r.pbmsg.Entity\"N\n\030RecordStatus"
+    "Notification\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.E"
+    "ntity\022\021\n\trecording\030\002 \002(\010\"f\n\037SubscribeAcc"
+    "ountLocationRequest\022\023\n\013subscribing\030\001 \002(\010"
+    "\022!\n\naccount_id\030\002 \002(\0132\r.pbmsg.Entity\022\013\n\003t"
+    "tl\030\003 \002(\007\"x\n\033AccountLocationNotification\022"
+    "!\n\naccount_id\030\001 \002(\0132\r.pbmsg.Entity\022\021\n\tlo"
+    "ngitude\030\002 \002(\001\022\020\n\010latitude\030\003 \002(\001\022\021\n\ttimes"
+    "tamp\030\004 \002(\t\"Q\n\022AppendAlertRequest\022\033\n\005aler"
+    "t\030\001 \002(\0132\014.pbmsg.Alert\022\036\n\007members\030\002 \003(\0132\r"
+    ".pbmsg.Entity\"2\n\023AppendAlertResponse\022\033\n\005"
+    "alert\030\001 \002(\0132\014.pbmsg.Alert\"1\n\022ModifyAlert"
+    "Request\022\033\n\005alert\030\001 \002(\0132\014.pbmsg.Alert\"3\n\020"
+    "StopAlertRequest\022\037\n\010alert_id\030\001 \002(\0132\r.pbm"
+    "sg.Entity\":\n\027AlertOveredNotification\022\037\n\010"
+    "alert_id\030\001 \002(\0132\r.pbmsg.Entity\"\264\001\n\024Histor"
+    "yAlertsRequest\022\014\n\004name\030\001 \001(\014\022\030\n\020create_t"
+    "ime_from\030\002 \001(\t\022\026\n\016create_time_to\030\003 \001(\t\022\027"
+    "\n\017alram_time_from\030\004 \001(\t\022\025\n\ralram_time_to"
+    "\030\005 \001(\t\022\026\n\016over_time_from\030\006 \001(\t\022\024\n\014over_t"
+    "ime_to\030\007 \001(\t\"D\n\025HistoryAlertsResponse\022+\n"
+    "\016history_alerts\030\001 \003(\0132\023.pbmsg.HistoryAle"
+    "rt\"/\n\023HistoryAlertRequest\022\030\n\020history_ale"
+    "rt_id\030\001 \002(\007\"B\n\024HistoryAlertResponse\022*\n\rh"
+    "istory_alert\030\001 \002(\0132\023.pbmsg.HistoryAlert\""
+    "}\n\032HistoryAlertMessageRequest\022\030\n\020history"
+    "_alert_id\030\001 \002(\007\022\027\n\017from_message_id\030\002 \001(\007"
+    "\022\021\n\tfrom_time\030\003 \001(\t\022\031\n\021max_message_count"
+    "\030\004 \002(\007\"{\n\033HistoryAlertMessageResponse\022\030\n"
+    "\020history_alert_id\030\001 \002(\007\022%\n\010messages\030\002 \003("
+    "\0132\023.pbmsg.MediaMessage\022\033\n\023leave_message_"
+    "count\030\003 \002(\007\"5\n\031DeleteHistoryAlertRequest"
+    "\022\030\n\020history_alert_id\030\001 \002(\007\"5\n\022DeleteGrou"
+    "pRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entit"
+    "y\"\374\013\n\007Request\022)\n\005login\030\001 \001(\0132\032.app.dispa"
+    "tch.LoginRequest\022+\n\006entity\030\002 \001(\0132\033.app.d"
+    "ispatch.EntityRequest\0226\n\014append_group\030\003 "
+    "\001(\0132 .app.dispatch.AppendGroupRequest\0226\n"
+    "\014modify_group\030\004 \001(\0132 .app.dispatch.Modif"
+    "yGroupRequest\022D\n\023modify_participants\030\005 \001"
+    "(\0132\'.app.dispatch.ModifyParticipantsRequ"
+    "est\0228\n\rgroup_message\030\006 \001(\0132!.app.dispatc"
+    "h.MediaMessageRequest\022B\n\022invite_particip"
+    "ant\030\007 \001(\0132&.app.dispatch.InviteParticipa"
+    "ntRequest\022>\n\020drop_participant\030\010 \001(\0132$.ap"
+    "p.dispatch.DropParticipantRequest\022O\n\031rel"
+    "ease_participant_token\030\t \001(\0132,.app.dispa"
+    "tch.ReleaseParticipantTokenRequest\022O\n\031ap"
+    "point_participant_speak\030\n \001(\0132,.app.disp"
+    "atch.AppointParticipantSpeakRequest\0222\n\nj"
+    "ion_group\030\013 \001(\0132\036.app.dispatch.JionGroup"
+    "Request\0224\n\013leave_group\030\014 \001(\0132\037.app.dispa"
+    "tch.LeaveGroupRequest\0226\n\014send_message\030\r "
+    "\001(\0132 .app.dispatch.SendMessageRequest\022>\n"
+    "\020kick_participant\030\016 \001(\0132$.app.dispatch.K"
+    "ickParticipantRequest\0226\n\014start_record\030\017 "
+    "\001(\0132 .app.dispatch.StartRecordRequest\0224\n"
+    "\013stop_record\030\020 \001(\0132\037.app.dispatch.StopRe"
+    "cordRequest\022Q\n\032subscribe_account_locatio"
+    "n\030\021 \001(\0132-.app.dispatch.SubscribeAccountL"
+    "ocationRequest\0226\n\014append_alert\030\022 \001(\0132 .a"
+    "pp.dispatch.AppendAlertRequest\0226\n\014modify"
+    "_alert\030\023 \001(\0132 .app.dispatch.ModifyAlertR"
+    "equest\0222\n\nstop_alert\030\024 \001(\0132\036.app.dispatc"
+    "h.StopAlertRequest\022:\n\016history_alerts\030\025 \001"
+    "(\0132\".app.dispatch.HistoryAlertsRequest\0228"
+    "\n\rhistory_alert\030\026 \001(\0132!.app.dispatch.His"
+    "toryAlertRequest\022E\n\024delete_history_alert"
+    "\030\027 \001(\0132\'.app.dispatch.DeleteHistoryAlert"
+    "Request\0226\n\014delete_group\030\030 \001(\0132 .app.disp"
+    "atch.DeleteGroupRequest\022G\n\025history_alert"
+    "_message\030\031 \001(\0132(.app.dispatch.HistoryAle"
+    "rtMessageRequest\"\222\005\n\010Response\022\016\n\006result\030"
+    "\001 \002(\010\022\025\n\rlast_response\030\002 \002(\010\022\026\n\016error_de"
+    "scribe\030\003 \001(\014\022*\n\005login\030\004 \001(\0132\033.app.dispat"
+    "ch.LoginResponse\022,\n\006entity\030\005 \001(\0132\034.app.d"
+    "ispatch.EntityResponse\0227\n\014append_group\030\006"
+    " \001(\0132!.app.dispatch.AppendGroupResponse\022"
+    "7\n\014modify_group\030\007 \001(\0132!.app.dispatch.Mod"
+    "ifyGroupResponse\022E\n\023modify_participants\030"
+    "\010 \001(\0132(.app.dispatch.ModifyParticipantsR"
+    "esponse\0229\n\rgroup_message\030\t \001(\0132\".app.dis"
+    "patch.MediaMessageResponse\0227\n\014append_ale"
+    "rt\030\n \001(\0132!.app.dispatch.AppendAlertRespo"
+    "nse\022;\n\016history_alerts\030\013 \001(\0132#.app.dispat"
+    "ch.HistoryAlertsResponse\0229\n\rhistory_aler"
+    "t\030\014 \001(\0132\".app.dispatch.HistoryAlertRespo"
+    "nse\022H\n\025history_alert_message\030\r \001(\0132).app"
+    ".dispatch.HistoryAlertMessageResponse\"\275\006"
+    "\n\nIndication\0220\n\006entity\030\001 \001(\0132 .app.dispa"
+    "tch.EntityNotification\022=\n\rentity_status\030"
+    "\002 \001(\0132&.app.dispatch.EntityStatusNotific"
+    "ation\022<\n\014participants\030\003 \001(\0132&.app.dispat"
+    "ch.ParticipantsNotification\022F\n\022join_grou"
+    "p_request\030\004 \001(\0132*.app.dispatch.JoinGroup"
+    "RequestNotification\022G\n\022participant_statu"
+    "s\030\005 \001(\0132+.app.dispatch.ParticipantStatus"
+    "Notification\022=\n\rmedia_message\030\006 \001(\0132&.ap"
+    "p.dispatch.MediaMessageNotification\022X\n\033p"
+    "articipant_connect_request\030\007 \001(\01323.app.d"
+    "ispatch.ParticipantConnectRequestNotific"
+    "ation\022T\n\031participant_speak_request\030\010 \001(\013"
+    "21.app.dispatch.ParticipantSpeakRequestN"
+    "otification\022\?\n\016session_status\030\t \001(\0132\'.ap"
+    "p.dispatch.SessionStatusNotification\022=\n\r"
+    "record_status\030\n \001(\0132&.app.dispatch.Recor"
+    "dStatusNotification\022C\n\020account_location\030"
+    "\013 \001(\0132).app.dispatch.AccountLocationNoti"
+    "fication\022;\n\014alert_overed\030\014 \001(\0132%.app.dis"
+    "patch.AlertOveredNotification\"\324\001\n\007Messag"
+    "e\022#\n\010msg_type\030\001 \002(\0162\021.app.dispatch.MSG\022\020"
+    "\n\010sequence\030\002 \002(\007\022\022\n\nsession_id\030\003 \001(\007\022&\n\007"
+    "request\030\004 \001(\0132\025.app.dispatch.Request\022(\n\010"
+    "response\030\005 \001(\0132\026.app.dispatch.Response\022,"
+    "\n\nindication\030\006 \001(\0132\030.app.dispatch.Indica"
+    "tion*\253\020\n\003MSG\022\023\n\rLogin_Request\020\301\232\014\022\024\n\016Log"
+    "in_Response\020\302\232\014\022\024\n\016Logout_Request\020\303\232\014\022\025\n"
+    "\017Logout_Response\020\304\232\014\022\027\n\021Keepalive_Reques"
+    "t\020\305\232\014\022\030\n\022Keepalive_Response\020\306\232\014\022\024\n\016Entit"
+    "y_Request\020\307\232\014\022\025\n\017Entity_Response\020\310\232\014\022\032\n\024"
+    "Append_Group_Request\020\311\232\014\022\033\n\025Append_Group"
+    "_Response\020\312\232\014\022\032\n\024Modify_Group_Request\020\313\232"
+    "\014\022\033\n\025Modify_Group_Response\020\314\232\014\022!\n\033Modify"
+    "_Participants_Request\020\315\232\014\022\"\n\034Modify_Part"
+    "icipants_Response\020\316\232\014\022\033\n\025Media_Message_R"
+    "equest\020\317\232\014\022\034\n\026Media_Message_Response\020\320\232\014"
+    "\022 \n\032Invite_Participant_Request\020\321\232\014\022!\n\033In"
+    "vite_Participant_Response\020\322\232\014\022\036\n\030Drop_Pa"
+    "rticipant_Request\020\323\232\014\022\037\n\031Drop_Participan"
+    "t_Response\020\324\232\014\022\'\n!Release_Participant_To"
+    "ken_Request\020\325\232\014\022(\n\"Release_Participant_T"
+    "oken_Response\020\326\232\014\022\'\n!Appoint_Participant"
+    "_Speak_Request\020\327\232\014\022(\n\"Appoint_Participan"
+    "t_Speak_Response\020\330\232\014\022\030\n\022Jion_Group_Reque"
+    "st\020\331\232\014\022\031\n\023Jion_Group_Response\020\332\232\014\022\031\n\023Lea"
+    "ve_Group_Request\020\333\232\014\022\032\n\024Leave_Group_Resp"
+    "onse\020\334\232\014\022\032\n\024Send_Message_Request\020\335\232\014\022\033\n\025"
+    "Send_Message_Response\020\336\232\014\022\036\n\030Kick_Partic"
+    "ipant_Request\020\337\232\014\022\037\n\031Kick_Participant_Re"
+    "sponse\020\340\232\014\022\032\n\024Start_Record_Request\020\341\232\014\022\033"
+    "\n\025Start_Record_Response\020\342\232\014\022\031\n\023Stop_Reco"
+    "rd_Request\020\343\232\014\022\032\n\024Stop_Record_Response\020\344"
+    "\232\014\022(\n\"Subscribe_Account_Location_Request"
+    "\020\345\232\014\022)\n#Subscribe_Account_Location_Respo"
+    "nse\020\346\232\014\022\032\n\024Append_Alert_Request\020\347\232\014\022\033\n\025A"
+    "ppend_Alert_Response\020\350\232\014\022\032\n\024Modify_Alert"
+    "_Request\020\351\232\014\022\033\n\025Modify_Alert_Response\020\352\232"
+    "\014\022\030\n\022Stop_Alert_Request\020\353\232\014\022\031\n\023Stop_Aler"
+    "t_Response\020\354\232\014\022\034\n\026History_Alerts_Request"
+    "\020\355\232\014\022\035\n\027History_Alerts_Response\020\356\232\014\022\033\n\025H"
+    "istory_Alert_Request\020\357\232\014\022\034\n\026History_Aler"
+    "t_Response\020\360\232\014\022#\n\035History_Alert_Message_"
+    "Request\020\361\232\014\022$\n\036History_Alert_Message_Res"
+    "ponse\020\362\232\014\022\"\n\034Delete_History_Alert_Reques"
+    "t\020\363\232\014\022#\n\035Delete_History_Alert_Response\020\364"
+    "\232\014\022\032\n\024Delete_Group_Request\020\365\232\014\022\033\n\025Delete"
+    "_Group_Response\020\366\232\014\022\031\n\023Entity_Notificati"
+    "on\020\321\350\014\022 \n\032Entity_Status_Notification\020\322\350\014"
+    "\022\037\n\031Participants_Notification\020\323\350\014\022%\n\037Joi"
+    "n_Group_Request_Notification\020\324\350\014\022%\n\037Part"
+    "icipant_Status_Notification\020\325\350\014\022 \n\032Media"
+    "_Message_Notification\020\326\350\014\022.\n(Participant"
+    "_Connect_Request_Notification\020\327\350\014\022,\n&Par"
+    "ticipant_Speak_Request_Notification\020\330\350\014\022"
+    "!\n\033Session_Status_Notification\020\331\350\014\022 \n\032Re"
+    "cord_Status_Notification\020\332\350\014\022#\n\035Account_"
+    "Location_Notification\020\333\350\014\022\037\n\031Alert_Overe"
+    "d_Notification\020\334\350\014", 9618);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "app.dispatch.proto", &protobuf_RegisterTypes);
   LoginRequest::default_instance_ = new LoginRequest();
@@ -2984,6 +2986,7 @@ void EntityNotification::Swap(EntityNotification* other) {
 const int EntityStatusNotification::kIdFieldNumber;
 const int EntityStatusNotification::kStatusFieldNumber;
 const int EntityStatusNotification::kSipStatusFieldNumber;
+const int EntityStatusNotification::kCustomStatusFieldNumber;
 #endif  // !_MSC_VER
 
 EntityStatusNotification::EntityStatusNotification()
@@ -3006,6 +3009,7 @@ void EntityStatusNotification::SharedCtor() {
   id_ = NULL;
   status_ = 0;
   sip_status_ = 0;
+  custom_status_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -3047,6 +3051,7 @@ void EntityStatusNotification::Clear() {
     }
     status_ = 0;
     sip_status_ = 0;
+    custom_status_ = 0;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -3071,7 +3076,7 @@ bool EntityStatusNotification::MergePartialFromCodedStream(
         break;
       }
 
-      // required .pbmsg.RegisterStatus status = 2;
+      // optional .pbmsg.RegisterStatus status = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
@@ -3109,6 +3114,27 @@ bool EntityStatusNotification::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(32)) goto parse_custom_status;
+        break;
+      }
+
+      // optional .pbmsg.CustomStatus custom_status = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_custom_status:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::pbmsg::CustomStatus_IsValid(value)) {
+            set_custom_status(static_cast< ::pbmsg::CustomStatus >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(4, value);
+          }
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -3137,7 +3163,7 @@ void EntityStatusNotification::SerializeWithCachedSizes(
       1, this->id(), output);
   }
 
-  // required .pbmsg.RegisterStatus status = 2;
+  // optional .pbmsg.RegisterStatus status = 2;
   if (has_status()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       2, this->status(), output);
@@ -3147,6 +3173,12 @@ void EntityStatusNotification::SerializeWithCachedSizes(
   if (has_sip_status()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->sip_status(), output);
+  }
+
+  // optional .pbmsg.CustomStatus custom_status = 4;
+  if (has_custom_status()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      4, this->custom_status(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -3164,7 +3196,7 @@ void EntityStatusNotification::SerializeWithCachedSizes(
         1, this->id(), target);
   }
 
-  // required .pbmsg.RegisterStatus status = 2;
+  // optional .pbmsg.RegisterStatus status = 2;
   if (has_status()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       2, this->status(), target);
@@ -3174,6 +3206,12 @@ void EntityStatusNotification::SerializeWithCachedSizes(
   if (has_sip_status()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       3, this->sip_status(), target);
+  }
+
+  // optional .pbmsg.CustomStatus custom_status = 4;
+  if (has_custom_status()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      4, this->custom_status(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -3194,7 +3232,7 @@ int EntityStatusNotification::ByteSize() const {
           this->id());
     }
 
-    // required .pbmsg.RegisterStatus status = 2;
+    // optional .pbmsg.RegisterStatus status = 2;
     if (has_status()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
@@ -3204,6 +3242,12 @@ int EntityStatusNotification::ByteSize() const {
     if (has_sip_status()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->sip_status());
+    }
+
+    // optional .pbmsg.CustomStatus custom_status = 4;
+    if (has_custom_status()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->custom_status());
     }
 
   }
@@ -3242,6 +3286,9 @@ void EntityStatusNotification::MergeFrom(const EntityStatusNotification& from) {
     if (from.has_sip_status()) {
       set_sip_status(from.sip_status());
     }
+    if (from.has_custom_status()) {
+      set_custom_status(from.custom_status());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -3259,7 +3306,7 @@ void EntityStatusNotification::CopyFrom(const EntityStatusNotification& from) {
 }
 
 bool EntityStatusNotification::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   return true;
 }
@@ -3269,6 +3316,7 @@ void EntityStatusNotification::Swap(EntityStatusNotification* other) {
     std::swap(id_, other->id_);
     std::swap(status_, other->status_);
     std::swap(sip_status_, other->sip_status_);
+    std::swap(custom_status_, other->custom_status_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -5621,7 +5669,7 @@ void ParticipantStatusNotification::Swap(ParticipantStatusNotification* other) {
 #ifndef _MSC_VER
 const int MediaMessageRequest::kIdFieldNumber;
 const int MediaMessageRequest::kFromMessageIdFieldNumber;
-const int MediaMessageRequest::kFromTimeFieldNumber;
+const int MediaMessageRequest::kFromTimestampFieldNumber;
 const int MediaMessageRequest::kMaxMessageCountFieldNumber;
 #endif  // !_MSC_VER
 
@@ -5644,7 +5692,7 @@ void MediaMessageRequest::SharedCtor() {
   _cached_size_ = 0;
   id_ = NULL;
   from_message_id_ = 0u;
-  from_time_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  from_timestamp_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   max_message_count_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -5654,8 +5702,8 @@ MediaMessageRequest::~MediaMessageRequest() {
 }
 
 void MediaMessageRequest::SharedDtor() {
-  if (from_time_ != &::google::protobuf::internal::kEmptyString) {
-    delete from_time_;
+  if (from_timestamp_ != &::google::protobuf::internal::kEmptyString) {
+    delete from_timestamp_;
   }
   if (this != default_instance_) {
     delete id_;
@@ -5689,9 +5737,9 @@ void MediaMessageRequest::Clear() {
       if (id_ != NULL) id_->::pbmsg::Entity::Clear();
     }
     from_message_id_ = 0u;
-    if (has_from_time()) {
-      if (from_time_ != &::google::protobuf::internal::kEmptyString) {
-        from_time_->clear();
+    if (has_from_timestamp()) {
+      if (from_timestamp_ != &::google::protobuf::internal::kEmptyString) {
+        from_timestamp_->clear();
       }
     }
     max_message_count_ = 0u;
@@ -5731,19 +5779,19 @@ bool MediaMessageRequest::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(26)) goto parse_from_time;
+        if (input->ExpectTag(26)) goto parse_from_timestamp;
         break;
       }
 
-      // optional string from_time = 3;
+      // optional string from_timestamp = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_from_time:
+         parse_from_timestamp:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_from_time()));
+                input, this->mutable_from_timestamp()));
           ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->from_time().data(), this->from_time().length(),
+            this->from_timestamp().data(), this->from_timestamp().length(),
             ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
@@ -5797,13 +5845,13 @@ void MediaMessageRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFixed32(2, this->from_message_id(), output);
   }
 
-  // optional string from_time = 3;
-  if (has_from_time()) {
+  // optional string from_timestamp = 3;
+  if (has_from_timestamp()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->from_time().data(), this->from_time().length(),
+      this->from_timestamp().data(), this->from_timestamp().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      3, this->from_time(), output);
+      3, this->from_timestamp(), output);
   }
 
   // required fixed32 max_message_count = 4;
@@ -5831,14 +5879,14 @@ void MediaMessageRequest::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteFixed32ToArray(2, this->from_message_id(), target);
   }
 
-  // optional string from_time = 3;
-  if (has_from_time()) {
+  // optional string from_timestamp = 3;
+  if (has_from_timestamp()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->from_time().data(), this->from_time().length(),
+      this->from_timestamp().data(), this->from_timestamp().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        3, this->from_time(), target);
+        3, this->from_timestamp(), target);
   }
 
   // required fixed32 max_message_count = 4;
@@ -5869,11 +5917,11 @@ int MediaMessageRequest::ByteSize() const {
       total_size += 1 + 4;
     }
 
-    // optional string from_time = 3;
-    if (has_from_time()) {
+    // optional string from_timestamp = 3;
+    if (has_from_timestamp()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->from_time());
+          this->from_timestamp());
     }
 
     // required fixed32 max_message_count = 4;
@@ -5914,8 +5962,8 @@ void MediaMessageRequest::MergeFrom(const MediaMessageRequest& from) {
     if (from.has_from_message_id()) {
       set_from_message_id(from.from_message_id());
     }
-    if (from.has_from_time()) {
-      set_from_time(from.from_time());
+    if (from.has_from_timestamp()) {
+      set_from_timestamp(from.from_timestamp());
     }
     if (from.has_max_message_count()) {
       set_max_message_count(from.max_message_count());
@@ -5946,7 +5994,7 @@ void MediaMessageRequest::Swap(MediaMessageRequest* other) {
   if (other != this) {
     std::swap(id_, other->id_);
     std::swap(from_message_id_, other->from_message_id_);
-    std::swap(from_time_, other->from_time_);
+    std::swap(from_timestamp_, other->from_timestamp_);
     std::swap(max_message_count_, other->max_message_count_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
@@ -7126,7 +7174,7 @@ bool InviteParticipantRequest::MergePartialFromCodedStream(
         break;
       }
 
-      // required .pbmsg.Entity account_id = 2;
+      // optional .pbmsg.Entity account_id = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -7164,7 +7212,7 @@ void InviteParticipantRequest::SerializeWithCachedSizes(
       1, this->group_id(), output);
   }
 
-  // required .pbmsg.Entity account_id = 2;
+  // optional .pbmsg.Entity account_id = 2;
   if (has_account_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->account_id(), output);
@@ -7185,7 +7233,7 @@ void InviteParticipantRequest::SerializeWithCachedSizes(
         1, this->group_id(), target);
   }
 
-  // required .pbmsg.Entity account_id = 2;
+  // optional .pbmsg.Entity account_id = 2;
   if (has_account_id()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -7210,7 +7258,7 @@ int InviteParticipantRequest::ByteSize() const {
           this->group_id());
     }
 
-    // required .pbmsg.Entity account_id = 2;
+    // optional .pbmsg.Entity account_id = 2;
     if (has_account_id()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -7267,7 +7315,7 @@ void InviteParticipantRequest::CopyFrom(const InviteParticipantRequest& from) {
 }
 
 bool InviteParticipantRequest::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   return true;
 }
@@ -7385,7 +7433,7 @@ bool DropParticipantRequest::MergePartialFromCodedStream(
         break;
       }
 
-      // required .pbmsg.Entity account_id = 2;
+      // optional .pbmsg.Entity account_id = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -7423,7 +7471,7 @@ void DropParticipantRequest::SerializeWithCachedSizes(
       1, this->group_id(), output);
   }
 
-  // required .pbmsg.Entity account_id = 2;
+  // optional .pbmsg.Entity account_id = 2;
   if (has_account_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->account_id(), output);
@@ -7444,7 +7492,7 @@ void DropParticipantRequest::SerializeWithCachedSizes(
         1, this->group_id(), target);
   }
 
-  // required .pbmsg.Entity account_id = 2;
+  // optional .pbmsg.Entity account_id = 2;
   if (has_account_id()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -7469,7 +7517,7 @@ int DropParticipantRequest::ByteSize() const {
           this->group_id());
     }
 
-    // required .pbmsg.Entity account_id = 2;
+    // optional .pbmsg.Entity account_id = 2;
     if (has_account_id()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -7526,7 +7574,7 @@ void DropParticipantRequest::CopyFrom(const DropParticipantRequest& from) {
 }
 
 bool DropParticipantRequest::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   return true;
 }
@@ -9109,7 +9157,7 @@ bool KickParticipantRequest::MergePartialFromCodedStream(
         break;
       }
 
-      // required .pbmsg.Entity account_id = 2;
+      // optional .pbmsg.Entity account_id = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -9147,7 +9195,7 @@ void KickParticipantRequest::SerializeWithCachedSizes(
       1, this->group_id(), output);
   }
 
-  // required .pbmsg.Entity account_id = 2;
+  // optional .pbmsg.Entity account_id = 2;
   if (has_account_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->account_id(), output);
@@ -9168,7 +9216,7 @@ void KickParticipantRequest::SerializeWithCachedSizes(
         1, this->group_id(), target);
   }
 
-  // required .pbmsg.Entity account_id = 2;
+  // optional .pbmsg.Entity account_id = 2;
   if (has_account_id()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -9193,7 +9241,7 @@ int KickParticipantRequest::ByteSize() const {
           this->group_id());
     }
 
-    // required .pbmsg.Entity account_id = 2;
+    // optional .pbmsg.Entity account_id = 2;
     if (has_account_id()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -9250,7 +9298,7 @@ void KickParticipantRequest::CopyFrom(const KickParticipantRequest& from) {
 }
 
 bool KickParticipantRequest::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   return true;
 }
@@ -13946,7 +13994,7 @@ const int Request::kEntityFieldNumber;
 const int Request::kAppendGroupFieldNumber;
 const int Request::kModifyGroupFieldNumber;
 const int Request::kModifyParticipantsFieldNumber;
-const int Request::kMediaMessageFieldNumber;
+const int Request::kGroupMessageFieldNumber;
 const int Request::kInviteParticipantFieldNumber;
 const int Request::kDropParticipantFieldNumber;
 const int Request::kReleaseParticipantTokenFieldNumber;
@@ -13979,7 +14027,7 @@ void Request::InitAsDefaultInstance() {
   append_group_ = const_cast< ::app::dispatch::AppendGroupRequest*>(&::app::dispatch::AppendGroupRequest::default_instance());
   modify_group_ = const_cast< ::app::dispatch::ModifyGroupRequest*>(&::app::dispatch::ModifyGroupRequest::default_instance());
   modify_participants_ = const_cast< ::app::dispatch::ModifyParticipantsRequest*>(&::app::dispatch::ModifyParticipantsRequest::default_instance());
-  media_message_ = const_cast< ::app::dispatch::MediaMessageRequest*>(&::app::dispatch::MediaMessageRequest::default_instance());
+  group_message_ = const_cast< ::app::dispatch::MediaMessageRequest*>(&::app::dispatch::MediaMessageRequest::default_instance());
   invite_participant_ = const_cast< ::app::dispatch::InviteParticipantRequest*>(&::app::dispatch::InviteParticipantRequest::default_instance());
   drop_participant_ = const_cast< ::app::dispatch::DropParticipantRequest*>(&::app::dispatch::DropParticipantRequest::default_instance());
   release_participant_token_ = const_cast< ::app::dispatch::ReleaseParticipantTokenRequest*>(&::app::dispatch::ReleaseParticipantTokenRequest::default_instance());
@@ -14014,7 +14062,7 @@ void Request::SharedCtor() {
   append_group_ = NULL;
   modify_group_ = NULL;
   modify_participants_ = NULL;
-  media_message_ = NULL;
+  group_message_ = NULL;
   invite_participant_ = NULL;
   drop_participant_ = NULL;
   release_participant_token_ = NULL;
@@ -14048,7 +14096,7 @@ void Request::SharedDtor() {
     delete append_group_;
     delete modify_group_;
     delete modify_participants_;
-    delete media_message_;
+    delete group_message_;
     delete invite_participant_;
     delete drop_participant_;
     delete release_participant_token_;
@@ -14109,8 +14157,8 @@ void Request::Clear() {
     if (has_modify_participants()) {
       if (modify_participants_ != NULL) modify_participants_->::app::dispatch::ModifyParticipantsRequest::Clear();
     }
-    if (has_media_message()) {
-      if (media_message_ != NULL) media_message_->::app::dispatch::MediaMessageRequest::Clear();
+    if (has_group_message()) {
+      if (group_message_ != NULL) group_message_->::app::dispatch::MediaMessageRequest::Clear();
     }
     if (has_invite_participant()) {
       if (invite_participant_ != NULL) invite_participant_->::app::dispatch::InviteParticipantRequest::Clear();
@@ -14251,17 +14299,17 @@ bool Request::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(50)) goto parse_media_message;
+        if (input->ExpectTag(50)) goto parse_group_message;
         break;
       }
 
-      // optional .app.dispatch.MediaMessageRequest media_message = 6;
+      // optional .app.dispatch.MediaMessageRequest group_message = 6;
       case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_media_message:
+         parse_group_message:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_media_message()));
+               input, mutable_group_message()));
         } else {
           goto handle_uninterpreted;
         }
@@ -14583,10 +14631,10 @@ void Request::SerializeWithCachedSizes(
       5, this->modify_participants(), output);
   }
 
-  // optional .app.dispatch.MediaMessageRequest media_message = 6;
-  if (has_media_message()) {
+  // optional .app.dispatch.MediaMessageRequest group_message = 6;
+  if (has_group_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      6, this->media_message(), output);
+      6, this->group_message(), output);
   }
 
   // optional .app.dispatch.InviteParticipantRequest invite_participant = 7;
@@ -14746,11 +14794,11 @@ void Request::SerializeWithCachedSizes(
         5, this->modify_participants(), target);
   }
 
-  // optional .app.dispatch.MediaMessageRequest media_message = 6;
-  if (has_media_message()) {
+  // optional .app.dispatch.MediaMessageRequest group_message = 6;
+  if (has_group_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        6, this->media_message(), target);
+        6, this->group_message(), target);
   }
 
   // optional .app.dispatch.InviteParticipantRequest invite_participant = 7;
@@ -14932,11 +14980,11 @@ int Request::ByteSize() const {
           this->modify_participants());
     }
 
-    // optional .app.dispatch.MediaMessageRequest media_message = 6;
-    if (has_media_message()) {
+    // optional .app.dispatch.MediaMessageRequest group_message = 6;
+    if (has_group_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->media_message());
+          this->group_message());
     }
 
     // optional .app.dispatch.InviteParticipantRequest invite_participant = 7;
@@ -15120,8 +15168,8 @@ void Request::MergeFrom(const Request& from) {
     if (from.has_modify_participants()) {
       mutable_modify_participants()->::app::dispatch::ModifyParticipantsRequest::MergeFrom(from.modify_participants());
     }
-    if (from.has_media_message()) {
-      mutable_media_message()->::app::dispatch::MediaMessageRequest::MergeFrom(from.media_message());
+    if (from.has_group_message()) {
+      mutable_group_message()->::app::dispatch::MediaMessageRequest::MergeFrom(from.group_message());
     }
     if (from.has_invite_participant()) {
       mutable_invite_participant()->::app::dispatch::InviteParticipantRequest::MergeFrom(from.invite_participant());
@@ -15219,8 +15267,8 @@ bool Request::IsInitialized() const {
   if (has_modify_participants()) {
     if (!this->modify_participants().IsInitialized()) return false;
   }
-  if (has_media_message()) {
-    if (!this->media_message().IsInitialized()) return false;
+  if (has_group_message()) {
+    if (!this->group_message().IsInitialized()) return false;
   }
   if (has_invite_participant()) {
     if (!this->invite_participant().IsInitialized()) return false;
@@ -15286,7 +15334,7 @@ void Request::Swap(Request* other) {
     std::swap(append_group_, other->append_group_);
     std::swap(modify_group_, other->modify_group_);
     std::swap(modify_participants_, other->modify_participants_);
-    std::swap(media_message_, other->media_message_);
+    std::swap(group_message_, other->group_message_);
     std::swap(invite_participant_, other->invite_participant_);
     std::swap(drop_participant_, other->drop_participant_);
     std::swap(release_participant_token_, other->release_participant_token_);
@@ -15332,7 +15380,7 @@ const int Response::kEntityFieldNumber;
 const int Response::kAppendGroupFieldNumber;
 const int Response::kModifyGroupFieldNumber;
 const int Response::kModifyParticipantsFieldNumber;
-const int Response::kMediaMessageFieldNumber;
+const int Response::kGroupMessageFieldNumber;
 const int Response::kAppendAlertFieldNumber;
 const int Response::kHistoryAlertsFieldNumber;
 const int Response::kHistoryAlertFieldNumber;
@@ -15350,7 +15398,7 @@ void Response::InitAsDefaultInstance() {
   append_group_ = const_cast< ::app::dispatch::AppendGroupResponse*>(&::app::dispatch::AppendGroupResponse::default_instance());
   modify_group_ = const_cast< ::app::dispatch::ModifyGroupResponse*>(&::app::dispatch::ModifyGroupResponse::default_instance());
   modify_participants_ = const_cast< ::app::dispatch::ModifyParticipantsResponse*>(&::app::dispatch::ModifyParticipantsResponse::default_instance());
-  media_message_ = const_cast< ::app::dispatch::MediaMessageResponse*>(&::app::dispatch::MediaMessageResponse::default_instance());
+  group_message_ = const_cast< ::app::dispatch::MediaMessageResponse*>(&::app::dispatch::MediaMessageResponse::default_instance());
   append_alert_ = const_cast< ::app::dispatch::AppendAlertResponse*>(&::app::dispatch::AppendAlertResponse::default_instance());
   history_alerts_ = const_cast< ::app::dispatch::HistoryAlertsResponse*>(&::app::dispatch::HistoryAlertsResponse::default_instance());
   history_alert_ = const_cast< ::app::dispatch::HistoryAlertResponse*>(&::app::dispatch::HistoryAlertResponse::default_instance());
@@ -15373,7 +15421,7 @@ void Response::SharedCtor() {
   append_group_ = NULL;
   modify_group_ = NULL;
   modify_participants_ = NULL;
-  media_message_ = NULL;
+  group_message_ = NULL;
   append_alert_ = NULL;
   history_alerts_ = NULL;
   history_alert_ = NULL;
@@ -15395,7 +15443,7 @@ void Response::SharedDtor() {
     delete append_group_;
     delete modify_group_;
     delete modify_participants_;
-    delete media_message_;
+    delete group_message_;
     delete append_alert_;
     delete history_alerts_;
     delete history_alert_;
@@ -15450,8 +15498,8 @@ void Response::Clear() {
     }
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    if (has_media_message()) {
-      if (media_message_ != NULL) media_message_->::app::dispatch::MediaMessageResponse::Clear();
+    if (has_group_message()) {
+      if (group_message_ != NULL) group_message_->::app::dispatch::MediaMessageResponse::Clear();
     }
     if (has_append_alert()) {
       if (append_alert_ != NULL) append_alert_->::app::dispatch::AppendAlertResponse::Clear();
@@ -15587,17 +15635,17 @@ bool Response::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(74)) goto parse_media_message;
+        if (input->ExpectTag(74)) goto parse_group_message;
         break;
       }
 
-      // optional .app.dispatch.MediaMessageResponse media_message = 9;
+      // optional .app.dispatch.MediaMessageResponse group_message = 9;
       case 9: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_media_message:
+         parse_group_message:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_media_message()));
+               input, mutable_group_message()));
         } else {
           goto handle_uninterpreted;
         }
@@ -15725,10 +15773,10 @@ void Response::SerializeWithCachedSizes(
       8, this->modify_participants(), output);
   }
 
-  // optional .app.dispatch.MediaMessageResponse media_message = 9;
-  if (has_media_message()) {
+  // optional .app.dispatch.MediaMessageResponse group_message = 9;
+  if (has_group_message()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      9, this->media_message(), output);
+      9, this->group_message(), output);
   }
 
   // optional .app.dispatch.AppendAlertResponse append_alert = 10;
@@ -15815,11 +15863,11 @@ void Response::SerializeWithCachedSizes(
         8, this->modify_participants(), target);
   }
 
-  // optional .app.dispatch.MediaMessageResponse media_message = 9;
-  if (has_media_message()) {
+  // optional .app.dispatch.MediaMessageResponse group_message = 9;
+  if (has_group_message()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        9, this->media_message(), target);
+        9, this->group_message(), target);
   }
 
   // optional .app.dispatch.AppendAlertResponse append_alert = 10;
@@ -15915,11 +15963,11 @@ int Response::ByteSize() const {
 
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    // optional .app.dispatch.MediaMessageResponse media_message = 9;
-    if (has_media_message()) {
+    // optional .app.dispatch.MediaMessageResponse group_message = 9;
+    if (has_group_message()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->media_message());
+          this->group_message());
     }
 
     // optional .app.dispatch.AppendAlertResponse append_alert = 10;
@@ -16003,8 +16051,8 @@ void Response::MergeFrom(const Response& from) {
     }
   }
   if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    if (from.has_media_message()) {
-      mutable_media_message()->::app::dispatch::MediaMessageResponse::MergeFrom(from.media_message());
+    if (from.has_group_message()) {
+      mutable_group_message()->::app::dispatch::MediaMessageResponse::MergeFrom(from.group_message());
     }
     if (from.has_append_alert()) {
       mutable_append_alert()->::app::dispatch::AppendAlertResponse::MergeFrom(from.append_alert());
@@ -16052,8 +16100,8 @@ bool Response::IsInitialized() const {
   if (has_modify_participants()) {
     if (!this->modify_participants().IsInitialized()) return false;
   }
-  if (has_media_message()) {
-    if (!this->media_message().IsInitialized()) return false;
+  if (has_group_message()) {
+    if (!this->group_message().IsInitialized()) return false;
   }
   if (has_append_alert()) {
     if (!this->append_alert().IsInitialized()) return false;
@@ -16077,7 +16125,7 @@ void Response::Swap(Response* other) {
     std::swap(append_group_, other->append_group_);
     std::swap(modify_group_, other->modify_group_);
     std::swap(modify_participants_, other->modify_participants_);
-    std::swap(media_message_, other->media_message_);
+    std::swap(group_message_, other->group_message_);
     std::swap(append_alert_, other->append_alert_);
     std::swap(history_alerts_, other->history_alerts_);
     std::swap(history_alert_, other->history_alert_);

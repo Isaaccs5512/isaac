@@ -2,6 +2,7 @@ package app.admin;
 
 import "AppData.proto";
 import "EntityData.proto";
+import "Configure.proto";
 
 // Ê¡ÂÔ AdminÇ°×º
 enum MSG
@@ -83,33 +84,28 @@ message EntityNotification
     required    pbmsg.EntityData              data        =   2;
 }
 
-message SystemConfigure
-{
-    optional    string                  domain      =   1;
-    optional    string                  poc_server  =   2;
-    optional    string                  xmd_server  =   3;
-}
+
 
 message GetSystemConfigureResponse
 {   
-    required    SystemConfigure         configure   =   1;
+    required    pbmsg.Configure         configure   =   1;
 }
 
 message SetSystemConfigureRequest
 {
-    required    SystemConfigure         configure   =   1;
+    required    pbmsg.Configure         configure   =   1;
 }
 
 message Request 
 {
     optional    LoginRequest                login                     = 1;
-    optional    AppendEntityRequest         app_entity                = 2;
+    optional    AppendEntityRequest         append_entity             = 2;
     optional    ModifyEntityRequest         modify_entity             = 3;
     optional    DeleteEntityRequest         delete_entity             = 4;
     optional    EntityRequest               entity                    = 5;
     optional    SetSystemConfigureRequest   set_system_configure      = 6;
 
-}
+}   
 message Response
 {
     required bool                          result                   = 1;

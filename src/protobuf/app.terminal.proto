@@ -60,9 +60,18 @@ enum MSG
     History_Alert_Request               = 300037;
     History_Alert_Response              = 300038;
 
-    History_Alert_Mesage_Request        = 300039;
-    History_Alert_Mesage_Response       = 300040;
-    
+    History_Alert_Message_Request        = 300039;
+    History_Alert_Message_Response       = 300040;
+
+	Accounts_Request					 = 300041;
+	Accounts_Response					 = 300042;
+
+	Account_Request						 = 300043;
+	Account_Response					 = 300044;
+
+	Group_Subscribe_Request				 = 300045;
+	Group_Subscribe_Response			 = 300046;
+
     Register_Status_Notification        = 310001;
     Joined_Group_Notification           = 310002;
     Leave_Group_Notification            = 310003;
@@ -108,7 +117,7 @@ enum SessionStatus
     Talking = 2;// 获取到话语权，正在讲话
 }
 
-enum AlertLevel 
+enum AlertLevel
 {
     Exigency = 0;      //最高级别，紧急警情
     Importance = 1;    //级别次于紧急，重要警情
@@ -116,7 +125,14 @@ enum AlertLevel
     Ordinary  = 3;     //最低级别,     普通警情
 }
 
-message LoginRequest 
+enum CustomStatus
+{
+	Standby = 0;
+	Duty = 1;
+	Turnout = 2;
+	Training = 3;
+};
+message LoginRequest
 {
     required string number      = 1;
     optional string password    = 2;
@@ -134,33 +150,48 @@ message LoginResponse
     required fixed32            ttl                     = 8;
     required GpsReportMode      gps_report_mode         = 9;
     required string             upload_address          = 10;
+    required fixed32			session_id              = 11;
+	required bool				participant_subscribing = 12;
+	required bool				message_subscribing		= 13;
+	required fixed32			groups_hash				= 14;
+	required fixed32			accounts_hash			= 15;
+	required fixed32			unjoin_groups_hash 		= 16;
 }
 message RegisterStatusNotification
 {
-    required RegisterStatus     status                  = 1;
+    optional RegisterStatus     sip_status              = 1;
+    optional CustomStatus       custom_status			= 2;
 }
 
-message Group 
+message Group
 {
     required fixed32            id                      = 1;
     required bytes              name                    = 2;
-    required string             number                  = 3;
+    optional string             number                  = 3;
+	optional CallPrivilege      call_privilege   		= 4;
+	optional TokenPrivilege		token_privilege			= 5;
+	optional bool				participant_subscribing = 6;
+	optional bool			    message_subscribing		= 7;
+	optional fixed32			participants_hash		= 8;
 }
 
+message GroupsRequest
+{
+	required bool				get_joined_groups		= 1;
+	required bool 				get_unjoined_groups		= 2;
+}
 message GroupsResponse
 {
     repeated    Group           joined_groups           = 1;
     repeated    Group           unjoin_groups           = 2;
 }
 
-message Participant 
+message Participant
 {
     required    fixed32         account_id              = 1;
     required    bytes           account_name            = 2;
     required    fixed32         talk_priority           = 3;
-    optional    CallPrivilege   call_privilege          = 4;
-    optional    TokenPrivilege  token_privilege         = 5;
-    required    SessionStatus   status                  = 6;
+    required    SessionStatus   status                  = 4;
 }
 message GroupParticipantsRequest
 {
@@ -177,7 +208,7 @@ message MediaMessageRequest
     required    fixed32         id                      = 1;
     optional    string          from_timestamp          = 2;
     optional    fixed32         from_message_id         = 3;
-    required    fixed32         max_message_count       = 4;    
+    required    fixed32         max_message_count       = 4;
 }
 
 message MediaMessage
@@ -201,13 +232,7 @@ message MediaMessageResponse
 
 message JoinedGroupNotification
 {
-    required    fixed32         group_id                = 1;
-    required    bytes           group_name              = 2;
-    required    string          group_number            = 3;
-
-    required    fixed32         talk_priority           = 4;
-    required    CallPrivilege   call_privilege          = 5;
-    required    TokenPrivilege  token_privilege         = 6;
+	required   Group			group					= 1;
 }
 
 message LeaveGroupNotification
@@ -227,7 +252,7 @@ message OthersLeaveGroupNotification
     repeated    fixed32         account_ids             = 2;
 }
 message MediaMessageNotification
-{   
+{
     required    fixed32         group_id                = 1;
     required    MediaMessage    msg                     = 2;
 }
@@ -246,7 +271,7 @@ message SessionStatusNotification
 {
     required    fixed32         group_id                = 1;
     required    fixed32         account_id              = 2;
-    required    MediaMessage   status                  = 3;
+    required    SessionStatus    status                  = 3;
 }
 
 message SpeakRequest
@@ -255,7 +280,7 @@ message SpeakRequest
 }
 
 message JoinSessionRequest
-{   
+{
     required fixed32            group_id                = 1;
 }
 
@@ -307,7 +332,7 @@ message LocationNotification
 
 }
 
-message Alert 
+message Alert
 {
     required    fixed32         id                      = 1;
     required    bytes           name                    = 2;
@@ -328,7 +353,7 @@ message AlertRequest
 {
     required    fixed32         alert_id                = 1;
 }
-message AlertResponse   
+message AlertResponse
 {
     required    Alert           alert                   = 1;
 }
@@ -338,7 +363,7 @@ message AlertCreateNotification
     required    fixed32         alert_id                = 1;
     required    bytes           name                    = 2;
     required    fixed32         group_id                = 3;
-    
+
 }
 
 message AlertModifyNotification
@@ -357,7 +382,7 @@ message HistoryAlertsRequest
 
     optional    string          create_time_from        = 2;
     optional    string          create_time_to          = 3;
-    
+
     optional    string          alram_time_from         = 4;
     optional    string          alram_time_to         = 5;
 
@@ -365,7 +390,7 @@ message HistoryAlertsRequest
     optional    string          over_time_to            = 7;
 }
 
-message HistoryAlert 
+message HistoryAlert
 {
     required    fixed32         id                      = 1;
     required    bytes           name                    = 2;
@@ -377,7 +402,7 @@ message HistoryAlert
     optional    string          over_time               = 8;
 }
 
-message HistoryAlertsResponse  
+message HistoryAlertsResponse
 {
     repeated    HistoryAlert    history_alerts          = 1;
 }
@@ -386,12 +411,12 @@ message HistoryAlertRequest
 {
     required    fixed32         history_alert_id        = 1;
 }
-message HistoryAlertResponse 
+message HistoryAlertResponse
 {
     required    HistoryAlert    history_alert           = 1;
 }
 
-message HistoryAlertMesageRequest
+message HistoryAlertMessageRequest
 {
     required    fixed32         history_alert_id        = 1;
     optional    fixed32         from_message_id         = 2;
@@ -399,22 +424,49 @@ message HistoryAlertMesageRequest
     required    fixed32         max_message_count       = 4;
 }
 
-message HistoryAlertMesageResponse  
+message HistoryAlertMessageResponse
 {
     required    fixed32         history_alert_id        = 1;
     repeated    MediaMessage    messages                = 2;
     required    fixed32         leave_message_count     = 3;
 }
 
-message Request 
+
+//	Accounts_Request					 = 300041;
+message	AccountsResponse
+{
+	repeated fixed32			ids	= 1;
+}
+
+message	AccountRequest
+{
+	required	fixed32			id	= 1;
+}
+message	AccountResponse
+{
+	required fixed32			id			= 1;
+	required bytes				name		= 2;
+	required string				number		= 3;
+}
+
+message	GroupSubscribeRequest
+{
+	optional bool 				participant_subscribing	= 1;
+	optional bool 				message_subscribing		= 2;
+	optional fixed32			group_id				= 3;
+	optional bool				effect_current			= 4;
+	optional bool 				effect_follow			= 5;
+}
+
+message Request
 {
     optional LoginRequest                   login                   = 1;
-    optional GroupParticipantsRequest       gourp_participants      = 2;
+    optional GroupParticipantsRequest       group_participants      = 2;
     optional MediaMessageRequest            group_message           = 3;
     optional JoinGroupRequest               join_group              = 4;
     optional ConnectGroupRequest            connect_group           = 5;
     optional SpeakRequest                   speak                   = 6;
-    optional JoinSessionRequest             jone_session            = 7;
+    optional JoinSessionRequest             join_session            = 7;
     optional LeaveSessionRequest            leave_session           = 8;
     optional ReleaseTokenRequest            release_token           = 9;
     optional AppointSpeakRequest            appoint_speak           = 10;
@@ -423,8 +475,11 @@ message Request
     optional AlertRequest                   alert                   = 13;
     optional HistoryAlertsRequest           history_alerts          = 14;
     optional HistoryAlertRequest            history_alert           = 15;
-    optional HistoryAlertMesageRequest      history_alert_message   = 16;
-    
+    optional HistoryAlertMessageRequest     history_alert_message   = 16;
+    optional AccountRequest					account					= 17;
+    optional GroupSubscribeRequest			group_subscribe			= 18;
+    optional GroupsRequest					groups            		= 19;
+
 
 }
 message Response
@@ -432,7 +487,7 @@ message Response
     required bool                          result                   = 1;
     required bool                          last_response            = 2;
     optional bytes                         error_describe           = 3;
-    
+
     optional LoginResponse                 login                    = 4;
     optional GroupsResponse                groups                   = 5;
     optional GroupParticipantsResponse     group_participants       = 6;
@@ -442,11 +497,12 @@ message Response
     optional AlertResponse                 alert                    = 10;
     optional HistoryAlertsResponse         history_alerts           = 11;
     optional HistoryAlertResponse          history_alert            = 12;
-    optional HistoryAlertMesageResponse    history_alert_message    = 13;
-    
+    optional HistoryAlertMessageResponse   history_alert_message    = 13;
+    optional AccountsResponse			   accounts					= 14;
+    optional AccountResponse			   account					= 15;
 
 }
-message Indication 
+message Indication
 {
     optional    RegisterStatusNotification       register_status     = 1;
     optional    JoinedGroupNotification          joined_group        = 2;
@@ -462,7 +518,7 @@ message Indication
 
 }
 
-message Message 
+message Message
 {
     required    MSG         msg_type        = 1;
     required    fixed32     sequence        = 2;

@@ -707,7 +707,7 @@ class EntityStatusNotification : public ::google::protobuf::Message {
   inline ::pbmsg::Entity* release_id();
   inline void set_allocated_id(::pbmsg::Entity* id);
 
-  // required .pbmsg.RegisterStatus status = 2;
+  // optional .pbmsg.RegisterStatus status = 2;
   inline bool has_status() const;
   inline void clear_status();
   static const int kStatusFieldNumber = 2;
@@ -721,6 +721,13 @@ class EntityStatusNotification : public ::google::protobuf::Message {
   inline ::pbmsg::RegisterStatus sip_status() const;
   inline void set_sip_status(::pbmsg::RegisterStatus value);
 
+  // optional .pbmsg.CustomStatus custom_status = 4;
+  inline bool has_custom_status() const;
+  inline void clear_custom_status();
+  static const int kCustomStatusFieldNumber = 4;
+  inline ::pbmsg::CustomStatus custom_status() const;
+  inline void set_custom_status(::pbmsg::CustomStatus value);
+
   // @@protoc_insertion_point(class_scope:app.dispatch.EntityStatusNotification)
  private:
   inline void set_has_id();
@@ -729,15 +736,18 @@ class EntityStatusNotification : public ::google::protobuf::Message {
   inline void clear_has_status();
   inline void set_has_sip_status();
   inline void clear_has_sip_status();
+  inline void set_has_custom_status();
+  inline void clear_has_custom_status();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::pbmsg::Entity* id_;
   int status_;
   int sip_status_;
+  int custom_status_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
 
   friend void  protobuf_AddDesc_app_2edispatch_2eproto();
   friend void protobuf_AssignDesc_app_2edispatch_2eproto();
@@ -1677,17 +1687,17 @@ class MediaMessageRequest : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 from_message_id() const;
   inline void set_from_message_id(::google::protobuf::uint32 value);
 
-  // optional string from_time = 3;
-  inline bool has_from_time() const;
-  inline void clear_from_time();
-  static const int kFromTimeFieldNumber = 3;
-  inline const ::std::string& from_time() const;
-  inline void set_from_time(const ::std::string& value);
-  inline void set_from_time(const char* value);
-  inline void set_from_time(const char* value, size_t size);
-  inline ::std::string* mutable_from_time();
-  inline ::std::string* release_from_time();
-  inline void set_allocated_from_time(::std::string* from_time);
+  // optional string from_timestamp = 3;
+  inline bool has_from_timestamp() const;
+  inline void clear_from_timestamp();
+  static const int kFromTimestampFieldNumber = 3;
+  inline const ::std::string& from_timestamp() const;
+  inline void set_from_timestamp(const ::std::string& value);
+  inline void set_from_timestamp(const char* value);
+  inline void set_from_timestamp(const char* value, size_t size);
+  inline ::std::string* mutable_from_timestamp();
+  inline ::std::string* release_from_timestamp();
+  inline void set_allocated_from_timestamp(::std::string* from_timestamp);
 
   // required fixed32 max_message_count = 4;
   inline bool has_max_message_count() const;
@@ -1702,15 +1712,15 @@ class MediaMessageRequest : public ::google::protobuf::Message {
   inline void clear_has_id();
   inline void set_has_from_message_id();
   inline void clear_has_from_message_id();
-  inline void set_has_from_time();
-  inline void clear_has_from_time();
+  inline void set_has_from_timestamp();
+  inline void clear_has_from_timestamp();
   inline void set_has_max_message_count();
   inline void clear_has_max_message_count();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::pbmsg::Entity* id_;
-  ::std::string* from_time_;
+  ::std::string* from_timestamp_;
   ::google::protobuf::uint32 from_message_id_;
   ::google::protobuf::uint32 max_message_count_;
 
@@ -2184,7 +2194,7 @@ class InviteParticipantRequest : public ::google::protobuf::Message {
   inline ::pbmsg::Entity* release_group_id();
   inline void set_allocated_group_id(::pbmsg::Entity* group_id);
 
-  // required .pbmsg.Entity account_id = 2;
+  // optional .pbmsg.Entity account_id = 2;
   inline bool has_account_id() const;
   inline void clear_account_id();
   static const int kAccountIdFieldNumber = 2;
@@ -2280,7 +2290,7 @@ class DropParticipantRequest : public ::google::protobuf::Message {
   inline ::pbmsg::Entity* release_group_id();
   inline void set_allocated_group_id(::pbmsg::Entity* group_id);
 
-  // required .pbmsg.Entity account_id = 2;
+  // optional .pbmsg.Entity account_id = 2;
   inline bool has_account_id() const;
   inline void clear_account_id();
   static const int kAccountIdFieldNumber = 2;
@@ -2926,7 +2936,7 @@ class KickParticipantRequest : public ::google::protobuf::Message {
   inline ::pbmsg::Entity* release_group_id();
   inline void set_allocated_group_id(::pbmsg::Entity* group_id);
 
-  // required .pbmsg.Entity account_id = 2;
+  // optional .pbmsg.Entity account_id = 2;
   inline bool has_account_id() const;
   inline void clear_account_id();
   static const int kAccountIdFieldNumber = 2;
@@ -4792,14 +4802,14 @@ class Request : public ::google::protobuf::Message {
   inline ::app::dispatch::ModifyParticipantsRequest* release_modify_participants();
   inline void set_allocated_modify_participants(::app::dispatch::ModifyParticipantsRequest* modify_participants);
 
-  // optional .app.dispatch.MediaMessageRequest media_message = 6;
-  inline bool has_media_message() const;
-  inline void clear_media_message();
-  static const int kMediaMessageFieldNumber = 6;
-  inline const ::app::dispatch::MediaMessageRequest& media_message() const;
-  inline ::app::dispatch::MediaMessageRequest* mutable_media_message();
-  inline ::app::dispatch::MediaMessageRequest* release_media_message();
-  inline void set_allocated_media_message(::app::dispatch::MediaMessageRequest* media_message);
+  // optional .app.dispatch.MediaMessageRequest group_message = 6;
+  inline bool has_group_message() const;
+  inline void clear_group_message();
+  static const int kGroupMessageFieldNumber = 6;
+  inline const ::app::dispatch::MediaMessageRequest& group_message() const;
+  inline ::app::dispatch::MediaMessageRequest* mutable_group_message();
+  inline ::app::dispatch::MediaMessageRequest* release_group_message();
+  inline void set_allocated_group_message(::app::dispatch::MediaMessageRequest* group_message);
 
   // optional .app.dispatch.InviteParticipantRequest invite_participant = 7;
   inline bool has_invite_participant() const;
@@ -4984,8 +4994,8 @@ class Request : public ::google::protobuf::Message {
   inline void clear_has_modify_group();
   inline void set_has_modify_participants();
   inline void clear_has_modify_participants();
-  inline void set_has_media_message();
-  inline void clear_has_media_message();
+  inline void set_has_group_message();
+  inline void clear_has_group_message();
   inline void set_has_invite_participant();
   inline void clear_has_invite_participant();
   inline void set_has_drop_participant();
@@ -5032,7 +5042,7 @@ class Request : public ::google::protobuf::Message {
   ::app::dispatch::AppendGroupRequest* append_group_;
   ::app::dispatch::ModifyGroupRequest* modify_group_;
   ::app::dispatch::ModifyParticipantsRequest* modify_participants_;
-  ::app::dispatch::MediaMessageRequest* media_message_;
+  ::app::dispatch::MediaMessageRequest* group_message_;
   ::app::dispatch::InviteParticipantRequest* invite_participant_;
   ::app::dispatch::DropParticipantRequest* drop_participant_;
   ::app::dispatch::ReleaseParticipantTokenRequest* release_participant_token_;
@@ -5190,14 +5200,14 @@ class Response : public ::google::protobuf::Message {
   inline ::app::dispatch::ModifyParticipantsResponse* release_modify_participants();
   inline void set_allocated_modify_participants(::app::dispatch::ModifyParticipantsResponse* modify_participants);
 
-  // optional .app.dispatch.MediaMessageResponse media_message = 9;
-  inline bool has_media_message() const;
-  inline void clear_media_message();
-  static const int kMediaMessageFieldNumber = 9;
-  inline const ::app::dispatch::MediaMessageResponse& media_message() const;
-  inline ::app::dispatch::MediaMessageResponse* mutable_media_message();
-  inline ::app::dispatch::MediaMessageResponse* release_media_message();
-  inline void set_allocated_media_message(::app::dispatch::MediaMessageResponse* media_message);
+  // optional .app.dispatch.MediaMessageResponse group_message = 9;
+  inline bool has_group_message() const;
+  inline void clear_group_message();
+  static const int kGroupMessageFieldNumber = 9;
+  inline const ::app::dispatch::MediaMessageResponse& group_message() const;
+  inline ::app::dispatch::MediaMessageResponse* mutable_group_message();
+  inline ::app::dispatch::MediaMessageResponse* release_group_message();
+  inline void set_allocated_group_message(::app::dispatch::MediaMessageResponse* group_message);
 
   // optional .app.dispatch.AppendAlertResponse append_alert = 10;
   inline bool has_append_alert() const;
@@ -5253,8 +5263,8 @@ class Response : public ::google::protobuf::Message {
   inline void clear_has_modify_group();
   inline void set_has_modify_participants();
   inline void clear_has_modify_participants();
-  inline void set_has_media_message();
-  inline void clear_has_media_message();
+  inline void set_has_group_message();
+  inline void clear_has_group_message();
   inline void set_has_append_alert();
   inline void clear_has_append_alert();
   inline void set_has_history_alerts();
@@ -5272,7 +5282,7 @@ class Response : public ::google::protobuf::Message {
   ::app::dispatch::AppendGroupResponse* append_group_;
   ::app::dispatch::ModifyGroupResponse* modify_group_;
   ::app::dispatch::ModifyParticipantsResponse* modify_participants_;
-  ::app::dispatch::MediaMessageResponse* media_message_;
+  ::app::dispatch::MediaMessageResponse* group_message_;
   ::app::dispatch::AppendAlertResponse* append_alert_;
   ::app::dispatch::HistoryAlertsResponse* history_alerts_;
   ::app::dispatch::HistoryAlertResponse* history_alert_;
@@ -6068,7 +6078,7 @@ inline void EntityStatusNotification::set_allocated_id(::pbmsg::Entity* id) {
   }
 }
 
-// required .pbmsg.RegisterStatus status = 2;
+// optional .pbmsg.RegisterStatus status = 2;
 inline bool EntityStatusNotification::has_status() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -6112,6 +6122,29 @@ inline void EntityStatusNotification::set_sip_status(::pbmsg::RegisterStatus val
   assert(::pbmsg::RegisterStatus_IsValid(value));
   set_has_sip_status();
   sip_status_ = value;
+}
+
+// optional .pbmsg.CustomStatus custom_status = 4;
+inline bool EntityStatusNotification::has_custom_status() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void EntityStatusNotification::set_has_custom_status() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void EntityStatusNotification::clear_has_custom_status() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void EntityStatusNotification::clear_custom_status() {
+  custom_status_ = 0;
+  clear_has_custom_status();
+}
+inline ::pbmsg::CustomStatus EntityStatusNotification::custom_status() const {
+  return static_cast< ::pbmsg::CustomStatus >(custom_status_);
+}
+inline void EntityStatusNotification::set_custom_status(::pbmsg::CustomStatus value) {
+  assert(::pbmsg::CustomStatus_IsValid(value));
+  set_has_custom_status();
+  custom_status_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -6799,73 +6832,73 @@ inline void MediaMessageRequest::set_from_message_id(::google::protobuf::uint32 
   from_message_id_ = value;
 }
 
-// optional string from_time = 3;
-inline bool MediaMessageRequest::has_from_time() const {
+// optional string from_timestamp = 3;
+inline bool MediaMessageRequest::has_from_timestamp() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void MediaMessageRequest::set_has_from_time() {
+inline void MediaMessageRequest::set_has_from_timestamp() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void MediaMessageRequest::clear_has_from_time() {
+inline void MediaMessageRequest::clear_has_from_timestamp() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void MediaMessageRequest::clear_from_time() {
-  if (from_time_ != &::google::protobuf::internal::kEmptyString) {
-    from_time_->clear();
+inline void MediaMessageRequest::clear_from_timestamp() {
+  if (from_timestamp_ != &::google::protobuf::internal::kEmptyString) {
+    from_timestamp_->clear();
   }
-  clear_has_from_time();
+  clear_has_from_timestamp();
 }
-inline const ::std::string& MediaMessageRequest::from_time() const {
-  return *from_time_;
+inline const ::std::string& MediaMessageRequest::from_timestamp() const {
+  return *from_timestamp_;
 }
-inline void MediaMessageRequest::set_from_time(const ::std::string& value) {
-  set_has_from_time();
-  if (from_time_ == &::google::protobuf::internal::kEmptyString) {
-    from_time_ = new ::std::string;
+inline void MediaMessageRequest::set_from_timestamp(const ::std::string& value) {
+  set_has_from_timestamp();
+  if (from_timestamp_ == &::google::protobuf::internal::kEmptyString) {
+    from_timestamp_ = new ::std::string;
   }
-  from_time_->assign(value);
+  from_timestamp_->assign(value);
 }
-inline void MediaMessageRequest::set_from_time(const char* value) {
-  set_has_from_time();
-  if (from_time_ == &::google::protobuf::internal::kEmptyString) {
-    from_time_ = new ::std::string;
+inline void MediaMessageRequest::set_from_timestamp(const char* value) {
+  set_has_from_timestamp();
+  if (from_timestamp_ == &::google::protobuf::internal::kEmptyString) {
+    from_timestamp_ = new ::std::string;
   }
-  from_time_->assign(value);
+  from_timestamp_->assign(value);
 }
-inline void MediaMessageRequest::set_from_time(const char* value, size_t size) {
-  set_has_from_time();
-  if (from_time_ == &::google::protobuf::internal::kEmptyString) {
-    from_time_ = new ::std::string;
+inline void MediaMessageRequest::set_from_timestamp(const char* value, size_t size) {
+  set_has_from_timestamp();
+  if (from_timestamp_ == &::google::protobuf::internal::kEmptyString) {
+    from_timestamp_ = new ::std::string;
   }
-  from_time_->assign(reinterpret_cast<const char*>(value), size);
+  from_timestamp_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* MediaMessageRequest::mutable_from_time() {
-  set_has_from_time();
-  if (from_time_ == &::google::protobuf::internal::kEmptyString) {
-    from_time_ = new ::std::string;
+inline ::std::string* MediaMessageRequest::mutable_from_timestamp() {
+  set_has_from_timestamp();
+  if (from_timestamp_ == &::google::protobuf::internal::kEmptyString) {
+    from_timestamp_ = new ::std::string;
   }
-  return from_time_;
+  return from_timestamp_;
 }
-inline ::std::string* MediaMessageRequest::release_from_time() {
-  clear_has_from_time();
-  if (from_time_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* MediaMessageRequest::release_from_timestamp() {
+  clear_has_from_timestamp();
+  if (from_timestamp_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = from_time_;
-    from_time_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = from_timestamp_;
+    from_timestamp_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
-inline void MediaMessageRequest::set_allocated_from_time(::std::string* from_time) {
-  if (from_time_ != &::google::protobuf::internal::kEmptyString) {
-    delete from_time_;
+inline void MediaMessageRequest::set_allocated_from_timestamp(::std::string* from_timestamp) {
+  if (from_timestamp_ != &::google::protobuf::internal::kEmptyString) {
+    delete from_timestamp_;
   }
-  if (from_time) {
-    set_has_from_time();
-    from_time_ = from_time;
+  if (from_timestamp) {
+    set_has_from_timestamp();
+    from_timestamp_ = from_timestamp;
   } else {
-    clear_has_from_time();
-    from_time_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    clear_has_from_timestamp();
+    from_timestamp_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   }
 }
 
@@ -7262,7 +7295,7 @@ inline void InviteParticipantRequest::set_allocated_group_id(::pbmsg::Entity* gr
   }
 }
 
-// required .pbmsg.Entity account_id = 2;
+// optional .pbmsg.Entity account_id = 2;
 inline bool InviteParticipantRequest::has_account_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -7342,7 +7375,7 @@ inline void DropParticipantRequest::set_allocated_group_id(::pbmsg::Entity* grou
   }
 }
 
-// required .pbmsg.Entity account_id = 2;
+// optional .pbmsg.Entity account_id = 2;
 inline bool DropParticipantRequest::has_account_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -7811,7 +7844,7 @@ inline void KickParticipantRequest::set_allocated_group_id(::pbmsg::Entity* grou
   }
 }
 
-// required .pbmsg.Entity account_id = 2;
+// optional .pbmsg.Entity account_id = 2;
 inline bool KickParticipantRequest::has_account_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -9540,41 +9573,41 @@ inline void Request::set_allocated_modify_participants(::app::dispatch::ModifyPa
   }
 }
 
-// optional .app.dispatch.MediaMessageRequest media_message = 6;
-inline bool Request::has_media_message() const {
+// optional .app.dispatch.MediaMessageRequest group_message = 6;
+inline bool Request::has_group_message() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline void Request::set_has_media_message() {
+inline void Request::set_has_group_message() {
   _has_bits_[0] |= 0x00000020u;
 }
-inline void Request::clear_has_media_message() {
+inline void Request::clear_has_group_message() {
   _has_bits_[0] &= ~0x00000020u;
 }
-inline void Request::clear_media_message() {
-  if (media_message_ != NULL) media_message_->::app::dispatch::MediaMessageRequest::Clear();
-  clear_has_media_message();
+inline void Request::clear_group_message() {
+  if (group_message_ != NULL) group_message_->::app::dispatch::MediaMessageRequest::Clear();
+  clear_has_group_message();
 }
-inline const ::app::dispatch::MediaMessageRequest& Request::media_message() const {
-  return media_message_ != NULL ? *media_message_ : *default_instance_->media_message_;
+inline const ::app::dispatch::MediaMessageRequest& Request::group_message() const {
+  return group_message_ != NULL ? *group_message_ : *default_instance_->group_message_;
 }
-inline ::app::dispatch::MediaMessageRequest* Request::mutable_media_message() {
-  set_has_media_message();
-  if (media_message_ == NULL) media_message_ = new ::app::dispatch::MediaMessageRequest;
-  return media_message_;
+inline ::app::dispatch::MediaMessageRequest* Request::mutable_group_message() {
+  set_has_group_message();
+  if (group_message_ == NULL) group_message_ = new ::app::dispatch::MediaMessageRequest;
+  return group_message_;
 }
-inline ::app::dispatch::MediaMessageRequest* Request::release_media_message() {
-  clear_has_media_message();
-  ::app::dispatch::MediaMessageRequest* temp = media_message_;
-  media_message_ = NULL;
+inline ::app::dispatch::MediaMessageRequest* Request::release_group_message() {
+  clear_has_group_message();
+  ::app::dispatch::MediaMessageRequest* temp = group_message_;
+  group_message_ = NULL;
   return temp;
 }
-inline void Request::set_allocated_media_message(::app::dispatch::MediaMessageRequest* media_message) {
-  delete media_message_;
-  media_message_ = media_message;
-  if (media_message) {
-    set_has_media_message();
+inline void Request::set_allocated_group_message(::app::dispatch::MediaMessageRequest* group_message) {
+  delete group_message_;
+  group_message_ = group_message;
+  if (group_message) {
+    set_has_group_message();
   } else {
-    clear_has_media_message();
+    clear_has_group_message();
   }
 }
 
@@ -10608,41 +10641,41 @@ inline void Response::set_allocated_modify_participants(::app::dispatch::ModifyP
   }
 }
 
-// optional .app.dispatch.MediaMessageResponse media_message = 9;
-inline bool Response::has_media_message() const {
+// optional .app.dispatch.MediaMessageResponse group_message = 9;
+inline bool Response::has_group_message() const {
   return (_has_bits_[0] & 0x00000100u) != 0;
 }
-inline void Response::set_has_media_message() {
+inline void Response::set_has_group_message() {
   _has_bits_[0] |= 0x00000100u;
 }
-inline void Response::clear_has_media_message() {
+inline void Response::clear_has_group_message() {
   _has_bits_[0] &= ~0x00000100u;
 }
-inline void Response::clear_media_message() {
-  if (media_message_ != NULL) media_message_->::app::dispatch::MediaMessageResponse::Clear();
-  clear_has_media_message();
+inline void Response::clear_group_message() {
+  if (group_message_ != NULL) group_message_->::app::dispatch::MediaMessageResponse::Clear();
+  clear_has_group_message();
 }
-inline const ::app::dispatch::MediaMessageResponse& Response::media_message() const {
-  return media_message_ != NULL ? *media_message_ : *default_instance_->media_message_;
+inline const ::app::dispatch::MediaMessageResponse& Response::group_message() const {
+  return group_message_ != NULL ? *group_message_ : *default_instance_->group_message_;
 }
-inline ::app::dispatch::MediaMessageResponse* Response::mutable_media_message() {
-  set_has_media_message();
-  if (media_message_ == NULL) media_message_ = new ::app::dispatch::MediaMessageResponse;
-  return media_message_;
+inline ::app::dispatch::MediaMessageResponse* Response::mutable_group_message() {
+  set_has_group_message();
+  if (group_message_ == NULL) group_message_ = new ::app::dispatch::MediaMessageResponse;
+  return group_message_;
 }
-inline ::app::dispatch::MediaMessageResponse* Response::release_media_message() {
-  clear_has_media_message();
-  ::app::dispatch::MediaMessageResponse* temp = media_message_;
-  media_message_ = NULL;
+inline ::app::dispatch::MediaMessageResponse* Response::release_group_message() {
+  clear_has_group_message();
+  ::app::dispatch::MediaMessageResponse* temp = group_message_;
+  group_message_ = NULL;
   return temp;
 }
-inline void Response::set_allocated_media_message(::app::dispatch::MediaMessageResponse* media_message) {
-  delete media_message_;
-  media_message_ = media_message;
-  if (media_message) {
-    set_has_media_message();
+inline void Response::set_allocated_group_message(::app::dispatch::MediaMessageResponse* group_message) {
+  delete group_message_;
+  group_message_ = group_message;
+  if (group_message) {
+    set_has_group_message();
   } else {
-    clear_has_media_message();
+    clear_has_group_message();
   }
 }
 

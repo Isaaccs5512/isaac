@@ -136,8 +136,9 @@ message EntityNotification
 message EntityStatusNotification
 {
     required    pbmsg.Entity            id          =   1;
-    required    pbmsg.RegisterStatus    status      =   2;
+    optional    pbmsg.RegisterStatus    status      =   2;
     optional    pbmsg.RegisterStatus    sip_status  =   3;
+    optional    pbmsg.CustomStatus      custom_status = 4;
 }
 
 message AppendGroupRequest
@@ -195,7 +196,7 @@ message MediaMessageRequest
 {
     required    pbmsg.Entity            id                  =   1;
     optional    fixed32                 from_message_id     =   2;
-    optional    string                  from_time           =   3;
+    optional    string                  from_timestamp      =   3;
     required    fixed32                 max_message_count   =   4;
 }
 
@@ -228,13 +229,13 @@ message ParticipantSpeakRequestNotification
 message InviteParticipantRequest
 {
     required    pbmsg.Entity            group_id            =   1;
-    required    pbmsg.Entity            account_id          =   2;
+    optional    pbmsg.Entity            account_id          =   2;
 }
 
 message DropParticipantRequest
 {
     required    pbmsg.Entity            group_id            =   1;
-    required    pbmsg.Entity            account_id          =   2;
+    optional    pbmsg.Entity            account_id          =   2;
 
 }
 
@@ -275,10 +276,11 @@ message SendMessageRequest
     required    pbmsg.MediaMessage      msg                 =   2;
 }
 
+
 message KickParticipantRequest
 {
     required    pbmsg.Entity            group_id            =   1;
-    required    pbmsg.Entity            account_id          =   2;
+    optional    pbmsg.Entity            account_id          =   2;
 
 }
 
@@ -403,7 +405,7 @@ message Request
     optional    AppendGroupRequest                append_group               =   3;
     optional    ModifyGroupRequest                modify_group               =   4;
     optional    ModifyParticipantsRequest         modify_participants        =   5;
-    optional    MediaMessageRequest               media_message              =   6;
+    optional    MediaMessageRequest               group_message              =   6;
     optional    InviteParticipantRequest          invite_participant         =   7;
     optional    DropParticipantRequest            drop_participant           =   8;
     optional    ReleaseParticipantTokenRequest    release_participant_token  =   9;
@@ -437,11 +439,11 @@ message Response
     optional    AppendGroupResponse                append_group              =   6;
     optional    ModifyGroupResponse                modify_group              =   7;
     optional    ModifyParticipantsResponse         modify_participants       =   8;
-    optional    MediaMessageResponse               media_message             =   9;
+    optional    MediaMessageResponse               group_message             =   9;
     optional    AppendAlertResponse                append_alert              =   10;
     optional    HistoryAlertsResponse              history_alerts            =   11;
     optional    HistoryAlertResponse               history_alert             =   12;
-    optional    HistoryAlertMessageResponse         history_alert_message     =   13;
+    optional    HistoryAlertMessageResponse         history_alert_message    =   13;
 
 }
 message Indication

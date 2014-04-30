@@ -56,6 +56,7 @@ const ::google::protobuf::EnumDescriptor* SessionStatus_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* RecordType_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* AccountServiceStatus_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* CallPrivilege_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* CustomStatus_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* RegisterStatus_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* EntityType_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* UserType_descriptor_ = NULL;
@@ -126,7 +127,7 @@ void protobuf_AssignDesc_AppData_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Unit));
   Account_descriptor_ = file->message_type(3);
-  static const int Account_offsets_[16] = {
+  static const int Account_offsets_[23] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, base_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, account_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, number_),
@@ -138,11 +139,18 @@ void protobuf_AssignDesc_AppData_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, token_privilege_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, gps_report_mode_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, ttl_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, gps_ttl_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, status_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, sip_status_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, address_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, binding_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, subscribing_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, latitude_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, longitude_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, timestamp_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, participant_subscribing_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, message_subscribing_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Account, custom_status_),
   };
   Account_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -193,7 +201,7 @@ void protobuf_AssignDesc_AppData_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Organization));
   Participant_descriptor_ = file->message_type(6);
-  static const int Participant_offsets_[9] = {
+  static const int Participant_offsets_[10] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Participant, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Participant, group_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Participant, account_),
@@ -202,7 +210,8 @@ void protobuf_AssignDesc_AppData_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Participant, token_privilege_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Participant, join_timestamp_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Participant, status_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Participant, sync_added_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Participant, participant_subscribing_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Participant, message_subscribing_),
   };
   Participant_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -216,7 +225,7 @@ void protobuf_AssignDesc_AppData_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Participant));
   Group_descriptor_ = file->message_type(7);
-  static const int Group_offsets_[11] = {
+  static const int Group_offsets_[13] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Group, base_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Group, owner_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Group, number_),
@@ -228,6 +237,8 @@ void protobuf_AssignDesc_AppData_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Group, recorder_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Group, record_status_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Group, record_server_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Group, include_listen_users_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Group, listen_users_),
   };
   Group_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -290,14 +301,15 @@ void protobuf_AssignDesc_AppData_2eproto() {
   RecordType_descriptor_ = file->enum_type(3);
   AccountServiceStatus_descriptor_ = file->enum_type(4);
   CallPrivilege_descriptor_ = file->enum_type(5);
-  RegisterStatus_descriptor_ = file->enum_type(6);
-  EntityType_descriptor_ = file->enum_type(7);
-  UserType_descriptor_ = file->enum_type(8);
-  MessageType_descriptor_ = file->enum_type(9);
-  TokenPrivilege_descriptor_ = file->enum_type(10);
-  AccountType_descriptor_ = file->enum_type(11);
-  GpsReportMode_descriptor_ = file->enum_type(12);
-  RecordStatus_descriptor_ = file->enum_type(13);
+  CustomStatus_descriptor_ = file->enum_type(6);
+  RegisterStatus_descriptor_ = file->enum_type(7);
+  EntityType_descriptor_ = file->enum_type(8);
+  UserType_descriptor_ = file->enum_type(9);
+  MessageType_descriptor_ = file->enum_type(10);
+  TokenPrivilege_descriptor_ = file->enum_type(11);
+  AccountType_descriptor_ = file->enum_type(12);
+  GpsReportMode_descriptor_ = file->enum_type(13);
+  RecordStatus_descriptor_ = file->enum_type(14);
 }
 
 namespace {
@@ -370,7 +382,7 @@ void protobuf_AddDesc_AppData_2eproto() {
     "bmsg.EntityType\022\035\n\006parent\030\004 \001(\0132\r.pbmsg."
     "Entity\"\\\n\004Unit\022\033\n\004base\030\001 \002(\0132\r.pbmsg.Ent"
     "ity\022\027\n\017include_members\030\002 \001(\010\022\036\n\007members\030"
-    "\003 \003(\0132\r.pbmsg.Entity\"\202\004\n\007Account\022\033\n\004base"
+    "\003 \003(\0132\r.pbmsg.Entity\"\265\005\n\007Account\022\033\n\004base"
     "\030\001 \002(\0132\r.pbmsg.Entity\022(\n\014account_type\030\002 "
     "\001(\0162\022.pbmsg.AccountType\022\016\n\006number\030\003 \001(\014\022"
     "\024\n\014short_number\030\004 \001(\014\022\020\n\010password\030\005 \001(\014\022"
@@ -379,69 +391,78 @@ void protobuf_AddDesc_AppData_2eproto() {
     "rivilege\030\010 \001(\0162\024.pbmsg.CallPrivilege\022.\n\017"
     "token_privilege\030\t \001(\0162\025.pbmsg.TokenPrivi"
     "lege\022-\n\017gps_report_mode\030\n \001(\0162\024.pbmsg.Gp"
-    "sReportMode\022\013\n\003ttl\030\013 \001(\007\022%\n\006status\030\014 \001(\016"
-    "2\025.pbmsg.RegisterStatus\022)\n\nsip_status\030\r "
-    "\001(\0162\025.pbmsg.RegisterStatus\022\037\n\007address\030\016 "
-    "\001(\0132\016.pbmsg.Address\022\017\n\007binding\030\017 \001(\010\022\023\n\013"
-    "subscribing\030\020 \001(\010\"\301\001\n\004User\022\033\n\004base\030\001 \002(\013"
-    "2\r.pbmsg.Entity\022\020\n\010password\030\002 \001(\014\022\"\n\tuse"
-    "r_type\030\003 \001(\0162\017.pbmsg.UserType\022\036\n\007account"
-    "\030\004 \001(\0132\r.pbmsg.Entity\022%\n\006status\030\005 \001(\0162\025."
-    "pbmsg.RegisterStatus\022\037\n\007address\030\006 \001(\0132\016."
-    "pbmsg.Address\"d\n\014Organization\022\033\n\004base\030\001 "
-    "\002(\0132\r.pbmsg.Entity\022\027\n\017include_members\030\002 "
-    "\001(\010\022\036\n\007members\030\003 \003(\0132\r.pbmsg.Entity\"\231\002\n\013"
-    "Participant\022\n\n\002id\030\001 \001(\007\022\034\n\005group\030\002 \001(\0132\r"
-    ".pbmsg.Entity\022\036\n\007account\030\003 \001(\0132\r.pbmsg.E"
-    "ntity\022\020\n\010priority\030\004 \001(\007\022,\n\016call_privileg"
-    "e\030\005 \001(\0162\024.pbmsg.CallPrivilege\022.\n\017token_p"
-    "rivilege\030\006 \001(\0162\025.pbmsg.TokenPrivilege\022\026\n"
-    "\016join_timestamp\030\007 \001(\014\022$\n\006status\030\010 \001(\0162\024."
-    "pbmsg.SessionStatus\022\022\n\nsync_added\030\t \001(\010\""
-    "\333\002\n\005Group\022\033\n\004base\030\001 \002(\0132\r.pbmsg.Entity\022\034"
-    "\n\005owner\030\002 \001(\0132\r.pbmsg.Entity\022\016\n\006number\030\003"
-    " \001(\014\022\024\n\014short_number\030\004 \001(\014\022\016\n\006sealed\030\005 \001"
-    "(\010\022\034\n\024include_participants\030\006 \001(\010\022(\n\014part"
-    "icipants\030\007 \003(\0132\022.pbmsg.Participant\022&\n\013re"
-    "cord_type\030\010 \001(\0162\021.pbmsg.RecordType\022\037\n\010re"
-    "corder\030\t \001(\0132\r.pbmsg.Entity\022*\n\rrecord_st"
-    "atus\030\n \001(\0162\023.pbmsg.RecordStatus\022$\n\rrecor"
-    "d_server\030\013 \001(\0132\r.pbmsg.Entity\"\261\001\n\005Alert\022"
-    "\033\n\004base\030\001 \002(\0132\r.pbmsg.Entity\022\034\n\005group\030\002 "
-    "\001(\0132\r.pbmsg.Entity\022\020\n\010describe\030\003 \001(\014\022 \n\005"
-    "level\030\004 \001(\0162\021.pbmsg.AlertLevel\022\022\n\nalram_"
-    "time\030\005 \001(\014\022\020\n\010use_cars\030\006 \001(\007\022\023\n\013create_t"
-    "ime\030\007 \001(\014\"\273\002\n\007Gateway\022\033\n\004base\030\001 \002(\0132\r.pb"
-    "msg.Entity\022\037\n\007address\030\002 \001(\0132\016.pbmsg.Addr"
-    "ess\022\037\n\027include_allocate_counts\030\003 \001(\010\022&\n\017"
-    "allocate_counts\030\004 \003(\0132\r.pbmsg.Entity\022\035\n\025"
-    "include_active_counts\030\005 \001(\010\022$\n\ractive_co"
-    "unts\030\006 \003(\0132\r.pbmsg.Entity\022\032\n\022include_rec"
-    "ordings\030\007 \001(\010\022!\n\nrecordings\030\010 \003(\0132\r.pbms"
-    "g.Entity\022%\n\006status\030\t \001(\0162\025.pbmsg.Registe"
-    "rStatus*-\n\013AlertStatus\022\017\n\013AlertActive\020\000\022"
-    "\r\n\tAlertOver\020\001*K\n\nAlertLevel\022\014\n\010Exigency"
-    "\020\000\022\016\n\nImportance\020\001\022\021\n\rSubordination\020\002\022\014\n"
-    "\010Ordinary\020\003*3\n\rSessionStatus\022\010\n\004IDLE\020\000\022\013"
-    "\n\007InGroup\020\001\022\013\n\007Talking\020\002*>\n\nRecordType\022\016"
-    "\n\nDontRecord\020\000\022\016\n\nAutoRecord\020\001\022\020\n\014Manual"
-    "Record\020\002*:\n\024AccountServiceStatus\022\017\n\013Acco"
-    "untStop\020\000\022\021\n\rAccountActive\020\001*@\n\rCallPriv"
-    "ilege\022\016\n\nCallForbid\020\000\022\017\n\013CallFreedom\020\001\022\016"
-    "\n\nCallPolicy\020\002*)\n\016RegisterStatus\022\013\n\007OffL"
-    "ine\020\000\022\n\n\006OnLine\020\001*u\n\nEntityType\022\010\n\004UNIT\020"
-    "\000\022\013\n\007ACCOUNT\020\001\022\010\n\004USER\020\002\022\t\n\005GROUP\020\003\022\013\n\007G"
-    "ATEWAY\020\004\022\020\n\014ORGANIZATION\020\005\022\t\n\005ALERT\020\006\022\021\n"
-    "\rHISTORY_ALERT\020\007*#\n\010UserType\022\t\n\005Admin\020\000\022"
-    "\014\n\010Operator\020\001*8\n\013MessageType\022\010\n\004Text\020\000\022\013"
-    "\n\007Picture\020\001\022\022\n\016TextPictureMix\020\002*D\n\016Token"
-    "Privilege\022\017\n\013TokenForbid\020\000\022\020\n\014TokenFreed"
-    "om\020\001\022\017\n\013TokenPolicy\020\002*I\n\013AccountType\022\016\n\n"
-    "Dispatcher\020\000\022\014\n\010Terminal\020\001\022\n\n\006Record\020\002\022\020"
-    "\n\014MediaGateway\020\003*F\n\rGpsReportMode\022\021\n\rGps"
-    "ManualPull\020\000\022\021\n\rGpsManualPush\020\001\022\017\n\013GpsAu"
-    "toPush\020\002*/\n\014RecordStatus\022\016\n\nRecordStop\020\000"
-    "\022\017\n\013RecordStart\020\001", 3097);
+    "sReportMode\022\013\n\003ttl\030\013 \001(\007\022\017\n\007gps_ttl\030\014 \001("
+    "\007\022%\n\006status\030\r \001(\0162\025.pbmsg.RegisterStatus"
+    "\022)\n\nsip_status\030\016 \001(\0162\025.pbmsg.RegisterSta"
+    "tus\022\037\n\007address\030\017 \001(\0132\016.pbmsg.Address\022\017\n\007"
+    "binding\030\020 \001(\010\022\023\n\013subscribing\030\021 \001(\010\022\020\n\010la"
+    "titude\030\022 \001(\001\022\021\n\tlongitude\030\023 \001(\001\022\021\n\ttimes"
+    "tamp\030\024 \001(\014\022\037\n\027participant_subscribing\030\025 "
+    "\001(\010\022\033\n\023message_subscribing\030\026 \001(\010\022*\n\rcust"
+    "om_status\030\027 \001(\0162\023.pbmsg.CustomStatus\"\301\001\n"
+    "\004User\022\033\n\004base\030\001 \002(\0132\r.pbmsg.Entity\022\020\n\010pa"
+    "ssword\030\002 \001(\014\022\"\n\tuser_type\030\003 \001(\0162\017.pbmsg."
+    "UserType\022\036\n\007account\030\004 \001(\0132\r.pbmsg.Entity"
+    "\022%\n\006status\030\005 \001(\0162\025.pbmsg.RegisterStatus\022"
+    "\037\n\007address\030\006 \001(\0132\016.pbmsg.Address\"d\n\014Orga"
+    "nization\022\033\n\004base\030\001 \002(\0132\r.pbmsg.Entity\022\027\n"
+    "\017include_members\030\002 \001(\010\022\036\n\007members\030\003 \003(\0132"
+    "\r.pbmsg.Entity\"\303\002\n\013Participant\022\n\n\002id\030\001 \001"
+    "(\007\022\034\n\005group\030\002 \001(\0132\r.pbmsg.Entity\022\036\n\007acco"
+    "unt\030\003 \001(\0132\r.pbmsg.Entity\022\020\n\010priority\030\004 \001"
+    "(\007\022,\n\016call_privilege\030\005 \001(\0162\024.pbmsg.CallP"
+    "rivilege\022.\n\017token_privilege\030\006 \001(\0162\025.pbms"
+    "g.TokenPrivilege\022\026\n\016join_timestamp\030\007 \001(\014"
+    "\022$\n\006status\030\010 \001(\0162\024.pbmsg.SessionStatus\022\037"
+    "\n\027participant_subscribing\030\t \001(\010\022\033\n\023messa"
+    "ge_subscribing\030\n \001(\010\"\236\003\n\005Group\022\033\n\004base\030\001"
+    " \002(\0132\r.pbmsg.Entity\022\034\n\005owner\030\002 \001(\0132\r.pbm"
+    "sg.Entity\022\016\n\006number\030\003 \001(\014\022\024\n\014short_numbe"
+    "r\030\004 \001(\014\022\016\n\006sealed\030\005 \001(\010\022\034\n\024include_parti"
+    "cipants\030\006 \001(\010\022(\n\014participants\030\007 \003(\0132\022.pb"
+    "msg.Participant\022&\n\013record_type\030\010 \001(\0162\021.p"
+    "bmsg.RecordType\022\037\n\010recorder\030\t \001(\0132\r.pbms"
+    "g.Entity\022*\n\rrecord_status\030\n \001(\0162\023.pbmsg."
+    "RecordStatus\022$\n\rrecord_server\030\013 \001(\0132\r.pb"
+    "msg.Entity\022\034\n\024include_listen_users\030\014 \001(\010"
+    "\022#\n\014listen_users\030\r \003(\0132\r.pbmsg.Entity\"\261\001"
+    "\n\005Alert\022\033\n\004base\030\001 \002(\0132\r.pbmsg.Entity\022\034\n\005"
+    "group\030\002 \001(\0132\r.pbmsg.Entity\022\020\n\010describe\030\003"
+    " \001(\014\022 \n\005level\030\004 \001(\0162\021.pbmsg.AlertLevel\022\022"
+    "\n\nalram_time\030\005 \001(\014\022\020\n\010use_cars\030\006 \001(\007\022\023\n\013"
+    "create_time\030\007 \001(\014\"\273\002\n\007Gateway\022\033\n\004base\030\001 "
+    "\002(\0132\r.pbmsg.Entity\022\037\n\007address\030\002 \001(\0132\016.pb"
+    "msg.Address\022\037\n\027include_allocate_counts\030\003"
+    " \001(\010\022&\n\017allocate_counts\030\004 \003(\0132\r.pbmsg.En"
+    "tity\022\035\n\025include_active_counts\030\005 \001(\010\022$\n\ra"
+    "ctive_counts\030\006 \003(\0132\r.pbmsg.Entity\022\032\n\022inc"
+    "lude_recordings\030\007 \001(\010\022!\n\nrecordings\030\010 \003("
+    "\0132\r.pbmsg.Entity\022%\n\006status\030\t \001(\0162\025.pbmsg"
+    ".RegisterStatus*-\n\013AlertStatus\022\017\n\013AlertA"
+    "ctive\020\000\022\r\n\tAlertOver\020\001*K\n\nAlertLevel\022\014\n\010"
+    "Exigency\020\000\022\016\n\nImportance\020\001\022\021\n\rSubordinat"
+    "ion\020\002\022\014\n\010Ordinary\020\003*3\n\rSessionStatus\022\010\n\004"
+    "IDLE\020\000\022\013\n\007InGroup\020\001\022\013\n\007Talking\020\002*>\n\nReco"
+    "rdType\022\016\n\nDontRecord\020\000\022\016\n\nAutoRecord\020\001\022\020"
+    "\n\014ManualRecord\020\002*:\n\024AccountServiceStatus"
+    "\022\017\n\013AccountStop\020\000\022\021\n\rAccountActive\020\001*@\n\r"
+    "CallPrivilege\022\016\n\nCallForbid\020\000\022\017\n\013CallFre"
+    "edom\020\001\022\016\n\nCallPolicy\020\002*@\n\014CustomStatus\022\013"
+    "\n\007Standby\020\000\022\010\n\004Duty\020\001\022\013\n\007Turnout\020\002\022\014\n\010Tr"
+    "aining\020\003*)\n\016RegisterStatus\022\013\n\007OffLine\020\000\022"
+    "\n\n\006OnLine\020\001*u\n\nEntityType\022\010\n\004UNIT\020\000\022\013\n\007A"
+    "CCOUNT\020\001\022\010\n\004USER\020\002\022\t\n\005GROUP\020\003\022\013\n\007GATEWAY"
+    "\020\004\022\020\n\014ORGANIZATION\020\005\022\t\n\005ALERT\020\006\022\021\n\rHISTO"
+    "RY_ALERT\020\007*#\n\010UserType\022\t\n\005Admin\020\000\022\014\n\010Ope"
+    "rator\020\001*8\n\013MessageType\022\010\n\004Text\020\000\022\013\n\007Pict"
+    "ure\020\001\022\022\n\016TextPictureMix\020\002*D\n\016TokenPrivil"
+    "ege\022\017\n\013TokenForbid\020\000\022\020\n\014TokenFreedom\020\001\022\017"
+    "\n\013TokenPolicy\020\002*I\n\013AccountType\022\016\n\nDispat"
+    "cher\020\000\022\014\n\010Terminal\020\001\022\n\n\006Record\020\002\022\020\n\014Medi"
+    "aGateway\020\003*F\n\rGpsReportMode\022\021\n\rGpsManual"
+    "Pull\020\000\022\021\n\rGpsManualPush\020\001\022\017\n\013GpsAutoPush"
+    "\020\002*/\n\014RecordStatus\022\016\n\nRecordStop\020\000\022\017\n\013Re"
+    "cordStart\020\001", 3451);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "AppData.proto", &protobuf_RegisterTypes);
   Address::default_instance_ = new Address();
@@ -556,6 +577,22 @@ bool CallPrivilege_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::google::protobuf::EnumDescriptor* CustomStatus_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return CustomStatus_descriptor_;
+}
+bool CustomStatus_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
       return true;
     default:
       return false;
@@ -1591,11 +1628,18 @@ const int Account::kCallPrivilegeFieldNumber;
 const int Account::kTokenPrivilegeFieldNumber;
 const int Account::kGpsReportModeFieldNumber;
 const int Account::kTtlFieldNumber;
+const int Account::kGpsTtlFieldNumber;
 const int Account::kStatusFieldNumber;
 const int Account::kSipStatusFieldNumber;
 const int Account::kAddressFieldNumber;
 const int Account::kBindingFieldNumber;
 const int Account::kSubscribingFieldNumber;
+const int Account::kLatitudeFieldNumber;
+const int Account::kLongitudeFieldNumber;
+const int Account::kTimestampFieldNumber;
+const int Account::kParticipantSubscribingFieldNumber;
+const int Account::kMessageSubscribingFieldNumber;
+const int Account::kCustomStatusFieldNumber;
 #endif  // !_MSC_VER
 
 Account::Account()
@@ -1627,11 +1671,18 @@ void Account::SharedCtor() {
   token_privilege_ = 0;
   gps_report_mode_ = 0;
   ttl_ = 0u;
+  gps_ttl_ = 0u;
   status_ = 0;
   sip_status_ = 0;
   address_ = NULL;
   binding_ = false;
   subscribing_ = false;
+  latitude_ = 0;
+  longitude_ = 0;
+  timestamp_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  participant_subscribing_ = false;
+  message_subscribing_ = false;
+  custom_status_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1648,6 +1699,9 @@ void Account::SharedDtor() {
   }
   if (password_ != &::google::protobuf::internal::kEmptyString) {
     delete password_;
+  }
+  if (timestamp_ != &::google::protobuf::internal::kEmptyString) {
+    delete timestamp_;
   }
   if (this != default_instance_) {
     delete base_;
@@ -1705,13 +1759,26 @@ void Account::Clear() {
     token_privilege_ = 0;
     gps_report_mode_ = 0;
     ttl_ = 0u;
+    gps_ttl_ = 0u;
     status_ = 0;
     sip_status_ = 0;
     if (has_address()) {
       if (address_ != NULL) address_->::pbmsg::Address::Clear();
     }
     binding_ = false;
+  }
+  if (_has_bits_[16 / 32] & (0xffu << (16 % 32))) {
     subscribing_ = false;
+    latitude_ = 0;
+    longitude_ = 0;
+    if (has_timestamp()) {
+      if (timestamp_ != &::google::protobuf::internal::kEmptyString) {
+        timestamp_->clear();
+      }
+    }
+    participant_subscribing_ = false;
+    message_subscribing_ = false;
+    custom_status_ = 0;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -1911,12 +1978,28 @@ bool Account::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(96)) goto parse_status;
+        if (input->ExpectTag(101)) goto parse_gps_ttl;
         break;
       }
 
-      // optional .pbmsg.RegisterStatus status = 12;
+      // optional fixed32 gps_ttl = 12;
       case 12: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
+         parse_gps_ttl:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
+                 input, &gps_ttl_)));
+          set_has_gps_ttl();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(104)) goto parse_status;
+        break;
+      }
+
+      // optional .pbmsg.RegisterStatus status = 13;
+      case 13: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_status:
@@ -1927,17 +2010,17 @@ bool Account::MergePartialFromCodedStream(
           if (::pbmsg::RegisterStatus_IsValid(value)) {
             set_status(static_cast< ::pbmsg::RegisterStatus >(value));
           } else {
-            mutable_unknown_fields()->AddVarint(12, value);
+            mutable_unknown_fields()->AddVarint(13, value);
           }
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(104)) goto parse_sip_status;
+        if (input->ExpectTag(112)) goto parse_sip_status;
         break;
       }
 
-      // optional .pbmsg.RegisterStatus sip_status = 13;
-      case 13: {
+      // optional .pbmsg.RegisterStatus sip_status = 14;
+      case 14: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_sip_status:
@@ -1948,17 +2031,17 @@ bool Account::MergePartialFromCodedStream(
           if (::pbmsg::RegisterStatus_IsValid(value)) {
             set_sip_status(static_cast< ::pbmsg::RegisterStatus >(value));
           } else {
-            mutable_unknown_fields()->AddVarint(13, value);
+            mutable_unknown_fields()->AddVarint(14, value);
           }
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(114)) goto parse_address;
+        if (input->ExpectTag(122)) goto parse_address;
         break;
       }
 
-      // optional .pbmsg.Address address = 14;
-      case 14: {
+      // optional .pbmsg.Address address = 15;
+      case 15: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_address:
@@ -1967,12 +2050,12 @@ bool Account::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(120)) goto parse_binding;
+        if (input->ExpectTag(128)) goto parse_binding;
         break;
       }
 
-      // optional bool binding = 15;
-      case 15: {
+      // optional bool binding = 16;
+      case 16: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_binding:
@@ -1983,12 +2066,12 @@ bool Account::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(128)) goto parse_subscribing;
+        if (input->ExpectTag(136)) goto parse_subscribing;
         break;
       }
 
-      // optional bool subscribing = 16;
-      case 16: {
+      // optional bool subscribing = 17;
+      case 17: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_subscribing:
@@ -1996,6 +2079,105 @@ bool Account::MergePartialFromCodedStream(
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
                  input, &subscribing_)));
           set_has_subscribing();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(145)) goto parse_latitude;
+        break;
+      }
+
+      // optional double latitude = 18;
+      case 18: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED64) {
+         parse_latitude:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &latitude_)));
+          set_has_latitude();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(153)) goto parse_longitude;
+        break;
+      }
+
+      // optional double longitude = 19;
+      case 19: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED64) {
+         parse_longitude:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &longitude_)));
+          set_has_longitude();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(162)) goto parse_timestamp;
+        break;
+      }
+
+      // optional bytes timestamp = 20;
+      case 20: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_timestamp:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_timestamp()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(168)) goto parse_participant_subscribing;
+        break;
+      }
+
+      // optional bool participant_subscribing = 21;
+      case 21: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_participant_subscribing:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &participant_subscribing_)));
+          set_has_participant_subscribing();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(176)) goto parse_message_subscribing;
+        break;
+      }
+
+      // optional bool message_subscribing = 22;
+      case 22: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_message_subscribing:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &message_subscribing_)));
+          set_has_message_subscribing();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(184)) goto parse_custom_status;
+        break;
+      }
+
+      // optional .pbmsg.CustomStatus custom_status = 23;
+      case 23: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_custom_status:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::pbmsg::CustomStatus_IsValid(value)) {
+            set_custom_status(static_cast< ::pbmsg::CustomStatus >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(23, value);
+          }
         } else {
           goto handle_uninterpreted;
         }
@@ -2085,32 +2267,69 @@ void Account::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFixed32(11, this->ttl(), output);
   }
 
-  // optional .pbmsg.RegisterStatus status = 12;
+  // optional fixed32 gps_ttl = 12;
+  if (has_gps_ttl()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFixed32(12, this->gps_ttl(), output);
+  }
+
+  // optional .pbmsg.RegisterStatus status = 13;
   if (has_status()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      12, this->status(), output);
+      13, this->status(), output);
   }
 
-  // optional .pbmsg.RegisterStatus sip_status = 13;
+  // optional .pbmsg.RegisterStatus sip_status = 14;
   if (has_sip_status()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      13, this->sip_status(), output);
+      14, this->sip_status(), output);
   }
 
-  // optional .pbmsg.Address address = 14;
+  // optional .pbmsg.Address address = 15;
   if (has_address()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      14, this->address(), output);
+      15, this->address(), output);
   }
 
-  // optional bool binding = 15;
+  // optional bool binding = 16;
   if (has_binding()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(15, this->binding(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(16, this->binding(), output);
   }
 
-  // optional bool subscribing = 16;
+  // optional bool subscribing = 17;
   if (has_subscribing()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(16, this->subscribing(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(17, this->subscribing(), output);
+  }
+
+  // optional double latitude = 18;
+  if (has_latitude()) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(18, this->latitude(), output);
+  }
+
+  // optional double longitude = 19;
+  if (has_longitude()) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(19, this->longitude(), output);
+  }
+
+  // optional bytes timestamp = 20;
+  if (has_timestamp()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+      20, this->timestamp(), output);
+  }
+
+  // optional bool participant_subscribing = 21;
+  if (has_participant_subscribing()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(21, this->participant_subscribing(), output);
+  }
+
+  // optional bool message_subscribing = 22;
+  if (has_message_subscribing()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(22, this->message_subscribing(), output);
+  }
+
+  // optional .pbmsg.CustomStatus custom_status = 23;
+  if (has_custom_status()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      23, this->custom_status(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -2189,33 +2408,71 @@ void Account::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteFixed32ToArray(11, this->ttl(), target);
   }
 
-  // optional .pbmsg.RegisterStatus status = 12;
+  // optional fixed32 gps_ttl = 12;
+  if (has_gps_ttl()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFixed32ToArray(12, this->gps_ttl(), target);
+  }
+
+  // optional .pbmsg.RegisterStatus status = 13;
   if (has_status()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      12, this->status(), target);
+      13, this->status(), target);
   }
 
-  // optional .pbmsg.RegisterStatus sip_status = 13;
+  // optional .pbmsg.RegisterStatus sip_status = 14;
   if (has_sip_status()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      13, this->sip_status(), target);
+      14, this->sip_status(), target);
   }
 
-  // optional .pbmsg.Address address = 14;
+  // optional .pbmsg.Address address = 15;
   if (has_address()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        14, this->address(), target);
+        15, this->address(), target);
   }
 
-  // optional bool binding = 15;
+  // optional bool binding = 16;
   if (has_binding()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(15, this->binding(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(16, this->binding(), target);
   }
 
-  // optional bool subscribing = 16;
+  // optional bool subscribing = 17;
   if (has_subscribing()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(16, this->subscribing(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(17, this->subscribing(), target);
+  }
+
+  // optional double latitude = 18;
+  if (has_latitude()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(18, this->latitude(), target);
+  }
+
+  // optional double longitude = 19;
+  if (has_longitude()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(19, this->longitude(), target);
+  }
+
+  // optional bytes timestamp = 20;
+  if (has_timestamp()) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        20, this->timestamp(), target);
+  }
+
+  // optional bool participant_subscribing = 21;
+  if (has_participant_subscribing()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(21, this->participant_subscribing(), target);
+  }
+
+  // optional bool message_subscribing = 22;
+  if (has_message_subscribing()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(22, this->message_subscribing(), target);
+  }
+
+  // optional .pbmsg.CustomStatus custom_status = 23;
+  if (has_custom_status()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      23, this->custom_status(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2299,33 +2556,73 @@ int Account::ByteSize() const {
       total_size += 1 + 4;
     }
 
-    // optional .pbmsg.RegisterStatus status = 12;
+    // optional fixed32 gps_ttl = 12;
+    if (has_gps_ttl()) {
+      total_size += 1 + 4;
+    }
+
+    // optional .pbmsg.RegisterStatus status = 13;
     if (has_status()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
     }
 
-    // optional .pbmsg.RegisterStatus sip_status = 13;
+    // optional .pbmsg.RegisterStatus sip_status = 14;
     if (has_sip_status()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->sip_status());
     }
 
-    // optional .pbmsg.Address address = 14;
+    // optional .pbmsg.Address address = 15;
     if (has_address()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->address());
     }
 
-    // optional bool binding = 15;
+    // optional bool binding = 16;
     if (has_binding()) {
-      total_size += 1 + 1;
+      total_size += 2 + 1;
     }
 
-    // optional bool subscribing = 16;
+  }
+  if (_has_bits_[16 / 32] & (0xffu << (16 % 32))) {
+    // optional bool subscribing = 17;
     if (has_subscribing()) {
       total_size += 2 + 1;
+    }
+
+    // optional double latitude = 18;
+    if (has_latitude()) {
+      total_size += 2 + 8;
+    }
+
+    // optional double longitude = 19;
+    if (has_longitude()) {
+      total_size += 2 + 8;
+    }
+
+    // optional bytes timestamp = 20;
+    if (has_timestamp()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->timestamp());
+    }
+
+    // optional bool participant_subscribing = 21;
+    if (has_participant_subscribing()) {
+      total_size += 2 + 1;
+    }
+
+    // optional bool message_subscribing = 22;
+    if (has_message_subscribing()) {
+      total_size += 2 + 1;
+    }
+
+    // optional .pbmsg.CustomStatus custom_status = 23;
+    if (has_custom_status()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->custom_status());
     }
 
   }
@@ -2390,6 +2687,9 @@ void Account::MergeFrom(const Account& from) {
     if (from.has_ttl()) {
       set_ttl(from.ttl());
     }
+    if (from.has_gps_ttl()) {
+      set_gps_ttl(from.gps_ttl());
+    }
     if (from.has_status()) {
       set_status(from.status());
     }
@@ -2402,8 +2702,28 @@ void Account::MergeFrom(const Account& from) {
     if (from.has_binding()) {
       set_binding(from.binding());
     }
+  }
+  if (from._has_bits_[16 / 32] & (0xffu << (16 % 32))) {
     if (from.has_subscribing()) {
       set_subscribing(from.subscribing());
+    }
+    if (from.has_latitude()) {
+      set_latitude(from.latitude());
+    }
+    if (from.has_longitude()) {
+      set_longitude(from.longitude());
+    }
+    if (from.has_timestamp()) {
+      set_timestamp(from.timestamp());
+    }
+    if (from.has_participant_subscribing()) {
+      set_participant_subscribing(from.participant_subscribing());
+    }
+    if (from.has_message_subscribing()) {
+      set_message_subscribing(from.message_subscribing());
+    }
+    if (from.has_custom_status()) {
+      set_custom_status(from.custom_status());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -2440,11 +2760,18 @@ void Account::Swap(Account* other) {
     std::swap(token_privilege_, other->token_privilege_);
     std::swap(gps_report_mode_, other->gps_report_mode_);
     std::swap(ttl_, other->ttl_);
+    std::swap(gps_ttl_, other->gps_ttl_);
     std::swap(status_, other->status_);
     std::swap(sip_status_, other->sip_status_);
     std::swap(address_, other->address_);
     std::swap(binding_, other->binding_);
     std::swap(subscribing_, other->subscribing_);
+    std::swap(latitude_, other->latitude_);
+    std::swap(longitude_, other->longitude_);
+    std::swap(timestamp_, other->timestamp_);
+    std::swap(participant_subscribing_, other->participant_subscribing_);
+    std::swap(message_subscribing_, other->message_subscribing_);
+    std::swap(custom_status_, other->custom_status_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -3207,7 +3534,8 @@ const int Participant::kCallPrivilegeFieldNumber;
 const int Participant::kTokenPrivilegeFieldNumber;
 const int Participant::kJoinTimestampFieldNumber;
 const int Participant::kStatusFieldNumber;
-const int Participant::kSyncAddedFieldNumber;
+const int Participant::kParticipantSubscribingFieldNumber;
+const int Participant::kMessageSubscribingFieldNumber;
 #endif  // !_MSC_VER
 
 Participant::Participant()
@@ -3236,7 +3564,8 @@ void Participant::SharedCtor() {
   token_privilege_ = 0;
   join_timestamp_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   status_ = 0;
-  sync_added_ = false;
+  participant_subscribing_ = false;
+  message_subscribing_ = false;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -3295,7 +3624,8 @@ void Participant::Clear() {
     status_ = 0;
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    sync_added_ = false;
+    participant_subscribing_ = false;
+    message_subscribing_ = false;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -3439,19 +3769,35 @@ bool Participant::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(72)) goto parse_sync_added;
+        if (input->ExpectTag(72)) goto parse_participant_subscribing;
         break;
       }
 
-      // optional bool sync_added = 9;
+      // optional bool participant_subscribing = 9;
       case 9: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
-         parse_sync_added:
+         parse_participant_subscribing:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &sync_added_)));
-          set_has_sync_added();
+                 input, &participant_subscribing_)));
+          set_has_participant_subscribing();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(80)) goto parse_message_subscribing;
+        break;
+      }
+
+      // optional bool message_subscribing = 10;
+      case 10: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_message_subscribing:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &message_subscribing_)));
+          set_has_message_subscribing();
         } else {
           goto handle_uninterpreted;
         }
@@ -3523,9 +3869,14 @@ void Participant::SerializeWithCachedSizes(
       8, this->status(), output);
   }
 
-  // optional bool sync_added = 9;
-  if (has_sync_added()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(9, this->sync_added(), output);
+  // optional bool participant_subscribing = 9;
+  if (has_participant_subscribing()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(9, this->participant_subscribing(), output);
+  }
+
+  // optional bool message_subscribing = 10;
+  if (has_message_subscribing()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(10, this->message_subscribing(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -3585,9 +3936,14 @@ void Participant::SerializeWithCachedSizes(
       8, this->status(), target);
   }
 
-  // optional bool sync_added = 9;
-  if (has_sync_added()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(9, this->sync_added(), target);
+  // optional bool participant_subscribing = 9;
+  if (has_participant_subscribing()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(9, this->participant_subscribing(), target);
+  }
+
+  // optional bool message_subscribing = 10;
+  if (has_message_subscribing()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(10, this->message_subscribing(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -3652,8 +4008,13 @@ int Participant::ByteSize() const {
 
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    // optional bool sync_added = 9;
-    if (has_sync_added()) {
+    // optional bool participant_subscribing = 9;
+    if (has_participant_subscribing()) {
+      total_size += 1 + 1;
+    }
+
+    // optional bool message_subscribing = 10;
+    if (has_message_subscribing()) {
       total_size += 1 + 1;
     }
 
@@ -3710,8 +4071,11 @@ void Participant::MergeFrom(const Participant& from) {
     }
   }
   if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    if (from.has_sync_added()) {
-      set_sync_added(from.sync_added());
+    if (from.has_participant_subscribing()) {
+      set_participant_subscribing(from.participant_subscribing());
+    }
+    if (from.has_message_subscribing()) {
+      set_message_subscribing(from.message_subscribing());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -3744,7 +4108,8 @@ void Participant::Swap(Participant* other) {
     std::swap(token_privilege_, other->token_privilege_);
     std::swap(join_timestamp_, other->join_timestamp_);
     std::swap(status_, other->status_);
-    std::swap(sync_added_, other->sync_added_);
+    std::swap(participant_subscribing_, other->participant_subscribing_);
+    std::swap(message_subscribing_, other->message_subscribing_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -3774,6 +4139,8 @@ const int Group::kRecordTypeFieldNumber;
 const int Group::kRecorderFieldNumber;
 const int Group::kRecordStatusFieldNumber;
 const int Group::kRecordServerFieldNumber;
+const int Group::kIncludeListenUsersFieldNumber;
+const int Group::kListenUsersFieldNumber;
 #endif  // !_MSC_VER
 
 Group::Group()
@@ -3806,6 +4173,7 @@ void Group::SharedCtor() {
   recorder_ = NULL;
   record_status_ = 0;
   record_server_ = NULL;
+  include_listen_users_ = false;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -3879,8 +4247,10 @@ void Group::Clear() {
     if (has_record_server()) {
       if (record_server_ != NULL) record_server_->::pbmsg::Entity::Clear();
     }
+    include_listen_users_ = false;
   }
   participants_.Clear();
+  listen_users_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -4059,6 +4429,37 @@ bool Group::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(96)) goto parse_include_listen_users;
+        break;
+      }
+
+      // optional bool include_listen_users = 12;
+      case 12: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_include_listen_users:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &include_listen_users_)));
+          set_has_include_listen_users();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(106)) goto parse_listen_users;
+        break;
+      }
+
+      // repeated .pbmsg.Entity listen_users = 13;
+      case 13: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_listen_users:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_listen_users()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(106)) goto parse_listen_users;
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -4145,6 +4546,17 @@ void Group::SerializeWithCachedSizes(
       11, this->record_server(), output);
   }
 
+  // optional bool include_listen_users = 12;
+  if (has_include_listen_users()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(12, this->include_listen_users(), output);
+  }
+
+  // repeated .pbmsg.Entity listen_users = 13;
+  for (int i = 0; i < this->listen_users_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      13, this->listen_users(i), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -4224,6 +4636,18 @@ void Group::SerializeWithCachedSizes(
         11, this->record_server(), target);
   }
 
+  // optional bool include_listen_users = 12;
+  if (has_include_listen_users()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(12, this->include_listen_users(), target);
+  }
+
+  // repeated .pbmsg.Entity listen_users = 13;
+  for (int i = 0; i < this->listen_users_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        13, this->listen_users(i), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -4301,6 +4725,11 @@ int Group::ByteSize() const {
           this->record_server());
     }
 
+    // optional bool include_listen_users = 12;
+    if (has_include_listen_users()) {
+      total_size += 1 + 1;
+    }
+
   }
   // repeated .pbmsg.Participant participants = 7;
   total_size += 1 * this->participants_size();
@@ -4308,6 +4737,14 @@ int Group::ByteSize() const {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         this->participants(i));
+  }
+
+  // repeated .pbmsg.Entity listen_users = 13;
+  total_size += 1 * this->listen_users_size();
+  for (int i = 0; i < this->listen_users_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->listen_users(i));
   }
 
   if (!unknown_fields().empty()) {
@@ -4336,6 +4773,7 @@ void Group::MergeFrom(const ::google::protobuf::Message& from) {
 void Group::MergeFrom(const Group& from) {
   GOOGLE_CHECK_NE(&from, this);
   participants_.MergeFrom(from.participants_);
+  listen_users_.MergeFrom(from.listen_users_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_base()) {
       mutable_base()->::pbmsg::Entity::MergeFrom(from.base());
@@ -4368,6 +4806,9 @@ void Group::MergeFrom(const Group& from) {
     }
     if (from.has_record_server()) {
       mutable_record_server()->::pbmsg::Entity::MergeFrom(from.record_server());
+    }
+    if (from.has_include_listen_users()) {
+      set_include_listen_users(from.include_listen_users());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -4404,6 +4845,8 @@ void Group::Swap(Group* other) {
     std::swap(recorder_, other->recorder_);
     std::swap(record_status_, other->record_status_);
     std::swap(record_server_, other->record_server_);
+    std::swap(include_listen_users_, other->include_listen_users_);
+    listen_users_.Swap(&other->listen_users_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

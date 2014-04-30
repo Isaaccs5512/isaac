@@ -39,6 +39,7 @@ class LoginRequest;
 class LoginResponse;
 class RegisterStatusNotification;
 class Group;
+class GroupsRequest;
 class GroupsResponse;
 class Participant;
 class GroupParticipantsRequest;
@@ -75,8 +76,12 @@ class HistoryAlert;
 class HistoryAlertsResponse;
 class HistoryAlertRequest;
 class HistoryAlertResponse;
-class HistoryAlertMesageRequest;
-class HistoryAlertMesageResponse;
+class HistoryAlertMessageRequest;
+class HistoryAlertMessageResponse;
+class AccountsResponse;
+class AccountRequest;
+class AccountResponse;
+class GroupSubscribeRequest;
 class Request;
 class Response;
 class Indication;
@@ -121,8 +126,14 @@ enum MSG {
   History_Alerts_Response = 300036,
   History_Alert_Request = 300037,
   History_Alert_Response = 300038,
-  History_Alert_Mesage_Request = 300039,
-  History_Alert_Mesage_Response = 300040,
+  History_Alert_Message_Request = 300039,
+  History_Alert_Message_Response = 300040,
+  Accounts_Request = 300041,
+  Accounts_Response = 300042,
+  Account_Request = 300043,
+  Account_Response = 300044,
+  Group_Subscribe_Request = 300045,
+  Group_Subscribe_Response = 300046,
   Register_Status_Notification = 310001,
   Joined_Group_Notification = 310002,
   Leave_Group_Notification = 310003,
@@ -269,6 +280,27 @@ inline bool AlertLevel_Parse(
     const ::std::string& name, AlertLevel* value) {
   return ::google::protobuf::internal::ParseNamedEnum<AlertLevel>(
     AlertLevel_descriptor(), name, value);
+}
+enum CustomStatus {
+  Standby = 0,
+  Duty = 1,
+  Turnout = 2,
+  Training = 3
+};
+bool CustomStatus_IsValid(int value);
+const CustomStatus CustomStatus_MIN = Standby;
+const CustomStatus CustomStatus_MAX = Training;
+const int CustomStatus_ARRAYSIZE = CustomStatus_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* CustomStatus_descriptor();
+inline const ::std::string& CustomStatus_Name(CustomStatus value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    CustomStatus_descriptor(), value);
+}
+inline bool CustomStatus_Parse(
+    const ::std::string& name, CustomStatus* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<CustomStatus>(
+    CustomStatus_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -518,6 +550,48 @@ class LoginResponse : public ::google::protobuf::Message {
   inline ::std::string* release_upload_address();
   inline void set_allocated_upload_address(::std::string* upload_address);
 
+  // required fixed32 session_id = 11;
+  inline bool has_session_id() const;
+  inline void clear_session_id();
+  static const int kSessionIdFieldNumber = 11;
+  inline ::google::protobuf::uint32 session_id() const;
+  inline void set_session_id(::google::protobuf::uint32 value);
+
+  // required bool participant_subscribing = 12;
+  inline bool has_participant_subscribing() const;
+  inline void clear_participant_subscribing();
+  static const int kParticipantSubscribingFieldNumber = 12;
+  inline bool participant_subscribing() const;
+  inline void set_participant_subscribing(bool value);
+
+  // required bool message_subscribing = 13;
+  inline bool has_message_subscribing() const;
+  inline void clear_message_subscribing();
+  static const int kMessageSubscribingFieldNumber = 13;
+  inline bool message_subscribing() const;
+  inline void set_message_subscribing(bool value);
+
+  // required fixed32 groups_hash = 14;
+  inline bool has_groups_hash() const;
+  inline void clear_groups_hash();
+  static const int kGroupsHashFieldNumber = 14;
+  inline ::google::protobuf::uint32 groups_hash() const;
+  inline void set_groups_hash(::google::protobuf::uint32 value);
+
+  // required fixed32 accounts_hash = 15;
+  inline bool has_accounts_hash() const;
+  inline void clear_accounts_hash();
+  static const int kAccountsHashFieldNumber = 15;
+  inline ::google::protobuf::uint32 accounts_hash() const;
+  inline void set_accounts_hash(::google::protobuf::uint32 value);
+
+  // required fixed32 unjoin_groups_hash = 16;
+  inline bool has_unjoin_groups_hash() const;
+  inline void clear_unjoin_groups_hash();
+  static const int kUnjoinGroupsHashFieldNumber = 16;
+  inline ::google::protobuf::uint32 unjoin_groups_hash() const;
+  inline void set_unjoin_groups_hash(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:app.terminal.LoginResponse)
  private:
   inline void set_has_sip_uri();
@@ -540,6 +614,18 @@ class LoginResponse : public ::google::protobuf::Message {
   inline void clear_has_gps_report_mode();
   inline void set_has_upload_address();
   inline void clear_has_upload_address();
+  inline void set_has_session_id();
+  inline void clear_has_session_id();
+  inline void set_has_participant_subscribing();
+  inline void clear_has_participant_subscribing();
+  inline void set_has_message_subscribing();
+  inline void clear_has_message_subscribing();
+  inline void set_has_groups_hash();
+  inline void clear_has_groups_hash();
+  inline void set_has_accounts_hash();
+  inline void clear_has_accounts_hash();
+  inline void set_has_unjoin_groups_hash();
+  inline void clear_has_unjoin_groups_hash();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -553,9 +639,15 @@ class LoginResponse : public ::google::protobuf::Message {
   ::google::protobuf::uint32 ttl_;
   int gps_report_mode_;
   ::std::string* upload_address_;
+  ::google::protobuf::uint32 session_id_;
+  bool participant_subscribing_;
+  bool message_subscribing_;
+  ::google::protobuf::uint32 groups_hash_;
+  ::google::protobuf::uint32 accounts_hash_;
+  ::google::protobuf::uint32 unjoin_groups_hash_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(10 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(16 + 31) / 32];
 
   friend void  protobuf_AddDesc_app_2eterminal_2eproto();
   friend void protobuf_AssignDesc_app_2eterminal_2eproto();
@@ -620,24 +712,34 @@ class RegisterStatusNotification : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .app.terminal.RegisterStatus status = 1;
-  inline bool has_status() const;
-  inline void clear_status();
-  static const int kStatusFieldNumber = 1;
-  inline ::app::terminal::RegisterStatus status() const;
-  inline void set_status(::app::terminal::RegisterStatus value);
+  // optional .app.terminal.RegisterStatus sip_status = 1;
+  inline bool has_sip_status() const;
+  inline void clear_sip_status();
+  static const int kSipStatusFieldNumber = 1;
+  inline ::app::terminal::RegisterStatus sip_status() const;
+  inline void set_sip_status(::app::terminal::RegisterStatus value);
+
+  // optional .app.terminal.CustomStatus custom_status = 2;
+  inline bool has_custom_status() const;
+  inline void clear_custom_status();
+  static const int kCustomStatusFieldNumber = 2;
+  inline ::app::terminal::CustomStatus custom_status() const;
+  inline void set_custom_status(::app::terminal::CustomStatus value);
 
   // @@protoc_insertion_point(class_scope:app.terminal.RegisterStatusNotification)
  private:
-  inline void set_has_status();
-  inline void clear_has_status();
+  inline void set_has_sip_status();
+  inline void clear_has_sip_status();
+  inline void set_has_custom_status();
+  inline void clear_has_custom_status();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  int status_;
+  int sip_status_;
+  int custom_status_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
 
   friend void  protobuf_AddDesc_app_2eterminal_2eproto();
   friend void protobuf_AssignDesc_app_2eterminal_2eproto();
@@ -721,7 +823,7 @@ class Group : public ::google::protobuf::Message {
   inline ::std::string* release_name();
   inline void set_allocated_name(::std::string* name);
 
-  // required string number = 3;
+  // optional string number = 3;
   inline bool has_number() const;
   inline void clear_number();
   static const int kNumberFieldNumber = 3;
@@ -733,6 +835,41 @@ class Group : public ::google::protobuf::Message {
   inline ::std::string* release_number();
   inline void set_allocated_number(::std::string* number);
 
+  // optional .app.terminal.CallPrivilege call_privilege = 4;
+  inline bool has_call_privilege() const;
+  inline void clear_call_privilege();
+  static const int kCallPrivilegeFieldNumber = 4;
+  inline ::app::terminal::CallPrivilege call_privilege() const;
+  inline void set_call_privilege(::app::terminal::CallPrivilege value);
+
+  // optional .app.terminal.TokenPrivilege token_privilege = 5;
+  inline bool has_token_privilege() const;
+  inline void clear_token_privilege();
+  static const int kTokenPrivilegeFieldNumber = 5;
+  inline ::app::terminal::TokenPrivilege token_privilege() const;
+  inline void set_token_privilege(::app::terminal::TokenPrivilege value);
+
+  // optional bool participant_subscribing = 6;
+  inline bool has_participant_subscribing() const;
+  inline void clear_participant_subscribing();
+  static const int kParticipantSubscribingFieldNumber = 6;
+  inline bool participant_subscribing() const;
+  inline void set_participant_subscribing(bool value);
+
+  // optional bool message_subscribing = 7;
+  inline bool has_message_subscribing() const;
+  inline void clear_message_subscribing();
+  static const int kMessageSubscribingFieldNumber = 7;
+  inline bool message_subscribing() const;
+  inline void set_message_subscribing(bool value);
+
+  // optional fixed32 participants_hash = 8;
+  inline bool has_participants_hash() const;
+  inline void clear_participants_hash();
+  static const int kParticipantsHashFieldNumber = 8;
+  inline ::google::protobuf::uint32 participants_hash() const;
+  inline void set_participants_hash(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:app.terminal.Group)
  private:
   inline void set_has_id();
@@ -741,15 +878,30 @@ class Group : public ::google::protobuf::Message {
   inline void clear_has_name();
   inline void set_has_number();
   inline void clear_has_number();
+  inline void set_has_call_privilege();
+  inline void clear_has_call_privilege();
+  inline void set_has_token_privilege();
+  inline void clear_has_token_privilege();
+  inline void set_has_participant_subscribing();
+  inline void clear_has_participant_subscribing();
+  inline void set_has_message_subscribing();
+  inline void clear_has_message_subscribing();
+  inline void set_has_participants_hash();
+  inline void clear_has_participants_hash();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::std::string* name_;
-  ::std::string* number_;
   ::google::protobuf::uint32 id_;
+  int call_privilege_;
+  ::std::string* number_;
+  int token_privilege_;
+  bool participant_subscribing_;
+  bool message_subscribing_;
+  ::google::protobuf::uint32 participants_hash_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
 
   friend void  protobuf_AddDesc_app_2eterminal_2eproto();
   friend void protobuf_AssignDesc_app_2eterminal_2eproto();
@@ -757,6 +909,98 @@ class Group : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static Group* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GroupsRequest : public ::google::protobuf::Message {
+ public:
+  GroupsRequest();
+  virtual ~GroupsRequest();
+
+  GroupsRequest(const GroupsRequest& from);
+
+  inline GroupsRequest& operator=(const GroupsRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GroupsRequest& default_instance();
+
+  void Swap(GroupsRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  GroupsRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GroupsRequest& from);
+  void MergeFrom(const GroupsRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required bool get_joined_groups = 1;
+  inline bool has_get_joined_groups() const;
+  inline void clear_get_joined_groups();
+  static const int kGetJoinedGroupsFieldNumber = 1;
+  inline bool get_joined_groups() const;
+  inline void set_get_joined_groups(bool value);
+
+  // required bool get_unjoined_groups = 2;
+  inline bool has_get_unjoined_groups() const;
+  inline void clear_get_unjoined_groups();
+  static const int kGetUnjoinedGroupsFieldNumber = 2;
+  inline bool get_unjoined_groups() const;
+  inline void set_get_unjoined_groups(bool value);
+
+  // @@protoc_insertion_point(class_scope:app.terminal.GroupsRequest)
+ private:
+  inline void set_has_get_joined_groups();
+  inline void clear_has_get_joined_groups();
+  inline void set_has_get_unjoined_groups();
+  inline void clear_has_get_unjoined_groups();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  bool get_joined_groups_;
+  bool get_unjoined_groups_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+
+  friend void  protobuf_AddDesc_app_2eterminal_2eproto();
+  friend void protobuf_AssignDesc_app_2eterminal_2eproto();
+  friend void protobuf_ShutdownFile_app_2eterminal_2eproto();
+
+  void InitAsDefaultInstance();
+  static GroupsRequest* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -938,24 +1182,10 @@ class Participant : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 talk_priority() const;
   inline void set_talk_priority(::google::protobuf::uint32 value);
 
-  // optional .app.terminal.CallPrivilege call_privilege = 4;
-  inline bool has_call_privilege() const;
-  inline void clear_call_privilege();
-  static const int kCallPrivilegeFieldNumber = 4;
-  inline ::app::terminal::CallPrivilege call_privilege() const;
-  inline void set_call_privilege(::app::terminal::CallPrivilege value);
-
-  // optional .app.terminal.TokenPrivilege token_privilege = 5;
-  inline bool has_token_privilege() const;
-  inline void clear_token_privilege();
-  static const int kTokenPrivilegeFieldNumber = 5;
-  inline ::app::terminal::TokenPrivilege token_privilege() const;
-  inline void set_token_privilege(::app::terminal::TokenPrivilege value);
-
-  // required .app.terminal.SessionStatus status = 6;
+  // required .app.terminal.SessionStatus status = 4;
   inline bool has_status() const;
   inline void clear_status();
-  static const int kStatusFieldNumber = 6;
+  static const int kStatusFieldNumber = 4;
   inline ::app::terminal::SessionStatus status() const;
   inline void set_status(::app::terminal::SessionStatus value);
 
@@ -967,10 +1197,6 @@ class Participant : public ::google::protobuf::Message {
   inline void clear_has_account_name();
   inline void set_has_talk_priority();
   inline void clear_has_talk_priority();
-  inline void set_has_call_privilege();
-  inline void clear_has_call_privilege();
-  inline void set_has_token_privilege();
-  inline void clear_has_token_privilege();
   inline void set_has_status();
   inline void clear_has_status();
 
@@ -979,12 +1205,10 @@ class Participant : public ::google::protobuf::Message {
   ::std::string* account_name_;
   ::google::protobuf::uint32 account_id_;
   ::google::protobuf::uint32 talk_priority_;
-  int call_privilege_;
-  int token_privilege_;
   int status_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
 
   friend void  protobuf_AddDesc_app_2eterminal_2eproto();
   friend void protobuf_AssignDesc_app_2eterminal_2eproto();
@@ -1640,84 +1864,26 @@ class JoinedGroupNotification : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required fixed32 group_id = 1;
-  inline bool has_group_id() const;
-  inline void clear_group_id();
-  static const int kGroupIdFieldNumber = 1;
-  inline ::google::protobuf::uint32 group_id() const;
-  inline void set_group_id(::google::protobuf::uint32 value);
-
-  // required bytes group_name = 2;
-  inline bool has_group_name() const;
-  inline void clear_group_name();
-  static const int kGroupNameFieldNumber = 2;
-  inline const ::std::string& group_name() const;
-  inline void set_group_name(const ::std::string& value);
-  inline void set_group_name(const char* value);
-  inline void set_group_name(const void* value, size_t size);
-  inline ::std::string* mutable_group_name();
-  inline ::std::string* release_group_name();
-  inline void set_allocated_group_name(::std::string* group_name);
-
-  // required string group_number = 3;
-  inline bool has_group_number() const;
-  inline void clear_group_number();
-  static const int kGroupNumberFieldNumber = 3;
-  inline const ::std::string& group_number() const;
-  inline void set_group_number(const ::std::string& value);
-  inline void set_group_number(const char* value);
-  inline void set_group_number(const char* value, size_t size);
-  inline ::std::string* mutable_group_number();
-  inline ::std::string* release_group_number();
-  inline void set_allocated_group_number(::std::string* group_number);
-
-  // required fixed32 talk_priority = 4;
-  inline bool has_talk_priority() const;
-  inline void clear_talk_priority();
-  static const int kTalkPriorityFieldNumber = 4;
-  inline ::google::protobuf::uint32 talk_priority() const;
-  inline void set_talk_priority(::google::protobuf::uint32 value);
-
-  // required .app.terminal.CallPrivilege call_privilege = 5;
-  inline bool has_call_privilege() const;
-  inline void clear_call_privilege();
-  static const int kCallPrivilegeFieldNumber = 5;
-  inline ::app::terminal::CallPrivilege call_privilege() const;
-  inline void set_call_privilege(::app::terminal::CallPrivilege value);
-
-  // required .app.terminal.TokenPrivilege token_privilege = 6;
-  inline bool has_token_privilege() const;
-  inline void clear_token_privilege();
-  static const int kTokenPrivilegeFieldNumber = 6;
-  inline ::app::terminal::TokenPrivilege token_privilege() const;
-  inline void set_token_privilege(::app::terminal::TokenPrivilege value);
+  // required .app.terminal.Group group = 1;
+  inline bool has_group() const;
+  inline void clear_group();
+  static const int kGroupFieldNumber = 1;
+  inline const ::app::terminal::Group& group() const;
+  inline ::app::terminal::Group* mutable_group();
+  inline ::app::terminal::Group* release_group();
+  inline void set_allocated_group(::app::terminal::Group* group);
 
   // @@protoc_insertion_point(class_scope:app.terminal.JoinedGroupNotification)
  private:
-  inline void set_has_group_id();
-  inline void clear_has_group_id();
-  inline void set_has_group_name();
-  inline void clear_has_group_name();
-  inline void set_has_group_number();
-  inline void clear_has_group_number();
-  inline void set_has_talk_priority();
-  inline void clear_has_talk_priority();
-  inline void set_has_call_privilege();
-  inline void clear_has_call_privilege();
-  inline void set_has_token_privilege();
-  inline void clear_has_token_privilege();
+  inline void set_has_group();
+  inline void clear_has_group();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::std::string* group_name_;
-  ::google::protobuf::uint32 group_id_;
-  ::google::protobuf::uint32 talk_priority_;
-  ::std::string* group_number_;
-  int call_privilege_;
-  int token_privilege_;
+  ::app::terminal::Group* group_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
 
   friend void  protobuf_AddDesc_app_2eterminal_2eproto();
   friend void protobuf_AssignDesc_app_2eterminal_2eproto();
@@ -2326,14 +2492,12 @@ class SessionStatusNotification : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 account_id() const;
   inline void set_account_id(::google::protobuf::uint32 value);
 
-  // required .app.terminal.MediaMessage status = 3;
+  // required .app.terminal.SessionStatus status = 3;
   inline bool has_status() const;
   inline void clear_status();
   static const int kStatusFieldNumber = 3;
-  inline const ::app::terminal::MediaMessage& status() const;
-  inline ::app::terminal::MediaMessage* mutable_status();
-  inline ::app::terminal::MediaMessage* release_status();
-  inline void set_allocated_status(::app::terminal::MediaMessage* status);
+  inline ::app::terminal::SessionStatus status() const;
+  inline void set_status(::app::terminal::SessionStatus value);
 
   // @@protoc_insertion_point(class_scope:app.terminal.SessionStatusNotification)
  private:
@@ -2348,7 +2512,7 @@ class SessionStatusNotification : public ::google::protobuf::Message {
 
   ::google::protobuf::uint32 group_id_;
   ::google::protobuf::uint32 account_id_;
-  ::app::terminal::MediaMessage* status_;
+  int status_;
 
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
@@ -4531,14 +4695,14 @@ class HistoryAlertResponse : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class HistoryAlertMesageRequest : public ::google::protobuf::Message {
+class HistoryAlertMessageRequest : public ::google::protobuf::Message {
  public:
-  HistoryAlertMesageRequest();
-  virtual ~HistoryAlertMesageRequest();
+  HistoryAlertMessageRequest();
+  virtual ~HistoryAlertMessageRequest();
 
-  HistoryAlertMesageRequest(const HistoryAlertMesageRequest& from);
+  HistoryAlertMessageRequest(const HistoryAlertMessageRequest& from);
 
-  inline HistoryAlertMesageRequest& operator=(const HistoryAlertMesageRequest& from) {
+  inline HistoryAlertMessageRequest& operator=(const HistoryAlertMessageRequest& from) {
     CopyFrom(from);
     return *this;
   }
@@ -4552,17 +4716,17 @@ class HistoryAlertMesageRequest : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const HistoryAlertMesageRequest& default_instance();
+  static const HistoryAlertMessageRequest& default_instance();
 
-  void Swap(HistoryAlertMesageRequest* other);
+  void Swap(HistoryAlertMessageRequest* other);
 
   // implements Message ----------------------------------------------
 
-  HistoryAlertMesageRequest* New() const;
+  HistoryAlertMessageRequest* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const HistoryAlertMesageRequest& from);
-  void MergeFrom(const HistoryAlertMesageRequest& from);
+  void CopyFrom(const HistoryAlertMessageRequest& from);
+  void MergeFrom(const HistoryAlertMessageRequest& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -4618,7 +4782,7 @@ class HistoryAlertMesageRequest : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 max_message_count() const;
   inline void set_max_message_count(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:app.terminal.HistoryAlertMesageRequest)
+  // @@protoc_insertion_point(class_scope:app.terminal.HistoryAlertMessageRequest)
  private:
   inline void set_has_history_alert_id();
   inline void clear_has_history_alert_id();
@@ -4644,18 +4808,18 @@ class HistoryAlertMesageRequest : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_app_2eterminal_2eproto();
 
   void InitAsDefaultInstance();
-  static HistoryAlertMesageRequest* default_instance_;
+  static HistoryAlertMessageRequest* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class HistoryAlertMesageResponse : public ::google::protobuf::Message {
+class HistoryAlertMessageResponse : public ::google::protobuf::Message {
  public:
-  HistoryAlertMesageResponse();
-  virtual ~HistoryAlertMesageResponse();
+  HistoryAlertMessageResponse();
+  virtual ~HistoryAlertMessageResponse();
 
-  HistoryAlertMesageResponse(const HistoryAlertMesageResponse& from);
+  HistoryAlertMessageResponse(const HistoryAlertMessageResponse& from);
 
-  inline HistoryAlertMesageResponse& operator=(const HistoryAlertMesageResponse& from) {
+  inline HistoryAlertMessageResponse& operator=(const HistoryAlertMessageResponse& from) {
     CopyFrom(from);
     return *this;
   }
@@ -4669,17 +4833,17 @@ class HistoryAlertMesageResponse : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const HistoryAlertMesageResponse& default_instance();
+  static const HistoryAlertMessageResponse& default_instance();
 
-  void Swap(HistoryAlertMesageResponse* other);
+  void Swap(HistoryAlertMessageResponse* other);
 
   // implements Message ----------------------------------------------
 
-  HistoryAlertMesageResponse* New() const;
+  HistoryAlertMessageResponse* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const HistoryAlertMesageResponse& from);
-  void MergeFrom(const HistoryAlertMesageResponse& from);
+  void CopyFrom(const HistoryAlertMessageResponse& from);
+  void MergeFrom(const HistoryAlertMessageResponse& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -4728,7 +4892,7 @@ class HistoryAlertMesageResponse : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 leave_message_count() const;
   inline void set_leave_message_count(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:app.terminal.HistoryAlertMesageResponse)
+  // @@protoc_insertion_point(class_scope:app.terminal.HistoryAlertMessageResponse)
  private:
   inline void set_has_history_alert_id();
   inline void clear_has_history_alert_id();
@@ -4749,7 +4913,408 @@ class HistoryAlertMesageResponse : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_app_2eterminal_2eproto();
 
   void InitAsDefaultInstance();
-  static HistoryAlertMesageResponse* default_instance_;
+  static HistoryAlertMessageResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class AccountsResponse : public ::google::protobuf::Message {
+ public:
+  AccountsResponse();
+  virtual ~AccountsResponse();
+
+  AccountsResponse(const AccountsResponse& from);
+
+  inline AccountsResponse& operator=(const AccountsResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const AccountsResponse& default_instance();
+
+  void Swap(AccountsResponse* other);
+
+  // implements Message ----------------------------------------------
+
+  AccountsResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const AccountsResponse& from);
+  void MergeFrom(const AccountsResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated fixed32 ids = 1;
+  inline int ids_size() const;
+  inline void clear_ids();
+  static const int kIdsFieldNumber = 1;
+  inline ::google::protobuf::uint32 ids(int index) const;
+  inline void set_ids(int index, ::google::protobuf::uint32 value);
+  inline void add_ids(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      ids() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_ids();
+
+  // @@protoc_insertion_point(class_scope:app.terminal.AccountsResponse)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > ids_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_app_2eterminal_2eproto();
+  friend void protobuf_AssignDesc_app_2eterminal_2eproto();
+  friend void protobuf_ShutdownFile_app_2eterminal_2eproto();
+
+  void InitAsDefaultInstance();
+  static AccountsResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class AccountRequest : public ::google::protobuf::Message {
+ public:
+  AccountRequest();
+  virtual ~AccountRequest();
+
+  AccountRequest(const AccountRequest& from);
+
+  inline AccountRequest& operator=(const AccountRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const AccountRequest& default_instance();
+
+  void Swap(AccountRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  AccountRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const AccountRequest& from);
+  void MergeFrom(const AccountRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required fixed32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:app.terminal.AccountRequest)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 id_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_app_2eterminal_2eproto();
+  friend void protobuf_AssignDesc_app_2eterminal_2eproto();
+  friend void protobuf_ShutdownFile_app_2eterminal_2eproto();
+
+  void InitAsDefaultInstance();
+  static AccountRequest* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class AccountResponse : public ::google::protobuf::Message {
+ public:
+  AccountResponse();
+  virtual ~AccountResponse();
+
+  AccountResponse(const AccountResponse& from);
+
+  inline AccountResponse& operator=(const AccountResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const AccountResponse& default_instance();
+
+  void Swap(AccountResponse* other);
+
+  // implements Message ----------------------------------------------
+
+  AccountResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const AccountResponse& from);
+  void MergeFrom(const AccountResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required fixed32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
+
+  // required bytes name = 2;
+  inline bool has_name() const;
+  inline void clear_name();
+  static const int kNameFieldNumber = 2;
+  inline const ::std::string& name() const;
+  inline void set_name(const ::std::string& value);
+  inline void set_name(const char* value);
+  inline void set_name(const void* value, size_t size);
+  inline ::std::string* mutable_name();
+  inline ::std::string* release_name();
+  inline void set_allocated_name(::std::string* name);
+
+  // required string number = 3;
+  inline bool has_number() const;
+  inline void clear_number();
+  static const int kNumberFieldNumber = 3;
+  inline const ::std::string& number() const;
+  inline void set_number(const ::std::string& value);
+  inline void set_number(const char* value);
+  inline void set_number(const char* value, size_t size);
+  inline ::std::string* mutable_number();
+  inline ::std::string* release_number();
+  inline void set_allocated_number(::std::string* number);
+
+  // @@protoc_insertion_point(class_scope:app.terminal.AccountResponse)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+  inline void set_has_name();
+  inline void clear_has_name();
+  inline void set_has_number();
+  inline void clear_has_number();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::std::string* name_;
+  ::std::string* number_;
+  ::google::protobuf::uint32 id_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+
+  friend void  protobuf_AddDesc_app_2eterminal_2eproto();
+  friend void protobuf_AssignDesc_app_2eterminal_2eproto();
+  friend void protobuf_ShutdownFile_app_2eterminal_2eproto();
+
+  void InitAsDefaultInstance();
+  static AccountResponse* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GroupSubscribeRequest : public ::google::protobuf::Message {
+ public:
+  GroupSubscribeRequest();
+  virtual ~GroupSubscribeRequest();
+
+  GroupSubscribeRequest(const GroupSubscribeRequest& from);
+
+  inline GroupSubscribeRequest& operator=(const GroupSubscribeRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GroupSubscribeRequest& default_instance();
+
+  void Swap(GroupSubscribeRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  GroupSubscribeRequest* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GroupSubscribeRequest& from);
+  void MergeFrom(const GroupSubscribeRequest& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional bool participant_subscribing = 1;
+  inline bool has_participant_subscribing() const;
+  inline void clear_participant_subscribing();
+  static const int kParticipantSubscribingFieldNumber = 1;
+  inline bool participant_subscribing() const;
+  inline void set_participant_subscribing(bool value);
+
+  // optional bool message_subscribing = 2;
+  inline bool has_message_subscribing() const;
+  inline void clear_message_subscribing();
+  static const int kMessageSubscribingFieldNumber = 2;
+  inline bool message_subscribing() const;
+  inline void set_message_subscribing(bool value);
+
+  // optional fixed32 group_id = 3;
+  inline bool has_group_id() const;
+  inline void clear_group_id();
+  static const int kGroupIdFieldNumber = 3;
+  inline ::google::protobuf::uint32 group_id() const;
+  inline void set_group_id(::google::protobuf::uint32 value);
+
+  // optional bool effect_current = 4;
+  inline bool has_effect_current() const;
+  inline void clear_effect_current();
+  static const int kEffectCurrentFieldNumber = 4;
+  inline bool effect_current() const;
+  inline void set_effect_current(bool value);
+
+  // optional bool effect_follow = 5;
+  inline bool has_effect_follow() const;
+  inline void clear_effect_follow();
+  static const int kEffectFollowFieldNumber = 5;
+  inline bool effect_follow() const;
+  inline void set_effect_follow(bool value);
+
+  // @@protoc_insertion_point(class_scope:app.terminal.GroupSubscribeRequest)
+ private:
+  inline void set_has_participant_subscribing();
+  inline void clear_has_participant_subscribing();
+  inline void set_has_message_subscribing();
+  inline void clear_has_message_subscribing();
+  inline void set_has_group_id();
+  inline void clear_has_group_id();
+  inline void set_has_effect_current();
+  inline void clear_has_effect_current();
+  inline void set_has_effect_follow();
+  inline void clear_has_effect_follow();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 group_id_;
+  bool participant_subscribing_;
+  bool message_subscribing_;
+  bool effect_current_;
+  bool effect_follow_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+
+  friend void  protobuf_AddDesc_app_2eterminal_2eproto();
+  friend void protobuf_AssignDesc_app_2eterminal_2eproto();
+  friend void protobuf_ShutdownFile_app_2eterminal_2eproto();
+
+  void InitAsDefaultInstance();
+  static GroupSubscribeRequest* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -4816,14 +5381,14 @@ class Request : public ::google::protobuf::Message {
   inline ::app::terminal::LoginRequest* release_login();
   inline void set_allocated_login(::app::terminal::LoginRequest* login);
 
-  // optional .app.terminal.GroupParticipantsRequest gourp_participants = 2;
-  inline bool has_gourp_participants() const;
-  inline void clear_gourp_participants();
-  static const int kGourpParticipantsFieldNumber = 2;
-  inline const ::app::terminal::GroupParticipantsRequest& gourp_participants() const;
-  inline ::app::terminal::GroupParticipantsRequest* mutable_gourp_participants();
-  inline ::app::terminal::GroupParticipantsRequest* release_gourp_participants();
-  inline void set_allocated_gourp_participants(::app::terminal::GroupParticipantsRequest* gourp_participants);
+  // optional .app.terminal.GroupParticipantsRequest group_participants = 2;
+  inline bool has_group_participants() const;
+  inline void clear_group_participants();
+  static const int kGroupParticipantsFieldNumber = 2;
+  inline const ::app::terminal::GroupParticipantsRequest& group_participants() const;
+  inline ::app::terminal::GroupParticipantsRequest* mutable_group_participants();
+  inline ::app::terminal::GroupParticipantsRequest* release_group_participants();
+  inline void set_allocated_group_participants(::app::terminal::GroupParticipantsRequest* group_participants);
 
   // optional .app.terminal.MediaMessageRequest group_message = 3;
   inline bool has_group_message() const;
@@ -4861,14 +5426,14 @@ class Request : public ::google::protobuf::Message {
   inline ::app::terminal::SpeakRequest* release_speak();
   inline void set_allocated_speak(::app::terminal::SpeakRequest* speak);
 
-  // optional .app.terminal.JoinSessionRequest jone_session = 7;
-  inline bool has_jone_session() const;
-  inline void clear_jone_session();
-  static const int kJoneSessionFieldNumber = 7;
-  inline const ::app::terminal::JoinSessionRequest& jone_session() const;
-  inline ::app::terminal::JoinSessionRequest* mutable_jone_session();
-  inline ::app::terminal::JoinSessionRequest* release_jone_session();
-  inline void set_allocated_jone_session(::app::terminal::JoinSessionRequest* jone_session);
+  // optional .app.terminal.JoinSessionRequest join_session = 7;
+  inline bool has_join_session() const;
+  inline void clear_join_session();
+  static const int kJoinSessionFieldNumber = 7;
+  inline const ::app::terminal::JoinSessionRequest& join_session() const;
+  inline ::app::terminal::JoinSessionRequest* mutable_join_session();
+  inline ::app::terminal::JoinSessionRequest* release_join_session();
+  inline void set_allocated_join_session(::app::terminal::JoinSessionRequest* join_session);
 
   // optional .app.terminal.LeaveSessionRequest leave_session = 8;
   inline bool has_leave_session() const;
@@ -4942,21 +5507,48 @@ class Request : public ::google::protobuf::Message {
   inline ::app::terminal::HistoryAlertRequest* release_history_alert();
   inline void set_allocated_history_alert(::app::terminal::HistoryAlertRequest* history_alert);
 
-  // optional .app.terminal.HistoryAlertMesageRequest history_alert_message = 16;
+  // optional .app.terminal.HistoryAlertMessageRequest history_alert_message = 16;
   inline bool has_history_alert_message() const;
   inline void clear_history_alert_message();
   static const int kHistoryAlertMessageFieldNumber = 16;
-  inline const ::app::terminal::HistoryAlertMesageRequest& history_alert_message() const;
-  inline ::app::terminal::HistoryAlertMesageRequest* mutable_history_alert_message();
-  inline ::app::terminal::HistoryAlertMesageRequest* release_history_alert_message();
-  inline void set_allocated_history_alert_message(::app::terminal::HistoryAlertMesageRequest* history_alert_message);
+  inline const ::app::terminal::HistoryAlertMessageRequest& history_alert_message() const;
+  inline ::app::terminal::HistoryAlertMessageRequest* mutable_history_alert_message();
+  inline ::app::terminal::HistoryAlertMessageRequest* release_history_alert_message();
+  inline void set_allocated_history_alert_message(::app::terminal::HistoryAlertMessageRequest* history_alert_message);
+
+  // optional .app.terminal.AccountRequest account = 17;
+  inline bool has_account() const;
+  inline void clear_account();
+  static const int kAccountFieldNumber = 17;
+  inline const ::app::terminal::AccountRequest& account() const;
+  inline ::app::terminal::AccountRequest* mutable_account();
+  inline ::app::terminal::AccountRequest* release_account();
+  inline void set_allocated_account(::app::terminal::AccountRequest* account);
+
+  // optional .app.terminal.GroupSubscribeRequest group_subscribe = 18;
+  inline bool has_group_subscribe() const;
+  inline void clear_group_subscribe();
+  static const int kGroupSubscribeFieldNumber = 18;
+  inline const ::app::terminal::GroupSubscribeRequest& group_subscribe() const;
+  inline ::app::terminal::GroupSubscribeRequest* mutable_group_subscribe();
+  inline ::app::terminal::GroupSubscribeRequest* release_group_subscribe();
+  inline void set_allocated_group_subscribe(::app::terminal::GroupSubscribeRequest* group_subscribe);
+
+  // optional .app.terminal.GroupsRequest groups = 19;
+  inline bool has_groups() const;
+  inline void clear_groups();
+  static const int kGroupsFieldNumber = 19;
+  inline const ::app::terminal::GroupsRequest& groups() const;
+  inline ::app::terminal::GroupsRequest* mutable_groups();
+  inline ::app::terminal::GroupsRequest* release_groups();
+  inline void set_allocated_groups(::app::terminal::GroupsRequest* groups);
 
   // @@protoc_insertion_point(class_scope:app.terminal.Request)
  private:
   inline void set_has_login();
   inline void clear_has_login();
-  inline void set_has_gourp_participants();
-  inline void clear_has_gourp_participants();
+  inline void set_has_group_participants();
+  inline void clear_has_group_participants();
   inline void set_has_group_message();
   inline void clear_has_group_message();
   inline void set_has_join_group();
@@ -4965,8 +5557,8 @@ class Request : public ::google::protobuf::Message {
   inline void clear_has_connect_group();
   inline void set_has_speak();
   inline void clear_has_speak();
-  inline void set_has_jone_session();
-  inline void clear_has_jone_session();
+  inline void set_has_join_session();
+  inline void clear_has_join_session();
   inline void set_has_leave_session();
   inline void clear_has_leave_session();
   inline void set_has_release_token();
@@ -4985,16 +5577,22 @@ class Request : public ::google::protobuf::Message {
   inline void clear_has_history_alert();
   inline void set_has_history_alert_message();
   inline void clear_has_history_alert_message();
+  inline void set_has_account();
+  inline void clear_has_account();
+  inline void set_has_group_subscribe();
+  inline void clear_has_group_subscribe();
+  inline void set_has_groups();
+  inline void clear_has_groups();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::app::terminal::LoginRequest* login_;
-  ::app::terminal::GroupParticipantsRequest* gourp_participants_;
+  ::app::terminal::GroupParticipantsRequest* group_participants_;
   ::app::terminal::MediaMessageRequest* group_message_;
   ::app::terminal::JoinGroupRequest* join_group_;
   ::app::terminal::ConnectGroupRequest* connect_group_;
   ::app::terminal::SpeakRequest* speak_;
-  ::app::terminal::JoinSessionRequest* jone_session_;
+  ::app::terminal::JoinSessionRequest* join_session_;
   ::app::terminal::LeaveSessionRequest* leave_session_;
   ::app::terminal::ReleaseTokenRequest* release_token_;
   ::app::terminal::AppointSpeakRequest* appoint_speak_;
@@ -5003,10 +5601,13 @@ class Request : public ::google::protobuf::Message {
   ::app::terminal::AlertRequest* alert_;
   ::app::terminal::HistoryAlertsRequest* history_alerts_;
   ::app::terminal::HistoryAlertRequest* history_alert_;
-  ::app::terminal::HistoryAlertMesageRequest* history_alert_message_;
+  ::app::terminal::HistoryAlertMessageRequest* history_alert_message_;
+  ::app::terminal::AccountRequest* account_;
+  ::app::terminal::GroupSubscribeRequest* group_subscribe_;
+  ::app::terminal::GroupsRequest* groups_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(16 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(19 + 31) / 32];
 
   friend void  protobuf_AddDesc_app_2eterminal_2eproto();
   friend void protobuf_AssignDesc_app_2eterminal_2eproto();
@@ -5178,14 +5779,32 @@ class Response : public ::google::protobuf::Message {
   inline ::app::terminal::HistoryAlertResponse* release_history_alert();
   inline void set_allocated_history_alert(::app::terminal::HistoryAlertResponse* history_alert);
 
-  // optional .app.terminal.HistoryAlertMesageResponse history_alert_message = 13;
+  // optional .app.terminal.HistoryAlertMessageResponse history_alert_message = 13;
   inline bool has_history_alert_message() const;
   inline void clear_history_alert_message();
   static const int kHistoryAlertMessageFieldNumber = 13;
-  inline const ::app::terminal::HistoryAlertMesageResponse& history_alert_message() const;
-  inline ::app::terminal::HistoryAlertMesageResponse* mutable_history_alert_message();
-  inline ::app::terminal::HistoryAlertMesageResponse* release_history_alert_message();
-  inline void set_allocated_history_alert_message(::app::terminal::HistoryAlertMesageResponse* history_alert_message);
+  inline const ::app::terminal::HistoryAlertMessageResponse& history_alert_message() const;
+  inline ::app::terminal::HistoryAlertMessageResponse* mutable_history_alert_message();
+  inline ::app::terminal::HistoryAlertMessageResponse* release_history_alert_message();
+  inline void set_allocated_history_alert_message(::app::terminal::HistoryAlertMessageResponse* history_alert_message);
+
+  // optional .app.terminal.AccountsResponse accounts = 14;
+  inline bool has_accounts() const;
+  inline void clear_accounts();
+  static const int kAccountsFieldNumber = 14;
+  inline const ::app::terminal::AccountsResponse& accounts() const;
+  inline ::app::terminal::AccountsResponse* mutable_accounts();
+  inline ::app::terminal::AccountsResponse* release_accounts();
+  inline void set_allocated_accounts(::app::terminal::AccountsResponse* accounts);
+
+  // optional .app.terminal.AccountResponse account = 15;
+  inline bool has_account() const;
+  inline void clear_account();
+  static const int kAccountFieldNumber = 15;
+  inline const ::app::terminal::AccountResponse& account() const;
+  inline ::app::terminal::AccountResponse* mutable_account();
+  inline ::app::terminal::AccountResponse* release_account();
+  inline void set_allocated_account(::app::terminal::AccountResponse* account);
 
   // @@protoc_insertion_point(class_scope:app.terminal.Response)
  private:
@@ -5215,6 +5834,10 @@ class Response : public ::google::protobuf::Message {
   inline void clear_has_history_alert();
   inline void set_has_history_alert_message();
   inline void clear_has_history_alert_message();
+  inline void set_has_accounts();
+  inline void clear_has_accounts();
+  inline void set_has_account();
+  inline void clear_has_account();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -5228,12 +5851,14 @@ class Response : public ::google::protobuf::Message {
   ::app::terminal::AlertResponse* alert_;
   ::app::terminal::HistoryAlertsResponse* history_alerts_;
   ::app::terminal::HistoryAlertResponse* history_alert_;
-  ::app::terminal::HistoryAlertMesageResponse* history_alert_message_;
+  ::app::terminal::HistoryAlertMessageResponse* history_alert_message_;
+  ::app::terminal::AccountsResponse* accounts_;
+  ::app::terminal::AccountResponse* account_;
   bool result_;
   bool last_response_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(15 + 31) / 32];
 
   friend void  protobuf_AddDesc_app_2eterminal_2eproto();
   friend void protobuf_AssignDesc_app_2eterminal_2eproto();
@@ -6150,31 +6775,186 @@ inline void LoginResponse::set_allocated_upload_address(::std::string* upload_ad
   }
 }
 
+// required fixed32 session_id = 11;
+inline bool LoginResponse::has_session_id() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void LoginResponse::set_has_session_id() {
+  _has_bits_[0] |= 0x00000400u;
+}
+inline void LoginResponse::clear_has_session_id() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline void LoginResponse::clear_session_id() {
+  session_id_ = 0u;
+  clear_has_session_id();
+}
+inline ::google::protobuf::uint32 LoginResponse::session_id() const {
+  return session_id_;
+}
+inline void LoginResponse::set_session_id(::google::protobuf::uint32 value) {
+  set_has_session_id();
+  session_id_ = value;
+}
+
+// required bool participant_subscribing = 12;
+inline bool LoginResponse::has_participant_subscribing() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+inline void LoginResponse::set_has_participant_subscribing() {
+  _has_bits_[0] |= 0x00000800u;
+}
+inline void LoginResponse::clear_has_participant_subscribing() {
+  _has_bits_[0] &= ~0x00000800u;
+}
+inline void LoginResponse::clear_participant_subscribing() {
+  participant_subscribing_ = false;
+  clear_has_participant_subscribing();
+}
+inline bool LoginResponse::participant_subscribing() const {
+  return participant_subscribing_;
+}
+inline void LoginResponse::set_participant_subscribing(bool value) {
+  set_has_participant_subscribing();
+  participant_subscribing_ = value;
+}
+
+// required bool message_subscribing = 13;
+inline bool LoginResponse::has_message_subscribing() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void LoginResponse::set_has_message_subscribing() {
+  _has_bits_[0] |= 0x00001000u;
+}
+inline void LoginResponse::clear_has_message_subscribing() {
+  _has_bits_[0] &= ~0x00001000u;
+}
+inline void LoginResponse::clear_message_subscribing() {
+  message_subscribing_ = false;
+  clear_has_message_subscribing();
+}
+inline bool LoginResponse::message_subscribing() const {
+  return message_subscribing_;
+}
+inline void LoginResponse::set_message_subscribing(bool value) {
+  set_has_message_subscribing();
+  message_subscribing_ = value;
+}
+
+// required fixed32 groups_hash = 14;
+inline bool LoginResponse::has_groups_hash() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void LoginResponse::set_has_groups_hash() {
+  _has_bits_[0] |= 0x00002000u;
+}
+inline void LoginResponse::clear_has_groups_hash() {
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline void LoginResponse::clear_groups_hash() {
+  groups_hash_ = 0u;
+  clear_has_groups_hash();
+}
+inline ::google::protobuf::uint32 LoginResponse::groups_hash() const {
+  return groups_hash_;
+}
+inline void LoginResponse::set_groups_hash(::google::protobuf::uint32 value) {
+  set_has_groups_hash();
+  groups_hash_ = value;
+}
+
+// required fixed32 accounts_hash = 15;
+inline bool LoginResponse::has_accounts_hash() const {
+  return (_has_bits_[0] & 0x00004000u) != 0;
+}
+inline void LoginResponse::set_has_accounts_hash() {
+  _has_bits_[0] |= 0x00004000u;
+}
+inline void LoginResponse::clear_has_accounts_hash() {
+  _has_bits_[0] &= ~0x00004000u;
+}
+inline void LoginResponse::clear_accounts_hash() {
+  accounts_hash_ = 0u;
+  clear_has_accounts_hash();
+}
+inline ::google::protobuf::uint32 LoginResponse::accounts_hash() const {
+  return accounts_hash_;
+}
+inline void LoginResponse::set_accounts_hash(::google::protobuf::uint32 value) {
+  set_has_accounts_hash();
+  accounts_hash_ = value;
+}
+
+// required fixed32 unjoin_groups_hash = 16;
+inline bool LoginResponse::has_unjoin_groups_hash() const {
+  return (_has_bits_[0] & 0x00008000u) != 0;
+}
+inline void LoginResponse::set_has_unjoin_groups_hash() {
+  _has_bits_[0] |= 0x00008000u;
+}
+inline void LoginResponse::clear_has_unjoin_groups_hash() {
+  _has_bits_[0] &= ~0x00008000u;
+}
+inline void LoginResponse::clear_unjoin_groups_hash() {
+  unjoin_groups_hash_ = 0u;
+  clear_has_unjoin_groups_hash();
+}
+inline ::google::protobuf::uint32 LoginResponse::unjoin_groups_hash() const {
+  return unjoin_groups_hash_;
+}
+inline void LoginResponse::set_unjoin_groups_hash(::google::protobuf::uint32 value) {
+  set_has_unjoin_groups_hash();
+  unjoin_groups_hash_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // RegisterStatusNotification
 
-// required .app.terminal.RegisterStatus status = 1;
-inline bool RegisterStatusNotification::has_status() const {
+// optional .app.terminal.RegisterStatus sip_status = 1;
+inline bool RegisterStatusNotification::has_sip_status() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void RegisterStatusNotification::set_has_status() {
+inline void RegisterStatusNotification::set_has_sip_status() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void RegisterStatusNotification::clear_has_status() {
+inline void RegisterStatusNotification::clear_has_sip_status() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void RegisterStatusNotification::clear_status() {
-  status_ = 0;
-  clear_has_status();
+inline void RegisterStatusNotification::clear_sip_status() {
+  sip_status_ = 0;
+  clear_has_sip_status();
 }
-inline ::app::terminal::RegisterStatus RegisterStatusNotification::status() const {
-  return static_cast< ::app::terminal::RegisterStatus >(status_);
+inline ::app::terminal::RegisterStatus RegisterStatusNotification::sip_status() const {
+  return static_cast< ::app::terminal::RegisterStatus >(sip_status_);
 }
-inline void RegisterStatusNotification::set_status(::app::terminal::RegisterStatus value) {
+inline void RegisterStatusNotification::set_sip_status(::app::terminal::RegisterStatus value) {
   assert(::app::terminal::RegisterStatus_IsValid(value));
-  set_has_status();
-  status_ = value;
+  set_has_sip_status();
+  sip_status_ = value;
+}
+
+// optional .app.terminal.CustomStatus custom_status = 2;
+inline bool RegisterStatusNotification::has_custom_status() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void RegisterStatusNotification::set_has_custom_status() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void RegisterStatusNotification::clear_has_custom_status() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void RegisterStatusNotification::clear_custom_status() {
+  custom_status_ = 0;
+  clear_has_custom_status();
+}
+inline ::app::terminal::CustomStatus RegisterStatusNotification::custom_status() const {
+  return static_cast< ::app::terminal::CustomStatus >(custom_status_);
+}
+inline void RegisterStatusNotification::set_custom_status(::app::terminal::CustomStatus value) {
+  assert(::app::terminal::CustomStatus_IsValid(value));
+  set_has_custom_status();
+  custom_status_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -6273,7 +7053,7 @@ inline void Group::set_allocated_name(::std::string* name) {
   }
 }
 
-// required string number = 3;
+// optional string number = 3;
 inline bool Group::has_number() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -6341,6 +7121,166 @@ inline void Group::set_allocated_number(::std::string* number) {
     clear_has_number();
     number_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   }
+}
+
+// optional .app.terminal.CallPrivilege call_privilege = 4;
+inline bool Group::has_call_privilege() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void Group::set_has_call_privilege() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void Group::clear_has_call_privilege() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void Group::clear_call_privilege() {
+  call_privilege_ = 0;
+  clear_has_call_privilege();
+}
+inline ::app::terminal::CallPrivilege Group::call_privilege() const {
+  return static_cast< ::app::terminal::CallPrivilege >(call_privilege_);
+}
+inline void Group::set_call_privilege(::app::terminal::CallPrivilege value) {
+  assert(::app::terminal::CallPrivilege_IsValid(value));
+  set_has_call_privilege();
+  call_privilege_ = value;
+}
+
+// optional .app.terminal.TokenPrivilege token_privilege = 5;
+inline bool Group::has_token_privilege() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void Group::set_has_token_privilege() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void Group::clear_has_token_privilege() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void Group::clear_token_privilege() {
+  token_privilege_ = 0;
+  clear_has_token_privilege();
+}
+inline ::app::terminal::TokenPrivilege Group::token_privilege() const {
+  return static_cast< ::app::terminal::TokenPrivilege >(token_privilege_);
+}
+inline void Group::set_token_privilege(::app::terminal::TokenPrivilege value) {
+  assert(::app::terminal::TokenPrivilege_IsValid(value));
+  set_has_token_privilege();
+  token_privilege_ = value;
+}
+
+// optional bool participant_subscribing = 6;
+inline bool Group::has_participant_subscribing() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void Group::set_has_participant_subscribing() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void Group::clear_has_participant_subscribing() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void Group::clear_participant_subscribing() {
+  participant_subscribing_ = false;
+  clear_has_participant_subscribing();
+}
+inline bool Group::participant_subscribing() const {
+  return participant_subscribing_;
+}
+inline void Group::set_participant_subscribing(bool value) {
+  set_has_participant_subscribing();
+  participant_subscribing_ = value;
+}
+
+// optional bool message_subscribing = 7;
+inline bool Group::has_message_subscribing() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void Group::set_has_message_subscribing() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void Group::clear_has_message_subscribing() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void Group::clear_message_subscribing() {
+  message_subscribing_ = false;
+  clear_has_message_subscribing();
+}
+inline bool Group::message_subscribing() const {
+  return message_subscribing_;
+}
+inline void Group::set_message_subscribing(bool value) {
+  set_has_message_subscribing();
+  message_subscribing_ = value;
+}
+
+// optional fixed32 participants_hash = 8;
+inline bool Group::has_participants_hash() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void Group::set_has_participants_hash() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void Group::clear_has_participants_hash() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void Group::clear_participants_hash() {
+  participants_hash_ = 0u;
+  clear_has_participants_hash();
+}
+inline ::google::protobuf::uint32 Group::participants_hash() const {
+  return participants_hash_;
+}
+inline void Group::set_participants_hash(::google::protobuf::uint32 value) {
+  set_has_participants_hash();
+  participants_hash_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GroupsRequest
+
+// required bool get_joined_groups = 1;
+inline bool GroupsRequest::has_get_joined_groups() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GroupsRequest::set_has_get_joined_groups() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GroupsRequest::clear_has_get_joined_groups() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GroupsRequest::clear_get_joined_groups() {
+  get_joined_groups_ = false;
+  clear_has_get_joined_groups();
+}
+inline bool GroupsRequest::get_joined_groups() const {
+  return get_joined_groups_;
+}
+inline void GroupsRequest::set_get_joined_groups(bool value) {
+  set_has_get_joined_groups();
+  get_joined_groups_ = value;
+}
+
+// required bool get_unjoined_groups = 2;
+inline bool GroupsRequest::has_get_unjoined_groups() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GroupsRequest::set_has_get_unjoined_groups() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GroupsRequest::clear_has_get_unjoined_groups() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GroupsRequest::clear_get_unjoined_groups() {
+  get_unjoined_groups_ = false;
+  clear_has_get_unjoined_groups();
+}
+inline bool GroupsRequest::get_unjoined_groups() const {
+  return get_unjoined_groups_;
+}
+inline void GroupsRequest::set_get_unjoined_groups(bool value) {
+  set_has_get_unjoined_groups();
+  get_unjoined_groups_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -6515,61 +7455,15 @@ inline void Participant::set_talk_priority(::google::protobuf::uint32 value) {
   talk_priority_ = value;
 }
 
-// optional .app.terminal.CallPrivilege call_privilege = 4;
-inline bool Participant::has_call_privilege() const {
+// required .app.terminal.SessionStatus status = 4;
+inline bool Participant::has_status() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void Participant::set_has_call_privilege() {
+inline void Participant::set_has_status() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void Participant::clear_has_call_privilege() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void Participant::clear_call_privilege() {
-  call_privilege_ = 0;
-  clear_has_call_privilege();
-}
-inline ::app::terminal::CallPrivilege Participant::call_privilege() const {
-  return static_cast< ::app::terminal::CallPrivilege >(call_privilege_);
-}
-inline void Participant::set_call_privilege(::app::terminal::CallPrivilege value) {
-  assert(::app::terminal::CallPrivilege_IsValid(value));
-  set_has_call_privilege();
-  call_privilege_ = value;
-}
-
-// optional .app.terminal.TokenPrivilege token_privilege = 5;
-inline bool Participant::has_token_privilege() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
-inline void Participant::set_has_token_privilege() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void Participant::clear_has_token_privilege() {
-  _has_bits_[0] &= ~0x00000010u;
-}
-inline void Participant::clear_token_privilege() {
-  token_privilege_ = 0;
-  clear_has_token_privilege();
-}
-inline ::app::terminal::TokenPrivilege Participant::token_privilege() const {
-  return static_cast< ::app::terminal::TokenPrivilege >(token_privilege_);
-}
-inline void Participant::set_token_privilege(::app::terminal::TokenPrivilege value) {
-  assert(::app::terminal::TokenPrivilege_IsValid(value));
-  set_has_token_privilege();
-  token_privilege_ = value;
-}
-
-// required .app.terminal.SessionStatus status = 6;
-inline bool Participant::has_status() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
-}
-inline void Participant::set_has_status() {
-  _has_bits_[0] |= 0x00000020u;
-}
 inline void Participant::clear_has_status() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void Participant::clear_status() {
   status_ = 0;
@@ -7368,234 +8262,42 @@ inline void MediaMessageResponse::set_leave_message_count(::google::protobuf::ui
 
 // JoinedGroupNotification
 
-// required fixed32 group_id = 1;
-inline bool JoinedGroupNotification::has_group_id() const {
+// required .app.terminal.Group group = 1;
+inline bool JoinedGroupNotification::has_group() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void JoinedGroupNotification::set_has_group_id() {
+inline void JoinedGroupNotification::set_has_group() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void JoinedGroupNotification::clear_has_group_id() {
+inline void JoinedGroupNotification::clear_has_group() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void JoinedGroupNotification::clear_group_id() {
-  group_id_ = 0u;
-  clear_has_group_id();
+inline void JoinedGroupNotification::clear_group() {
+  if (group_ != NULL) group_->::app::terminal::Group::Clear();
+  clear_has_group();
 }
-inline ::google::protobuf::uint32 JoinedGroupNotification::group_id() const {
-  return group_id_;
+inline const ::app::terminal::Group& JoinedGroupNotification::group() const {
+  return group_ != NULL ? *group_ : *default_instance_->group_;
 }
-inline void JoinedGroupNotification::set_group_id(::google::protobuf::uint32 value) {
-  set_has_group_id();
-  group_id_ = value;
+inline ::app::terminal::Group* JoinedGroupNotification::mutable_group() {
+  set_has_group();
+  if (group_ == NULL) group_ = new ::app::terminal::Group;
+  return group_;
 }
-
-// required bytes group_name = 2;
-inline bool JoinedGroupNotification::has_group_name() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+inline ::app::terminal::Group* JoinedGroupNotification::release_group() {
+  clear_has_group();
+  ::app::terminal::Group* temp = group_;
+  group_ = NULL;
+  return temp;
 }
-inline void JoinedGroupNotification::set_has_group_name() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void JoinedGroupNotification::clear_has_group_name() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void JoinedGroupNotification::clear_group_name() {
-  if (group_name_ != &::google::protobuf::internal::kEmptyString) {
-    group_name_->clear();
-  }
-  clear_has_group_name();
-}
-inline const ::std::string& JoinedGroupNotification::group_name() const {
-  return *group_name_;
-}
-inline void JoinedGroupNotification::set_group_name(const ::std::string& value) {
-  set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::kEmptyString) {
-    group_name_ = new ::std::string;
-  }
-  group_name_->assign(value);
-}
-inline void JoinedGroupNotification::set_group_name(const char* value) {
-  set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::kEmptyString) {
-    group_name_ = new ::std::string;
-  }
-  group_name_->assign(value);
-}
-inline void JoinedGroupNotification::set_group_name(const void* value, size_t size) {
-  set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::kEmptyString) {
-    group_name_ = new ::std::string;
-  }
-  group_name_->assign(reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* JoinedGroupNotification::mutable_group_name() {
-  set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::kEmptyString) {
-    group_name_ = new ::std::string;
-  }
-  return group_name_;
-}
-inline ::std::string* JoinedGroupNotification::release_group_name() {
-  clear_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
+inline void JoinedGroupNotification::set_allocated_group(::app::terminal::Group* group) {
+  delete group_;
+  group_ = group;
+  if (group) {
+    set_has_group();
   } else {
-    ::std::string* temp = group_name_;
-    group_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
+    clear_has_group();
   }
-}
-inline void JoinedGroupNotification::set_allocated_group_name(::std::string* group_name) {
-  if (group_name_ != &::google::protobuf::internal::kEmptyString) {
-    delete group_name_;
-  }
-  if (group_name) {
-    set_has_group_name();
-    group_name_ = group_name;
-  } else {
-    clear_has_group_name();
-    group_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  }
-}
-
-// required string group_number = 3;
-inline bool JoinedGroupNotification::has_group_number() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void JoinedGroupNotification::set_has_group_number() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void JoinedGroupNotification::clear_has_group_number() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void JoinedGroupNotification::clear_group_number() {
-  if (group_number_ != &::google::protobuf::internal::kEmptyString) {
-    group_number_->clear();
-  }
-  clear_has_group_number();
-}
-inline const ::std::string& JoinedGroupNotification::group_number() const {
-  return *group_number_;
-}
-inline void JoinedGroupNotification::set_group_number(const ::std::string& value) {
-  set_has_group_number();
-  if (group_number_ == &::google::protobuf::internal::kEmptyString) {
-    group_number_ = new ::std::string;
-  }
-  group_number_->assign(value);
-}
-inline void JoinedGroupNotification::set_group_number(const char* value) {
-  set_has_group_number();
-  if (group_number_ == &::google::protobuf::internal::kEmptyString) {
-    group_number_ = new ::std::string;
-  }
-  group_number_->assign(value);
-}
-inline void JoinedGroupNotification::set_group_number(const char* value, size_t size) {
-  set_has_group_number();
-  if (group_number_ == &::google::protobuf::internal::kEmptyString) {
-    group_number_ = new ::std::string;
-  }
-  group_number_->assign(reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* JoinedGroupNotification::mutable_group_number() {
-  set_has_group_number();
-  if (group_number_ == &::google::protobuf::internal::kEmptyString) {
-    group_number_ = new ::std::string;
-  }
-  return group_number_;
-}
-inline ::std::string* JoinedGroupNotification::release_group_number() {
-  clear_has_group_number();
-  if (group_number_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = group_number_;
-    group_number_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
-}
-inline void JoinedGroupNotification::set_allocated_group_number(::std::string* group_number) {
-  if (group_number_ != &::google::protobuf::internal::kEmptyString) {
-    delete group_number_;
-  }
-  if (group_number) {
-    set_has_group_number();
-    group_number_ = group_number;
-  } else {
-    clear_has_group_number();
-    group_number_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  }
-}
-
-// required fixed32 talk_priority = 4;
-inline bool JoinedGroupNotification::has_talk_priority() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void JoinedGroupNotification::set_has_talk_priority() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void JoinedGroupNotification::clear_has_talk_priority() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void JoinedGroupNotification::clear_talk_priority() {
-  talk_priority_ = 0u;
-  clear_has_talk_priority();
-}
-inline ::google::protobuf::uint32 JoinedGroupNotification::talk_priority() const {
-  return talk_priority_;
-}
-inline void JoinedGroupNotification::set_talk_priority(::google::protobuf::uint32 value) {
-  set_has_talk_priority();
-  talk_priority_ = value;
-}
-
-// required .app.terminal.CallPrivilege call_privilege = 5;
-inline bool JoinedGroupNotification::has_call_privilege() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
-inline void JoinedGroupNotification::set_has_call_privilege() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void JoinedGroupNotification::clear_has_call_privilege() {
-  _has_bits_[0] &= ~0x00000010u;
-}
-inline void JoinedGroupNotification::clear_call_privilege() {
-  call_privilege_ = 0;
-  clear_has_call_privilege();
-}
-inline ::app::terminal::CallPrivilege JoinedGroupNotification::call_privilege() const {
-  return static_cast< ::app::terminal::CallPrivilege >(call_privilege_);
-}
-inline void JoinedGroupNotification::set_call_privilege(::app::terminal::CallPrivilege value) {
-  assert(::app::terminal::CallPrivilege_IsValid(value));
-  set_has_call_privilege();
-  call_privilege_ = value;
-}
-
-// required .app.terminal.TokenPrivilege token_privilege = 6;
-inline bool JoinedGroupNotification::has_token_privilege() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
-}
-inline void JoinedGroupNotification::set_has_token_privilege() {
-  _has_bits_[0] |= 0x00000020u;
-}
-inline void JoinedGroupNotification::clear_has_token_privilege() {
-  _has_bits_[0] &= ~0x00000020u;
-}
-inline void JoinedGroupNotification::clear_token_privilege() {
-  token_privilege_ = 0;
-  clear_has_token_privilege();
-}
-inline ::app::terminal::TokenPrivilege JoinedGroupNotification::token_privilege() const {
-  return static_cast< ::app::terminal::TokenPrivilege >(token_privilege_);
-}
-inline void JoinedGroupNotification::set_token_privilege(::app::terminal::TokenPrivilege value) {
-  assert(::app::terminal::TokenPrivilege_IsValid(value));
-  set_has_token_privilege();
-  token_privilege_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -7890,7 +8592,7 @@ inline void SessionStatusNotification::set_account_id(::google::protobuf::uint32
   account_id_ = value;
 }
 
-// required .app.terminal.MediaMessage status = 3;
+// required .app.terminal.SessionStatus status = 3;
 inline bool SessionStatusNotification::has_status() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -7901,31 +8603,16 @@ inline void SessionStatusNotification::clear_has_status() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void SessionStatusNotification::clear_status() {
-  if (status_ != NULL) status_->::app::terminal::MediaMessage::Clear();
+  status_ = 0;
   clear_has_status();
 }
-inline const ::app::terminal::MediaMessage& SessionStatusNotification::status() const {
-  return status_ != NULL ? *status_ : *default_instance_->status_;
+inline ::app::terminal::SessionStatus SessionStatusNotification::status() const {
+  return static_cast< ::app::terminal::SessionStatus >(status_);
 }
-inline ::app::terminal::MediaMessage* SessionStatusNotification::mutable_status() {
+inline void SessionStatusNotification::set_status(::app::terminal::SessionStatus value) {
+  assert(::app::terminal::SessionStatus_IsValid(value));
   set_has_status();
-  if (status_ == NULL) status_ = new ::app::terminal::MediaMessage;
-  return status_;
-}
-inline ::app::terminal::MediaMessage* SessionStatusNotification::release_status() {
-  clear_has_status();
-  ::app::terminal::MediaMessage* temp = status_;
-  status_ = NULL;
-  return temp;
-}
-inline void SessionStatusNotification::set_allocated_status(::app::terminal::MediaMessage* status) {
-  delete status_;
-  status_ = status;
-  if (status) {
-    set_has_status();
-  } else {
-    clear_has_status();
-  }
+  status_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -10266,100 +10953,100 @@ inline void HistoryAlertResponse::set_allocated_history_alert(::app::terminal::H
 
 // -------------------------------------------------------------------
 
-// HistoryAlertMesageRequest
+// HistoryAlertMessageRequest
 
 // required fixed32 history_alert_id = 1;
-inline bool HistoryAlertMesageRequest::has_history_alert_id() const {
+inline bool HistoryAlertMessageRequest::has_history_alert_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void HistoryAlertMesageRequest::set_has_history_alert_id() {
+inline void HistoryAlertMessageRequest::set_has_history_alert_id() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void HistoryAlertMesageRequest::clear_has_history_alert_id() {
+inline void HistoryAlertMessageRequest::clear_has_history_alert_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void HistoryAlertMesageRequest::clear_history_alert_id() {
+inline void HistoryAlertMessageRequest::clear_history_alert_id() {
   history_alert_id_ = 0u;
   clear_has_history_alert_id();
 }
-inline ::google::protobuf::uint32 HistoryAlertMesageRequest::history_alert_id() const {
+inline ::google::protobuf::uint32 HistoryAlertMessageRequest::history_alert_id() const {
   return history_alert_id_;
 }
-inline void HistoryAlertMesageRequest::set_history_alert_id(::google::protobuf::uint32 value) {
+inline void HistoryAlertMessageRequest::set_history_alert_id(::google::protobuf::uint32 value) {
   set_has_history_alert_id();
   history_alert_id_ = value;
 }
 
 // optional fixed32 from_message_id = 2;
-inline bool HistoryAlertMesageRequest::has_from_message_id() const {
+inline bool HistoryAlertMessageRequest::has_from_message_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void HistoryAlertMesageRequest::set_has_from_message_id() {
+inline void HistoryAlertMessageRequest::set_has_from_message_id() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void HistoryAlertMesageRequest::clear_has_from_message_id() {
+inline void HistoryAlertMessageRequest::clear_has_from_message_id() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void HistoryAlertMesageRequest::clear_from_message_id() {
+inline void HistoryAlertMessageRequest::clear_from_message_id() {
   from_message_id_ = 0u;
   clear_has_from_message_id();
 }
-inline ::google::protobuf::uint32 HistoryAlertMesageRequest::from_message_id() const {
+inline ::google::protobuf::uint32 HistoryAlertMessageRequest::from_message_id() const {
   return from_message_id_;
 }
-inline void HistoryAlertMesageRequest::set_from_message_id(::google::protobuf::uint32 value) {
+inline void HistoryAlertMessageRequest::set_from_message_id(::google::protobuf::uint32 value) {
   set_has_from_message_id();
   from_message_id_ = value;
 }
 
 // optional string from_time = 3;
-inline bool HistoryAlertMesageRequest::has_from_time() const {
+inline bool HistoryAlertMessageRequest::has_from_time() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void HistoryAlertMesageRequest::set_has_from_time() {
+inline void HistoryAlertMessageRequest::set_has_from_time() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void HistoryAlertMesageRequest::clear_has_from_time() {
+inline void HistoryAlertMessageRequest::clear_has_from_time() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void HistoryAlertMesageRequest::clear_from_time() {
+inline void HistoryAlertMessageRequest::clear_from_time() {
   if (from_time_ != &::google::protobuf::internal::kEmptyString) {
     from_time_->clear();
   }
   clear_has_from_time();
 }
-inline const ::std::string& HistoryAlertMesageRequest::from_time() const {
+inline const ::std::string& HistoryAlertMessageRequest::from_time() const {
   return *from_time_;
 }
-inline void HistoryAlertMesageRequest::set_from_time(const ::std::string& value) {
+inline void HistoryAlertMessageRequest::set_from_time(const ::std::string& value) {
   set_has_from_time();
   if (from_time_ == &::google::protobuf::internal::kEmptyString) {
     from_time_ = new ::std::string;
   }
   from_time_->assign(value);
 }
-inline void HistoryAlertMesageRequest::set_from_time(const char* value) {
+inline void HistoryAlertMessageRequest::set_from_time(const char* value) {
   set_has_from_time();
   if (from_time_ == &::google::protobuf::internal::kEmptyString) {
     from_time_ = new ::std::string;
   }
   from_time_->assign(value);
 }
-inline void HistoryAlertMesageRequest::set_from_time(const char* value, size_t size) {
+inline void HistoryAlertMessageRequest::set_from_time(const char* value, size_t size) {
   set_has_from_time();
   if (from_time_ == &::google::protobuf::internal::kEmptyString) {
     from_time_ = new ::std::string;
   }
   from_time_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* HistoryAlertMesageRequest::mutable_from_time() {
+inline ::std::string* HistoryAlertMessageRequest::mutable_from_time() {
   set_has_from_time();
   if (from_time_ == &::google::protobuf::internal::kEmptyString) {
     from_time_ = new ::std::string;
   }
   return from_time_;
 }
-inline ::std::string* HistoryAlertMesageRequest::release_from_time() {
+inline ::std::string* HistoryAlertMessageRequest::release_from_time() {
   clear_has_from_time();
   if (from_time_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
@@ -10369,7 +11056,7 @@ inline ::std::string* HistoryAlertMesageRequest::release_from_time() {
     return temp;
   }
 }
-inline void HistoryAlertMesageRequest::set_allocated_from_time(::std::string* from_time) {
+inline void HistoryAlertMessageRequest::set_allocated_from_time(::std::string* from_time) {
   if (from_time_ != &::google::protobuf::internal::kEmptyString) {
     delete from_time_;
   }
@@ -10383,98 +11070,433 @@ inline void HistoryAlertMesageRequest::set_allocated_from_time(::std::string* fr
 }
 
 // required fixed32 max_message_count = 4;
-inline bool HistoryAlertMesageRequest::has_max_message_count() const {
+inline bool HistoryAlertMessageRequest::has_max_message_count() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void HistoryAlertMesageRequest::set_has_max_message_count() {
+inline void HistoryAlertMessageRequest::set_has_max_message_count() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void HistoryAlertMesageRequest::clear_has_max_message_count() {
+inline void HistoryAlertMessageRequest::clear_has_max_message_count() {
   _has_bits_[0] &= ~0x00000008u;
 }
-inline void HistoryAlertMesageRequest::clear_max_message_count() {
+inline void HistoryAlertMessageRequest::clear_max_message_count() {
   max_message_count_ = 0u;
   clear_has_max_message_count();
 }
-inline ::google::protobuf::uint32 HistoryAlertMesageRequest::max_message_count() const {
+inline ::google::protobuf::uint32 HistoryAlertMessageRequest::max_message_count() const {
   return max_message_count_;
 }
-inline void HistoryAlertMesageRequest::set_max_message_count(::google::protobuf::uint32 value) {
+inline void HistoryAlertMessageRequest::set_max_message_count(::google::protobuf::uint32 value) {
   set_has_max_message_count();
   max_message_count_ = value;
 }
 
 // -------------------------------------------------------------------
 
-// HistoryAlertMesageResponse
+// HistoryAlertMessageResponse
 
 // required fixed32 history_alert_id = 1;
-inline bool HistoryAlertMesageResponse::has_history_alert_id() const {
+inline bool HistoryAlertMessageResponse::has_history_alert_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void HistoryAlertMesageResponse::set_has_history_alert_id() {
+inline void HistoryAlertMessageResponse::set_has_history_alert_id() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void HistoryAlertMesageResponse::clear_has_history_alert_id() {
+inline void HistoryAlertMessageResponse::clear_has_history_alert_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void HistoryAlertMesageResponse::clear_history_alert_id() {
+inline void HistoryAlertMessageResponse::clear_history_alert_id() {
   history_alert_id_ = 0u;
   clear_has_history_alert_id();
 }
-inline ::google::protobuf::uint32 HistoryAlertMesageResponse::history_alert_id() const {
+inline ::google::protobuf::uint32 HistoryAlertMessageResponse::history_alert_id() const {
   return history_alert_id_;
 }
-inline void HistoryAlertMesageResponse::set_history_alert_id(::google::protobuf::uint32 value) {
+inline void HistoryAlertMessageResponse::set_history_alert_id(::google::protobuf::uint32 value) {
   set_has_history_alert_id();
   history_alert_id_ = value;
 }
 
 // repeated .app.terminal.MediaMessage messages = 2;
-inline int HistoryAlertMesageResponse::messages_size() const {
+inline int HistoryAlertMessageResponse::messages_size() const {
   return messages_.size();
 }
-inline void HistoryAlertMesageResponse::clear_messages() {
+inline void HistoryAlertMessageResponse::clear_messages() {
   messages_.Clear();
 }
-inline const ::app::terminal::MediaMessage& HistoryAlertMesageResponse::messages(int index) const {
+inline const ::app::terminal::MediaMessage& HistoryAlertMessageResponse::messages(int index) const {
   return messages_.Get(index);
 }
-inline ::app::terminal::MediaMessage* HistoryAlertMesageResponse::mutable_messages(int index) {
+inline ::app::terminal::MediaMessage* HistoryAlertMessageResponse::mutable_messages(int index) {
   return messages_.Mutable(index);
 }
-inline ::app::terminal::MediaMessage* HistoryAlertMesageResponse::add_messages() {
+inline ::app::terminal::MediaMessage* HistoryAlertMessageResponse::add_messages() {
   return messages_.Add();
 }
 inline const ::google::protobuf::RepeatedPtrField< ::app::terminal::MediaMessage >&
-HistoryAlertMesageResponse::messages() const {
+HistoryAlertMessageResponse::messages() const {
   return messages_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::app::terminal::MediaMessage >*
-HistoryAlertMesageResponse::mutable_messages() {
+HistoryAlertMessageResponse::mutable_messages() {
   return &messages_;
 }
 
 // required fixed32 leave_message_count = 3;
-inline bool HistoryAlertMesageResponse::has_leave_message_count() const {
+inline bool HistoryAlertMessageResponse::has_leave_message_count() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void HistoryAlertMesageResponse::set_has_leave_message_count() {
+inline void HistoryAlertMessageResponse::set_has_leave_message_count() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void HistoryAlertMesageResponse::clear_has_leave_message_count() {
+inline void HistoryAlertMessageResponse::clear_has_leave_message_count() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void HistoryAlertMesageResponse::clear_leave_message_count() {
+inline void HistoryAlertMessageResponse::clear_leave_message_count() {
   leave_message_count_ = 0u;
   clear_has_leave_message_count();
 }
-inline ::google::protobuf::uint32 HistoryAlertMesageResponse::leave_message_count() const {
+inline ::google::protobuf::uint32 HistoryAlertMessageResponse::leave_message_count() const {
   return leave_message_count_;
 }
-inline void HistoryAlertMesageResponse::set_leave_message_count(::google::protobuf::uint32 value) {
+inline void HistoryAlertMessageResponse::set_leave_message_count(::google::protobuf::uint32 value) {
   set_has_leave_message_count();
   leave_message_count_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// AccountsResponse
+
+// repeated fixed32 ids = 1;
+inline int AccountsResponse::ids_size() const {
+  return ids_.size();
+}
+inline void AccountsResponse::clear_ids() {
+  ids_.Clear();
+}
+inline ::google::protobuf::uint32 AccountsResponse::ids(int index) const {
+  return ids_.Get(index);
+}
+inline void AccountsResponse::set_ids(int index, ::google::protobuf::uint32 value) {
+  ids_.Set(index, value);
+}
+inline void AccountsResponse::add_ids(::google::protobuf::uint32 value) {
+  ids_.Add(value);
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+AccountsResponse::ids() const {
+  return ids_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+AccountsResponse::mutable_ids() {
+  return &ids_;
+}
+
+// -------------------------------------------------------------------
+
+// AccountRequest
+
+// required fixed32 id = 1;
+inline bool AccountRequest::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void AccountRequest::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void AccountRequest::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void AccountRequest::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 AccountRequest::id() const {
+  return id_;
+}
+inline void AccountRequest::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// AccountResponse
+
+// required fixed32 id = 1;
+inline bool AccountResponse::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void AccountResponse::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void AccountResponse::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void AccountResponse::clear_id() {
+  id_ = 0u;
+  clear_has_id();
+}
+inline ::google::protobuf::uint32 AccountResponse::id() const {
+  return id_;
+}
+inline void AccountResponse::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
+}
+
+// required bytes name = 2;
+inline bool AccountResponse::has_name() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void AccountResponse::set_has_name() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void AccountResponse::clear_has_name() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void AccountResponse::clear_name() {
+  if (name_ != &::google::protobuf::internal::kEmptyString) {
+    name_->clear();
+  }
+  clear_has_name();
+}
+inline const ::std::string& AccountResponse::name() const {
+  return *name_;
+}
+inline void AccountResponse::set_name(const ::std::string& value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void AccountResponse::set_name(const char* value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void AccountResponse::set_name(const void* value, size_t size) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* AccountResponse::mutable_name() {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  return name_;
+}
+inline ::std::string* AccountResponse::release_name() {
+  clear_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = name_;
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void AccountResponse::set_allocated_name(::std::string* name) {
+  if (name_ != &::google::protobuf::internal::kEmptyString) {
+    delete name_;
+  }
+  if (name) {
+    set_has_name();
+    name_ = name;
+  } else {
+    clear_has_name();
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// required string number = 3;
+inline bool AccountResponse::has_number() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void AccountResponse::set_has_number() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void AccountResponse::clear_has_number() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void AccountResponse::clear_number() {
+  if (number_ != &::google::protobuf::internal::kEmptyString) {
+    number_->clear();
+  }
+  clear_has_number();
+}
+inline const ::std::string& AccountResponse::number() const {
+  return *number_;
+}
+inline void AccountResponse::set_number(const ::std::string& value) {
+  set_has_number();
+  if (number_ == &::google::protobuf::internal::kEmptyString) {
+    number_ = new ::std::string;
+  }
+  number_->assign(value);
+}
+inline void AccountResponse::set_number(const char* value) {
+  set_has_number();
+  if (number_ == &::google::protobuf::internal::kEmptyString) {
+    number_ = new ::std::string;
+  }
+  number_->assign(value);
+}
+inline void AccountResponse::set_number(const char* value, size_t size) {
+  set_has_number();
+  if (number_ == &::google::protobuf::internal::kEmptyString) {
+    number_ = new ::std::string;
+  }
+  number_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* AccountResponse::mutable_number() {
+  set_has_number();
+  if (number_ == &::google::protobuf::internal::kEmptyString) {
+    number_ = new ::std::string;
+  }
+  return number_;
+}
+inline ::std::string* AccountResponse::release_number() {
+  clear_has_number();
+  if (number_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = number_;
+    number_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void AccountResponse::set_allocated_number(::std::string* number) {
+  if (number_ != &::google::protobuf::internal::kEmptyString) {
+    delete number_;
+  }
+  if (number) {
+    set_has_number();
+    number_ = number;
+  } else {
+    clear_has_number();
+    number_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// -------------------------------------------------------------------
+
+// GroupSubscribeRequest
+
+// optional bool participant_subscribing = 1;
+inline bool GroupSubscribeRequest::has_participant_subscribing() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GroupSubscribeRequest::set_has_participant_subscribing() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GroupSubscribeRequest::clear_has_participant_subscribing() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GroupSubscribeRequest::clear_participant_subscribing() {
+  participant_subscribing_ = false;
+  clear_has_participant_subscribing();
+}
+inline bool GroupSubscribeRequest::participant_subscribing() const {
+  return participant_subscribing_;
+}
+inline void GroupSubscribeRequest::set_participant_subscribing(bool value) {
+  set_has_participant_subscribing();
+  participant_subscribing_ = value;
+}
+
+// optional bool message_subscribing = 2;
+inline bool GroupSubscribeRequest::has_message_subscribing() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GroupSubscribeRequest::set_has_message_subscribing() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GroupSubscribeRequest::clear_has_message_subscribing() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GroupSubscribeRequest::clear_message_subscribing() {
+  message_subscribing_ = false;
+  clear_has_message_subscribing();
+}
+inline bool GroupSubscribeRequest::message_subscribing() const {
+  return message_subscribing_;
+}
+inline void GroupSubscribeRequest::set_message_subscribing(bool value) {
+  set_has_message_subscribing();
+  message_subscribing_ = value;
+}
+
+// optional fixed32 group_id = 3;
+inline bool GroupSubscribeRequest::has_group_id() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GroupSubscribeRequest::set_has_group_id() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GroupSubscribeRequest::clear_has_group_id() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GroupSubscribeRequest::clear_group_id() {
+  group_id_ = 0u;
+  clear_has_group_id();
+}
+inline ::google::protobuf::uint32 GroupSubscribeRequest::group_id() const {
+  return group_id_;
+}
+inline void GroupSubscribeRequest::set_group_id(::google::protobuf::uint32 value) {
+  set_has_group_id();
+  group_id_ = value;
+}
+
+// optional bool effect_current = 4;
+inline bool GroupSubscribeRequest::has_effect_current() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void GroupSubscribeRequest::set_has_effect_current() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void GroupSubscribeRequest::clear_has_effect_current() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void GroupSubscribeRequest::clear_effect_current() {
+  effect_current_ = false;
+  clear_has_effect_current();
+}
+inline bool GroupSubscribeRequest::effect_current() const {
+  return effect_current_;
+}
+inline void GroupSubscribeRequest::set_effect_current(bool value) {
+  set_has_effect_current();
+  effect_current_ = value;
+}
+
+// optional bool effect_follow = 5;
+inline bool GroupSubscribeRequest::has_effect_follow() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void GroupSubscribeRequest::set_has_effect_follow() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void GroupSubscribeRequest::clear_has_effect_follow() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void GroupSubscribeRequest::clear_effect_follow() {
+  effect_follow_ = false;
+  clear_has_effect_follow();
+}
+inline bool GroupSubscribeRequest::effect_follow() const {
+  return effect_follow_;
+}
+inline void GroupSubscribeRequest::set_effect_follow(bool value) {
+  set_has_effect_follow();
+  effect_follow_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -10519,41 +11541,41 @@ inline void Request::set_allocated_login(::app::terminal::LoginRequest* login) {
   }
 }
 
-// optional .app.terminal.GroupParticipantsRequest gourp_participants = 2;
-inline bool Request::has_gourp_participants() const {
+// optional .app.terminal.GroupParticipantsRequest group_participants = 2;
+inline bool Request::has_group_participants() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Request::set_has_gourp_participants() {
+inline void Request::set_has_group_participants() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Request::clear_has_gourp_participants() {
+inline void Request::clear_has_group_participants() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void Request::clear_gourp_participants() {
-  if (gourp_participants_ != NULL) gourp_participants_->::app::terminal::GroupParticipantsRequest::Clear();
-  clear_has_gourp_participants();
+inline void Request::clear_group_participants() {
+  if (group_participants_ != NULL) group_participants_->::app::terminal::GroupParticipantsRequest::Clear();
+  clear_has_group_participants();
 }
-inline const ::app::terminal::GroupParticipantsRequest& Request::gourp_participants() const {
-  return gourp_participants_ != NULL ? *gourp_participants_ : *default_instance_->gourp_participants_;
+inline const ::app::terminal::GroupParticipantsRequest& Request::group_participants() const {
+  return group_participants_ != NULL ? *group_participants_ : *default_instance_->group_participants_;
 }
-inline ::app::terminal::GroupParticipantsRequest* Request::mutable_gourp_participants() {
-  set_has_gourp_participants();
-  if (gourp_participants_ == NULL) gourp_participants_ = new ::app::terminal::GroupParticipantsRequest;
-  return gourp_participants_;
+inline ::app::terminal::GroupParticipantsRequest* Request::mutable_group_participants() {
+  set_has_group_participants();
+  if (group_participants_ == NULL) group_participants_ = new ::app::terminal::GroupParticipantsRequest;
+  return group_participants_;
 }
-inline ::app::terminal::GroupParticipantsRequest* Request::release_gourp_participants() {
-  clear_has_gourp_participants();
-  ::app::terminal::GroupParticipantsRequest* temp = gourp_participants_;
-  gourp_participants_ = NULL;
+inline ::app::terminal::GroupParticipantsRequest* Request::release_group_participants() {
+  clear_has_group_participants();
+  ::app::terminal::GroupParticipantsRequest* temp = group_participants_;
+  group_participants_ = NULL;
   return temp;
 }
-inline void Request::set_allocated_gourp_participants(::app::terminal::GroupParticipantsRequest* gourp_participants) {
-  delete gourp_participants_;
-  gourp_participants_ = gourp_participants;
-  if (gourp_participants) {
-    set_has_gourp_participants();
+inline void Request::set_allocated_group_participants(::app::terminal::GroupParticipantsRequest* group_participants) {
+  delete group_participants_;
+  group_participants_ = group_participants;
+  if (group_participants) {
+    set_has_group_participants();
   } else {
-    clear_has_gourp_participants();
+    clear_has_group_participants();
   }
 }
 
@@ -10709,41 +11731,41 @@ inline void Request::set_allocated_speak(::app::terminal::SpeakRequest* speak) {
   }
 }
 
-// optional .app.terminal.JoinSessionRequest jone_session = 7;
-inline bool Request::has_jone_session() const {
+// optional .app.terminal.JoinSessionRequest join_session = 7;
+inline bool Request::has_join_session() const {
   return (_has_bits_[0] & 0x00000040u) != 0;
 }
-inline void Request::set_has_jone_session() {
+inline void Request::set_has_join_session() {
   _has_bits_[0] |= 0x00000040u;
 }
-inline void Request::clear_has_jone_session() {
+inline void Request::clear_has_join_session() {
   _has_bits_[0] &= ~0x00000040u;
 }
-inline void Request::clear_jone_session() {
-  if (jone_session_ != NULL) jone_session_->::app::terminal::JoinSessionRequest::Clear();
-  clear_has_jone_session();
+inline void Request::clear_join_session() {
+  if (join_session_ != NULL) join_session_->::app::terminal::JoinSessionRequest::Clear();
+  clear_has_join_session();
 }
-inline const ::app::terminal::JoinSessionRequest& Request::jone_session() const {
-  return jone_session_ != NULL ? *jone_session_ : *default_instance_->jone_session_;
+inline const ::app::terminal::JoinSessionRequest& Request::join_session() const {
+  return join_session_ != NULL ? *join_session_ : *default_instance_->join_session_;
 }
-inline ::app::terminal::JoinSessionRequest* Request::mutable_jone_session() {
-  set_has_jone_session();
-  if (jone_session_ == NULL) jone_session_ = new ::app::terminal::JoinSessionRequest;
-  return jone_session_;
+inline ::app::terminal::JoinSessionRequest* Request::mutable_join_session() {
+  set_has_join_session();
+  if (join_session_ == NULL) join_session_ = new ::app::terminal::JoinSessionRequest;
+  return join_session_;
 }
-inline ::app::terminal::JoinSessionRequest* Request::release_jone_session() {
-  clear_has_jone_session();
-  ::app::terminal::JoinSessionRequest* temp = jone_session_;
-  jone_session_ = NULL;
+inline ::app::terminal::JoinSessionRequest* Request::release_join_session() {
+  clear_has_join_session();
+  ::app::terminal::JoinSessionRequest* temp = join_session_;
+  join_session_ = NULL;
   return temp;
 }
-inline void Request::set_allocated_jone_session(::app::terminal::JoinSessionRequest* jone_session) {
-  delete jone_session_;
-  jone_session_ = jone_session;
-  if (jone_session) {
-    set_has_jone_session();
+inline void Request::set_allocated_join_session(::app::terminal::JoinSessionRequest* join_session) {
+  delete join_session_;
+  join_session_ = join_session;
+  if (join_session) {
+    set_has_join_session();
   } else {
-    clear_has_jone_session();
+    clear_has_join_session();
   }
 }
 
@@ -11051,7 +12073,7 @@ inline void Request::set_allocated_history_alert(::app::terminal::HistoryAlertRe
   }
 }
 
-// optional .app.terminal.HistoryAlertMesageRequest history_alert_message = 16;
+// optional .app.terminal.HistoryAlertMessageRequest history_alert_message = 16;
 inline bool Request::has_history_alert_message() const {
   return (_has_bits_[0] & 0x00008000u) != 0;
 }
@@ -11062,30 +12084,144 @@ inline void Request::clear_has_history_alert_message() {
   _has_bits_[0] &= ~0x00008000u;
 }
 inline void Request::clear_history_alert_message() {
-  if (history_alert_message_ != NULL) history_alert_message_->::app::terminal::HistoryAlertMesageRequest::Clear();
+  if (history_alert_message_ != NULL) history_alert_message_->::app::terminal::HistoryAlertMessageRequest::Clear();
   clear_has_history_alert_message();
 }
-inline const ::app::terminal::HistoryAlertMesageRequest& Request::history_alert_message() const {
+inline const ::app::terminal::HistoryAlertMessageRequest& Request::history_alert_message() const {
   return history_alert_message_ != NULL ? *history_alert_message_ : *default_instance_->history_alert_message_;
 }
-inline ::app::terminal::HistoryAlertMesageRequest* Request::mutable_history_alert_message() {
+inline ::app::terminal::HistoryAlertMessageRequest* Request::mutable_history_alert_message() {
   set_has_history_alert_message();
-  if (history_alert_message_ == NULL) history_alert_message_ = new ::app::terminal::HistoryAlertMesageRequest;
+  if (history_alert_message_ == NULL) history_alert_message_ = new ::app::terminal::HistoryAlertMessageRequest;
   return history_alert_message_;
 }
-inline ::app::terminal::HistoryAlertMesageRequest* Request::release_history_alert_message() {
+inline ::app::terminal::HistoryAlertMessageRequest* Request::release_history_alert_message() {
   clear_has_history_alert_message();
-  ::app::terminal::HistoryAlertMesageRequest* temp = history_alert_message_;
+  ::app::terminal::HistoryAlertMessageRequest* temp = history_alert_message_;
   history_alert_message_ = NULL;
   return temp;
 }
-inline void Request::set_allocated_history_alert_message(::app::terminal::HistoryAlertMesageRequest* history_alert_message) {
+inline void Request::set_allocated_history_alert_message(::app::terminal::HistoryAlertMessageRequest* history_alert_message) {
   delete history_alert_message_;
   history_alert_message_ = history_alert_message;
   if (history_alert_message) {
     set_has_history_alert_message();
   } else {
     clear_has_history_alert_message();
+  }
+}
+
+// optional .app.terminal.AccountRequest account = 17;
+inline bool Request::has_account() const {
+  return (_has_bits_[0] & 0x00010000u) != 0;
+}
+inline void Request::set_has_account() {
+  _has_bits_[0] |= 0x00010000u;
+}
+inline void Request::clear_has_account() {
+  _has_bits_[0] &= ~0x00010000u;
+}
+inline void Request::clear_account() {
+  if (account_ != NULL) account_->::app::terminal::AccountRequest::Clear();
+  clear_has_account();
+}
+inline const ::app::terminal::AccountRequest& Request::account() const {
+  return account_ != NULL ? *account_ : *default_instance_->account_;
+}
+inline ::app::terminal::AccountRequest* Request::mutable_account() {
+  set_has_account();
+  if (account_ == NULL) account_ = new ::app::terminal::AccountRequest;
+  return account_;
+}
+inline ::app::terminal::AccountRequest* Request::release_account() {
+  clear_has_account();
+  ::app::terminal::AccountRequest* temp = account_;
+  account_ = NULL;
+  return temp;
+}
+inline void Request::set_allocated_account(::app::terminal::AccountRequest* account) {
+  delete account_;
+  account_ = account;
+  if (account) {
+    set_has_account();
+  } else {
+    clear_has_account();
+  }
+}
+
+// optional .app.terminal.GroupSubscribeRequest group_subscribe = 18;
+inline bool Request::has_group_subscribe() const {
+  return (_has_bits_[0] & 0x00020000u) != 0;
+}
+inline void Request::set_has_group_subscribe() {
+  _has_bits_[0] |= 0x00020000u;
+}
+inline void Request::clear_has_group_subscribe() {
+  _has_bits_[0] &= ~0x00020000u;
+}
+inline void Request::clear_group_subscribe() {
+  if (group_subscribe_ != NULL) group_subscribe_->::app::terminal::GroupSubscribeRequest::Clear();
+  clear_has_group_subscribe();
+}
+inline const ::app::terminal::GroupSubscribeRequest& Request::group_subscribe() const {
+  return group_subscribe_ != NULL ? *group_subscribe_ : *default_instance_->group_subscribe_;
+}
+inline ::app::terminal::GroupSubscribeRequest* Request::mutable_group_subscribe() {
+  set_has_group_subscribe();
+  if (group_subscribe_ == NULL) group_subscribe_ = new ::app::terminal::GroupSubscribeRequest;
+  return group_subscribe_;
+}
+inline ::app::terminal::GroupSubscribeRequest* Request::release_group_subscribe() {
+  clear_has_group_subscribe();
+  ::app::terminal::GroupSubscribeRequest* temp = group_subscribe_;
+  group_subscribe_ = NULL;
+  return temp;
+}
+inline void Request::set_allocated_group_subscribe(::app::terminal::GroupSubscribeRequest* group_subscribe) {
+  delete group_subscribe_;
+  group_subscribe_ = group_subscribe;
+  if (group_subscribe) {
+    set_has_group_subscribe();
+  } else {
+    clear_has_group_subscribe();
+  }
+}
+
+// optional .app.terminal.GroupsRequest groups = 19;
+inline bool Request::has_groups() const {
+  return (_has_bits_[0] & 0x00040000u) != 0;
+}
+inline void Request::set_has_groups() {
+  _has_bits_[0] |= 0x00040000u;
+}
+inline void Request::clear_has_groups() {
+  _has_bits_[0] &= ~0x00040000u;
+}
+inline void Request::clear_groups() {
+  if (groups_ != NULL) groups_->::app::terminal::GroupsRequest::Clear();
+  clear_has_groups();
+}
+inline const ::app::terminal::GroupsRequest& Request::groups() const {
+  return groups_ != NULL ? *groups_ : *default_instance_->groups_;
+}
+inline ::app::terminal::GroupsRequest* Request::mutable_groups() {
+  set_has_groups();
+  if (groups_ == NULL) groups_ = new ::app::terminal::GroupsRequest;
+  return groups_;
+}
+inline ::app::terminal::GroupsRequest* Request::release_groups() {
+  clear_has_groups();
+  ::app::terminal::GroupsRequest* temp = groups_;
+  groups_ = NULL;
+  return temp;
+}
+inline void Request::set_allocated_groups(::app::terminal::GroupsRequest* groups) {
+  delete groups_;
+  groups_ = groups;
+  if (groups) {
+    set_has_groups();
+  } else {
+    clear_has_groups();
   }
 }
 
@@ -11549,7 +12685,7 @@ inline void Response::set_allocated_history_alert(::app::terminal::HistoryAlertR
   }
 }
 
-// optional .app.terminal.HistoryAlertMesageResponse history_alert_message = 13;
+// optional .app.terminal.HistoryAlertMessageResponse history_alert_message = 13;
 inline bool Response::has_history_alert_message() const {
   return (_has_bits_[0] & 0x00001000u) != 0;
 }
@@ -11560,30 +12696,106 @@ inline void Response::clear_has_history_alert_message() {
   _has_bits_[0] &= ~0x00001000u;
 }
 inline void Response::clear_history_alert_message() {
-  if (history_alert_message_ != NULL) history_alert_message_->::app::terminal::HistoryAlertMesageResponse::Clear();
+  if (history_alert_message_ != NULL) history_alert_message_->::app::terminal::HistoryAlertMessageResponse::Clear();
   clear_has_history_alert_message();
 }
-inline const ::app::terminal::HistoryAlertMesageResponse& Response::history_alert_message() const {
+inline const ::app::terminal::HistoryAlertMessageResponse& Response::history_alert_message() const {
   return history_alert_message_ != NULL ? *history_alert_message_ : *default_instance_->history_alert_message_;
 }
-inline ::app::terminal::HistoryAlertMesageResponse* Response::mutable_history_alert_message() {
+inline ::app::terminal::HistoryAlertMessageResponse* Response::mutable_history_alert_message() {
   set_has_history_alert_message();
-  if (history_alert_message_ == NULL) history_alert_message_ = new ::app::terminal::HistoryAlertMesageResponse;
+  if (history_alert_message_ == NULL) history_alert_message_ = new ::app::terminal::HistoryAlertMessageResponse;
   return history_alert_message_;
 }
-inline ::app::terminal::HistoryAlertMesageResponse* Response::release_history_alert_message() {
+inline ::app::terminal::HistoryAlertMessageResponse* Response::release_history_alert_message() {
   clear_has_history_alert_message();
-  ::app::terminal::HistoryAlertMesageResponse* temp = history_alert_message_;
+  ::app::terminal::HistoryAlertMessageResponse* temp = history_alert_message_;
   history_alert_message_ = NULL;
   return temp;
 }
-inline void Response::set_allocated_history_alert_message(::app::terminal::HistoryAlertMesageResponse* history_alert_message) {
+inline void Response::set_allocated_history_alert_message(::app::terminal::HistoryAlertMessageResponse* history_alert_message) {
   delete history_alert_message_;
   history_alert_message_ = history_alert_message;
   if (history_alert_message) {
     set_has_history_alert_message();
   } else {
     clear_has_history_alert_message();
+  }
+}
+
+// optional .app.terminal.AccountsResponse accounts = 14;
+inline bool Response::has_accounts() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void Response::set_has_accounts() {
+  _has_bits_[0] |= 0x00002000u;
+}
+inline void Response::clear_has_accounts() {
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline void Response::clear_accounts() {
+  if (accounts_ != NULL) accounts_->::app::terminal::AccountsResponse::Clear();
+  clear_has_accounts();
+}
+inline const ::app::terminal::AccountsResponse& Response::accounts() const {
+  return accounts_ != NULL ? *accounts_ : *default_instance_->accounts_;
+}
+inline ::app::terminal::AccountsResponse* Response::mutable_accounts() {
+  set_has_accounts();
+  if (accounts_ == NULL) accounts_ = new ::app::terminal::AccountsResponse;
+  return accounts_;
+}
+inline ::app::terminal::AccountsResponse* Response::release_accounts() {
+  clear_has_accounts();
+  ::app::terminal::AccountsResponse* temp = accounts_;
+  accounts_ = NULL;
+  return temp;
+}
+inline void Response::set_allocated_accounts(::app::terminal::AccountsResponse* accounts) {
+  delete accounts_;
+  accounts_ = accounts;
+  if (accounts) {
+    set_has_accounts();
+  } else {
+    clear_has_accounts();
+  }
+}
+
+// optional .app.terminal.AccountResponse account = 15;
+inline bool Response::has_account() const {
+  return (_has_bits_[0] & 0x00004000u) != 0;
+}
+inline void Response::set_has_account() {
+  _has_bits_[0] |= 0x00004000u;
+}
+inline void Response::clear_has_account() {
+  _has_bits_[0] &= ~0x00004000u;
+}
+inline void Response::clear_account() {
+  if (account_ != NULL) account_->::app::terminal::AccountResponse::Clear();
+  clear_has_account();
+}
+inline const ::app::terminal::AccountResponse& Response::account() const {
+  return account_ != NULL ? *account_ : *default_instance_->account_;
+}
+inline ::app::terminal::AccountResponse* Response::mutable_account() {
+  set_has_account();
+  if (account_ == NULL) account_ = new ::app::terminal::AccountResponse;
+  return account_;
+}
+inline ::app::terminal::AccountResponse* Response::release_account() {
+  clear_has_account();
+  ::app::terminal::AccountResponse* temp = account_;
+  account_ = NULL;
+  return temp;
+}
+inline void Response::set_allocated_account(::app::terminal::AccountResponse* account) {
+  delete account_;
+  account_ = account;
+  if (account) {
+    set_has_account();
+  } else {
+    clear_has_account();
   }
 }
 
@@ -12231,6 +13443,10 @@ inline const EnumDescriptor* GetEnumDescriptor< ::app::terminal::SessionStatus>(
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::app::terminal::AlertLevel>() {
   return ::app::terminal::AlertLevel_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::app::terminal::CustomStatus>() {
+  return ::app::terminal::CustomStatus_descriptor();
 }
 
 }  // namespace google

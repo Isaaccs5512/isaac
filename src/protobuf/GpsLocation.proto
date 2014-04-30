@@ -5,7 +5,7 @@ package pbmsg;
 message GpsLocation
 {
 
-optional fixed32 account_id = 1;
+optional fixed32 id = 1;
 optional double latitude = 2;
 optional double longitude = 3;
 optional bytes timestamp = 4; 

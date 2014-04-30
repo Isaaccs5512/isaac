@@ -164,6 +164,27 @@ inline bool CallPrivilege_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<CallPrivilege>(
     CallPrivilege_descriptor(), name, value);
 }
+enum CustomStatus {
+  Standby = 0,
+  Duty = 1,
+  Turnout = 2,
+  Training = 3
+};
+bool CustomStatus_IsValid(int value);
+const CustomStatus CustomStatus_MIN = Standby;
+const CustomStatus CustomStatus_MAX = Training;
+const int CustomStatus_ARRAYSIZE = CustomStatus_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* CustomStatus_descriptor();
+inline const ::std::string& CustomStatus_Name(CustomStatus value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    CustomStatus_descriptor(), value);
+}
+inline bool CustomStatus_Parse(
+    const ::std::string& name, CustomStatus* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<CustomStatus>(
+    CustomStatus_descriptor(), name, value);
+}
 enum RegisterStatus {
   OffLine = 0,
   OnLine = 1
@@ -800,42 +821,96 @@ class Account : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 ttl() const;
   inline void set_ttl(::google::protobuf::uint32 value);
 
-  // optional .pbmsg.RegisterStatus status = 12;
+  // optional fixed32 gps_ttl = 12;
+  inline bool has_gps_ttl() const;
+  inline void clear_gps_ttl();
+  static const int kGpsTtlFieldNumber = 12;
+  inline ::google::protobuf::uint32 gps_ttl() const;
+  inline void set_gps_ttl(::google::protobuf::uint32 value);
+
+  // optional .pbmsg.RegisterStatus status = 13;
   inline bool has_status() const;
   inline void clear_status();
-  static const int kStatusFieldNumber = 12;
+  static const int kStatusFieldNumber = 13;
   inline ::pbmsg::RegisterStatus status() const;
   inline void set_status(::pbmsg::RegisterStatus value);
 
-  // optional .pbmsg.RegisterStatus sip_status = 13;
+  // optional .pbmsg.RegisterStatus sip_status = 14;
   inline bool has_sip_status() const;
   inline void clear_sip_status();
-  static const int kSipStatusFieldNumber = 13;
+  static const int kSipStatusFieldNumber = 14;
   inline ::pbmsg::RegisterStatus sip_status() const;
   inline void set_sip_status(::pbmsg::RegisterStatus value);
 
-  // optional .pbmsg.Address address = 14;
+  // optional .pbmsg.Address address = 15;
   inline bool has_address() const;
   inline void clear_address();
-  static const int kAddressFieldNumber = 14;
+  static const int kAddressFieldNumber = 15;
   inline const ::pbmsg::Address& address() const;
   inline ::pbmsg::Address* mutable_address();
   inline ::pbmsg::Address* release_address();
   inline void set_allocated_address(::pbmsg::Address* address);
 
-  // optional bool binding = 15;
+  // optional bool binding = 16;
   inline bool has_binding() const;
   inline void clear_binding();
-  static const int kBindingFieldNumber = 15;
+  static const int kBindingFieldNumber = 16;
   inline bool binding() const;
   inline void set_binding(bool value);
 
-  // optional bool subscribing = 16;
+  // optional bool subscribing = 17;
   inline bool has_subscribing() const;
   inline void clear_subscribing();
-  static const int kSubscribingFieldNumber = 16;
+  static const int kSubscribingFieldNumber = 17;
   inline bool subscribing() const;
   inline void set_subscribing(bool value);
+
+  // optional double latitude = 18;
+  inline bool has_latitude() const;
+  inline void clear_latitude();
+  static const int kLatitudeFieldNumber = 18;
+  inline double latitude() const;
+  inline void set_latitude(double value);
+
+  // optional double longitude = 19;
+  inline bool has_longitude() const;
+  inline void clear_longitude();
+  static const int kLongitudeFieldNumber = 19;
+  inline double longitude() const;
+  inline void set_longitude(double value);
+
+  // optional bytes timestamp = 20;
+  inline bool has_timestamp() const;
+  inline void clear_timestamp();
+  static const int kTimestampFieldNumber = 20;
+  inline const ::std::string& timestamp() const;
+  inline void set_timestamp(const ::std::string& value);
+  inline void set_timestamp(const char* value);
+  inline void set_timestamp(const void* value, size_t size);
+  inline ::std::string* mutable_timestamp();
+  inline ::std::string* release_timestamp();
+  inline void set_allocated_timestamp(::std::string* timestamp);
+
+  // optional bool participant_subscribing = 21;
+  inline bool has_participant_subscribing() const;
+  inline void clear_participant_subscribing();
+  static const int kParticipantSubscribingFieldNumber = 21;
+  inline bool participant_subscribing() const;
+  inline void set_participant_subscribing(bool value);
+
+  // optional bool message_subscribing = 22;
+  inline bool has_message_subscribing() const;
+  inline void clear_message_subscribing();
+  static const int kMessageSubscribingFieldNumber = 22;
+  inline bool message_subscribing() const;
+  inline void set_message_subscribing(bool value);
+
+  // optional .pbmsg.CustomStatus custom_status = 23;
+  inline bool has_custom_status() const;
+  inline void clear_custom_status();
+  static const int kCustomStatusFieldNumber = 23;
+  inline ::pbmsg::CustomStatus custom_status() const;
+  inline void set_custom_status(::pbmsg::CustomStatus value);
 
   // @@protoc_insertion_point(class_scope:pbmsg.Account)
  private:
@@ -861,6 +936,8 @@ class Account : public ::google::protobuf::Message {
   inline void clear_has_gps_report_mode();
   inline void set_has_ttl();
   inline void clear_has_ttl();
+  inline void set_has_gps_ttl();
+  inline void clear_has_gps_ttl();
   inline void set_has_status();
   inline void clear_has_status();
   inline void set_has_sip_status();
@@ -871,6 +948,18 @@ class Account : public ::google::protobuf::Message {
   inline void clear_has_binding();
   inline void set_has_subscribing();
   inline void clear_has_subscribing();
+  inline void set_has_latitude();
+  inline void clear_has_latitude();
+  inline void set_has_longitude();
+  inline void clear_has_longitude();
+  inline void set_has_timestamp();
+  inline void clear_has_timestamp();
+  inline void set_has_participant_subscribing();
+  inline void clear_has_participant_subscribing();
+  inline void set_has_message_subscribing();
+  inline void clear_has_message_subscribing();
+  inline void set_has_custom_status();
+  inline void clear_has_custom_status();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -885,14 +974,21 @@ class Account : public ::google::protobuf::Message {
   int token_privilege_;
   int gps_report_mode_;
   ::google::protobuf::uint32 ttl_;
+  ::google::protobuf::uint32 gps_ttl_;
   int status_;
-  ::pbmsg::Address* address_;
   int sip_status_;
+  ::pbmsg::Address* address_;
+  double latitude_;
+  double longitude_;
   bool binding_;
   bool subscribing_;
+  bool participant_subscribing_;
+  bool message_subscribing_;
+  int custom_status_;
+  ::std::string* timestamp_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(16 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(23 + 31) / 32];
 
   friend void  protobuf_AddDesc_AppData_2eproto();
   friend void protobuf_AssignDesc_AppData_2eproto();
@@ -1272,12 +1368,19 @@ class Participant : public ::google::protobuf::Message {
   inline ::pbmsg::SessionStatus status() const;
   inline void set_status(::pbmsg::SessionStatus value);
 
-  // optional bool sync_added = 9;
-  inline bool has_sync_added() const;
-  inline void clear_sync_added();
-  static const int kSyncAddedFieldNumber = 9;
-  inline bool sync_added() const;
-  inline void set_sync_added(bool value);
+  // optional bool participant_subscribing = 9;
+  inline bool has_participant_subscribing() const;
+  inline void clear_participant_subscribing();
+  static const int kParticipantSubscribingFieldNumber = 9;
+  inline bool participant_subscribing() const;
+  inline void set_participant_subscribing(bool value);
+
+  // optional bool message_subscribing = 10;
+  inline bool has_message_subscribing() const;
+  inline void clear_message_subscribing();
+  static const int kMessageSubscribingFieldNumber = 10;
+  inline bool message_subscribing() const;
+  inline void set_message_subscribing(bool value);
 
   // @@protoc_insertion_point(class_scope:pbmsg.Participant)
  private:
@@ -1297,8 +1400,10 @@ class Participant : public ::google::protobuf::Message {
   inline void clear_has_join_timestamp();
   inline void set_has_status();
   inline void clear_has_status();
-  inline void set_has_sync_added();
-  inline void clear_has_sync_added();
+  inline void set_has_participant_subscribing();
+  inline void clear_has_participant_subscribing();
+  inline void set_has_message_subscribing();
+  inline void clear_has_message_subscribing();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1310,10 +1415,11 @@ class Participant : public ::google::protobuf::Message {
   int token_privilege_;
   ::std::string* join_timestamp_;
   int status_;
-  bool sync_added_;
+  bool participant_subscribing_;
+  bool message_subscribing_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(9 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(10 + 31) / 32];
 
   friend void  protobuf_AddDesc_AppData_2eproto();
   friend void protobuf_AssignDesc_AppData_2eproto();
@@ -1478,6 +1584,25 @@ class Group : public ::google::protobuf::Message {
   inline ::pbmsg::Entity* release_record_server();
   inline void set_allocated_record_server(::pbmsg::Entity* record_server);
 
+  // optional bool include_listen_users = 12;
+  inline bool has_include_listen_users() const;
+  inline void clear_include_listen_users();
+  static const int kIncludeListenUsersFieldNumber = 12;
+  inline bool include_listen_users() const;
+  inline void set_include_listen_users(bool value);
+
+  // repeated .pbmsg.Entity listen_users = 13;
+  inline int listen_users_size() const;
+  inline void clear_listen_users();
+  static const int kListenUsersFieldNumber = 13;
+  inline const ::pbmsg::Entity& listen_users(int index) const;
+  inline ::pbmsg::Entity* mutable_listen_users(int index);
+  inline ::pbmsg::Entity* add_listen_users();
+  inline const ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >&
+      listen_users() const;
+  inline ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >*
+      mutable_listen_users();
+
   // @@protoc_insertion_point(class_scope:pbmsg.Group)
  private:
   inline void set_has_base();
@@ -1500,6 +1625,8 @@ class Group : public ::google::protobuf::Message {
   inline void clear_has_record_status();
   inline void set_has_record_server();
   inline void clear_has_record_server();
+  inline void set_has_include_listen_users();
+  inline void clear_has_include_listen_users();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1507,16 +1634,18 @@ class Group : public ::google::protobuf::Message {
   ::pbmsg::Entity* owner_;
   ::std::string* number_;
   ::std::string* short_number_;
+  ::google::protobuf::RepeatedPtrField< ::pbmsg::Participant > participants_;
   bool sealed_;
   bool include_participants_;
+  bool include_listen_users_;
   int record_type_;
-  ::google::protobuf::RepeatedPtrField< ::pbmsg::Participant > participants_;
   ::pbmsg::Entity* recorder_;
   ::pbmsg::Entity* record_server_;
+  ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity > listen_users_;
   int record_status_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(11 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
 
   friend void  protobuf_AddDesc_AppData_2eproto();
   friend void protobuf_AssignDesc_AppData_2eproto();
@@ -2617,15 +2746,37 @@ inline void Account::set_ttl(::google::protobuf::uint32 value) {
   ttl_ = value;
 }
 
-// optional .pbmsg.RegisterStatus status = 12;
-inline bool Account::has_status() const {
+// optional fixed32 gps_ttl = 12;
+inline bool Account::has_gps_ttl() const {
   return (_has_bits_[0] & 0x00000800u) != 0;
 }
-inline void Account::set_has_status() {
+inline void Account::set_has_gps_ttl() {
   _has_bits_[0] |= 0x00000800u;
 }
-inline void Account::clear_has_status() {
+inline void Account::clear_has_gps_ttl() {
   _has_bits_[0] &= ~0x00000800u;
+}
+inline void Account::clear_gps_ttl() {
+  gps_ttl_ = 0u;
+  clear_has_gps_ttl();
+}
+inline ::google::protobuf::uint32 Account::gps_ttl() const {
+  return gps_ttl_;
+}
+inline void Account::set_gps_ttl(::google::protobuf::uint32 value) {
+  set_has_gps_ttl();
+  gps_ttl_ = value;
+}
+
+// optional .pbmsg.RegisterStatus status = 13;
+inline bool Account::has_status() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void Account::set_has_status() {
+  _has_bits_[0] |= 0x00001000u;
+}
+inline void Account::clear_has_status() {
+  _has_bits_[0] &= ~0x00001000u;
 }
 inline void Account::clear_status() {
   status_ = 0;
@@ -2640,15 +2791,15 @@ inline void Account::set_status(::pbmsg::RegisterStatus value) {
   status_ = value;
 }
 
-// optional .pbmsg.RegisterStatus sip_status = 13;
+// optional .pbmsg.RegisterStatus sip_status = 14;
 inline bool Account::has_sip_status() const {
-  return (_has_bits_[0] & 0x00001000u) != 0;
+  return (_has_bits_[0] & 0x00002000u) != 0;
 }
 inline void Account::set_has_sip_status() {
-  _has_bits_[0] |= 0x00001000u;
+  _has_bits_[0] |= 0x00002000u;
 }
 inline void Account::clear_has_sip_status() {
-  _has_bits_[0] &= ~0x00001000u;
+  _has_bits_[0] &= ~0x00002000u;
 }
 inline void Account::clear_sip_status() {
   sip_status_ = 0;
@@ -2663,15 +2814,15 @@ inline void Account::set_sip_status(::pbmsg::RegisterStatus value) {
   sip_status_ = value;
 }
 
-// optional .pbmsg.Address address = 14;
+// optional .pbmsg.Address address = 15;
 inline bool Account::has_address() const {
-  return (_has_bits_[0] & 0x00002000u) != 0;
+  return (_has_bits_[0] & 0x00004000u) != 0;
 }
 inline void Account::set_has_address() {
-  _has_bits_[0] |= 0x00002000u;
+  _has_bits_[0] |= 0x00004000u;
 }
 inline void Account::clear_has_address() {
-  _has_bits_[0] &= ~0x00002000u;
+  _has_bits_[0] &= ~0x00004000u;
 }
 inline void Account::clear_address() {
   if (address_ != NULL) address_->::pbmsg::Address::Clear();
@@ -2701,15 +2852,15 @@ inline void Account::set_allocated_address(::pbmsg::Address* address) {
   }
 }
 
-// optional bool binding = 15;
+// optional bool binding = 16;
 inline bool Account::has_binding() const {
-  return (_has_bits_[0] & 0x00004000u) != 0;
+  return (_has_bits_[0] & 0x00008000u) != 0;
 }
 inline void Account::set_has_binding() {
-  _has_bits_[0] |= 0x00004000u;
+  _has_bits_[0] |= 0x00008000u;
 }
 inline void Account::clear_has_binding() {
-  _has_bits_[0] &= ~0x00004000u;
+  _has_bits_[0] &= ~0x00008000u;
 }
 inline void Account::clear_binding() {
   binding_ = false;
@@ -2723,15 +2874,15 @@ inline void Account::set_binding(bool value) {
   binding_ = value;
 }
 
-// optional bool subscribing = 16;
+// optional bool subscribing = 17;
 inline bool Account::has_subscribing() const {
-  return (_has_bits_[0] & 0x00008000u) != 0;
+  return (_has_bits_[0] & 0x00010000u) != 0;
 }
 inline void Account::set_has_subscribing() {
-  _has_bits_[0] |= 0x00008000u;
+  _has_bits_[0] |= 0x00010000u;
 }
 inline void Account::clear_has_subscribing() {
-  _has_bits_[0] &= ~0x00008000u;
+  _has_bits_[0] &= ~0x00010000u;
 }
 inline void Account::clear_subscribing() {
   subscribing_ = false;
@@ -2743,6 +2894,187 @@ inline bool Account::subscribing() const {
 inline void Account::set_subscribing(bool value) {
   set_has_subscribing();
   subscribing_ = value;
+}
+
+// optional double latitude = 18;
+inline bool Account::has_latitude() const {
+  return (_has_bits_[0] & 0x00020000u) != 0;
+}
+inline void Account::set_has_latitude() {
+  _has_bits_[0] |= 0x00020000u;
+}
+inline void Account::clear_has_latitude() {
+  _has_bits_[0] &= ~0x00020000u;
+}
+inline void Account::clear_latitude() {
+  latitude_ = 0;
+  clear_has_latitude();
+}
+inline double Account::latitude() const {
+  return latitude_;
+}
+inline void Account::set_latitude(double value) {
+  set_has_latitude();
+  latitude_ = value;
+}
+
+// optional double longitude = 19;
+inline bool Account::has_longitude() const {
+  return (_has_bits_[0] & 0x00040000u) != 0;
+}
+inline void Account::set_has_longitude() {
+  _has_bits_[0] |= 0x00040000u;
+}
+inline void Account::clear_has_longitude() {
+  _has_bits_[0] &= ~0x00040000u;
+}
+inline void Account::clear_longitude() {
+  longitude_ = 0;
+  clear_has_longitude();
+}
+inline double Account::longitude() const {
+  return longitude_;
+}
+inline void Account::set_longitude(double value) {
+  set_has_longitude();
+  longitude_ = value;
+}
+
+// optional bytes timestamp = 20;
+inline bool Account::has_timestamp() const {
+  return (_has_bits_[0] & 0x00080000u) != 0;
+}
+inline void Account::set_has_timestamp() {
+  _has_bits_[0] |= 0x00080000u;
+}
+inline void Account::clear_has_timestamp() {
+  _has_bits_[0] &= ~0x00080000u;
+}
+inline void Account::clear_timestamp() {
+  if (timestamp_ != &::google::protobuf::internal::kEmptyString) {
+    timestamp_->clear();
+  }
+  clear_has_timestamp();
+}
+inline const ::std::string& Account::timestamp() const {
+  return *timestamp_;
+}
+inline void Account::set_timestamp(const ::std::string& value) {
+  set_has_timestamp();
+  if (timestamp_ == &::google::protobuf::internal::kEmptyString) {
+    timestamp_ = new ::std::string;
+  }
+  timestamp_->assign(value);
+}
+inline void Account::set_timestamp(const char* value) {
+  set_has_timestamp();
+  if (timestamp_ == &::google::protobuf::internal::kEmptyString) {
+    timestamp_ = new ::std::string;
+  }
+  timestamp_->assign(value);
+}
+inline void Account::set_timestamp(const void* value, size_t size) {
+  set_has_timestamp();
+  if (timestamp_ == &::google::protobuf::internal::kEmptyString) {
+    timestamp_ = new ::std::string;
+  }
+  timestamp_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Account::mutable_timestamp() {
+  set_has_timestamp();
+  if (timestamp_ == &::google::protobuf::internal::kEmptyString) {
+    timestamp_ = new ::std::string;
+  }
+  return timestamp_;
+}
+inline ::std::string* Account::release_timestamp() {
+  clear_has_timestamp();
+  if (timestamp_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = timestamp_;
+    timestamp_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void Account::set_allocated_timestamp(::std::string* timestamp) {
+  if (timestamp_ != &::google::protobuf::internal::kEmptyString) {
+    delete timestamp_;
+  }
+  if (timestamp) {
+    set_has_timestamp();
+    timestamp_ = timestamp;
+  } else {
+    clear_has_timestamp();
+    timestamp_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// optional bool participant_subscribing = 21;
+inline bool Account::has_participant_subscribing() const {
+  return (_has_bits_[0] & 0x00100000u) != 0;
+}
+inline void Account::set_has_participant_subscribing() {
+  _has_bits_[0] |= 0x00100000u;
+}
+inline void Account::clear_has_participant_subscribing() {
+  _has_bits_[0] &= ~0x00100000u;
+}
+inline void Account::clear_participant_subscribing() {
+  participant_subscribing_ = false;
+  clear_has_participant_subscribing();
+}
+inline bool Account::participant_subscribing() const {
+  return participant_subscribing_;
+}
+inline void Account::set_participant_subscribing(bool value) {
+  set_has_participant_subscribing();
+  participant_subscribing_ = value;
+}
+
+// optional bool message_subscribing = 22;
+inline bool Account::has_message_subscribing() const {
+  return (_has_bits_[0] & 0x00200000u) != 0;
+}
+inline void Account::set_has_message_subscribing() {
+  _has_bits_[0] |= 0x00200000u;
+}
+inline void Account::clear_has_message_subscribing() {
+  _has_bits_[0] &= ~0x00200000u;
+}
+inline void Account::clear_message_subscribing() {
+  message_subscribing_ = false;
+  clear_has_message_subscribing();
+}
+inline bool Account::message_subscribing() const {
+  return message_subscribing_;
+}
+inline void Account::set_message_subscribing(bool value) {
+  set_has_message_subscribing();
+  message_subscribing_ = value;
+}
+
+// optional .pbmsg.CustomStatus custom_status = 23;
+inline bool Account::has_custom_status() const {
+  return (_has_bits_[0] & 0x00400000u) != 0;
+}
+inline void Account::set_has_custom_status() {
+  _has_bits_[0] |= 0x00400000u;
+}
+inline void Account::clear_has_custom_status() {
+  _has_bits_[0] &= ~0x00400000u;
+}
+inline void Account::clear_custom_status() {
+  custom_status_ = 0;
+  clear_has_custom_status();
+}
+inline ::pbmsg::CustomStatus Account::custom_status() const {
+  return static_cast< ::pbmsg::CustomStatus >(custom_status_);
+}
+inline void Account::set_custom_status(::pbmsg::CustomStatus value) {
+  assert(::pbmsg::CustomStatus_IsValid(value));
+  set_has_custom_status();
+  custom_status_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -3331,26 +3663,48 @@ inline void Participant::set_status(::pbmsg::SessionStatus value) {
   status_ = value;
 }
 
-// optional bool sync_added = 9;
-inline bool Participant::has_sync_added() const {
+// optional bool participant_subscribing = 9;
+inline bool Participant::has_participant_subscribing() const {
   return (_has_bits_[0] & 0x00000100u) != 0;
 }
-inline void Participant::set_has_sync_added() {
+inline void Participant::set_has_participant_subscribing() {
   _has_bits_[0] |= 0x00000100u;
 }
-inline void Participant::clear_has_sync_added() {
+inline void Participant::clear_has_participant_subscribing() {
   _has_bits_[0] &= ~0x00000100u;
 }
-inline void Participant::clear_sync_added() {
-  sync_added_ = false;
-  clear_has_sync_added();
+inline void Participant::clear_participant_subscribing() {
+  participant_subscribing_ = false;
+  clear_has_participant_subscribing();
 }
-inline bool Participant::sync_added() const {
-  return sync_added_;
+inline bool Participant::participant_subscribing() const {
+  return participant_subscribing_;
 }
-inline void Participant::set_sync_added(bool value) {
-  set_has_sync_added();
-  sync_added_ = value;
+inline void Participant::set_participant_subscribing(bool value) {
+  set_has_participant_subscribing();
+  participant_subscribing_ = value;
+}
+
+// optional bool message_subscribing = 10;
+inline bool Participant::has_message_subscribing() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void Participant::set_has_message_subscribing() {
+  _has_bits_[0] |= 0x00000200u;
+}
+inline void Participant::clear_has_message_subscribing() {
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline void Participant::clear_message_subscribing() {
+  message_subscribing_ = false;
+  clear_has_message_subscribing();
+}
+inline bool Participant::message_subscribing() const {
+  return message_subscribing_;
+}
+inline void Participant::set_message_subscribing(bool value) {
+  set_has_message_subscribing();
+  message_subscribing_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -3762,6 +4116,53 @@ inline void Group::set_allocated_record_server(::pbmsg::Entity* record_server) {
   } else {
     clear_has_record_server();
   }
+}
+
+// optional bool include_listen_users = 12;
+inline bool Group::has_include_listen_users() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+inline void Group::set_has_include_listen_users() {
+  _has_bits_[0] |= 0x00000800u;
+}
+inline void Group::clear_has_include_listen_users() {
+  _has_bits_[0] &= ~0x00000800u;
+}
+inline void Group::clear_include_listen_users() {
+  include_listen_users_ = false;
+  clear_has_include_listen_users();
+}
+inline bool Group::include_listen_users() const {
+  return include_listen_users_;
+}
+inline void Group::set_include_listen_users(bool value) {
+  set_has_include_listen_users();
+  include_listen_users_ = value;
+}
+
+// repeated .pbmsg.Entity listen_users = 13;
+inline int Group::listen_users_size() const {
+  return listen_users_.size();
+}
+inline void Group::clear_listen_users() {
+  listen_users_.Clear();
+}
+inline const ::pbmsg::Entity& Group::listen_users(int index) const {
+  return listen_users_.Get(index);
+}
+inline ::pbmsg::Entity* Group::mutable_listen_users(int index) {
+  return listen_users_.Mutable(index);
+}
+inline ::pbmsg::Entity* Group::add_listen_users() {
+  return listen_users_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >&
+Group::listen_users() const {
+  return listen_users_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >*
+Group::mutable_listen_users() {
+  return &listen_users_;
 }
 
 // -------------------------------------------------------------------
@@ -4375,6 +4776,10 @@ inline const EnumDescriptor* GetEnumDescriptor< ::pbmsg::AccountServiceStatus>()
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::pbmsg::CallPrivilege>() {
   return ::pbmsg::CallPrivilege_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::pbmsg::CustomStatus>() {
+  return ::pbmsg::CustomStatus_descriptor();
 }
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::pbmsg::RegisterStatus>() {

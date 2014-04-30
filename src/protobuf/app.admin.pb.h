@@ -27,6 +27,7 @@
 #include <google/protobuf/unknown_field_set.h>
 #include "AppData.pb.h"
 #include "EntityData.pb.h"
+#include "Configure.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace app {
@@ -46,7 +47,6 @@ class DeleteEntityRequest;
 class EntityRequest;
 class EntityResponse;
 class EntityNotification;
-class SystemConfigure;
 class GetSystemConfigureResponse;
 class SetSystemConfigureRequest;
 class Request;
@@ -896,123 +896,6 @@ class EntityNotification : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class SystemConfigure : public ::google::protobuf::Message {
- public:
-  SystemConfigure();
-  virtual ~SystemConfigure();
-
-  SystemConfigure(const SystemConfigure& from);
-
-  inline SystemConfigure& operator=(const SystemConfigure& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const SystemConfigure& default_instance();
-
-  void Swap(SystemConfigure* other);
-
-  // implements Message ----------------------------------------------
-
-  SystemConfigure* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const SystemConfigure& from);
-  void MergeFrom(const SystemConfigure& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // optional string domain = 1;
-  inline bool has_domain() const;
-  inline void clear_domain();
-  static const int kDomainFieldNumber = 1;
-  inline const ::std::string& domain() const;
-  inline void set_domain(const ::std::string& value);
-  inline void set_domain(const char* value);
-  inline void set_domain(const char* value, size_t size);
-  inline ::std::string* mutable_domain();
-  inline ::std::string* release_domain();
-  inline void set_allocated_domain(::std::string* domain);
-
-  // optional string poc_server = 2;
-  inline bool has_poc_server() const;
-  inline void clear_poc_server();
-  static const int kPocServerFieldNumber = 2;
-  inline const ::std::string& poc_server() const;
-  inline void set_poc_server(const ::std::string& value);
-  inline void set_poc_server(const char* value);
-  inline void set_poc_server(const char* value, size_t size);
-  inline ::std::string* mutable_poc_server();
-  inline ::std::string* release_poc_server();
-  inline void set_allocated_poc_server(::std::string* poc_server);
-
-  // optional string xmd_server = 3;
-  inline bool has_xmd_server() const;
-  inline void clear_xmd_server();
-  static const int kXmdServerFieldNumber = 3;
-  inline const ::std::string& xmd_server() const;
-  inline void set_xmd_server(const ::std::string& value);
-  inline void set_xmd_server(const char* value);
-  inline void set_xmd_server(const char* value, size_t size);
-  inline ::std::string* mutable_xmd_server();
-  inline ::std::string* release_xmd_server();
-  inline void set_allocated_xmd_server(::std::string* xmd_server);
-
-  // @@protoc_insertion_point(class_scope:app.admin.SystemConfigure)
- private:
-  inline void set_has_domain();
-  inline void clear_has_domain();
-  inline void set_has_poc_server();
-  inline void clear_has_poc_server();
-  inline void set_has_xmd_server();
-  inline void clear_has_xmd_server();
-
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-
-  ::std::string* domain_;
-  ::std::string* poc_server_;
-  ::std::string* xmd_server_;
-
-  mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
-
-  friend void  protobuf_AddDesc_app_2eadmin_2eproto();
-  friend void protobuf_AssignDesc_app_2eadmin_2eproto();
-  friend void protobuf_ShutdownFile_app_2eadmin_2eproto();
-
-  void InitAsDefaultInstance();
-  static SystemConfigure* default_instance_;
-};
-// -------------------------------------------------------------------
-
 class GetSystemConfigureResponse : public ::google::protobuf::Message {
  public:
   GetSystemConfigureResponse();
@@ -1067,14 +950,14 @@ class GetSystemConfigureResponse : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .app.admin.SystemConfigure configure = 1;
+  // required .pbmsg.Configure configure = 1;
   inline bool has_configure() const;
   inline void clear_configure();
   static const int kConfigureFieldNumber = 1;
-  inline const ::app::admin::SystemConfigure& configure() const;
-  inline ::app::admin::SystemConfigure* mutable_configure();
-  inline ::app::admin::SystemConfigure* release_configure();
-  inline void set_allocated_configure(::app::admin::SystemConfigure* configure);
+  inline const ::pbmsg::Configure& configure() const;
+  inline ::pbmsg::Configure* mutable_configure();
+  inline ::pbmsg::Configure* release_configure();
+  inline void set_allocated_configure(::pbmsg::Configure* configure);
 
   // @@protoc_insertion_point(class_scope:app.admin.GetSystemConfigureResponse)
  private:
@@ -1083,7 +966,7 @@ class GetSystemConfigureResponse : public ::google::protobuf::Message {
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::app::admin::SystemConfigure* configure_;
+  ::pbmsg::Configure* configure_;
 
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
@@ -1151,14 +1034,14 @@ class SetSystemConfigureRequest : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .app.admin.SystemConfigure configure = 1;
+  // required .pbmsg.Configure configure = 1;
   inline bool has_configure() const;
   inline void clear_configure();
   static const int kConfigureFieldNumber = 1;
-  inline const ::app::admin::SystemConfigure& configure() const;
-  inline ::app::admin::SystemConfigure* mutable_configure();
-  inline ::app::admin::SystemConfigure* release_configure();
-  inline void set_allocated_configure(::app::admin::SystemConfigure* configure);
+  inline const ::pbmsg::Configure& configure() const;
+  inline ::pbmsg::Configure* mutable_configure();
+  inline ::pbmsg::Configure* release_configure();
+  inline void set_allocated_configure(::pbmsg::Configure* configure);
 
   // @@protoc_insertion_point(class_scope:app.admin.SetSystemConfigureRequest)
  private:
@@ -1167,7 +1050,7 @@ class SetSystemConfigureRequest : public ::google::protobuf::Message {
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::app::admin::SystemConfigure* configure_;
+  ::pbmsg::Configure* configure_;
 
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
@@ -1244,14 +1127,14 @@ class Request : public ::google::protobuf::Message {
   inline ::app::admin::LoginRequest* release_login();
   inline void set_allocated_login(::app::admin::LoginRequest* login);
 
-  // optional .app.admin.AppendEntityRequest app_entity = 2;
-  inline bool has_app_entity() const;
-  inline void clear_app_entity();
-  static const int kAppEntityFieldNumber = 2;
-  inline const ::app::admin::AppendEntityRequest& app_entity() const;
-  inline ::app::admin::AppendEntityRequest* mutable_app_entity();
-  inline ::app::admin::AppendEntityRequest* release_app_entity();
-  inline void set_allocated_app_entity(::app::admin::AppendEntityRequest* app_entity);
+  // optional .app.admin.AppendEntityRequest append_entity = 2;
+  inline bool has_append_entity() const;
+  inline void clear_append_entity();
+  static const int kAppendEntityFieldNumber = 2;
+  inline const ::app::admin::AppendEntityRequest& append_entity() const;
+  inline ::app::admin::AppendEntityRequest* mutable_append_entity();
+  inline ::app::admin::AppendEntityRequest* release_append_entity();
+  inline void set_allocated_append_entity(::app::admin::AppendEntityRequest* append_entity);
 
   // optional .app.admin.ModifyEntityRequest modify_entity = 3;
   inline bool has_modify_entity() const;
@@ -1293,8 +1176,8 @@ class Request : public ::google::protobuf::Message {
  private:
   inline void set_has_login();
   inline void clear_has_login();
-  inline void set_has_app_entity();
-  inline void clear_has_app_entity();
+  inline void set_has_append_entity();
+  inline void clear_has_append_entity();
   inline void set_has_modify_entity();
   inline void clear_has_modify_entity();
   inline void set_has_delete_entity();
@@ -1307,7 +1190,7 @@ class Request : public ::google::protobuf::Message {
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::app::admin::LoginRequest* login_;
-  ::app::admin::AppendEntityRequest* app_entity_;
+  ::app::admin::AppendEntityRequest* append_entity_;
   ::app::admin::ModifyEntityRequest* modify_entity_;
   ::app::admin::DeleteEntityRequest* delete_entity_;
   ::app::admin::EntityRequest* entity_;
@@ -2252,223 +2135,9 @@ inline void EntityNotification::set_allocated_data(::pbmsg::EntityData* data) {
 
 // -------------------------------------------------------------------
 
-// SystemConfigure
-
-// optional string domain = 1;
-inline bool SystemConfigure::has_domain() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void SystemConfigure::set_has_domain() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void SystemConfigure::clear_has_domain() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void SystemConfigure::clear_domain() {
-  if (domain_ != &::google::protobuf::internal::kEmptyString) {
-    domain_->clear();
-  }
-  clear_has_domain();
-}
-inline const ::std::string& SystemConfigure::domain() const {
-  return *domain_;
-}
-inline void SystemConfigure::set_domain(const ::std::string& value) {
-  set_has_domain();
-  if (domain_ == &::google::protobuf::internal::kEmptyString) {
-    domain_ = new ::std::string;
-  }
-  domain_->assign(value);
-}
-inline void SystemConfigure::set_domain(const char* value) {
-  set_has_domain();
-  if (domain_ == &::google::protobuf::internal::kEmptyString) {
-    domain_ = new ::std::string;
-  }
-  domain_->assign(value);
-}
-inline void SystemConfigure::set_domain(const char* value, size_t size) {
-  set_has_domain();
-  if (domain_ == &::google::protobuf::internal::kEmptyString) {
-    domain_ = new ::std::string;
-  }
-  domain_->assign(reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* SystemConfigure::mutable_domain() {
-  set_has_domain();
-  if (domain_ == &::google::protobuf::internal::kEmptyString) {
-    domain_ = new ::std::string;
-  }
-  return domain_;
-}
-inline ::std::string* SystemConfigure::release_domain() {
-  clear_has_domain();
-  if (domain_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = domain_;
-    domain_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
-}
-inline void SystemConfigure::set_allocated_domain(::std::string* domain) {
-  if (domain_ != &::google::protobuf::internal::kEmptyString) {
-    delete domain_;
-  }
-  if (domain) {
-    set_has_domain();
-    domain_ = domain;
-  } else {
-    clear_has_domain();
-    domain_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  }
-}
-
-// optional string poc_server = 2;
-inline bool SystemConfigure::has_poc_server() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void SystemConfigure::set_has_poc_server() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void SystemConfigure::clear_has_poc_server() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void SystemConfigure::clear_poc_server() {
-  if (poc_server_ != &::google::protobuf::internal::kEmptyString) {
-    poc_server_->clear();
-  }
-  clear_has_poc_server();
-}
-inline const ::std::string& SystemConfigure::poc_server() const {
-  return *poc_server_;
-}
-inline void SystemConfigure::set_poc_server(const ::std::string& value) {
-  set_has_poc_server();
-  if (poc_server_ == &::google::protobuf::internal::kEmptyString) {
-    poc_server_ = new ::std::string;
-  }
-  poc_server_->assign(value);
-}
-inline void SystemConfigure::set_poc_server(const char* value) {
-  set_has_poc_server();
-  if (poc_server_ == &::google::protobuf::internal::kEmptyString) {
-    poc_server_ = new ::std::string;
-  }
-  poc_server_->assign(value);
-}
-inline void SystemConfigure::set_poc_server(const char* value, size_t size) {
-  set_has_poc_server();
-  if (poc_server_ == &::google::protobuf::internal::kEmptyString) {
-    poc_server_ = new ::std::string;
-  }
-  poc_server_->assign(reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* SystemConfigure::mutable_poc_server() {
-  set_has_poc_server();
-  if (poc_server_ == &::google::protobuf::internal::kEmptyString) {
-    poc_server_ = new ::std::string;
-  }
-  return poc_server_;
-}
-inline ::std::string* SystemConfigure::release_poc_server() {
-  clear_has_poc_server();
-  if (poc_server_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = poc_server_;
-    poc_server_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
-}
-inline void SystemConfigure::set_allocated_poc_server(::std::string* poc_server) {
-  if (poc_server_ != &::google::protobuf::internal::kEmptyString) {
-    delete poc_server_;
-  }
-  if (poc_server) {
-    set_has_poc_server();
-    poc_server_ = poc_server;
-  } else {
-    clear_has_poc_server();
-    poc_server_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  }
-}
-
-// optional string xmd_server = 3;
-inline bool SystemConfigure::has_xmd_server() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void SystemConfigure::set_has_xmd_server() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void SystemConfigure::clear_has_xmd_server() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void SystemConfigure::clear_xmd_server() {
-  if (xmd_server_ != &::google::protobuf::internal::kEmptyString) {
-    xmd_server_->clear();
-  }
-  clear_has_xmd_server();
-}
-inline const ::std::string& SystemConfigure::xmd_server() const {
-  return *xmd_server_;
-}
-inline void SystemConfigure::set_xmd_server(const ::std::string& value) {
-  set_has_xmd_server();
-  if (xmd_server_ == &::google::protobuf::internal::kEmptyString) {
-    xmd_server_ = new ::std::string;
-  }
-  xmd_server_->assign(value);
-}
-inline void SystemConfigure::set_xmd_server(const char* value) {
-  set_has_xmd_server();
-  if (xmd_server_ == &::google::protobuf::internal::kEmptyString) {
-    xmd_server_ = new ::std::string;
-  }
-  xmd_server_->assign(value);
-}
-inline void SystemConfigure::set_xmd_server(const char* value, size_t size) {
-  set_has_xmd_server();
-  if (xmd_server_ == &::google::protobuf::internal::kEmptyString) {
-    xmd_server_ = new ::std::string;
-  }
-  xmd_server_->assign(reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* SystemConfigure::mutable_xmd_server() {
-  set_has_xmd_server();
-  if (xmd_server_ == &::google::protobuf::internal::kEmptyString) {
-    xmd_server_ = new ::std::string;
-  }
-  return xmd_server_;
-}
-inline ::std::string* SystemConfigure::release_xmd_server() {
-  clear_has_xmd_server();
-  if (xmd_server_ == &::google::protobuf::internal::kEmptyString) {
-    return NULL;
-  } else {
-    ::std::string* temp = xmd_server_;
-    xmd_server_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-    return temp;
-  }
-}
-inline void SystemConfigure::set_allocated_xmd_server(::std::string* xmd_server) {
-  if (xmd_server_ != &::google::protobuf::internal::kEmptyString) {
-    delete xmd_server_;
-  }
-  if (xmd_server) {
-    set_has_xmd_server();
-    xmd_server_ = xmd_server;
-  } else {
-    clear_has_xmd_server();
-    xmd_server_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  }
-}
-
-// -------------------------------------------------------------------
-
 // GetSystemConfigureResponse
 
-// required .app.admin.SystemConfigure configure = 1;
+// required .pbmsg.Configure configure = 1;
 inline bool GetSystemConfigureResponse::has_configure() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -2479,24 +2148,24 @@ inline void GetSystemConfigureResponse::clear_has_configure() {
   _has_bits_[0] &= ~0x00000001u;
 }
 inline void GetSystemConfigureResponse::clear_configure() {
-  if (configure_ != NULL) configure_->::app::admin::SystemConfigure::Clear();
+  if (configure_ != NULL) configure_->::pbmsg::Configure::Clear();
   clear_has_configure();
 }
-inline const ::app::admin::SystemConfigure& GetSystemConfigureResponse::configure() const {
+inline const ::pbmsg::Configure& GetSystemConfigureResponse::configure() const {
   return configure_ != NULL ? *configure_ : *default_instance_->configure_;
 }
-inline ::app::admin::SystemConfigure* GetSystemConfigureResponse::mutable_configure() {
+inline ::pbmsg::Configure* GetSystemConfigureResponse::mutable_configure() {
   set_has_configure();
-  if (configure_ == NULL) configure_ = new ::app::admin::SystemConfigure;
+  if (configure_ == NULL) configure_ = new ::pbmsg::Configure;
   return configure_;
 }
-inline ::app::admin::SystemConfigure* GetSystemConfigureResponse::release_configure() {
+inline ::pbmsg::Configure* GetSystemConfigureResponse::release_configure() {
   clear_has_configure();
-  ::app::admin::SystemConfigure* temp = configure_;
+  ::pbmsg::Configure* temp = configure_;
   configure_ = NULL;
   return temp;
 }
-inline void GetSystemConfigureResponse::set_allocated_configure(::app::admin::SystemConfigure* configure) {
+inline void GetSystemConfigureResponse::set_allocated_configure(::pbmsg::Configure* configure) {
   delete configure_;
   configure_ = configure;
   if (configure) {
@@ -2510,7 +2179,7 @@ inline void GetSystemConfigureResponse::set_allocated_configure(::app::admin::Sy
 
 // SetSystemConfigureRequest
 
-// required .app.admin.SystemConfigure configure = 1;
+// required .pbmsg.Configure configure = 1;
 inline bool SetSystemConfigureRequest::has_configure() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -2521,24 +2190,24 @@ inline void SetSystemConfigureRequest::clear_has_configure() {
   _has_bits_[0] &= ~0x00000001u;
 }
 inline void SetSystemConfigureRequest::clear_configure() {
-  if (configure_ != NULL) configure_->::app::admin::SystemConfigure::Clear();
+  if (configure_ != NULL) configure_->::pbmsg::Configure::Clear();
   clear_has_configure();
 }
-inline const ::app::admin::SystemConfigure& SetSystemConfigureRequest::configure() const {
+inline const ::pbmsg::Configure& SetSystemConfigureRequest::configure() const {
   return configure_ != NULL ? *configure_ : *default_instance_->configure_;
 }
-inline ::app::admin::SystemConfigure* SetSystemConfigureRequest::mutable_configure() {
+inline ::pbmsg::Configure* SetSystemConfigureRequest::mutable_configure() {
   set_has_configure();
-  if (configure_ == NULL) configure_ = new ::app::admin::SystemConfigure;
+  if (configure_ == NULL) configure_ = new ::pbmsg::Configure;
   return configure_;
 }
-inline ::app::admin::SystemConfigure* SetSystemConfigureRequest::release_configure() {
+inline ::pbmsg::Configure* SetSystemConfigureRequest::release_configure() {
   clear_has_configure();
-  ::app::admin::SystemConfigure* temp = configure_;
+  ::pbmsg::Configure* temp = configure_;
   configure_ = NULL;
   return temp;
 }
-inline void SetSystemConfigureRequest::set_allocated_configure(::app::admin::SystemConfigure* configure) {
+inline void SetSystemConfigureRequest::set_allocated_configure(::pbmsg::Configure* configure) {
   delete configure_;
   configure_ = configure;
   if (configure) {
@@ -2590,41 +2259,41 @@ inline void Request::set_allocated_login(::app::admin::LoginRequest* login) {
   }
 }
 
-// optional .app.admin.AppendEntityRequest app_entity = 2;
-inline bool Request::has_app_entity() const {
+// optional .app.admin.AppendEntityRequest append_entity = 2;
+inline bool Request::has_append_entity() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Request::set_has_app_entity() {
+inline void Request::set_has_append_entity() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Request::clear_has_app_entity() {
+inline void Request::clear_has_append_entity() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void Request::clear_app_entity() {
-  if (app_entity_ != NULL) app_entity_->::app::admin::AppendEntityRequest::Clear();
-  clear_has_app_entity();
+inline void Request::clear_append_entity() {
+  if (append_entity_ != NULL) append_entity_->::app::admin::AppendEntityRequest::Clear();
+  clear_has_append_entity();
 }
-inline const ::app::admin::AppendEntityRequest& Request::app_entity() const {
-  return app_entity_ != NULL ? *app_entity_ : *default_instance_->app_entity_;
+inline const ::app::admin::AppendEntityRequest& Request::append_entity() const {
+  return append_entity_ != NULL ? *append_entity_ : *default_instance_->append_entity_;
 }
-inline ::app::admin::AppendEntityRequest* Request::mutable_app_entity() {
-  set_has_app_entity();
-  if (app_entity_ == NULL) app_entity_ = new ::app::admin::AppendEntityRequest;
-  return app_entity_;
+inline ::app::admin::AppendEntityRequest* Request::mutable_append_entity() {
+  set_has_append_entity();
+  if (append_entity_ == NULL) append_entity_ = new ::app::admin::AppendEntityRequest;
+  return append_entity_;
 }
-inline ::app::admin::AppendEntityRequest* Request::release_app_entity() {
-  clear_has_app_entity();
-  ::app::admin::AppendEntityRequest* temp = app_entity_;
-  app_entity_ = NULL;
+inline ::app::admin::AppendEntityRequest* Request::release_append_entity() {
+  clear_has_append_entity();
+  ::app::admin::AppendEntityRequest* temp = append_entity_;
+  append_entity_ = NULL;
   return temp;
 }
-inline void Request::set_allocated_app_entity(::app::admin::AppendEntityRequest* app_entity) {
-  delete app_entity_;
-  app_entity_ = app_entity;
-  if (app_entity) {
-    set_has_app_entity();
+inline void Request::set_allocated_append_entity(::app::admin::AppendEntityRequest* append_entity) {
+  delete append_entity_;
+  append_entity_ = append_entity;
+  if (append_entity) {
+    set_has_append_entity();
   } else {
-    clear_has_app_entity();
+    clear_has_append_entity();
   }
 }
 

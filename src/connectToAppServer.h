@@ -10,7 +10,7 @@
 
 #pragma once
 
-#define SERVERIP "192.168.0.63"
+#define SERVERIP "192.168.0.43"
 #define SERVPORT 38881    /*·þÎñÆ÷¼àÌý¶Ë¿ÚºÅ */
 
 class ConnectToAppServer

@@ -35,7 +35,7 @@ void protobuf_AssignDesc_GpsLocation_2eproto() {
   GOOGLE_CHECK(file != NULL);
   GpsLocation_descriptor_ = file->message_type(0);
   static const int GpsLocation_offsets_[4] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GpsLocation, account_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GpsLocation, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GpsLocation, latitude_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GpsLocation, longitude_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GpsLocation, timestamp_),
@@ -81,9 +81,9 @@ void protobuf_AddDesc_GpsLocation_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\021GpsLocation.proto\022\005pbmsg\"Y\n\013GpsLocatio"
-    "n\022\022\n\naccount_id\030\001 \001(\007\022\020\n\010latitude\030\002 \001(\001\022"
-    "\021\n\tlongitude\030\003 \001(\001\022\021\n\ttimestamp\030\004 \001(\014", 117);
+    "\n\021GpsLocation.proto\022\005pbmsg\"Q\n\013GpsLocatio"
+    "n\022\n\n\002id\030\001 \001(\007\022\020\n\010latitude\030\002 \001(\001\022\021\n\tlongi"
+    "tude\030\003 \001(\001\022\021\n\ttimestamp\030\004 \001(\014", 109);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "GpsLocation.proto", &protobuf_RegisterTypes);
   GpsLocation::default_instance_ = new GpsLocation();
@@ -101,7 +101,7 @@ struct StaticDescriptorInitializer_GpsLocation_2eproto {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int GpsLocation::kAccountIdFieldNumber;
+const int GpsLocation::kIdFieldNumber;
 const int GpsLocation::kLatitudeFieldNumber;
 const int GpsLocation::kLongitudeFieldNumber;
 const int GpsLocation::kTimestampFieldNumber;
@@ -123,7 +123,7 @@ GpsLocation::GpsLocation(const GpsLocation& from)
 
 void GpsLocation::SharedCtor() {
   _cached_size_ = 0;
-  account_id_ = 0u;
+  id_ = 0u;
   latitude_ = 0;
   longitude_ = 0;
   timestamp_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
@@ -165,7 +165,7 @@ GpsLocation* GpsLocation::New() const {
 
 void GpsLocation::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    account_id_ = 0u;
+    id_ = 0u;
     latitude_ = 0;
     longitude_ = 0;
     if (has_timestamp()) {
@@ -184,14 +184,14 @@ bool GpsLocation::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional fixed32 account_id = 1;
+      // optional fixed32 id = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_FIXED32) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_FIXED32>(
-                 input, &account_id_)));
-          set_has_account_id();
+                 input, &id_)));
+          set_has_id();
         } else {
           goto handle_uninterpreted;
         }
@@ -263,9 +263,9 @@ bool GpsLocation::MergePartialFromCodedStream(
 
 void GpsLocation::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // optional fixed32 account_id = 1;
-  if (has_account_id()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFixed32(1, this->account_id(), output);
+  // optional fixed32 id = 1;
+  if (has_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteFixed32(1, this->id(), output);
   }
 
   // optional double latitude = 2;
@@ -292,9 +292,9 @@ void GpsLocation::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* GpsLocation::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // optional fixed32 account_id = 1;
-  if (has_account_id()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFixed32ToArray(1, this->account_id(), target);
+  // optional fixed32 id = 1;
+  if (has_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFixed32ToArray(1, this->id(), target);
   }
 
   // optional double latitude = 2;
@@ -325,8 +325,8 @@ int GpsLocation::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // optional fixed32 account_id = 1;
-    if (has_account_id()) {
+    // optional fixed32 id = 1;
+    if (has_id()) {
       total_size += 1 + 4;
     }
 
@@ -374,8 +374,8 @@ void GpsLocation::MergeFrom(const ::google::protobuf::Message& from) {
 void GpsLocation::MergeFrom(const GpsLocation& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_account_id()) {
-      set_account_id(from.account_id());
+    if (from.has_id()) {
+      set_id(from.id());
     }
     if (from.has_latitude()) {
       set_latitude(from.latitude());
@@ -409,7 +409,7 @@ bool GpsLocation::IsInitialized() const {
 
 void GpsLocation::Swap(GpsLocation* other) {
   if (other != this) {
-    std::swap(account_id_, other->account_id_);
+    std::swap(id_, other->id_);
     std::swap(latitude_, other->latitude_);
     std::swap(longitude_, other->longitude_);
     std::swap(timestamp_, other->timestamp_);

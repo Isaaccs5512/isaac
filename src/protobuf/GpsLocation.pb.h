@@ -91,12 +91,12 @@ class GpsLocation : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // optional fixed32 account_id = 1;
-  inline bool has_account_id() const;
-  inline void clear_account_id();
-  static const int kAccountIdFieldNumber = 1;
-  inline ::google::protobuf::uint32 account_id() const;
-  inline void set_account_id(::google::protobuf::uint32 value);
+  // optional fixed32 id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 id() const;
+  inline void set_id(::google::protobuf::uint32 value);
 
   // optional double latitude = 2;
   inline bool has_latitude() const;
@@ -126,8 +126,8 @@ class GpsLocation : public ::google::protobuf::Message {
 
   // @@protoc_insertion_point(class_scope:pbmsg.GpsLocation)
  private:
-  inline void set_has_account_id();
-  inline void clear_has_account_id();
+  inline void set_has_id();
+  inline void clear_has_id();
   inline void set_has_latitude();
   inline void clear_has_latitude();
   inline void set_has_longitude();
@@ -140,7 +140,7 @@ class GpsLocation : public ::google::protobuf::Message {
   double latitude_;
   double longitude_;
   ::std::string* timestamp_;
-  ::google::protobuf::uint32 account_id_;
+  ::google::protobuf::uint32 id_;
 
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
@@ -159,26 +159,26 @@ class GpsLocation : public ::google::protobuf::Message {
 
 // GpsLocation
 
-// optional fixed32 account_id = 1;
-inline bool GpsLocation::has_account_id() const {
+// optional fixed32 id = 1;
+inline bool GpsLocation::has_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void GpsLocation::set_has_account_id() {
+inline void GpsLocation::set_has_id() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void GpsLocation::clear_has_account_id() {
+inline void GpsLocation::clear_has_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void GpsLocation::clear_account_id() {
-  account_id_ = 0u;
-  clear_has_account_id();
+inline void GpsLocation::clear_id() {
+  id_ = 0u;
+  clear_has_id();
 }
-inline ::google::protobuf::uint32 GpsLocation::account_id() const {
-  return account_id_;
+inline ::google::protobuf::uint32 GpsLocation::id() const {
+  return id_;
 }
-inline void GpsLocation::set_account_id(::google::protobuf::uint32 value) {
-  set_has_account_id();
-  account_id_ = value;
+inline void GpsLocation::set_id(::google::protobuf::uint32 value) {
+  set_has_id();
+  id_ = value;
 }
 
 // optional double latitude = 2;

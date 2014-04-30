@@ -35,6 +35,13 @@ CallForbid = 0;
 CallFreedom = 1;
 CallPolicy = 2;
 };
+ enum CustomStatus
+ {
+Standby = 0;
+Duty = 1;
+Turnout = 2;
+Training = 3;
+};
  enum RegisterStatus
  {
 OffLine = 0;
@@ -128,11 +135,18 @@ optional CallPrivilege call_privilege = 8;
 optional TokenPrivilege token_privilege = 9;
 optional GpsReportMode gps_report_mode = 10;
 optional fixed32 ttl = 11;
-optional RegisterStatus status = 12;
-optional RegisterStatus sip_status = 13;
-optional Address address = 14; 
-optional bool binding = 15;
-optional bool subscribing = 16;
+optional fixed32 gps_ttl = 12;
+optional RegisterStatus status = 13;
+optional RegisterStatus sip_status = 14;
+optional Address address = 15; 
+optional bool binding = 16;
+optional bool subscribing = 17;
+optional double latitude = 18;
+optional double longitude = 19;
+optional bytes timestamp = 20; 
+optional bool participant_subscribing = 21;
+optional bool message_subscribing = 22;
+optional CustomStatus custom_status = 23;
 };
       
 
@@ -168,7 +182,8 @@ optional CallPrivilege call_privilege = 5;
 optional TokenPrivilege token_privilege = 6;
 optional bytes join_timestamp = 7; 
 optional SessionStatus status = 8;
-optional bool sync_added = 9;
+optional bool participant_subscribing = 9;
+optional bool message_subscribing = 10;
 };
       
 
@@ -187,6 +202,10 @@ optional RecordType record_type = 8;
 optional Entity recorder = 9;
 optional RecordStatus record_status = 10;
 optional Entity record_server = 11;
+
+optional bool include_listen_users = 12;
+repeated Entity listen_users =13;
+        
 };
       
 

@@ -48,9 +48,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* EntityNotification_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   EntityNotification_reflection_ = NULL;
-const ::google::protobuf::Descriptor* SystemConfigure_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  SystemConfigure_reflection_ = NULL;
 const ::google::protobuf::Descriptor* GetSystemConfigureResponse_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   GetSystemConfigureResponse_reflection_ = NULL;
@@ -219,24 +216,7 @@ void protobuf_AssignDesc_app_2eadmin_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(EntityNotification));
-  SystemConfigure_descriptor_ = file->message_type(9);
-  static const int SystemConfigure_offsets_[3] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SystemConfigure, domain_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SystemConfigure, poc_server_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SystemConfigure, xmd_server_),
-  };
-  SystemConfigure_reflection_ =
-    new ::google::protobuf::internal::GeneratedMessageReflection(
-      SystemConfigure_descriptor_,
-      SystemConfigure::default_instance_,
-      SystemConfigure_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SystemConfigure, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SystemConfigure, _unknown_fields_),
-      -1,
-      ::google::protobuf::DescriptorPool::generated_pool(),
-      ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(SystemConfigure));
-  GetSystemConfigureResponse_descriptor_ = file->message_type(10);
+  GetSystemConfigureResponse_descriptor_ = file->message_type(9);
   static const int GetSystemConfigureResponse_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetSystemConfigureResponse, configure_),
   };
@@ -251,7 +231,7 @@ void protobuf_AssignDesc_app_2eadmin_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(GetSystemConfigureResponse));
-  SetSystemConfigureRequest_descriptor_ = file->message_type(11);
+  SetSystemConfigureRequest_descriptor_ = file->message_type(10);
   static const int SetSystemConfigureRequest_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SetSystemConfigureRequest, configure_),
   };
@@ -266,10 +246,10 @@ void protobuf_AssignDesc_app_2eadmin_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SetSystemConfigureRequest));
-  Request_descriptor_ = file->message_type(12);
+  Request_descriptor_ = file->message_type(11);
   static const int Request_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, login_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, app_entity_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, append_entity_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, modify_entity_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, delete_entity_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, entity_),
@@ -286,7 +266,7 @@ void protobuf_AssignDesc_app_2eadmin_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Request));
-  Response_descriptor_ = file->message_type(13);
+  Response_descriptor_ = file->message_type(12);
   static const int Response_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, result_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, last_response_),
@@ -307,7 +287,7 @@ void protobuf_AssignDesc_app_2eadmin_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Response));
-  Indication_descriptor_ = file->message_type(14);
+  Indication_descriptor_ = file->message_type(13);
   static const int Indication_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Indication, entity_),
   };
@@ -322,7 +302,7 @@ void protobuf_AssignDesc_app_2eadmin_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Indication));
-  Message_descriptor_ = file->message_type(15);
+  Message_descriptor_ = file->message_type(14);
   static const int Message_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message, msg_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message, sequence_),
@@ -374,8 +354,6 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     EntityNotification_descriptor_, &EntityNotification::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    SystemConfigure_descriptor_, &SystemConfigure::default_instance());
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     GetSystemConfigureResponse_descriptor_, &GetSystemConfigureResponse::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     SetSystemConfigureRequest_descriptor_, &SetSystemConfigureRequest::default_instance());
@@ -410,8 +388,6 @@ void protobuf_ShutdownFile_app_2eadmin_2eproto() {
   delete EntityResponse_reflection_;
   delete EntityNotification::default_instance_;
   delete EntityNotification_reflection_;
-  delete SystemConfigure::default_instance_;
-  delete SystemConfigure_reflection_;
   delete GetSystemConfigureResponse::default_instance_;
   delete GetSystemConfigureResponse_reflection_;
   delete SetSystemConfigureRequest::default_instance_;
@@ -434,64 +410,63 @@ void protobuf_AddDesc_app_2eadmin_2eproto() {
 
   ::pbmsg::protobuf_AddDesc_AppData_2eproto();
   ::pbmsg::protobuf_AddDesc_EntityData_2eproto();
+  ::pbmsg::protobuf_AddDesc_Configure_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\017app.admin.proto\022\tapp.admin\032\rAppData.pr"
-    "oto\032\020EntityData.proto\"2\n\014LoginRequest\022\020\n"
-    "\010username\030\001 \002(\014\022\020\n\010password\030\002 \002(\t\"K\n\rLog"
-    "inResponse\022\022\n\nsession_id\030\001 \002(\007\022\031\n\004self\030\002"
-    " \002(\0132\013.pbmsg.User\022\013\n\003ttl\030\003 \002(\007\"6\n\023Append"
-    "EntityRequest\022\037\n\004data\030\001 \002(\0132\021.pbmsg.Enti"
-    "tyData\"7\n\024AppendEntityResponse\022\037\n\004data\030\001"
-    " \002(\0132\021.pbmsg.EntityData\"6\n\023ModifyEntityR"
-    "equest\022\037\n\004data\030\001 \002(\0132\021.pbmsg.EntityData\""
-    "0\n\023DeleteEntityRequest\022\031\n\002id\030\001 \002(\0132\r.pbm"
-    "sg.Entity\"*\n\rEntityRequest\022\031\n\002id\030\001 \002(\0132\r"
-    ".pbmsg.Entity\"1\n\016EntityResponse\022\037\n\004data\030"
-    "\001 \002(\0132\021.pbmsg.EntityData\"c\n\022EntityNotifi"
-    "cation\022,\n\013notify_type\030\001 \002(\0162\027.pbmsg.Enti"
-    "tyNotifyType\022\037\n\004data\030\002 \002(\0132\021.pbmsg.Entit"
-    "yData\"I\n\017SystemConfigure\022\016\n\006domain\030\001 \001(\t"
-    "\022\022\n\npoc_server\030\002 \001(\t\022\022\n\nxmd_server\030\003 \001(\t"
-    "\"K\n\032GetSystemConfigureResponse\022-\n\tconfig"
-    "ure\030\001 \002(\0132\032.app.admin.SystemConfigure\"J\n"
-    "\031SetSystemConfigureRequest\022-\n\tconfigure\030"
-    "\001 \002(\0132\032.app.admin.SystemConfigure\"\301\002\n\007Re"
-    "quest\022&\n\005login\030\001 \001(\0132\027.app.admin.LoginRe"
-    "quest\0222\n\napp_entity\030\002 \001(\0132\036.app.admin.Ap"
-    "pendEntityRequest\0225\n\rmodify_entity\030\003 \001(\013"
-    "2\036.app.admin.ModifyEntityRequest\0225\n\rdele"
-    "te_entity\030\004 \001(\0132\036.app.admin.DeleteEntity"
-    "Request\022(\n\006entity\030\005 \001(\0132\030.app.admin.Enti"
-    "tyRequest\022B\n\024set_system_configure\030\006 \001(\0132"
-    "$.app.admin.SetSystemConfigureRequest\"\232\002"
-    "\n\010Response\022\016\n\006result\030\001 \002(\010\022\025\n\rlast_respo"
-    "nse\030\002 \002(\010\022\026\n\016error_describe\030\003 \001(\014\022\'\n\005log"
-    "in\030\004 \001(\0132\030.app.admin.LoginResponse\0226\n\rap"
-    "pend_entity\030\005 \001(\0132\037.app.admin.AppendEnti"
-    "tyResponse\022)\n\006entity\030\006 \001(\0132\031.app.admin.E"
-    "ntityResponse\022C\n\024get_system_configure\030\007 "
-    "\001(\0132%.app.admin.GetSystemConfigureRespon"
-    "se\";\n\nIndication\022-\n\006entity\030\001 \001(\0132\035.app.a"
-    "dmin.EntityNotification\"\310\001\n\007Message\022 \n\010m"
-    "sg_type\030\001 \002(\0162\016.app.admin.MSG\022\020\n\010sequenc"
-    "e\030\002 \002(\007\022\022\n\nsession_id\030\003 \001(\007\022#\n\007request\030\004"
-    " \001(\0132\022.app.admin.Request\022%\n\010response\030\005 \001"
-    "(\0132\023.app.admin.Response\022)\n\nindication\030\006 "
-    "\001(\0132\025.app.admin.Indication*\233\004\n\003MSG\022\023\n\rLo"
-    "gin_Request\020\241\215\006\022\024\n\016Login_Response\020\242\215\006\022\024\n"
-    "\016Logout_Request\020\243\215\006\022\025\n\017Logout_Response\020\244"
-    "\215\006\022\027\n\021Keepalive_Request\020\245\215\006\022\030\n\022Keepalive"
-    "_Response\020\246\215\006\022\033\n\025Append_Entity_Request\020\247"
-    "\215\006\022\034\n\026Append_Entity_Response\020\250\215\006\022\033\n\025Modi"
-    "fy_Entity_Request\020\251\215\006\022\034\n\026Modify_Entity_R"
-    "esponse\020\252\215\006\022\033\n\025Delete_Entity_Request\020\253\215\006"
-    "\022\034\n\026Delete_Entity_Response\020\254\215\006\022\024\n\016Entity"
-    "_Request\020\255\215\006\022\025\n\017Entity_Response\020\256\215\006\022\"\n\034G"
-    "et_System_Configure_Request\020\257\215\006\022#\n\035Get_S"
-    "ystem_Configure_Response\020\260\215\006\022\"\n\034Set_Syst"
-    "em_Configure_Request\020\261\215\006\022#\n\035Set_System_C"
-    "onfigure_Response\020\262\215\006\022\031\n\023Entity_Notifica"
-    "tion\020\261\333\006", 2248);
+    "oto\032\020EntityData.proto\032\017Configure.proto\"2"
+    "\n\014LoginRequest\022\020\n\010username\030\001 \002(\014\022\020\n\010pass"
+    "word\030\002 \002(\t\"K\n\rLoginResponse\022\022\n\nsession_i"
+    "d\030\001 \002(\007\022\031\n\004self\030\002 \002(\0132\013.pbmsg.User\022\013\n\003tt"
+    "l\030\003 \002(\007\"6\n\023AppendEntityRequest\022\037\n\004data\030\001"
+    " \002(\0132\021.pbmsg.EntityData\"7\n\024AppendEntityR"
+    "esponse\022\037\n\004data\030\001 \002(\0132\021.pbmsg.EntityData"
+    "\"6\n\023ModifyEntityRequest\022\037\n\004data\030\001 \002(\0132\021."
+    "pbmsg.EntityData\"0\n\023DeleteEntityRequest\022"
+    "\031\n\002id\030\001 \002(\0132\r.pbmsg.Entity\"*\n\rEntityRequ"
+    "est\022\031\n\002id\030\001 \002(\0132\r.pbmsg.Entity\"1\n\016Entity"
+    "Response\022\037\n\004data\030\001 \002(\0132\021.pbmsg.EntityDat"
+    "a\"c\n\022EntityNotification\022,\n\013notify_type\030\001"
+    " \002(\0162\027.pbmsg.EntityNotifyType\022\037\n\004data\030\002 "
+    "\002(\0132\021.pbmsg.EntityData\"A\n\032GetSystemConfi"
+    "gureResponse\022#\n\tconfigure\030\001 \002(\0132\020.pbmsg."
+    "Configure\"@\n\031SetSystemConfigureRequest\022#"
+    "\n\tconfigure\030\001 \002(\0132\020.pbmsg.Configure\"\304\002\n\007"
+    "Request\022&\n\005login\030\001 \001(\0132\027.app.admin.Login"
+    "Request\0225\n\rappend_entity\030\002 \001(\0132\036.app.adm"
+    "in.AppendEntityRequest\0225\n\rmodify_entity\030"
+    "\003 \001(\0132\036.app.admin.ModifyEntityRequest\0225\n"
+    "\rdelete_entity\030\004 \001(\0132\036.app.admin.DeleteE"
+    "ntityRequest\022(\n\006entity\030\005 \001(\0132\030.app.admin"
+    ".EntityRequest\022B\n\024set_system_configure\030\006"
+    " \001(\0132$.app.admin.SetSystemConfigureReque"
+    "st\"\232\002\n\010Response\022\016\n\006result\030\001 \002(\010\022\025\n\rlast_"
+    "response\030\002 \002(\010\022\026\n\016error_describe\030\003 \001(\014\022\'"
+    "\n\005login\030\004 \001(\0132\030.app.admin.LoginResponse\022"
+    "6\n\rappend_entity\030\005 \001(\0132\037.app.admin.Appen"
+    "dEntityResponse\022)\n\006entity\030\006 \001(\0132\031.app.ad"
+    "min.EntityResponse\022C\n\024get_system_configu"
+    "re\030\007 \001(\0132%.app.admin.GetSystemConfigureR"
+    "esponse\";\n\nIndication\022-\n\006entity\030\001 \001(\0132\035."
+    "app.admin.EntityNotification\"\310\001\n\007Message"
+    "\022 \n\010msg_type\030\001 \002(\0162\016.app.admin.MSG\022\020\n\010se"
+    "quence\030\002 \002(\007\022\022\n\nsession_id\030\003 \001(\007\022#\n\007requ"
+    "est\030\004 \001(\0132\022.app.admin.Request\022%\n\010respons"
+    "e\030\005 \001(\0132\023.app.admin.Response\022)\n\nindicati"
+    "on\030\006 \001(\0132\025.app.admin.Indication*\233\004\n\003MSG\022"
+    "\023\n\rLogin_Request\020\241\215\006\022\024\n\016Login_Response\020\242"
+    "\215\006\022\024\n\016Logout_Request\020\243\215\006\022\025\n\017Logout_Respo"
+    "nse\020\244\215\006\022\027\n\021Keepalive_Request\020\245\215\006\022\030\n\022Keep"
+    "alive_Response\020\246\215\006\022\033\n\025Append_Entity_Requ"
+    "est\020\247\215\006\022\034\n\026Append_Entity_Response\020\250\215\006\022\033\n"
+    "\025Modify_Entity_Request\020\251\215\006\022\034\n\026Modify_Ent"
+    "ity_Response\020\252\215\006\022\033\n\025Delete_Entity_Reques"
+    "t\020\253\215\006\022\034\n\026Delete_Entity_Response\020\254\215\006\022\024\n\016E"
+    "ntity_Request\020\255\215\006\022\025\n\017Entity_Response\020\256\215\006"
+    "\022\"\n\034Get_System_Configure_Request\020\257\215\006\022#\n\035"
+    "Get_System_Configure_Response\020\260\215\006\022\"\n\034Set"
+    "_System_Configure_Request\020\261\215\006\022#\n\035Set_Sys"
+    "tem_Configure_Response\020\262\215\006\022\031\n\023Entity_Not"
+    "ification\020\261\333\006", 2173);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "app.admin.proto", &protobuf_RegisterTypes);
   LoginRequest::default_instance_ = new LoginRequest();
@@ -503,7 +478,6 @@ void protobuf_AddDesc_app_2eadmin_2eproto() {
   EntityRequest::default_instance_ = new EntityRequest();
   EntityResponse::default_instance_ = new EntityResponse();
   EntityNotification::default_instance_ = new EntityNotification();
-  SystemConfigure::default_instance_ = new SystemConfigure();
   GetSystemConfigureResponse::default_instance_ = new GetSystemConfigureResponse();
   SetSystemConfigureRequest::default_instance_ = new SetSystemConfigureRequest();
   Request::default_instance_ = new Request();
@@ -519,7 +493,6 @@ void protobuf_AddDesc_app_2eadmin_2eproto() {
   EntityRequest::default_instance_->InitAsDefaultInstance();
   EntityResponse::default_instance_->InitAsDefaultInstance();
   EntityNotification::default_instance_->InitAsDefaultInstance();
-  SystemConfigure::default_instance_->InitAsDefaultInstance();
   GetSystemConfigureResponse::default_instance_->InitAsDefaultInstance();
   SetSystemConfigureRequest::default_instance_->InitAsDefaultInstance();
   Request::default_instance_->InitAsDefaultInstance();
@@ -2696,345 +2669,6 @@ void EntityNotification::Swap(EntityNotification* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int SystemConfigure::kDomainFieldNumber;
-const int SystemConfigure::kPocServerFieldNumber;
-const int SystemConfigure::kXmdServerFieldNumber;
-#endif  // !_MSC_VER
-
-SystemConfigure::SystemConfigure()
-  : ::google::protobuf::Message() {
-  SharedCtor();
-}
-
-void SystemConfigure::InitAsDefaultInstance() {
-}
-
-SystemConfigure::SystemConfigure(const SystemConfigure& from)
-  : ::google::protobuf::Message() {
-  SharedCtor();
-  MergeFrom(from);
-}
-
-void SystemConfigure::SharedCtor() {
-  _cached_size_ = 0;
-  domain_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  poc_server_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  xmd_server_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
-}
-
-SystemConfigure::~SystemConfigure() {
-  SharedDtor();
-}
-
-void SystemConfigure::SharedDtor() {
-  if (domain_ != &::google::protobuf::internal::kEmptyString) {
-    delete domain_;
-  }
-  if (poc_server_ != &::google::protobuf::internal::kEmptyString) {
-    delete poc_server_;
-  }
-  if (xmd_server_ != &::google::protobuf::internal::kEmptyString) {
-    delete xmd_server_;
-  }
-  if (this != default_instance_) {
-  }
-}
-
-void SystemConfigure::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const ::google::protobuf::Descriptor* SystemConfigure::descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return SystemConfigure_descriptor_;
-}
-
-const SystemConfigure& SystemConfigure::default_instance() {
-  if (default_instance_ == NULL) protobuf_AddDesc_app_2eadmin_2eproto();
-  return *default_instance_;
-}
-
-SystemConfigure* SystemConfigure::default_instance_ = NULL;
-
-SystemConfigure* SystemConfigure::New() const {
-  return new SystemConfigure;
-}
-
-void SystemConfigure::Clear() {
-  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (has_domain()) {
-      if (domain_ != &::google::protobuf::internal::kEmptyString) {
-        domain_->clear();
-      }
-    }
-    if (has_poc_server()) {
-      if (poc_server_ != &::google::protobuf::internal::kEmptyString) {
-        poc_server_->clear();
-      }
-    }
-    if (has_xmd_server()) {
-      if (xmd_server_ != &::google::protobuf::internal::kEmptyString) {
-        xmd_server_->clear();
-      }
-    }
-  }
-  ::memset(_has_bits_, 0, sizeof(_has_bits_));
-  mutable_unknown_fields()->Clear();
-}
-
-bool SystemConfigure::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
-  ::google::protobuf::uint32 tag;
-  while ((tag = input->ReadTag()) != 0) {
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional string domain = 1;
-      case 1: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_domain()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->domain().data(), this->domain().length(),
-            ::google::protobuf::internal::WireFormat::PARSE);
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(18)) goto parse_poc_server;
-        break;
-      }
-
-      // optional string poc_server = 2;
-      case 2: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_poc_server:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_poc_server()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->poc_server().data(), this->poc_server().length(),
-            ::google::protobuf::internal::WireFormat::PARSE);
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectTag(26)) goto parse_xmd_server;
-        break;
-      }
-
-      // optional string xmd_server = 3;
-      case 3: {
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_xmd_server:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_xmd_server()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->xmd_server().data(), this->xmd_server().length(),
-            ::google::protobuf::internal::WireFormat::PARSE);
-        } else {
-          goto handle_uninterpreted;
-        }
-        if (input->ExpectAtEnd()) return true;
-        break;
-      }
-
-      default: {
-      handle_uninterpreted:
-        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          return true;
-        }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, mutable_unknown_fields()));
-        break;
-      }
-    }
-  }
-  return true;
-#undef DO_
-}
-
-void SystemConfigure::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // optional string domain = 1;
-  if (has_domain()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->domain().data(), this->domain().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      1, this->domain(), output);
-  }
-
-  // optional string poc_server = 2;
-  if (has_poc_server()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->poc_server().data(), this->poc_server().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      2, this->poc_server(), output);
-  }
-
-  // optional string xmd_server = 3;
-  if (has_xmd_server()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->xmd_server().data(), this->xmd_server().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      3, this->xmd_server(), output);
-  }
-
-  if (!unknown_fields().empty()) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        unknown_fields(), output);
-  }
-}
-
-::google::protobuf::uint8* SystemConfigure::SerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
-  // optional string domain = 1;
-  if (has_domain()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->domain().data(), this->domain().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        1, this->domain(), target);
-  }
-
-  // optional string poc_server = 2;
-  if (has_poc_server()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->poc_server().data(), this->poc_server().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        2, this->poc_server(), target);
-  }
-
-  // optional string xmd_server = 3;
-  if (has_xmd_server()) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->xmd_server().data(), this->xmd_server().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        3, this->xmd_server(), target);
-  }
-
-  if (!unknown_fields().empty()) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        unknown_fields(), target);
-  }
-  return target;
-}
-
-int SystemConfigure::ByteSize() const {
-  int total_size = 0;
-
-  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // optional string domain = 1;
-    if (has_domain()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->domain());
-    }
-
-    // optional string poc_server = 2;
-    if (has_poc_server()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->poc_server());
-    }
-
-    // optional string xmd_server = 3;
-    if (has_xmd_server()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->xmd_server());
-    }
-
-  }
-  if (!unknown_fields().empty()) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        unknown_fields());
-  }
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = total_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void SystemConfigure::MergeFrom(const ::google::protobuf::Message& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  const SystemConfigure* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const SystemConfigure*>(
-      &from);
-  if (source == NULL) {
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-    MergeFrom(*source);
-  }
-}
-
-void SystemConfigure::MergeFrom(const SystemConfigure& from) {
-  GOOGLE_CHECK_NE(&from, this);
-  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_domain()) {
-      set_domain(from.domain());
-    }
-    if (from.has_poc_server()) {
-      set_poc_server(from.poc_server());
-    }
-    if (from.has_xmd_server()) {
-      set_xmd_server(from.xmd_server());
-    }
-  }
-  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
-}
-
-void SystemConfigure::CopyFrom(const ::google::protobuf::Message& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void SystemConfigure::CopyFrom(const SystemConfigure& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool SystemConfigure::IsInitialized() const {
-
-  return true;
-}
-
-void SystemConfigure::Swap(SystemConfigure* other) {
-  if (other != this) {
-    std::swap(domain_, other->domain_);
-    std::swap(poc_server_, other->poc_server_);
-    std::swap(xmd_server_, other->xmd_server_);
-    std::swap(_has_bits_[0], other->_has_bits_[0]);
-    _unknown_fields_.Swap(&other->_unknown_fields_);
-    std::swap(_cached_size_, other->_cached_size_);
-  }
-}
-
-::google::protobuf::Metadata SystemConfigure::GetMetadata() const {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::Metadata metadata;
-  metadata.descriptor = SystemConfigure_descriptor_;
-  metadata.reflection = SystemConfigure_reflection_;
-  return metadata;
-}
-
-
-// ===================================================================
-
-#ifndef _MSC_VER
 const int GetSystemConfigureResponse::kConfigureFieldNumber;
 #endif  // !_MSC_VER
 
@@ -3044,7 +2678,7 @@ GetSystemConfigureResponse::GetSystemConfigureResponse()
 }
 
 void GetSystemConfigureResponse::InitAsDefaultInstance() {
-  configure_ = const_cast< ::app::admin::SystemConfigure*>(&::app::admin::SystemConfigure::default_instance());
+  configure_ = const_cast< ::pbmsg::Configure*>(&::pbmsg::Configure::default_instance());
 }
 
 GetSystemConfigureResponse::GetSystemConfigureResponse(const GetSystemConfigureResponse& from)
@@ -3093,7 +2727,7 @@ GetSystemConfigureResponse* GetSystemConfigureResponse::New() const {
 void GetSystemConfigureResponse::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (has_configure()) {
-      if (configure_ != NULL) configure_->::app::admin::SystemConfigure::Clear();
+      if (configure_ != NULL) configure_->::pbmsg::Configure::Clear();
     }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -3106,7 +2740,7 @@ bool GetSystemConfigureResponse::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .app.admin.SystemConfigure configure = 1;
+      // required .pbmsg.Configure configure = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -3137,7 +2771,7 @@ bool GetSystemConfigureResponse::MergePartialFromCodedStream(
 
 void GetSystemConfigureResponse::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .app.admin.SystemConfigure configure = 1;
+  // required .pbmsg.Configure configure = 1;
   if (has_configure()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1, this->configure(), output);
@@ -3151,7 +2785,7 @@ void GetSystemConfigureResponse::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* GetSystemConfigureResponse::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .app.admin.SystemConfigure configure = 1;
+  // required .pbmsg.Configure configure = 1;
   if (has_configure()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -3169,7 +2803,7 @@ int GetSystemConfigureResponse::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .app.admin.SystemConfigure configure = 1;
+    // required .pbmsg.Configure configure = 1;
     if (has_configure()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -3204,7 +2838,7 @@ void GetSystemConfigureResponse::MergeFrom(const GetSystemConfigureResponse& fro
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_configure()) {
-      mutable_configure()->::app::admin::SystemConfigure::MergeFrom(from.configure());
+      mutable_configure()->::pbmsg::Configure::MergeFrom(from.configure());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -3258,7 +2892,7 @@ SetSystemConfigureRequest::SetSystemConfigureRequest()
 }
 
 void SetSystemConfigureRequest::InitAsDefaultInstance() {
-  configure_ = const_cast< ::app::admin::SystemConfigure*>(&::app::admin::SystemConfigure::default_instance());
+  configure_ = const_cast< ::pbmsg::Configure*>(&::pbmsg::Configure::default_instance());
 }
 
 SetSystemConfigureRequest::SetSystemConfigureRequest(const SetSystemConfigureRequest& from)
@@ -3307,7 +2941,7 @@ SetSystemConfigureRequest* SetSystemConfigureRequest::New() const {
 void SetSystemConfigureRequest::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (has_configure()) {
-      if (configure_ != NULL) configure_->::app::admin::SystemConfigure::Clear();
+      if (configure_ != NULL) configure_->::pbmsg::Configure::Clear();
     }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -3320,7 +2954,7 @@ bool SetSystemConfigureRequest::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   while ((tag = input->ReadTag()) != 0) {
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .app.admin.SystemConfigure configure = 1;
+      // required .pbmsg.Configure configure = 1;
       case 1: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -3351,7 +2985,7 @@ bool SetSystemConfigureRequest::MergePartialFromCodedStream(
 
 void SetSystemConfigureRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // required .app.admin.SystemConfigure configure = 1;
+  // required .pbmsg.Configure configure = 1;
   if (has_configure()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1, this->configure(), output);
@@ -3365,7 +2999,7 @@ void SetSystemConfigureRequest::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* SetSystemConfigureRequest::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // required .app.admin.SystemConfigure configure = 1;
+  // required .pbmsg.Configure configure = 1;
   if (has_configure()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -3383,7 +3017,7 @@ int SetSystemConfigureRequest::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .app.admin.SystemConfigure configure = 1;
+    // required .pbmsg.Configure configure = 1;
     if (has_configure()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -3418,7 +3052,7 @@ void SetSystemConfigureRequest::MergeFrom(const SetSystemConfigureRequest& from)
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_configure()) {
-      mutable_configure()->::app::admin::SystemConfigure::MergeFrom(from.configure());
+      mutable_configure()->::pbmsg::Configure::MergeFrom(from.configure());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -3464,7 +3098,7 @@ void SetSystemConfigureRequest::Swap(SetSystemConfigureRequest* other) {
 
 #ifndef _MSC_VER
 const int Request::kLoginFieldNumber;
-const int Request::kAppEntityFieldNumber;
+const int Request::kAppendEntityFieldNumber;
 const int Request::kModifyEntityFieldNumber;
 const int Request::kDeleteEntityFieldNumber;
 const int Request::kEntityFieldNumber;
@@ -3478,7 +3112,7 @@ Request::Request()
 
 void Request::InitAsDefaultInstance() {
   login_ = const_cast< ::app::admin::LoginRequest*>(&::app::admin::LoginRequest::default_instance());
-  app_entity_ = const_cast< ::app::admin::AppendEntityRequest*>(&::app::admin::AppendEntityRequest::default_instance());
+  append_entity_ = const_cast< ::app::admin::AppendEntityRequest*>(&::app::admin::AppendEntityRequest::default_instance());
   modify_entity_ = const_cast< ::app::admin::ModifyEntityRequest*>(&::app::admin::ModifyEntityRequest::default_instance());
   delete_entity_ = const_cast< ::app::admin::DeleteEntityRequest*>(&::app::admin::DeleteEntityRequest::default_instance());
   entity_ = const_cast< ::app::admin::EntityRequest*>(&::app::admin::EntityRequest::default_instance());
@@ -3494,7 +3128,7 @@ Request::Request(const Request& from)
 void Request::SharedCtor() {
   _cached_size_ = 0;
   login_ = NULL;
-  app_entity_ = NULL;
+  append_entity_ = NULL;
   modify_entity_ = NULL;
   delete_entity_ = NULL;
   entity_ = NULL;
@@ -3509,7 +3143,7 @@ Request::~Request() {
 void Request::SharedDtor() {
   if (this != default_instance_) {
     delete login_;
-    delete app_entity_;
+    delete append_entity_;
     delete modify_entity_;
     delete delete_entity_;
     delete entity_;
@@ -3543,8 +3177,8 @@ void Request::Clear() {
     if (has_login()) {
       if (login_ != NULL) login_->::app::admin::LoginRequest::Clear();
     }
-    if (has_app_entity()) {
-      if (app_entity_ != NULL) app_entity_->::app::admin::AppendEntityRequest::Clear();
+    if (has_append_entity()) {
+      if (append_entity_ != NULL) append_entity_->::app::admin::AppendEntityRequest::Clear();
     }
     if (has_modify_entity()) {
       if (modify_entity_ != NULL) modify_entity_->::app::admin::ModifyEntityRequest::Clear();
@@ -3578,17 +3212,17 @@ bool Request::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(18)) goto parse_app_entity;
+        if (input->ExpectTag(18)) goto parse_append_entity;
         break;
       }
 
-      // optional .app.admin.AppendEntityRequest app_entity = 2;
+      // optional .app.admin.AppendEntityRequest append_entity = 2;
       case 2: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_app_entity:
+         parse_append_entity:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_app_entity()));
+               input, mutable_append_entity()));
         } else {
           goto handle_uninterpreted;
         }
@@ -3676,10 +3310,10 @@ void Request::SerializeWithCachedSizes(
       1, this->login(), output);
   }
 
-  // optional .app.admin.AppendEntityRequest app_entity = 2;
-  if (has_app_entity()) {
+  // optional .app.admin.AppendEntityRequest append_entity = 2;
+  if (has_append_entity()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      2, this->app_entity(), output);
+      2, this->append_entity(), output);
   }
 
   // optional .app.admin.ModifyEntityRequest modify_entity = 3;
@@ -3721,11 +3355,11 @@ void Request::SerializeWithCachedSizes(
         1, this->login(), target);
   }
 
-  // optional .app.admin.AppendEntityRequest app_entity = 2;
-  if (has_app_entity()) {
+  // optional .app.admin.AppendEntityRequest append_entity = 2;
+  if (has_append_entity()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        2, this->app_entity(), target);
+        2, this->append_entity(), target);
   }
 
   // optional .app.admin.ModifyEntityRequest modify_entity = 3;
@@ -3774,11 +3408,11 @@ int Request::ByteSize() const {
           this->login());
     }
 
-    // optional .app.admin.AppendEntityRequest app_entity = 2;
-    if (has_app_entity()) {
+    // optional .app.admin.AppendEntityRequest append_entity = 2;
+    if (has_append_entity()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->app_entity());
+          this->append_entity());
     }
 
     // optional .app.admin.ModifyEntityRequest modify_entity = 3;
@@ -3839,8 +3473,8 @@ void Request::MergeFrom(const Request& from) {
     if (from.has_login()) {
       mutable_login()->::app::admin::LoginRequest::MergeFrom(from.login());
     }
-    if (from.has_app_entity()) {
-      mutable_app_entity()->::app::admin::AppendEntityRequest::MergeFrom(from.app_entity());
+    if (from.has_append_entity()) {
+      mutable_append_entity()->::app::admin::AppendEntityRequest::MergeFrom(from.append_entity());
     }
     if (from.has_modify_entity()) {
       mutable_modify_entity()->::app::admin::ModifyEntityRequest::MergeFrom(from.modify_entity());
@@ -3875,8 +3509,8 @@ bool Request::IsInitialized() const {
   if (has_login()) {
     if (!this->login().IsInitialized()) return false;
   }
-  if (has_app_entity()) {
-    if (!this->app_entity().IsInitialized()) return false;
+  if (has_append_entity()) {
+    if (!this->append_entity().IsInitialized()) return false;
   }
   if (has_modify_entity()) {
     if (!this->modify_entity().IsInitialized()) return false;
@@ -3896,7 +3530,7 @@ bool Request::IsInitialized() const {
 void Request::Swap(Request* other) {
   if (other != this) {
     std::swap(login_, other->login_);
-    std::swap(app_entity_, other->app_entity_);
+    std::swap(append_entity_, other->append_entity_);
     std::swap(modify_entity_, other->modify_entity_);
     std::swap(delete_entity_, other->delete_entity_);
     std::swap(entity_, other->entity_);
