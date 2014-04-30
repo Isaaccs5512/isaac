@@ -124,7 +124,7 @@ public:
 	std::string id;
 	std::string name;
 	std::string parentid;
-	enum ns__EntityType entity_type;
+	std::string entity_type;
 };
 
 class ns__Address
@@ -140,7 +140,7 @@ class ns__User
 public:
 	ns__Entity base;//非poc账户信息
 	ns__Entity account;//poc账户信息
-	enum ns__RegisterStatus status;
+	std::string register_tatus;
 };
 
 class ns__Account
@@ -151,12 +151,12 @@ public:
 	std::string number; //号码，SIP注册账号
 	std::string  short_number; //短号，应用服务器内部唯一号码，内部号码
 	std::string priority;//优先级，话权申请冲突决策的依据。值越大，优先级越高。
-	enum ns__CallPrivilege call_privilege;//呼叫默认权限,加入群组时的默认呼叫权限
+	std::string call_privilege;//呼叫默认权限,加入群组时的默认呼叫权限
 
-	enum ns__TokenPrivilege token_privilege;//话权默认权限,加入群组的通话后的话权申请默认权限
+	std::string token_privilege;//话权默认权限,加入群组的通话后的话权申请默认权限
 
-	enum ns__RegisterStatus status;
-	enum ns__RegisterStatus sip_status;
+	std::string register_tatus;
+	std::string sip_status;
 };
 
 
@@ -181,11 +181,13 @@ public:
 class ns__Participant
 {
 public:
-	ns__Entity account;
+	std::string id;
+	std::string name;
+	std::string parentid;
 	std::string priority;
-	enum ns__CallPrivilege call_privilege;
-	enum ns__TokenPrivilege token_privilege;
-	enum ns__SessionStatus status;
+	std::string call_privilege;
+	std::string token_privilege;
+	std::string session_status;
 };
 
 
@@ -200,8 +202,8 @@ public:
 	std::list<ns__Participant> participants;
 	std::string size;
 	        
-	enum ns__RecordType record_type;
-	enum ns__RecordStatus record_status;
+	std::string record_type;
+	std::string record_status;
 };
 
 class ns__Dispatch_Append_Group_Response
@@ -226,11 +228,11 @@ public:
 	ns__Entity base;
 	std::string group_id;//目前只能有一个关联群组的ID
 	std::string describe;// 警情描述
-	enum ns__AlertLevel level;//警情级别
+	std::string alert_level;//警情级别
 	std::string alram_time;//   报警时间
 	std::string use_cars;// 出动车辆数
 	std::string create_time;//警情的创建时间
-	enum ns__AlertStatus status ;//警情状态
+	std::string alert_status ;//警情状态
 };
 
 
@@ -273,7 +275,7 @@ class ns__Dispatch_Entity_Request_Response
 class ns__Dispatch_Entity_Nofitication_Response
 {
 public:
-	enum ns__EntityNotifyType notify_type;//
+	std::string notify_type;//
 	ns__EntityData data;//实体的集合信息如果为Deleted时，data只需要包含id字段即可
 	std::string session_id;
 	std::string error_describe;
@@ -284,15 +286,15 @@ class ns__Entity_Status_Notification
 {
 public:
 	ns__Entity id;//状态改变的实体,可以为 Account,User,Gateway等与应用服务器有注册的实体
-	enum ns__RegisterStatus status;//与应用服务器之间的注册状态
-	enum ns__RegisterStatus sip_status;//Account专有字段，表示Account和PoC服务器之前的注册状态
+	std::string register_status;//与应用服务器之间的注册状态
+	std::string sip_status;//Account专有字段，表示Account和PoC服务器之前的注册状态
 };
 
 class ns__Modify_Participant
 {
 public:
 	ns__Entity group_id;
-	enum ns__ListModifyType modify_type;
+	std::string modify_type;
 	std::list<ns__Participant> participants;
 	std::string size;
 };
@@ -328,7 +330,7 @@ class ns__Dispatch_Participant_Status_Notification_Response
 public:
 	ns__Entity group_id;//群组id
 	ns__Entity account_id;//PoC账号ID
-	enum ns__SessionStatus status;//会话状态
+	std::string session_status;//会话状态
 	std::string session_id;
 	std::string error_describe;
 	bool result;
@@ -401,7 +403,7 @@ class ns__Dispatch_Session_Status_Notification_Response
 {
 public:
 	ns__Entity group_id;
-	enum ns__SessionStatus status;
+	std::string session_status;
 	std::string session_id;
 	std::string error_describe;
 	bool result;
@@ -414,8 +416,8 @@ public:
 	double longitude;//经度
 	double latitude;//维度
 	std::string timestamp;//此位置信息获取的时间
-	enum ns__ProfessionStatus professionstatus;
-	enum ns__RegisterStatus status;
+	std::string profession_status;
+	std::string register_status;
 	std::string session_id;
 	std::string error_describe;
 	bool result;
@@ -427,7 +429,7 @@ public:
 	std::string id;
 	std::string name;
 	std::string describe;
-	enum ns__AlertLevel level;
+	std::string alert_level;
 	std::string alram_time;
 	std::string use_cars;
 	std::string create_time;
