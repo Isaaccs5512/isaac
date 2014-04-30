@@ -241,7 +241,7 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 	LOG(INFO)<<"Parse data from protobuf protobuf";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
-		if(message.msg_type() == app::dispatch::MSG::Login_Response)
+		if(message.msg_type() == app::dispatch::MSG::Logout_Response)
 		{
 			if(message.response().result())
 			{
@@ -275,6 +275,7 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 	LOG(INFO)<<"Dispatch_Entity_Request";
 	app::dispatch::Message message;
 	message.set_msg_type(app::dispatch::MSG::Entity_Request);
+	message.set_session_id(atoi(session_id.c_str()));
 	message.mutable_request()->mutable_entity()->mutable_id()->set_id(atoi(id.c_str()));
 	message.set_sequence(get_sequence());
 	
@@ -798,10 +799,10 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Media_Message_Request);
-	message.mutable_request()->mutable_media_message()->mutable_id()->set_id(atoi(group_id.c_str()));
-	message.mutable_request()->mutable_media_message()->set_from_message_id(atoi(from_message_id.c_str()));
-	message.mutable_request()->mutable_media_message()->set_from_time(from_time);
-	message.mutable_request()->mutable_media_message()->set_max_message_count(atoi(max_message_count.c_str()));
+	message.mutable_request()->mutable_group_message()->mutable_id()->set_id(atoi(group_id.c_str()));
+	message.mutable_request()->mutable_group_message()->set_from_message_id(atoi(from_message_id.c_str()));
+	message.mutable_request()->mutable_group_message()->set_from_timestamp(from_time);
+	message.mutable_request()->mutable_group_message()->set_max_message_count(atoi(max_message_count.c_str()));
 	std::string str;
 	int errorReturn;
 	if(!message.SerializeToString(&str))
@@ -846,20 +847,20 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 			{
 				response.result = true;
 				response.session_id = int2str(message.session_id());
-				response.size = int2str(message.response().media_message().messages_size());
-				response.leave_message_count = int2str(message.response().media_message().leave_message_count());
+				response.size = int2str(message.response().group_message().messages_size());
+				response.leave_message_count = int2str(message.response().group_message().leave_message_count());
 				ns__MediaMessage mediamessage;
-				for(int i=0;i<message.response().media_message().messages_size();i++)
+				for(int i=0;i<message.response().group_message().messages_size();i++)
 				{
-					mediamessage.audio_length = int2str(message.response().media_message().messages(i).audio_length());
-					mediamessage.audio_uri = message.response().media_message().messages(i).audio_uri();
-					mediamessage.id = int2str(message.response().media_message().messages(i).id());
-					mediamessage.picture_uri = message.response().media_message().messages(i).picture_uri();
-					mediamessage.sender = message.response().media_message().messages(i).sender();
-					mediamessage.text = message.response().media_message().messages(i).text();
-					mediamessage.timestamp = message.response().media_message().messages(i).timestamp();
-					mediamessage.video_length = int2str(message.response().media_message().messages(i).video_length());
-					mediamessage.video_uri = message.response().media_message().messages(i).video_uri();
+					mediamessage.audio_length = int2str(message.response().group_message().messages(i).audio_length());
+					mediamessage.audio_uri = message.response().group_message().messages(i).audio_uri();
+					mediamessage.id = int2str(message.response().group_message().messages(i).id());
+					mediamessage.picture_uri = message.response().group_message().messages(i).picture_uri();
+					mediamessage.sender = message.response().group_message().messages(i).sender();
+					mediamessage.text = message.response().group_message().messages(i).text();
+					mediamessage.timestamp = message.response().group_message().messages(i).timestamp();
+					mediamessage.video_length = int2str(message.response().group_message().messages(i).video_length());
+					mediamessage.video_uri = message.response().group_message().messages(i).video_uri();
 					response.data.push_back(mediamessage);
 				}
 			}
