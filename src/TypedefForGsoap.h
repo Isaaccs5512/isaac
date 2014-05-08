@@ -3,7 +3,7 @@
 //gsoap ns service style: rpc 
 //gsoap ns service encoding: encoded 
 //gsoap ns schema namespace: urn:xiaofang
-//gsoap ns service location: http://192.168.1.184:18881 
+//gsoap ns service location: http://192.168.146.128:18881 
 #pragma once
 #import "import/stllist.h"
 #ifndef WITH_OPENSSL
@@ -115,6 +115,7 @@ enum ns__EntityType
 	GROUP = 3,//  群组
 //	GATEWAY = 4,//  媒体网关（录音服务器合并一起）
 //	ORGANIZATION = 5,// 组织（PoC账号的集合）
+	ALERT = 6,
 };
 
 
@@ -166,6 +167,7 @@ public:
 	std::string session_id;	//会话ID，后续消息都必须携带。
 	std::string id;
 	std::string parentid;
+	std::string ttl;
 	std::string error_describe;
 	bool result;
 };
@@ -196,12 +198,13 @@ class ns__Group
 public:
 	std::string id;
 	std::string name;
-	std::string owner_id;
+	std::string owner_id;//创建者
+	std::string parent_id;//group所属的群组
 	std::string number;
 	std::string short_number;
 	std::list<ns__Participant> participants;
 	std::string size;
-	        
+	bool sealed;//是否为开放式群组        
 	std::string record_type;
 	std::string record_status;
 };
@@ -232,7 +235,7 @@ public:
 	std::string alram_time;//   报警时间
 	std::string use_cars;// 出动车辆数
 	std::string create_time;//警情的创建时间
-	std::string alert_status ;//警情状态
+	//std::string alert_status ;//警情状态
 };
 
 
@@ -293,7 +296,7 @@ public:
 class ns__Modify_Participant
 {
 public:
-	ns__Entity group_id;
+	std::string group_id;
 	std::string modify_type;
 	std::list<ns__Participant> participants;
 	std::string size;

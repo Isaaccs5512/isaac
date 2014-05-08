@@ -22,6 +22,16 @@ int ns__Dispatch_Logout(std::string session_id,
 
 
 /*
+brief		:保活请求
+param in	:
+param in	:
+param out	:
+*/
+int ns__Dispatch_Keepalive_Request(std::string session_id,
+						ns__Normal_Response &response);
+
+
+/*
 brief		:获取整个系统的单元架构（包含单元下面的群组、PoC账号等，需要通过递归的方式）根据Response的类型，
 			如果是单元，单元包含了成员，需要对单元的成员进行递归获取信息.
 param in	:id //要获取的实体的id(登录时，会返回parent_id，一般从此值开始，递归获取所有数据)

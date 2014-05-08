@@ -52,3 +52,383 @@ Connection: close
 
 <?xml version="1.0" encoding="UTF-8"?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="urn:xiaofang"><SOAP-ENV:Body SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><ns:Dispatch-Login><username>test1</username><password>123456</password></ns:Dispatch-Login></SOAP-ENV:Body></SOAP-ENV:Envelope>
+POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 2455
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Append-Group soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <session-id xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">4</session-id>
+         <group xsi:type="urn:Group" xs:type="type:Group" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">
+            <id xsi:type="xsd:string" xn:type="http://www.w3.org/2001/XMLSchema" xmlns:xn="http://www.w3.org/2000/xmlns/">?</id>
+            <name xsi:type="xsd:string" xs:type="type:string">asdfaf</name>
+            <owner-id xsi:type="xsd:string" xs:type="type:string">0</owner-id>
+            <number xsi:type="xsd:string" xs:type="type:string">?</number>
+            <short-number xsi:type="xsd:string" xs:type="type:string">?</short-number>
+            <!--Zero or more repetitions:-->
+            <participants xsi:type="urn:Participant" xs:type="type:Participant">
+               <account xsi:type="urn:Entity" xn:type="urn:xiaofang" xmlns:xn="http://www.w3.org/2000/xmlns/">
+                  <id xsi:type="xsd:string" xn:type="http://www.w3.org/2001/XMLSchema">?</id>
+                  <name xsi:type="xsd:string" xs:type="type:string">?</name>
+                  <parentid xsi:type="xsd:string" xs:type="type:string">?</parentid>
+                  <entity-type xsi:type="urn:EntityType" xs:type="type:EntityType">ACCOUNT</entity-type>
+               </account>
+               <priority xsi:type="xsd:string" xs:type="type:string">45</priority>
+               <call-privilege xsi:type="urn:CallPrivilege" xs:type="type:CallPrivilege">CallFreedom</call-privilege>
+               <token-privilege xsi:type="urn:TokenPrivilege" xs:type="type:TokenPrivilege">TokenFreedom</token-privilege>
+               <status xsi:type="urn:SessionStatus" xs:type="type:SessionStatus">?</status>
+            </participants>
+            <size xsi:type="xsd:string" xs:type="type:string">?</size>
+            <record-type xsi:type="urn:RecordType" xs:type="type:RecordType">?</record-type>
+            <record-status xsi:type="urn:RecordStatus" xs:type="type:RecordStatus">?</record-status>
+         </group>
+      </urn:Dispatch-Append-Group>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>POST / HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+Content-Length: 666
+Host: 192.168.1.184:18881
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
+
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:xiaofang">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Dispatch-Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <username xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">test2</username>
+         <password xsi:type="xsd:string" xs:type="type:string" xmlns:xs="http://www.w3.org/2000/XMLSchema-instance">123456</password>
+      </urn:Dispatch-Login>
+   </soapenv:Body>
+</soapenv:Envelope>

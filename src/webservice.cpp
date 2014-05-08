@@ -10,9 +10,14 @@
 #include <iostream>
 #include "md5.h"
 #include "cstdlib"
+#include "timer.hpp"
+#include <thread>
+#include <mutex>
 
 #define BACKLOG (100)	// Max. request backlog 
 static unsigned long sequence = 1;
+static std::map<unsigned long,int> keep_session_id;
+//static std::mutex m;
 
 unsigned long get_sequence()
 {
@@ -29,18 +34,48 @@ std::string int2str(int n)
     return s;
 }
 
+void mainTimerHandler(){}
+
+void handler()
+{
+	std::map<unsigned long,int>::iterator itor;
+	ns__Normal_Response response;
+	xiaofangService ser;
+	//std::lock_guard<std::mutex> lock(m);
+	for(itor = keep_session_id.begin();itor!=keep_session_id.end();++itor)
+	{
+		if(itor->second < 360)
+		{
+			ser.Dispatch_Keepalive_Request(int2str(itor->first),response);
+			(itor->second)++;
+		}
+		else
+			keep_session_id.erase(itor);
+		std::cout<<"first	="<<itor->first<<"	second=	"<<itor->second<<std::endl;
+	}
+}
+
+void reset_keep_session_id(unsigned long session_id)
+{
+	//std::lock_guard<std::mutex> lock(m);
+	std::map<unsigned long,int>::iterator itor = keep_session_id.find(session_id);
+	itor->second=0;
+}
+
+
 int main(int argc,char* argv[])
 {
 	xiaofangService service;
+	timer_pool_init(mainTimerHandler,5);
+	create_timer(handler,5,true);
    //	google::InitGoogleLogging("webservice");
 	FLAGS_log_dir = "/mnt/hgfs/centos_share/xiaofang/src/log";
 	LOG(INFO)<<"Service start\n";
    	task_pool_init();
    	if (argc < 2) // no args: assume this is a CGI application 
    	{ 
-		LOG(INFO)<<"Run service as CGI application\n";
-   		service.serve();
-		service.destroy();
+		LOG(INFO)<<"No IP address input\n";
+   		return -1;
    	} 
    	else 
    	{ 
@@ -93,14 +128,14 @@ void *process_request(std::tr1::shared_ptr<xiaofangService> & tservice)
 
 int xiaofangService::Dispatch_Login(std::string name,
 			std::string passwd,
-			ns__Dispatch_Login_Response &loginResponse)
+			ns__Dispatch_Login_Response &response)
 {
-	int errorReturn;
 	LOG(INFO)<<"Dispatch login";
+	response.result = true;
 	if(name.empty() || passwd.empty())
 	{
-		loginResponse.result = false;
-		loginResponse.error_describe = "No name or password input";
+		response.result = false;
+		response.error_describe = "No name or password input";
 		return SOAP_OK;
 	}
 	LOG(INFO)<<"Serializa data to protobuf protocol";
@@ -116,35 +151,36 @@ int xiaofangService::Dispatch_Login(std::string name,
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
-		loginResponse.result = false;
-		loginResponse.error_describe = message.InitializationErrorString();
+		response.result = false;
+		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
-		loginResponse.result = false;
-		loginResponse.error_describe = "Connection refused";
+		response.result = false;
+		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
-		loginResponse.result = false;
-		loginResponse.error_describe = "Write data to server error";
+		response.result = false;
+		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
-		loginResponse.result = false;
-		loginResponse.error_describe = "Read data len from server error";
+		response.result = false;
+		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
-		loginResponse.result = false;
-		loginResponse.error_describe = "Read data from server error";
+		response.result = false;
+		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
 
@@ -156,19 +192,17 @@ int xiaofangService::Dispatch_Login(std::string name,
 		{
 			if(message.response().result())
 			{
-				loginResponse.result = true;
-				loginResponse.session_id = int2str(message.response().login().session_id());
-				std::cout<<"loginResponse.session_id="<<loginResponse.session_id<<std::endl;
-				loginResponse.id = int2str(message.response().login().self().account().id());
-				std::cout<<"loginResponse.id="<<loginResponse.id<<std::endl;
-				loginResponse.parentid = int2str(message.response().login().self().account().parent().id());
-				std::cout<<"loginResponse.parentid="<<loginResponse.parentid<<std::endl;
+				response.result = true;
+				response.session_id = int2str(message.response().login().session_id());
+				response.id = int2str(message.response().login().self().account().id());
+				response.parentid = int2str(message.response().login().self().account().parent().id());
+				response.ttl = int2str(message.response().login().ttl());
 			}
 			else
 			{
 				LOG(ERROR)<<message.response().error_describe();;
-				loginResponse.result = false;
-				loginResponse.error_describe = message.response().error_describe();
+				response.result = false;
+				response.error_describe = message.response().error_describe();
 				return SOAP_OK;
 			}
 		}
@@ -176,10 +210,13 @@ int xiaofangService::Dispatch_Login(std::string name,
 	else
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
-		loginResponse.result = false;
-		loginResponse.error_describe = message.InitializationErrorString();
+		response.result = false;
+		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	//keep_session_id.insert(atoi(response.session_id.c_str()),0);
+	//std::lock_guard<std::mutex> lock(m);
+	keep_session_id.insert(std::pair<unsigned long,int>(atoi(response.session_id.c_str()),0));
 	return SOAP_OK;
 }
 
@@ -188,7 +225,7 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 									std::string password, 
 									ns__Normal_Response &response)
 {
-	int errorReturn;
+	
 	LOG(INFO)<<"Dispatch logout";
 	if(name.empty() || password.empty())
 	{
@@ -212,27 +249,29 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -264,19 +303,24 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+
+	//std::lock_guard<std::mutex> lock(m);
+	std::map<unsigned long,int>::iterator itor = keep_session_id.find(atoi(session_id.c_str()));
+	keep_session_id.erase(itor);
+		
 	return SOAP_OK;
 }
 
-int xiaofangService::Dispatch_Entity_Request(std::string session_id,
-											std::string id, 
-											ns__Dispatch_Entity_Request_Response& response)
+int xiaofangService::Dispatch_Keepalive_Request(std::string session_id,
+						ns__Normal_Response &response)
 {
-	int errorReturn;
-	LOG(INFO)<<"Dispatch_Entity_Request";
+	
+	LOG(INFO)<<"Dispatch_Keepalive_Request";
+	
+	LOG(INFO)<<"Serializa data to protobuf protocol";
 	app::dispatch::Message message;
-	message.set_msg_type(app::dispatch::MSG::Entity_Request);
+	message.set_msg_type(app::dispatch::MSG::Keepalive_Request);
 	message.set_session_id(atoi(session_id.c_str()));
-	message.mutable_request()->mutable_entity()->mutable_id()->set_id(atoi(id.c_str()));
 	message.set_sequence(get_sequence());
 	
 	std::string str;
@@ -287,27 +331,112 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
+	{
+		response.result = false;
+		response.error_describe = "Read data from server error";
+		return SOAP_OK;
+	}
+	LOG(INFO)<<"Parse data from protobuf protobuf";
+	if (message.ParseFromString(connecttoserver.get_recstr()) )
+	{	
+		if(message.msg_type() == app::dispatch::MSG::Keepalive_Response)
+		{
+			if(message.response().result())
+			{
+				response.session_id = int2str(message.session_id());
+				response.result = true;
+			}
+			else
+			{
+				LOG(ERROR)<<message.response().error_describe();
+				response.result = false;
+				response.error_describe = message.response().error_describe();
+				return SOAP_OK;
+			}
+		}
+	}
+	else
+	{
+		LOG(ERROR)<<message.InitializationErrorString();
+		response.result = false;
+		response.error_describe = message.InitializationErrorString();
+		return SOAP_OK;
+	}
+	return SOAP_OK;
+}
+
+int xiaofangService::Dispatch_Entity_Request(std::string session_id,
+											std::string id, 
+											ns__Dispatch_Entity_Request_Response& response)
+{
+	
+	LOG(INFO)<<"Dispatch_Entity_Request";
+	app::dispatch::Message message;
+	message.set_msg_type(app::dispatch::MSG::Entity_Request);
+	message.set_session_id(atoi(session_id.c_str()));
+	if(id.empty())
+	{
+		response.result = false;
+		response.error_describe  = "id is empty";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_entity()->mutable_id()->set_id(atoi(id.c_str()));
+	message.set_sequence(get_sequence());
+	reset_keep_session_id(atoi(session_id.c_str()));
+	std::string str;
+	if(!message.SerializeToString(&str))
+	{
+		LOG(ERROR)<<message.InitializationErrorString();
+		response.result = false;
+		response.error_describe = message.InitializationErrorString();
+		return SOAP_OK;
+	}
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
+	{
+		response.result = false;
+		response.error_describe = "Connection refused";
+		return SOAP_OK;
+	}
+	else if(connecttoserver.get_result() == -2)
+	{
+		response.result = false;
+		response.error_describe = "Write data to server error";
+		return SOAP_OK;
+	}
+		else if(connecttoserver.get_result() == -3)
+	{
+		response.result = false;
+		response.error_describe = "Read data len from server error";
+		return SOAP_OK;
+	}
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -321,11 +450,13 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 			if(message.response().result())
 			{
 				response.result = true;
-				response.data.id.entity_type = (ns__EntityType)message.response().entity().data().id().entity_type();
+				response.data.id.entity_type = int2str(message.response().entity().data().id().entity_type());
+				response.data.id.id = int2str(message.response().entity().data().id().id());
+				response.data.id.name = message.response().entity().data().id().name();
 				response.session_id = int2str(message.session_id());
-				if(response.data.id.entity_type == UNIT)
+				if((ns__EntityType)message.response().entity().data().id().entity_type() == UNIT)					
 				{
-					response.data.unit.base.entity_type = (ns__EntityType)message.response().entity().data().unit().base().entity_type();
+					response.data.unit.base.entity_type = int2str(message.response().entity().data().unit().base().entity_type());
 					response.data.unit.base.id = int2str(message.response().entity().data().unit().base().id());
 					response.data.unit.base.name = message.response().entity().data().unit().base().name();
 					response.data.unit.base.parentid = int2str(message.response().entity().data().unit().base().parent().id());
@@ -334,16 +465,16 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 					response.data.unit.size = int2str(message.response().entity().data().unit().members_size());
 					for(int i=0;i<atoi(response.data.unit.size.c_str());i++)
 					{
-						member.entity_type = (ns__EntityType)message.response().entity().data().unit().members(i).entity_type();
+						member.entity_type = int2str(message.response().entity().data().unit().members(i).entity_type());
 						member.id = int2str(message.response().entity().data().unit().members(i).id());
 						member.name = message.response().entity().data().unit().members(i).name();
 						member.parentid = int2str(message.response().entity().data().unit().members(i).parent().id());
 						response.data.unit.members.push_back(member);
 					}
 				}
-				else if(response.data.id.entity_type == ACCOUNT)
+				else if((ns__EntityType)message.response().entity().data().id().entity_type() == ACCOUNT)
 				{
-					response.data.account.base.entity_type = (ns__EntityType)message.response().entity().data().account().base().entity_type();
+					response.data.account.base.entity_type = int2str(message.response().entity().data().account().base().entity_type());
 					response.data.account.base.id = int2str(message.response().entity().data().account().base().id());
 					response.data.account.base.name = message.response().entity().data().account().base().name();
 					response.data.account.base.parentid = int2str(message.response().entity().data().account().base().parent().id());
@@ -351,45 +482,59 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 					response.data.account.priority = int2str(message.response().entity().data().account().priority());
 					response.data.account.short_number = message.response().entity().data().account().short_number();
 					response.data.account.sip_status = (ns__RegisterStatus)message.response().entity().data().account().sip_status();
-					response.data.account.status = (ns__RegisterStatus)message.response().entity().data().account().status();
-					response.data.account.token_privilege = (ns__TokenPrivilege)message.response().entity().data().account().token_privilege();
+					response.data.account.register_tatus = int2str(message.response().entity().data().account().status());
+					response.data.account.token_privilege = int2str(message.response().entity().data().account().token_privilege());
+					response.data.account.call_privilege = int2str(message.response().entity().data().account().call_privilege());
 				}
-				else if(response.data.id.entity_type == USER)
+				else if((ns__EntityType)message.response().entity().data().id().entity_type() == USER)
 				{
-					response.data.user.account.entity_type = (ns__EntityType)message.response().entity().data().user().account().entity_type();
+					response.data.user.account.entity_type = int2str(message.response().entity().data().user().account().entity_type());
 					response.data.user.account.id = int2str(message.response().entity().data().user().account().id());
 					response.data.user.account.name = message.response().entity().data().user().account().name();
 					response.data.user.account.parentid = int2str(message.response().entity().data().user().account().parent().id());
-					response.data.user.base.entity_type = (ns__EntityType)message.response().entity().data().user().base().entity_type();
+					response.data.user.base.entity_type = int2str(message.response().entity().data().user().base().entity_type());
 					response.data.user.base.id = int2str(message.response().entity().data().user().base().id());
 					response.data.user.base.name = message.response().entity().data().user().base().name();
 					response.data.user.base.parentid = int2str(message.response().entity().data().user().base().parent().id());
-					response.data.user.status = (ns__RegisterStatus)message.response().entity().data().user().status();
+					response.data.user.register_tatus = int2str(message.response().entity().data().user().status());
 				}
-				else if(response.data.id.entity_type == GROUP)
+				else if((ns__EntityType)message.response().entity().data().id().entity_type() == GROUP)
 				{
 					ns__Participant participant;
 					response.data.group.id = int2str(message.response().entity().data().group().base().id());
 					response.data.group.name = message.response().entity().data().group().base().name();
 					response.data.group.number = message.response().entity().data().group().number();
 					response.data.group.owner_id = int2str(message.response().entity().data().group().owner().id());
-
+					response.data.group.parent_id = int2str(message.response().entity().data().group().base().parent().id());
 					response.data.group.size = int2str(message.response().entity().data().group().participants_size());
 					for(int i=0;i<atoi(response.data.group.size.c_str());i++)
 					{
-						participant.account.entity_type = (ns__EntityType)message.response().entity().data().group().participants(i).account().entity_type();
-						participant.account.id = int2str(message.response().entity().data().group().participants(i).account().id());
-						participant.account.name = message.response().entity().data().group().participants(i).account().name();
-						participant.account.parentid = int2str(message.response().entity().data().group().participants(i).account().parent().id());
-						participant.call_privilege = (ns__CallPrivilege)message.response().entity().data().group().participants(i).call_privilege();
+						participant.id = int2str(message.response().entity().data().group().participants(i).account().id());
+						participant.name = message.response().entity().data().group().participants(i).account().name();
+						participant.parentid = int2str(message.response().entity().data().group().participants(i).account().parent().id());
+						participant.call_privilege = int2str(message.response().entity().data().group().participants(i).call_privilege());
 						participant.priority = int2str(message.response().entity().data().group().participants(i).priority());
-						participant.status = (ns__SessionStatus)message.response().entity().data().group().participants(i).status();
-						participant.token_privilege = (ns__TokenPrivilege)message.response().entity().data().group().participants(i).token_privilege();
+						participant.session_status = int2str(message.response().entity().data().group().participants(i).status());
+						participant.token_privilege = int2str(message.response().entity().data().group().participants(i).token_privilege());
 						response.data.group.participants.push_back(participant);
 					}
-					response.data.group.record_status = (ns__RecordStatus)message.response().entity().data().group().record_status();
-					response.data.group.record_type = (ns__RecordType)message.response().entity().data().group().record_type();
+					response.data.group.record_status = int2str(message.response().entity().data().group().record_status());
+					response.data.group.record_type = int2str(message.response().entity().data().group().record_type());
 					response.data.group.short_number = message.response().entity().data().group().short_number();
+				}
+				else if((ns__EntityType)message.response().entity().data().id().entity_type() == ALERT)
+				{
+					response.data.alert.alert_level = int2str(message.response().entity().data().alert().level());
+					//response.data.alert.alert_status = int2str(message.response().entity().data().alert().level());
+					response.data.alert.alram_time = message.response().entity().data().alert().alram_time();
+					response.data.alert.base.entity_type = int2str(message.response().entity().data().alert().base().entity_type());
+					response.data.alert.base.id = int2str(message.response().entity().data().alert().base().id());
+					response.data.alert.base.name = message.response().entity().data().alert().base().name();
+					response.data.alert.base.parentid = int2str(message.response().entity().data().alert().base().parent().id());
+					response.data.alert.create_time = message.response().entity().data().alert().create_time();
+					response.data.alert.describe = message.response().entity().data().alert().describe();
+					response.data.alert.use_cars = int2str(message.response().entity().data().alert().use_cars());
+					response.data.alert.group_id = int2str(message.response().entity().data().alert().group().id());
 				}
 			}
 			else
@@ -422,24 +567,49 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 											ns__Group group, 
 											ns__Dispatch_Append_Group_Response &response)
 {
-	int errorReturn;
-	int i = 0;
 	LOG(INFO)<<"Dispatch_Append_Group";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_sequence(get_sequence());
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_msg_type(app::dispatch::MSG::Append_Group_Request);
+	if(group.name.empty())
+	{
+		response.result = false;
+		response.error_describe = "name is empty";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_append_group()->mutable_group()->mutable_base()->set_name(group.name);
-	message.mutable_request()->mutable_append_group()->mutable_group()->mutable_owner()->set_id(atoi(group.owner_id.c_str()));
+	if(group.parent_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no parent id";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_append_group()->mutable_group()->mutable_base()->mutable_parent()->set_id(atoi(group.parent_id.c_str()));
+	message.mutable_request()->mutable_append_group()->mutable_group()->mutable_base()->set_entity_type((::pbmsg::EntityType)GROUP);
+	if(!group.sealed)
+		message.mutable_request()->mutable_append_group()->mutable_group()->set_sealed(false);
+	else
+		message.mutable_request()->mutable_append_group()->mutable_group()->set_sealed(true);
+	if(!group.short_number.empty())
+		message.mutable_request()->mutable_append_group()->mutable_group()->set_short_number(group.short_number);
 	if(atoi(group.size.c_str())!=0)
 	{
+		::pbmsg::Participant *participant;
+		message.mutable_request()->mutable_append_group()->mutable_group()->set_include_participants(true);
 		for(std::list<ns__Participant>::iterator itor = group.participants.begin();itor!=group.participants.end();itor++)
-		{		
-			message.mutable_request()->mutable_append_group()->mutable_group()->mutable_participants(i)->set_priority(atoi((itor->priority).c_str()));
-			message.mutable_request()->mutable_append_group()->mutable_group()->mutable_participants(i)->set_call_privilege((::pbmsg::CallPrivilege)itor->call_privilege);
-			message.mutable_request()->mutable_append_group()->mutable_group()->mutable_participants(i)->set_token_privilege((::pbmsg::TokenPrivilege)itor->token_privilege);
+		{	
+			participant = message.mutable_request()->mutable_append_group()->mutable_group()->add_participants();
+			participant->mutable_account()->set_id(atoi((itor->id).c_str()));
+			participant->set_priority(atoi((itor->priority).c_str()));
+			participant->set_call_privilege((::pbmsg::CallPrivilege)atoi((itor->call_privilege).c_str()));
+			participant->set_token_privilege((::pbmsg::TokenPrivilege)atoi((itor->token_privilege).c_str()));
 		}	
-		i++;
+	}
+	else
+	{
+		message.mutable_request()->mutable_append_group()->mutable_group()->set_include_participants(false);
 	}
 	std::string str;
 	if(!message.SerializeToString(&str))
@@ -449,27 +619,29 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -486,8 +658,10 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 				response.session_id = int2str(message.session_id());
 				response.data.id = int2str(message.response().append_group().group().base().id());
 				response.data.name = message.response().append_group().group().base().name();
+				response.data.sealed = message.response().append_group().group().sealed();
 				response.data.number = message.response().append_group().group().number();
 				response.data.owner_id = int2str(message.response().append_group().group().owner().id());
+				response.data.parent_id = int2str(message.response().append_group().group().owner().parent().id());
 				response.data.short_number = message.response().append_group().group().short_number();
 				response.data.record_status = (ns__RecordStatus)message.response().append_group().group().record_status();
 				response.data.record_type = (ns__RecordType)message.response().append_group().group().record_type();
@@ -497,12 +671,11 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 				{
 					participant.call_privilege = (ns__CallPrivilege)message.response().append_group().group().participants(i).call_privilege();
 					participant.priority = int2str(message.response().append_group().group().participants(i).priority());
-					participant.status = (ns__SessionStatus)message.response().append_group().group().participants(i).status();
+					participant.session_status = int2str(message.response().append_group().group().participants(i).status());
 					participant.token_privilege = (ns__TokenPrivilege)message.response().append_group().group().participants(i).token_privilege();
-					participant.account.entity_type = (ns__EntityType)message.response().append_group().group().participants(i).account().entity_type();
-					participant.account.id = int2str(message.response().append_group().group().participants(i).account().id());
-					participant.account.name = message.response().append_group().group().participants(i).account().name();
-					participant.account.parentid = int2str(message.response().append_group().group().participants(i).account().parent().id());
+					participant.id = int2str(message.response().append_group().group().participants(i).account().id());
+					participant.name = message.response().append_group().group().participants(i).account().name();
+					participant.parentid = int2str(message.response().append_group().group().participants(i).account().parent().id());
 					response.data.participants.push_back(participant);
 				}
 			}
@@ -527,15 +700,26 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 											ns__Group group, 
 											ns__Dispatch_Modify_Group_Response &response)
 {
-	int errorReturn;
-	int i = 0;
+	
 	LOG(INFO)<<"Dispatch_Modify_Group";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_sequence(get_sequence());
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_msg_type(app::dispatch::MSG::Modify_Group_Request);
-	message.mutable_request()->mutable_modify_group()->mutable_group()->mutable_base()->set_name(group.name);
-	message.mutable_request()->mutable_modify_group()->mutable_group()->mutable_owner()->set_id(atoi(group.owner_id.c_str()));
+	if(group.id.empty())
+	{
+		response.result = false;
+		response.error_describe = "group id is empty";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_modify_group()->mutable_group()->mutable_base()->set_id(atoi(group.id.c_str()));
+	if(!group.sealed)
+		message.mutable_request()->mutable_modify_group()->mutable_group()->set_sealed(false);
+	else
+		message.mutable_request()->mutable_modify_group()->mutable_group()->set_sealed(true);
+	if(!group.short_number.empty())
+		message.mutable_request()->mutable_modify_group()->mutable_group()->set_short_number(group.short_number);
 	std::string str;
 	if(!message.SerializeToString(&str))
 	{
@@ -544,27 +728,33 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	if(!message.IsInitialized())
+	{
+		LOG(ERROR)<<message.DebugString();
+	}
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -586,6 +776,8 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 				response.data.short_number = message.response().modify_group().group().short_number();
 				response.data.record_status = (ns__RecordStatus)message.response().modify_group().group().record_status();
 				response.data.record_type = (ns__RecordType)message.response().modify_group().group().record_type();
+				response.data.sealed = message.response().modify_group().group().sealed();
+				response.data.parent_id = int2str(message.response().modify_group().group().base().parent().id());
 			}
 			else
 			{
@@ -608,22 +800,43 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 												ns__Modify_Participant request, 
 												ns__Dispatch_Modify_Participants_Response &response)
 {
-	int errorReturn;
-	int i = 0;
 	LOG(INFO)<<"Dispatch_Modify_Participants";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_sequence(get_sequence());
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_msg_type(app::dispatch::MSG::Modify_Participants_Request);
+	if(request.group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_modify_participants()->mutable_group_id()->set_id(atoi(request.group_id.c_str()));
+	if(request.modify_type.empty())
+	{
+		response.result = false;
+		response.error_describe = "no modify type input";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_modify_participants()->set_modify_type((::pbmsg::ListModifyType)atoi(request.modify_type.c_str()));
 	if(atoi(request.size.c_str())!=0)
 	{
+		::pbmsg::Participant *participant;
 		for(std::list<ns__Participant>::iterator itor = request.participants.begin();itor!=request.participants.end();itor++)
 		{		
-			message.mutable_request()->mutable_append_group()->mutable_group()->mutable_participants(i)->set_priority(atoi((itor->priority).c_str()));
-			message.mutable_request()->mutable_append_group()->mutable_group()->mutable_participants(i)->set_call_privilege((::pbmsg::CallPrivilege)itor->call_privilege);
-			message.mutable_request()->mutable_append_group()->mutable_group()->mutable_participants(i)->set_token_privilege((::pbmsg::TokenPrivilege)itor->token_privilege);
+			participant = message.mutable_request()->mutable_modify_participants()->add_particiapnts();
+			participant->mutable_account()->set_id(atoi((itor->id).c_str()));
+			participant->set_priority(atoi((itor->priority).c_str()));
+			participant->set_call_privilege((::pbmsg::CallPrivilege)atoi((itor->call_privilege).c_str()));
+			participant->set_token_privilege((::pbmsg::TokenPrivilege)atoi((itor->token_privilege).c_str()));
 		}	
-		i++;
+	}
+	else
+	{
+		response.result = false;
+		response.error_describe = "no participants input";
+		return SOAP_OK;
 	}
 	std::string str;
 	if(!message.SerializeToString(&str))
@@ -633,27 +846,29 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -674,12 +889,11 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 				{
 					participant.call_privilege = (ns__CallPrivilege)message.response().append_group().group().participants(i).call_privilege();
 					participant.priority = int2str(message.response().append_group().group().participants(i).priority());
-					participant.status = (ns__SessionStatus)message.response().append_group().group().participants(i).status();
+					participant.session_status = int2str(message.response().append_group().group().participants(i).status());
 					participant.token_privilege = (ns__TokenPrivilege)message.response().append_group().group().participants(i).token_privilege();
-					participant.account.entity_type = (ns__EntityType)message.response().append_group().group().participants(i).account().entity_type();
-					participant.account.id = int2str(message.response().append_group().group().participants(i).account().id());
-					participant.account.name = message.response().append_group().group().participants(i).account().name();
-					participant.account.parentid = int2str(message.response().append_group().group().participants(i).account().parent().id());
+					participant.id = int2str(message.response().append_group().group().participants(i).account().id());
+					participant.name = message.response().append_group().group().participants(i).account().name();
+					participant.parentid = int2str(message.response().append_group().group().participants(i).account().parent().id());
 					response.data.participants.push_back(participant);
 				}
 			}
@@ -705,13 +919,20 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 											ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Delete_Group";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Delete_Group_Request);
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_delete_group()->mutable_group_id()->set_id(atoi(group_id.c_str()));
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -719,27 +940,29 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -748,7 +971,7 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 	LOG(INFO)<<"Parse data from protobuf protobuf";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
-		if(message.msg_type() == app::dispatch::MSG::Modify_Participants_Response)
+		if(message.msg_type() == app::dispatch::MSG::Delete_Group_Response)
 		{
 			if(message.response().result())
 			{
@@ -795,16 +1018,31 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 													ns__Dispatch_Media_Message_Request_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Media_Message_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Media_Message_Request);
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_group_message()->mutable_id()->set_id(atoi(group_id.c_str()));
-	message.mutable_request()->mutable_group_message()->set_from_message_id(atoi(from_message_id.c_str()));
-	message.mutable_request()->mutable_group_message()->set_from_timestamp(from_time);
+	if(!from_message_id.empty())
+		message.mutable_request()->mutable_group_message()->set_from_message_id(atoi(from_message_id.c_str()));
+	if(!from_time.empty())
+		message.mutable_request()->mutable_group_message()->set_from_timestamp(from_time);
+	if(max_message_count.empty())
+	{
+		response.result = false;
+		response.error_describe = "no max message count input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_group_message()->set_max_message_count(atoi(max_message_count.c_str()));
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -812,27 +1050,29 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -901,24 +1141,29 @@ int xiaofangService::Dispatch_Invite_Participant_Request(std::string session_id,
 														std::string account_id, 
 														ns__Normal_Response &response)
 {
-	return SOAP_OK;
-}
-
-int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
-														std::string group_id, 
-														std::string account_id, 
-														ns__Normal_Response &response)
-{
-	LOG(INFO)<<"Dispatch_Drop_Participant_Request";
+	LOG(INFO)<<"Dispatch_Invite_Participant_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Invite_Participant_Request);
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_invite_participant()->mutable_group_id()->set_id(atoi(group_id.c_str()));
+	if(account_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no account id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_invite_participant()->mutable_account_id()->set_id(atoi(account_id.c_str()));
 	
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -926,27 +1171,29 @@ int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -979,21 +1226,34 @@ int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
 	return SOAP_OK;
 }
 
-int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string session_id,
-																std::string group_id, 
-																std::string account_id, 
-																ns__Normal_Response &response)
+int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
+														std::string group_id, 
+														std::string account_id, 
+														ns__Normal_Response &response)
 {
-	LOG(INFO)<<"Dispatch_Release_Participant_Token_Request";
+	LOG(INFO)<<"Dispatch_Drop_Participant_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
-	message.set_msg_type(app::dispatch::MSG::Release_Participant_Token_Request);
-	message.mutable_request()->mutable_release_participant_token()->mutable_group_id()->set_id(atoi(group_id.c_str()));
-	message.mutable_request()->mutable_release_participant_token()->mutable_account_id()->set_id(atoi(account_id.c_str()));
+	message.set_msg_type(app::dispatch::MSG::Drop_Participant_Request);
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_drop_participant()->mutable_group_id()->set_id(atoi(group_id.c_str()));
+	if(account_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no account id input";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_drop_participant()->mutable_account_id()->set_id(atoi(account_id.c_str()));
 	
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1001,27 +1261,119 @@ int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string sess
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
+	{
+		response.result = false;
+		response.error_describe = "Read data from server error";
+		return SOAP_OK;
+	}
+	LOG(INFO)<<"Parse data from protobuf protobuf";
+	if (message.ParseFromString(connecttoserver.get_recstr()) )
+	{	
+		if(message.msg_type() == app::dispatch::MSG::Drop_Participant_Response)
+		{
+			if(message.response().result())
+			{
+				response.result = true;
+				response.session_id = int2str(message.session_id());
+			}
+			else
+			{
+				response.result = false;
+				response.error_describe = message.response().error_describe();
+			}
+		}
+	}
+	else
+	{
+		LOG(ERROR)<<message.InitializationErrorString();
+		response.result = false;
+		response.error_describe = message.InitializationErrorString();
+		return SOAP_OK;
+	}
+	return SOAP_OK;
+}
+
+int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string session_id,
+																std::string group_id, 
+																std::string account_id, 
+																ns__Normal_Response &response)
+{
+	LOG(INFO)<<"Dispatch_Release_Participant_Token_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
+	app::dispatch::Message message;
+	message.set_session_id(atoi(session_id.c_str()));
+	message.set_sequence(get_sequence());
+	message.set_msg_type(app::dispatch::MSG::Release_Participant_Token_Request);
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_release_participant_token()->mutable_group_id()->set_id(atoi(group_id.c_str()));
+	if(account_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no account id input";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_release_participant_token()->mutable_account_id()->set_id(atoi(account_id.c_str()));
+	
+	std::string str;
+	
+	if(!message.SerializeToString(&str))
+	{
+		LOG(ERROR)<<message.InitializationErrorString();
+		response.result = false;
+		response.error_describe = message.InitializationErrorString();
+		return SOAP_OK;
+	}
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
+	{
+		response.result = false;
+		response.error_describe = "Connection refused";
+		return SOAP_OK;
+	}
+	else if(connecttoserver.get_result() == -2)
+	{
+		response.result = false;
+		response.error_describe = "Write data to server error";
+		return SOAP_OK;
+	}
+		else if(connecttoserver.get_result() == -3)
+	{
+		response.result = false;
+		response.error_describe = "Read data len from server error";
+		return SOAP_OK;
+	}
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1060,15 +1412,28 @@ int xiaofangService::Dispatch_Appoint_Participant_Speak_Request(std::string sess
 																ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Appoint_Participant_Speak_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Appoint_Participant_Speak_Request);
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_appoint_participant_speak()->mutable_group_id()->set_id(atoi(group_id.c_str()));
+	if(account_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no account id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_appoint_participant_speak()->mutable_account_id()->set_id(atoi(account_id.c_str()));
 	
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1076,27 +1441,29 @@ int xiaofangService::Dispatch_Appoint_Participant_Speak_Request(std::string sess
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1134,14 +1501,21 @@ int xiaofangService::Dispatch_Jion_Group_Request(std::string session_id,
 												ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Jion_Group_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Jion_Group_Request);
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_jion_group()->mutable_group_id()->set_id(atoi(group_id.c_str()));
 	
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1149,27 +1523,29 @@ int xiaofangService::Dispatch_Jion_Group_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1207,14 +1583,21 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 													ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Jion_Group_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Leave_Group_Request);
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_leave_group()->mutable_group_id()->set_id(atoi(group_id.c_str()));
 	
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1222,27 +1605,29 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1286,21 +1671,35 @@ int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 													ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Send_Message_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Send_Message_Request);
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_send_message()->mutable_id()->set_id(atoi(group_id.c_str()));
-	message.mutable_request()->mutable_send_message()->mutable_msg()->set_sender(mediamessage.sender);
-	message.mutable_request()->mutable_send_message()->mutable_msg()->set_text(mediamessage.text);
-	message.mutable_request()->mutable_send_message()->mutable_msg()->set_picture_uri(mediamessage.picture_uri);
-	message.mutable_request()->mutable_send_message()->mutable_msg()->set_audio_uri(mediamessage.audio_uri);
-	message.mutable_request()->mutable_send_message()->mutable_msg()->set_audio_length(atoi(mediamessage.audio_length.c_str()));
-	message.mutable_request()->mutable_send_message()->mutable_msg()->set_video_uri(mediamessage.video_uri);
-	message.mutable_request()->mutable_send_message()->mutable_msg()->set_video_length(atoi(mediamessage.video_length.c_str()));
+	if(!mediamessage.sender.empty())
+		message.mutable_request()->mutable_send_message()->mutable_msg()->set_sender(mediamessage.sender);
+	if(!mediamessage.text.empty())
+		message.mutable_request()->mutable_send_message()->mutable_msg()->set_text(mediamessage.text);
+	if(!mediamessage.picture_uri.empty())
+		message.mutable_request()->mutable_send_message()->mutable_msg()->set_picture_uri(mediamessage.picture_uri);
+	if(!mediamessage.audio_uri.empty())
+		message.mutable_request()->mutable_send_message()->mutable_msg()->set_audio_uri(mediamessage.audio_uri);
+	if(!mediamessage.audio_length.empty())
+		message.mutable_request()->mutable_send_message()->mutable_msg()->set_audio_length(atoi(mediamessage.audio_length.c_str()));
+	if(!mediamessage.video_uri.empty())
+		message.mutable_request()->mutable_send_message()->mutable_msg()->set_video_uri(mediamessage.video_uri);
+	if(!mediamessage.video_length.empty())
+		message.mutable_request()->mutable_send_message()->mutable_msg()->set_video_length(atoi(mediamessage.video_length.c_str()));
 	
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1308,27 +1707,29 @@ int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1366,14 +1767,21 @@ int xiaofangService::Dispatch_Start_Record_Request(std::string session_id,
 													ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Start_Record_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Start_Record_Request);
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_start_record()->mutable_group_id()->set_id(atoi(group_id.c_str()));
 	
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1381,27 +1789,29 @@ int xiaofangService::Dispatch_Start_Record_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1439,14 +1849,21 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 												ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Stop_Record_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Stop_Record_Request);
-	message.mutable_request()->mutable_start_record()->mutable_group_id()->set_id(atoi(group_id.c_str()));
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_stop_record()->mutable_group_id()->set_id(atoi(group_id.c_str()));
 	
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1454,27 +1871,29 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1519,6 +1938,7 @@ int xiaofangService::Dispatch_Subscribe_Account_Info_Request(std::string session
 															std::string ttl, 
 															ns__Normal_Response &response)
 {
+	reset_keep_session_id(atoi(session_id.c_str()));
 	return SOAP_OK;
 }
 
@@ -1534,28 +1954,44 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 													ns__Dispatch_Append_Alert_Request_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Append_Alert_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Append_Alert_Request);
-	message.mutable_request()->mutable_append_alert()->mutable_alert()->mutable_base()->set_name(alert.base.name);
-	message.mutable_request()->mutable_append_alert()->mutable_alert()->set_describe(alert.describe);
-	message.mutable_request()->mutable_append_alert()->mutable_alert()->set_level((::pbmsg::AlertLevel)alert.level);
-	message.mutable_request()->mutable_append_alert()->mutable_alert()->set_alram_time(alert.alram_time);
-	message.mutable_request()->mutable_append_alert()->mutable_alert()->set_use_cars(atoi(alert.use_cars.c_str()));
-	message.mutable_request()->mutable_append_alert()->mutable_alert()->set_create_time(alert.create_time);
-	message.mutable_request()->mutable_append_alert()->mutable_alert()->mutable_group()->set_id(atoi(alert.group_id.c_str()));
-
-	int i=0;
+	if(alert.base.parentid.empty())
+	{
+		response.result = false;
+		response.error_describe = "parent id is empty";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_append_alert()->mutable_alert()->mutable_base()->mutable_parent()->set_id(atoi(alert.base.parentid.c_str()));
+	message.mutable_request()->mutable_append_alert()->mutable_alert()->mutable_base()->set_entity_type(::pbmsg::EntityType(ALERT));
+	if(!alert.base.name.empty())
+		message.mutable_request()->mutable_append_alert()->mutable_alert()->mutable_base()->set_name(alert.base.name);
+	if(!alert.describe.empty())
+		message.mutable_request()->mutable_append_alert()->mutable_alert()->set_describe(alert.describe);
+	if(!alert.alert_level.empty())
+		message.mutable_request()->mutable_append_alert()->mutable_alert()->set_level((::pbmsg::AlertLevel)atoi(alert.alert_level.c_str()));
+	if(!alert.alram_time.empty())
+		message.mutable_request()->mutable_append_alert()->mutable_alert()->set_alram_time(alert.alram_time);
+	if(!alert.use_cars.empty())
+		message.mutable_request()->mutable_append_alert()->mutable_alert()->set_use_cars(atoi(alert.use_cars.c_str()));
+	if(!alert.create_time.empty())
+		message.mutable_request()->mutable_append_alert()->mutable_alert()->set_create_time(alert.create_time);
+	if(!alert.group_id.empty())
+		message.mutable_request()->mutable_append_alert()->mutable_alert()->mutable_group()->set_id(atoi(alert.group_id.c_str()));
+	::pbmsg::Entity *entiry;
 	for(std::list<ns__Account>::iterator itor = members.begin();itor!=members.end();itor++)
 	{
-		message.mutable_request()->mutable_append_alert()->mutable_members(i)->set_id(atoi((itor->base.id).c_str()));
-		message.mutable_request()->mutable_append_alert()->mutable_members(i)->set_name(itor->base.name);
-		message.mutable_request()->mutable_append_alert()->mutable_members(i)->set_entity_type((::pbmsg::EntityType)itor->base.entity_type);
-		message.mutable_request()->mutable_append_alert()->mutable_members(i)->mutable_parent()->set_id(atoi(itor->base.parentid.c_str()));
+		entiry = message.mutable_request()->mutable_append_alert()->add_members();
+		entiry->set_id(atoi((itor->base.id).c_str()));
+		entiry->set_name(itor->base.name);
+		entiry->set_entity_type((::pbmsg::EntityType)atoi((itor->base.entity_type).c_str()));
+		entiry->set_id(atoi(itor->base.parentid.c_str()));
 	}
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1563,27 +1999,29 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1602,9 +2040,9 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 				response.data.create_time = message.response().append_alert().alert().create_time();
 				response.data.describe = message.response().append_alert().alert().describe();
 				response.data.group_id = int2str(message.response().append_alert().alert().group().id());
-				response.data.level = (ns__AlertLevel)message.response().append_alert().alert().level();
-				response.data.use_cars = message.response().append_alert().alert().use_cars();
-				response.data.base.entity_type = (ns__EntityType)message.response().append_alert().alert().base().entity_type();
+				response.data.alert_level = int2str(message.response().append_alert().alert().level());
+				response.data.use_cars = int2str(message.response().append_alert().alert().use_cars());
+				response.data.base.entity_type = int2str(message.response().append_alert().alert().base().entity_type());
 				response.data.base.id = int2str(message.response().append_alert().alert().base().id());
 				response.data.base.name = message.response().append_alert().alert().base().name();
 				response.data.base.parentid = int2str(message.response().append_alert().alert().base().parent().id());
@@ -1631,19 +2069,26 @@ int xiaofangService::Dispatch_Modify_Alert_Request(std::string session_id,
 													ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Modify_Alert_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Modify_Alert_Request);
-	message.mutable_request()->mutable_modify_alert()->mutable_alert()->mutable_base()->set_name(alert.base.name);
-	message.mutable_request()->mutable_modify_alert()->mutable_alert()->set_describe(alert.describe);
-	message.mutable_request()->mutable_modify_alert()->mutable_alert()->set_level((::pbmsg::AlertLevel)alert.level);
-	message.mutable_request()->mutable_modify_alert()->mutable_alert()->set_alram_time(alert.alram_time);
-	message.mutable_request()->mutable_modify_alert()->mutable_alert()->set_use_cars(atoi(alert.use_cars.c_str()));
-	message.mutable_request()->mutable_modify_alert()->mutable_alert()->set_create_time(alert.create_time);
+	if(!alert.base.name.empty())
+		message.mutable_request()->mutable_modify_alert()->mutable_alert()->mutable_base()->set_name(alert.base.name);
+	if(!alert.describe.empty())
+		message.mutable_request()->mutable_modify_alert()->mutable_alert()->set_describe(alert.describe);
+	if(!alert.alert_level.empty())
+		message.mutable_request()->mutable_modify_alert()->mutable_alert()->set_level((::pbmsg::AlertLevel)atoi(alert.alert_level.c_str()));
+	if(!alert.alram_time.empty())
+		message.mutable_request()->mutable_modify_alert()->mutable_alert()->set_alram_time(alert.alram_time);
+	if(!alert.use_cars.empty())
+		message.mutable_request()->mutable_modify_alert()->mutable_alert()->set_use_cars(atoi(alert.use_cars.c_str()));
+	if(!alert.create_time.empty())
+		message.mutable_request()->mutable_modify_alert()->mutable_alert()->set_create_time(alert.create_time);
 
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1651,27 +2096,29 @@ int xiaofangService::Dispatch_Modify_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1709,13 +2156,20 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 												ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Modify_Alert_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Stop_Alert_Request);
+	if(alert_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no alert id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_stop_alert()->mutable_alert_id()->set_id(atoi(alert_id.c_str()));
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1723,27 +2177,29 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1793,19 +2249,28 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 													ns__Dispatch_History_Alert_Request_Reponse &response)
 {
 	LOG(INFO)<<"Dispatch_History_Alert_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::History_Alerts_Request);
-	message.mutable_request()->mutable_history_alerts()->set_name(name);
-	message.mutable_request()->mutable_history_alerts()->set_create_time_from(create_time_from);
-	message.mutable_request()->mutable_history_alerts()->set_create_time_to(create_time_to);
-	message.mutable_request()->mutable_history_alerts()->set_alram_time_from(alram_time_from);
-	message.mutable_request()->mutable_history_alerts()->set_alram_time_to(alram_time_to);
-	message.mutable_request()->mutable_history_alerts()->set_over_time_from(over_time_from);
-	message.mutable_request()->mutable_history_alerts()->set_over_time_to(over_time_to);
+	message.mutable_request()->mutable_history_alerts();
+	if(!name.empty())
+		message.mutable_request()->mutable_history_alerts()->set_name(name);
+	if(!create_time_from.empty())
+		message.mutable_request()->mutable_history_alerts()->set_create_time_from(create_time_from);
+	if(!create_time_to.empty())
+		message.mutable_request()->mutable_history_alerts()->set_create_time_to(create_time_to);
+	if(!alram_time_from.empty())
+		message.mutable_request()->mutable_history_alerts()->set_alram_time_from(alram_time_from);
+	if(!alram_time_to.empty())
+		message.mutable_request()->mutable_history_alerts()->set_alram_time_to(alram_time_to);
+	if(!over_time_from.empty())
+		message.mutable_request()->mutable_history_alerts()->set_over_time_from(over_time_from);
+	if(!over_time_to.empty())
+		message.mutable_request()->mutable_history_alerts()->set_over_time_to(over_time_to);
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1813,27 +2278,29 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1857,7 +2324,7 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 					historyalert.create_time = message.response().history_alerts().history_alerts(i).create_time();
 					historyalert.describe = message.response().history_alerts().history_alerts(i).describe();
 					historyalert.id = int2str(message.response().history_alerts().history_alerts(i).id());
-					historyalert.level = (ns__AlertLevel)message.response().history_alerts().history_alerts(i).level();
+					historyalert.alert_level = int2str(message.response().history_alerts().history_alerts(i).level());
 					historyalert.name = message.response().history_alerts().history_alerts(i).name();
 					historyalert.over_time = message.response().history_alerts().history_alerts(i).over_time();
 					historyalert.use_cars = int2str(message.response().history_alerts().history_alerts(i).use_cars());
@@ -1886,13 +2353,20 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 											ns__Dispatch_Alert_Request_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Modify_Alert_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::History_Alert_Request);
+	if(alert_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no alert id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_history_alert()->set_history_alert_id(atoi(alert_id.c_str()));
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1900,27 +2374,29 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -1939,7 +2415,7 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 				response.data.create_time = message.response().history_alert().history_alert().create_time();
 				response.data.describe = message.response().history_alert().history_alert().describe();
 				response.data.id = int2str(message.response().history_alert().history_alert().id());
-				response.data.level = (ns__AlertLevel)message.response().history_alert().history_alert().level();
+				response.data.alert_level = int2str(message.response().history_alert().history_alert().level());
 				response.data.name = message.response().history_alert().history_alert().name();
 				response.data.over_time = message.response().history_alert().history_alert().over_time();
 				response.data.use_cars = int2str(message.response().history_alert().history_alert().use_cars());
@@ -1969,16 +2445,21 @@ int xiaofangService::Dispatch_History_Alert_Message_Request(std::string session_
 															ns__Dispatch_History_Alert_Message_Request_Response &response)
 {
 	LOG(INFO)<<"Dispatch_History_Alert_Message_Request";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::History_Alert_Message_Request);
-	message.mutable_request()->mutable_history_alert_message()->set_history_alert_id(atoi(history_alert_id.c_str()));
-	message.mutable_request()->mutable_history_alert_message()->set_from_message_id(atoi(from_message_id.c_str()));
-	message.mutable_request()->mutable_history_alert_message()->set_from_time(from_time);
-	message.mutable_request()->mutable_history_alert_message()->set_max_message_count(atoi(max_message_count.c_str()));
+	if(!history_alert_id.empty())
+		message.mutable_request()->mutable_history_alert_message()->set_history_alert_id(atoi(history_alert_id.c_str()));
+	if(!from_message_id.empty())
+		message.mutable_request()->mutable_history_alert_message()->set_from_message_id(atoi(from_message_id.c_str()));
+	if(!from_time.empty())
+		message.mutable_request()->mutable_history_alert_message()->set_from_time(from_time);
+	if(!max_message_count.empty())
+		message.mutable_request()->mutable_history_alert_message()->set_max_message_count(atoi(max_message_count.c_str()));
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1986,27 +2467,29 @@ int xiaofangService::Dispatch_History_Alert_Message_Request(std::string session_
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
@@ -2063,13 +2546,20 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 															ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Delete_Group";
+	reset_keep_session_id(atoi(session_id.c_str()));
 	app::dispatch::Message message;
 	message.set_session_id(atoi(session_id.c_str()));
 	message.set_sequence(get_sequence());
 	message.set_msg_type(app::dispatch::MSG::Delete_History_Alert_Request);
+	if(history_alert_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no history alert id input";
+		return SOAP_OK;
+	}
 	message.mutable_request()->mutable_delete_history_alert()->set_history_alert_id(atoi(history_alert_id.c_str()));
 	std::string str;
-	int errorReturn;
+	
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -2077,27 +2567,29 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	ConnectToAppServer connecttoserver;
-	errorReturn = connecttoserver.transportData(str,message.ByteSize());
-	if(errorReturn == -1)
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
 		response.error_describe = "Connection refused";
 		return SOAP_OK;
 	}
-	else if(errorReturn == -2)
+	else if(connecttoserver.get_result() == -2)
 	{
 		response.result = false;
 		response.error_describe = "Write data to server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -3)
+		else if(connecttoserver.get_result() == -3)
 	{
 		response.result = false;
 		response.error_describe = "Read data len from server error";
 		return SOAP_OK;
 	}
-		else if(errorReturn == -4)
+		else if(connecttoserver.get_result() == -4)
 	{
 		response.result = false;
 		response.error_describe = "Read data from server error";
