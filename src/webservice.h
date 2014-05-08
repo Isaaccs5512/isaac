@@ -289,10 +289,9 @@ param in	:account_id,//订阅或者取消的账号一般只可以订阅账号类型为Terminal的。
 param in	:ttl,//推送周期，单位s,subscribing==true时需要,否则默认为60s
 param out	:
 */
-int ns__Dispatch_Subscribe_Account_Info_Request(std::string session_id,
+int ns__Dispatch_Subscribe_Account_Location_Request(std::string session_id,
 												bool subscribing,
-												std::list<std::string> account_id,
-												enum ns__SubscribeType type,
+												std::string account_id,
 												std::string ttl,
 												ns__Normal_Response &response);
 
@@ -302,7 +301,7 @@ param in	:
 param in	:  
 param out	:response
 */
-int ns__Dispatch_Account_Info_Notification(std::string session_id,
+int ns__Dispatch_Account_Location_Notification(std::string session_id,
 			ns__Dispatch_Account_Info_Notification_Response &response);
 
 /*
@@ -397,4 +396,15 @@ param out	:
 */
 int ns__Dispatch_Delete_History_Alert_Request(std::string session_id,
 											std::string history_alert_id,
+											ns__Normal_Response &response);
+
+/*
+brief		:将指定的id踢出群组，如果没有制定id，那么清空群组
+param in	:history_alert_id
+param in	:  
+param out	:
+*/
+int ns__Dispatch_Kick_Participant_Request(std::string session_id,
+											std::string group_id,
+											std::string account_id,
 											ns__Normal_Response &response);

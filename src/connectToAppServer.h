@@ -18,7 +18,7 @@
 class ConnectToAppServer{
 public:
     ConnectToAppServer(asio::io_service&io_service,std::string msg,int len)
-        : socket_(io_service),recvlen_(0),sendstr_(msg),sendlen_(len)
+        : socket_(io_service),recvlen_(0),sendstr_(msg),sendlen_(len),recstr("")
     { 
     	timer = new asio::deadline_timer(io_service, boost::posix_time::seconds(5));
     } 
@@ -29,13 +29,15 @@ public:
 private:
     void handle_connect(const asio::error_code &error); 
 
-    void handle_write(const asio::error_code&error);
+    void read_head(const asio::error_code&error);
 
-    void handle_read_len(const asio::error_code&error);
+    void read_body(const asio::error_code&error);
 
-    void handle_read_data(const asio::error_code&error);
+    void read_more_body(const asio::error_code&error);
 	
 	std::string packData(std::string msg,int len);
+
+	void read_more();
 
 private:
     asio::ip::tcp::socket socket_;

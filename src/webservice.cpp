@@ -1931,18 +1931,102 @@ int xiaofangService::Dispatch_Record_Status_Notification(std::string session_id,
 	return SOAP_OK;
 }
 
-int xiaofangService::Dispatch_Subscribe_Account_Info_Request(std::string session_id,
+int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string session_id,
 															bool subscribing, 
-															std::list<std::string >account_id, 
-															enum ns__SubscribeType type, 
+															std::string account_id, 
 															std::string ttl, 
 															ns__Normal_Response &response)
 {
+	LOG(INFO)<<"Dispatch_Subscribe_Account_Location_Request";
 	reset_keep_session_id(atoi(session_id.c_str()));
+	app::dispatch::Message message;
+	message.set_session_id(atoi(session_id.c_str()));
+	message.set_sequence(get_sequence());
+	message.set_msg_type(app::dispatch::MSG::Subscribe_Account_Location_Request);
+	if(account_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "account id is empty";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_subscribe_account_location()->mutable_account_id()->set_id(atoi(account_id.c_str()));
+	if(ttl.empty())
+	{
+		response.result = false;
+		response.error_describe = "ttl is empty";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_subscribe_account_location()->set_ttl(atoi(ttl.c_str()));
+	if(!subscribing)
+		message.mutable_request()->mutable_subscribe_account_location()->set_subscribing(false);
+	else
+		message.mutable_request()->mutable_subscribe_account_location()->set_subscribing(true);
+	
+	std::string str;
+	
+	if(!message.SerializeToString(&str))
+	{
+		LOG(ERROR)<<message.InitializationErrorString();
+		response.result = false;
+		response.error_describe = message.InitializationErrorString();
+		return SOAP_OK;
+	}
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
+	{
+		response.result = false;
+		response.error_describe = "Connection refused";
+		return SOAP_OK;
+	}
+	else if(connecttoserver.get_result() == -2)
+	{
+		response.result = false;
+		response.error_describe = "Write data to server error";
+		return SOAP_OK;
+	}
+		else if(connecttoserver.get_result() == -3)
+	{
+		response.result = false;
+		response.error_describe = "Read data len from server error";
+		return SOAP_OK;
+	}
+		else if(connecttoserver.get_result() == -4)
+	{
+		response.result = false;
+		response.error_describe = "Read data from server error";
+		return SOAP_OK;
+	}
+	LOG(INFO)<<"Parse data from protobuf protobuf";
+	if (message.ParseFromString(connecttoserver.get_recstr()) )
+	{	
+		if(message.msg_type() == app::dispatch::MSG::Subscribe_Account_Location_Response)
+		{
+			if(message.response().result())
+			{
+				response.result = true;
+				response.session_id = int2str(message.session_id());
+			}
+			else
+			{
+				response.result = false;
+				response.error_describe = message.response().error_describe();
+			}
+		}
+	}
+	else
+	{
+		LOG(ERROR)<<message.InitializationErrorString();
+		response.result = false;
+		response.error_describe = message.InitializationErrorString();
+		return SOAP_OK;
+	}
 	return SOAP_OK;
 }
 
-int xiaofangService::Dispatch_Account_Info_Notification(std::string session_id, ns__Dispatch_Account_Info_Notification_Response &response)
+int xiaofangService::Dispatch_Account_Location_Notification(std::string session_id, ns__Dispatch_Account_Info_Notification_Response &response)
 {
 	return SOAP_OK;
 }
@@ -2599,6 +2683,92 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Delete_History_Alert_Response)
+		{
+			if(message.response().result())
+			{
+				response.result = true;
+				response.session_id = int2str(message.session_id());
+			}
+			else
+			{
+				response.result = false;
+				response.error_describe = message.response().error_describe();
+			}
+		}
+	}
+	else
+	{
+		LOG(ERROR)<<message.InitializationErrorString();
+		response.result = false;
+		response.error_describe = message.InitializationErrorString();
+		return SOAP_OK;
+	}
+	return SOAP_OK;
+}
+
+int xiaofangService::Dispatch_Kick_Participant_Request(std::string session_id,
+														std::string group_id,
+							
+														std::string account_id,
+							
+														ns__Normal_Response &response)
+{
+	LOG(INFO)<<"Dispatch_Delete_Group";
+	reset_keep_session_id(atoi(session_id.c_str()));
+	app::dispatch::Message message;
+	message.set_session_id(atoi(session_id.c_str()));
+	message.set_sequence(get_sequence());
+	message.set_msg_type(app::dispatch::MSG::Kick_Participant_Request);
+	if(group_id.empty())
+	{
+		response.result = false;
+		response.error_describe = "no group id input";
+		return SOAP_OK;
+	}
+	message.mutable_request()->mutable_kick_participant()->mutable_group_id()->set_id(atoi(group_id.c_str()));
+	if(!account_id.empty())
+		message.mutable_request()->mutable_kick_participant()->mutable_account_id()->set_id(atoi(account_id.c_str()));
+	std::string str;
+	
+	if(!message.SerializeToString(&str))
+	{
+		LOG(ERROR)<<message.InitializationErrorString();
+		response.result = false;
+		response.error_describe = message.InitializationErrorString();
+		return SOAP_OK;
+	}
+	asio::io_service io_service;
+	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	connecttoserver.start();
+	io_service.run();
+	if(connecttoserver.get_result() == -1)
+	{
+		response.result = false;
+		response.error_describe = "Connection refused";
+		return SOAP_OK;
+	}
+	else if(connecttoserver.get_result() == -2)
+	{
+		response.result = false;
+		response.error_describe = "Write data to server error";
+		return SOAP_OK;
+	}
+		else if(connecttoserver.get_result() == -3)
+	{
+		response.result = false;
+		response.error_describe = "Read data len from server error";
+		return SOAP_OK;
+	}
+		else if(connecttoserver.get_result() == -4)
+	{
+		response.result = false;
+		response.error_describe = "Read data from server error";
+		return SOAP_OK;
+	}
+	LOG(INFO)<<"Parse data from protobuf protobuf";
+	if (message.ParseFromString(connecttoserver.get_recstr()) )
+	{	
+		if(message.msg_type() == app::dispatch::MSG::Kick_Participant_Response)
 		{
 			if(message.response().result())
 			{

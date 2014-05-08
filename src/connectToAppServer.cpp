@@ -5,6 +5,8 @@
 #include <string>
 #include <array>
 #include "boost_1_55_0/boost/date_time/posix_time/posix_time.hpp"
+#include "protobuf/app.dispatch.pb.h"
+
 #define TIME_OUT 5
 
 void handler_timerout_error(asio::ip::tcp::socket &socket,const asio::error_code &error)
@@ -63,13 +65,13 @@ void ConnectToAppServer::handle_connect(const asio::error_code &error)
 	packData(sendstr_,sendlen_);
     asio::async_write(socket_,
         asio::buffer(str_,sendlen_+4),
-        boost::bind(&ConnectToAppServer::handle_write,
+        boost::bind(&ConnectToAppServer::read_head,
             this,
             asio::placeholders::error));
 	timer->async_wait(boost::bind(&handler_timerout_error,std::ref(socket_),asio::placeholders::error));
 } 
 
-void ConnectToAppServer::handle_write(const asio::error_code&error) 
+void ConnectToAppServer::read_head(const asio::error_code&error) 
 {
 	//timer->cancel();
 	timer->expires_from_now(boost::posix_time::seconds(TIME_OUT));
@@ -84,16 +86,31 @@ void ConnectToAppServer::handle_write(const asio::error_code&error)
     memset(lenbuf.get(),sizeof(lenbuf), 0);
     asio::async_read(socket_,
         asio::buffer(lenbuf.get(),4),
-        boost::bind(&ConnectToAppServer::handle_read_len,
+        boost::bind(&ConnectToAppServer::read_body,
             this,
             asio::placeholders::error));
 	timer->async_wait(boost::bind(&handler_timerout_error,std::ref(socket_),asio::placeholders::error));
 }
 
-void ConnectToAppServer::handle_read_len(const asio::error_code&error) 
+void ConnectToAppServer::read_more()
+{
+	timer->expires_from_now(boost::posix_time::seconds(TIME_OUT));
+	std::tr1::shared_ptr<char> tmplenbuf(new char[4]);
+	lenbuf = tmplenbuf;
+    memset(lenbuf.get(),sizeof(lenbuf), 0);
+    asio::async_read(socket_,
+        asio::buffer(lenbuf.get(),4),
+        boost::bind(&ConnectToAppServer::read_body,
+            this,
+            asio::placeholders::error));
+	timer->async_wait(boost::bind(&handler_timerout_error,std::ref(socket_),asio::placeholders::error));
+}
+
+void ConnectToAppServer::read_body(const asio::error_code&error) 
 {
 	//timer->cancel();
 	timer->expires_from_now(boost::posix_time::seconds(TIME_OUT));
+	recvlen_ = 0;
     if (error){
 		LOG(ERROR)<<error.message();
         socket_.close();
@@ -104,28 +121,40 @@ void ConnectToAppServer::handle_read_len(const asio::error_code&error)
 	recvlen_ |= ((lenbuf.get()[2])&0x000000ff) << 8;
 	recvlen_ |= ((lenbuf.get()[1])&0x000000ff) << 16;
 	recvlen_ |= ((lenbuf.get()[0])&0x000000ff) << 24;
-	
+
 	std::tr1::shared_ptr<char> tmprecvbuf(new char[recvlen_]);
 	recvbuf = tmprecvbuf;
     memset(recvbuf.get(),sizeof(recvbuf), 0);
     asio::async_read(socket_,
         asio::buffer(recvbuf.get(),recvlen_),
-        boost::bind(&ConnectToAppServer::handle_read_data,
+        boost::bind(&ConnectToAppServer::read_more_body,
             this,
             asio::placeholders::error));
 	timer->async_wait(boost::bind(&handler_timerout_error,std::ref(socket_),asio::placeholders::error));
 }
 
-void ConnectToAppServer::handle_read_data(const asio::error_code&error) 
+void ConnectToAppServer::read_more_body(const asio::error_code&error) 
 {
+	app::dispatch::Message message;
+	std::string tmpstr;
 	timer->cancel();
 	//timer->expires_from_now(boost::posix_time::seconds(TIME_OUT));
-	//timer->async_wait(boost::bind(&handler_timerout_error,std::ref(socket_)));
     if (error){
 		LOG(ERROR)<<error.message();
         socket_.close();
 		result_ = -4;
         return;
     } 
-	recstr = std::string(recvbuf.get(),recvlen_);
+	tmpstr = std::string(recvbuf.get(),recvlen_);
+	recstr +=tmpstr;
+	message.ParseFromString(tmpstr);
+	//std::cout<<message.DebugString()<<std::endl;
+	if(!message.response().last_response())//后面还有数据需要接受
+	{
+		read_more();
+	}
+	else
+	{
+		socket_.close();
+	}
 }
