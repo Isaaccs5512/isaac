@@ -13,11 +13,15 @@
 #include "timer.hpp"
 #include <thread>
 #include <mutex>
+#include <condition_variable>
+#include <atomic>
 
 #define BACKLOG (100)	// Max. request backlog 
 static unsigned long sequence = 1;
+std::mutex   keep_session_id_mutex;
 static std::map<unsigned long,int> keep_session_id;
-//static std::mutex m;
+std::mutex  keep_tcp_connection_mutex;
+static std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> > keep_tcp_connection;
 
 unsigned long get_sequence()
 {
@@ -36,17 +40,18 @@ std::string int2str(int n)
 
 void mainTimerHandler(){}
 
+int Dispatch_Keepalive_Request(std::string session_id,
+						ns__Normal_Response &response);
 void handler()
 {
 	std::map<unsigned long,int>::iterator itor;
 	ns__Normal_Response response;
-	xiaofangService ser;
-	//std::lock_guard<std::mutex> lock(m);
+	std::lock_guard<std::mutex> lock(keep_session_id_mutex);
 	for(itor = keep_session_id.begin();itor!=keep_session_id.end();++itor)
 	{
 		if(itor->second < 360)
 		{
-			ser.Dispatch_Keepalive_Request(int2str(itor->first),response);
+			Dispatch_Keepalive_Request(int2str(itor->first),response);
 			(itor->second)++;
 		}
 		else
@@ -57,11 +62,25 @@ void handler()
 
 void reset_keep_session_id(unsigned long session_id)
 {
-	//std::lock_guard<std::mutex> lock(m);
+	std::lock_guard<std::mutex> lock(keep_session_id_mutex);
 	std::map<unsigned long,int>::iterator itor = keep_session_id.find(session_id);
 	itor->second=0;
 }
 
+void earse_no_tcp_session(unsigned long session_id,std::tr1::shared_ptr<asio::ip::tcp::socket> new_socket)
+{
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.begin();
+	for(;itor_tcp!=keep_tcp_connection.end();++itor_tcp)
+	{
+		if(!itor_tcp->second->is_open())
+		{
+			keep_tcp_connection.erase(itor_tcp);
+			break;
+		}
+	}
+	keep_tcp_connection.insert(std::pair<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >(session_id,new_socket));
+}
 
 int main(int argc,char* argv[])
 {
@@ -148,6 +167,12 @@ int xiaofangService::Dispatch_Login(std::string name,
 	message.mutable_request()->mutable_login()->set_password(md5passwd);
 	
 	std::string str;
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -155,10 +180,27 @@ int xiaofangService::Dispatch_Login(std::string name,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+
+
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::tr1::shared_ptr<asio::io_service> io_service(new asio::io_service());
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket(new asio::ip::tcp::socket(*io_service.get()));
+	ConnectToAppServer connecttoserver(*io_service.get(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([io_service,cv]{
+		asio::io_service::work work(*io_service.get());
+		io_service->run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -183,9 +225,15 @@ int xiaofangService::Dispatch_Login(std::string name,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
+		else if(connecttoserver.get_result() == -5)
+	{
+		response.result = false;
+		response.error_describe = "time out";
+		return SOAP_OK;
+	}
 
-
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
+	message.Clear();
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Login_Response)
@@ -214,26 +262,22 @@ int xiaofangService::Dispatch_Login(std::string name,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	//keep_session_id.insert(atoi(response.session_id.c_str()),0);
-	//std::lock_guard<std::mutex> lock(m);
-	keep_session_id.insert(std::pair<unsigned long,int>(atoi(response.session_id.c_str()),0));
+
+	{
+		std::lock_guard<std::mutex> lock(keep_session_id_mutex);
+		keep_session_id.insert(std::pair<unsigned long,int>(atoi(response.session_id.c_str()),0));
+	}
+
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
+	keep_tcp_connection.insert(std::pair<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >(atoi(response.session_id.c_str()),socket));	
 	return SOAP_OK;
 }
 
 int xiaofangService::Dispatch_Logout(std::string session_id,
-									std::string name, 
-									std::string password, 
 									ns__Normal_Response &response)
 {
 	
 	LOG(INFO)<<"Dispatch logout";
-	if(name.empty() || password.empty())
-	{
-		response.result = false;
-		response.error_describe = "No name or password input";
-		return SOAP_OK;
-	}
-	std::string md5passwd = get_md5(password);	
 	
 	LOG(INFO)<<"Serializa data to protobuf protocol";
 	app::dispatch::Message message;
@@ -242,6 +286,12 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 	message.set_sequence(get_sequence());
 	
 	std::string str;
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -249,10 +299,37 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -277,7 +354,7 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Logout_Response)
@@ -304,14 +381,20 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 		return SOAP_OK;
 	}
 
-	//std::lock_guard<std::mutex> lock(m);
-	std::map<unsigned long,int>::iterator itor = keep_session_id.find(atoi(session_id.c_str()));
-	keep_session_id.erase(itor);
-		
+	{
+		std::lock_guard<std::mutex> lock(keep_session_id_mutex);
+		std::map<unsigned long,int>::iterator itor = keep_session_id.find(atoi(session_id.c_str()));
+		keep_session_id.erase(itor);
+	}
+	socket->close();
+	{
+		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
+		keep_tcp_connection.erase(itor_tcp);
+	}
 	return SOAP_OK;
 }
 
-int xiaofangService::Dispatch_Keepalive_Request(std::string session_id,
+int Dispatch_Keepalive_Request(std::string session_id,
 						ns__Normal_Response &response)
 {
 	
@@ -324,6 +407,12 @@ int xiaofangService::Dispatch_Keepalive_Request(std::string session_id,
 	message.set_sequence(get_sequence());
 	
 	std::string str;
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -331,10 +420,36 @@ int xiaofangService::Dispatch_Keepalive_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -359,7 +474,7 @@ int xiaofangService::Dispatch_Keepalive_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Keepalive_Response)
@@ -387,7 +502,6 @@ int xiaofangService::Dispatch_Keepalive_Request(std::string session_id,
 	}
 	return SOAP_OK;
 }
-
 int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 											std::string id, 
 											ns__Dispatch_Entity_Request_Response& response)
@@ -407,6 +521,12 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 	message.set_sequence(get_sequence());
 	reset_keep_session_id(atoi(session_id.c_str()));
 	std::string str;
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -414,10 +534,36 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -442,7 +588,7 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Entity_Response)
@@ -612,6 +758,12 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 		message.mutable_request()->mutable_append_group()->mutable_group()->set_include_participants(false);
 	}
 	std::string str;
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -619,10 +771,36 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -647,7 +825,7 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Append_Group_Response)
@@ -721,6 +899,12 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 	if(!group.short_number.empty())
 		message.mutable_request()->mutable_modify_group()->mutable_group()->set_short_number(group.short_number);
 	std::string str;
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -728,14 +912,36 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	if(!message.IsInitialized())
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
 	{
-		LOG(ERROR)<<message.DebugString();
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -760,7 +966,7 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Modify_Group_Response)
@@ -839,6 +1045,12 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 		return SOAP_OK;
 	}
 	std::string str;
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -846,10 +1058,36 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -874,7 +1112,7 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Modify_Participants_Response)
@@ -932,7 +1170,12 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 	}
 	message.mutable_request()->mutable_delete_group()->mutable_group_id()->set_id(atoi(group_id.c_str()));
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -940,10 +1183,36 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -968,7 +1237,7 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Delete_Group_Response)
@@ -1042,7 +1311,12 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 	}
 	message.mutable_request()->mutable_group_message()->set_max_message_count(atoi(max_message_count.c_str()));
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1050,10 +1324,36 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -1078,7 +1378,7 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Media_Message_Response)
@@ -1163,7 +1463,12 @@ int xiaofangService::Dispatch_Invite_Participant_Request(std::string session_id,
 	message.mutable_request()->mutable_invite_participant()->mutable_account_id()->set_id(atoi(account_id.c_str()));
 	
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1171,10 +1476,36 @@ int xiaofangService::Dispatch_Invite_Participant_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -1199,7 +1530,7 @@ int xiaofangService::Dispatch_Invite_Participant_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Invite_Participant_Response)
@@ -1253,7 +1584,12 @@ int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
 	message.mutable_request()->mutable_drop_participant()->mutable_account_id()->set_id(atoi(account_id.c_str()));
 	
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1261,10 +1597,36 @@ int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -1289,7 +1651,7 @@ int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Drop_Participant_Response)
@@ -1343,7 +1705,12 @@ int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string sess
 	message.mutable_request()->mutable_release_participant_token()->mutable_account_id()->set_id(atoi(account_id.c_str()));
 	
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1351,10 +1718,36 @@ int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string sess
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -1379,7 +1772,7 @@ int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string sess
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Release_Participant_Token_Response)
@@ -1433,7 +1826,12 @@ int xiaofangService::Dispatch_Appoint_Participant_Speak_Request(std::string sess
 	message.mutable_request()->mutable_appoint_participant_speak()->mutable_account_id()->set_id(atoi(account_id.c_str()));
 	
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1441,10 +1839,36 @@ int xiaofangService::Dispatch_Appoint_Participant_Speak_Request(std::string sess
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -1469,7 +1893,7 @@ int xiaofangService::Dispatch_Appoint_Participant_Speak_Request(std::string sess
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Appoint_Participant_Speak_Response)
@@ -1515,7 +1939,12 @@ int xiaofangService::Dispatch_Jion_Group_Request(std::string session_id,
 	message.mutable_request()->mutable_jion_group()->mutable_group_id()->set_id(atoi(group_id.c_str()));
 	
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1523,10 +1952,36 @@ int xiaofangService::Dispatch_Jion_Group_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -1551,7 +2006,7 @@ int xiaofangService::Dispatch_Jion_Group_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Jion_Group_Response)
@@ -1597,7 +2052,12 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 	message.mutable_request()->mutable_leave_group()->mutable_group_id()->set_id(atoi(group_id.c_str()));
 	
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1605,10 +2065,36 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -1633,7 +2119,7 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Leave_Group_Response)
@@ -1699,7 +2185,12 @@ int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 		message.mutable_request()->mutable_send_message()->mutable_msg()->set_video_length(atoi(mediamessage.video_length.c_str()));
 	
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1707,10 +2198,36 @@ int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -1735,7 +2252,7 @@ int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Send_Message_Response)
@@ -1781,7 +2298,12 @@ int xiaofangService::Dispatch_Start_Record_Request(std::string session_id,
 	message.mutable_request()->mutable_start_record()->mutable_group_id()->set_id(atoi(group_id.c_str()));
 	
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1789,10 +2311,36 @@ int xiaofangService::Dispatch_Start_Record_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -1817,7 +2365,7 @@ int xiaofangService::Dispatch_Start_Record_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Start_Record_Response)
@@ -1863,7 +2411,12 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 	message.mutable_request()->mutable_stop_record()->mutable_group_id()->set_id(atoi(group_id.c_str()));
 	
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1871,10 +2424,36 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -1899,7 +2478,7 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Stop_Record_Response)
@@ -1963,7 +2542,12 @@ int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string ses
 		message.mutable_request()->mutable_subscribe_account_location()->set_subscribing(true);
 	
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -1971,10 +2555,36 @@ int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string ses
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -1999,7 +2609,7 @@ int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string ses
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Subscribe_Account_Location_Response)
@@ -2075,7 +2685,12 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 		entiry->set_id(atoi(itor->base.parentid.c_str()));
 	}
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -2083,10 +2698,36 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -2111,7 +2752,7 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Append_Alert_Response)
@@ -2172,7 +2813,12 @@ int xiaofangService::Dispatch_Modify_Alert_Request(std::string session_id,
 		message.mutable_request()->mutable_modify_alert()->mutable_alert()->set_create_time(alert.create_time);
 
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -2180,10 +2826,36 @@ int xiaofangService::Dispatch_Modify_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -2208,7 +2880,7 @@ int xiaofangService::Dispatch_Modify_Alert_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Modify_Alert_Response)
@@ -2253,7 +2925,12 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 	}
 	message.mutable_request()->mutable_stop_alert()->mutable_alert_id()->set_id(atoi(alert_id.c_str()));
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -2261,10 +2938,36 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -2289,7 +2992,7 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Stop_Alert_Response)
@@ -2354,7 +3057,12 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 	if(!over_time_to.empty())
 		message.mutable_request()->mutable_history_alerts()->set_over_time_to(over_time_to);
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -2362,10 +3070,36 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -2390,7 +3124,7 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::History_Alerts_Response)
@@ -2450,7 +3184,12 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 	}
 	message.mutable_request()->mutable_history_alert()->set_history_alert_id(atoi(alert_id.c_str()));
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -2458,10 +3197,36 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -2486,7 +3251,7 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::History_Alert_Response)
@@ -2543,7 +3308,12 @@ int xiaofangService::Dispatch_History_Alert_Message_Request(std::string session_
 	if(!max_message_count.empty())
 		message.mutable_request()->mutable_history_alert_message()->set_max_message_count(atoi(max_message_count.c_str()));
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -2551,10 +3321,36 @@ int xiaofangService::Dispatch_History_Alert_Message_Request(std::string session_
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -2579,7 +3375,7 @@ int xiaofangService::Dispatch_History_Alert_Message_Request(std::string session_
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::History_Alert_Message_Response)
@@ -2643,7 +3439,12 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 	}
 	message.mutable_request()->mutable_delete_history_alert()->set_history_alert_id(atoi(history_alert_id.c_str()));
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -2651,10 +3452,36 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -2679,7 +3506,7 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Delete_History_Alert_Response)
@@ -2729,7 +3556,12 @@ int xiaofangService::Dispatch_Kick_Participant_Request(std::string session_id,
 	if(!account_id.empty())
 		message.mutable_request()->mutable_kick_participant()->mutable_account_id()->set_id(atoi(account_id.c_str()));
 	std::string str;
-	
+	if(!message.IsInitialized())
+	{
+		response.result = false;
+		response.error_describe = "Message can't be initialized";
+		return SOAP_OK;
+	}
 	if(!message.SerializeToString(&str))
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
@@ -2737,10 +3569,36 @@ int xiaofangService::Dispatch_Kick_Participant_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	asio::io_service io_service;
-	ConnectToAppServer connecttoserver(io_service,str,message.ByteSize());
+	std::mutex 	synchronous_mutex;
+	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.find(atoi(session_id.c_str()));
+	std::tr1::shared_ptr<asio::ip::tcp::socket> socket;
+	if(itor_tcp == keep_tcp_connection.end())
+	{
+		LOG(INFO)<<"Tcp connection has been closed";
+		response.result = false;
+		response.error_describe = "Tcp connection has been closed,please login";
+		return SOAP_OK;
+	}
+	else
+	{
+		 socket=itor_tcp->second;
+	}
+	ConnectToAppServer connecttoserver(socket->get_io_service(),socket,str,message.ByteSize(),cv,flag);
+	run_job([&connecttoserver,&synchronous_mutex]{
+	std::unique_lock<std::mutex> lock(synchronous_mutex);
 	connecttoserver.start();
-	io_service.run();
+	});
+	run_job([socket]{
+		asio::io_service::work work(socket->get_io_service());
+		socket->get_io_service().run();
+		});
+	{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		cv->wait(lock, [flag]{return flag->load();});
+	}
 	if(connecttoserver.get_result() == -1)
 	{
 		response.result = false;
@@ -2765,7 +3623,7 @@ int xiaofangService::Dispatch_Kick_Participant_Request(std::string session_id,
 		response.error_describe = "Read data from server error";
 		return SOAP_OK;
 	}
-	LOG(INFO)<<"Parse data from protobuf protobuf";
+	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(connecttoserver.get_recstr()) )
 	{	
 		if(message.msg_type() == app::dispatch::MSG::Kick_Participant_Response)

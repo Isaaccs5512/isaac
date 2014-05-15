@@ -9,15 +9,6 @@
 
 #define TIME_OUT 5
 
-void handler_timerout_error(asio::ip::tcp::socket &socket,const asio::error_code &error)
-{	
-	if(error != asio::error::operation_aborted)
-	{
-		LOG(ERROR)<<error.message();
-		socket.close();
-	}
-}
-
 std::string ConnectToAppServer::get_recstr()
 {
 	return recstr;
@@ -41,82 +32,144 @@ std::string ConnectToAppServer::packData(std::string msg,int len)
 	return str_;
 }
 
+void ConnectToAppServer::handler_timerout_error(const asio::error_code &error)
+{	
+	if(error != asio::error::operation_aborted)
+	{
+		LOG(ERROR)<<error.message();
+		result_ = -5;
+		if(!flag_.expired())
+			flag_shared_->store(true);
+		if(!cv_.expired())
+			cv_shared_->notify_one();
+	}
+}
+
 void ConnectToAppServer::start()
 {
-	timer->expires_from_now(boost::posix_time::seconds(TIME_OUT));
+	std::cout<<"11111111111"<<std::endl;
 	asio::ip::tcp::endpoint end_point(asio::ip::address::from_string(SERVERIP), SERVPORT);
-    socket_.async_connect(end_point,
-            boost::bind(&ConnectToAppServer::handle_connect,
-                this,
-                asio::placeholders::error));
-	timer->async_wait(boost::bind(&handler_timerout_error,std::ref(socket_),asio::placeholders::error));
+	if(socket_->is_open())
+	{
+		write();
+	}
+	else
+	{
+		socket_->async_connect(end_point,
+			[this](std::error_code ec){
+			if(!ec)
+			{
+				try{
+					timer_start.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				write();
+			}
+			else
+			{
+				try{
+					timer_start.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				result_ = -1;
+				if(!flag_.expired())
+					flag_shared_->store(true);
+				if(!cv_.expired())
+					cv_shared_->notify_one();
+			}
+		});
+		timer_start.expires_from_now(boost::posix_time::seconds(TIME_OUT));
+		timer_start.async_wait(boost::bind(&ConnectToAppServer::handler_timerout_error,this,asio::placeholders::error));
+	}
+	std::cout<<"2222222222"<<std::endl;
 } 
 
-void ConnectToAppServer::handle_connect(const asio::error_code &error)
+void ConnectToAppServer::write()
 {
-	//timer->cancel();
-	timer->expires_from_now(boost::posix_time::seconds(TIME_OUT));
-    if (error){
-		LOG(ERROR)<<error.message();
-        socket_.close();
-		result_ = -1;
-        return;
-    } 
+	std::cout<<"333333333"<<std::endl;
 	packData(sendstr_,sendlen_);
-    asio::async_write(socket_,
+	asio::async_write(*socket_.get(),
         asio::buffer(str_,sendlen_+4),
-        boost::bind(&ConnectToAppServer::read_head,
-            this,
-            asio::placeholders::error));
-	timer->async_wait(boost::bind(&handler_timerout_error,std::ref(socket_),asio::placeholders::error));
+        [this](std::error_code ec,std::size_t length){
+			if(!ec)
+			{
+				try{
+					timer_write.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				read_head();
+			}
+			else
+			{
+				try{
+					timer_write.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				result_ = -2;
+				if(!flag_.expired())
+					flag_shared_->store(true);
+				if(!cv_.expired())
+					cv_shared_->notify_one();
+			}
+	});
+	timer_write.expires_from_now(boost::posix_time::seconds(TIME_OUT));
+	timer_write.async_wait(boost::bind(&ConnectToAppServer::handler_timerout_error,this,asio::placeholders::error));
+	std::cout<<"444444444444"<<std::endl;
 } 
 
-void ConnectToAppServer::read_head(const asio::error_code&error) 
+void ConnectToAppServer::read_head() 
 {
-	//timer->cancel();
-	timer->expires_from_now(boost::posix_time::seconds(TIME_OUT));
-    if (error){
-		LOG(ERROR)<<error.message();
-        socket_.close();
-		result_ = -2;
-        return;
-    } 
+	std::cout<<"5555555555555"<<std::endl;
 	std::tr1::shared_ptr<char> tmplenbuf(new char[4]);
 	lenbuf = tmplenbuf;
     memset(lenbuf.get(),sizeof(lenbuf), 0);
-    asio::async_read(socket_,
+	asio::async_read(*socket_.get(),
         asio::buffer(lenbuf.get(),4),
-        boost::bind(&ConnectToAppServer::read_body,
-            this,
-            asio::placeholders::error));
-	timer->async_wait(boost::bind(&handler_timerout_error,std::ref(socket_),asio::placeholders::error));
+        [this](std::error_code ec,std::size_t length){
+			if(!ec)
+			{
+	std::cout<<"aaaaaaaa"<<std::endl;
+				try{
+					timer_read_head.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				read_body();
+			}
+			else
+			{
+	std::cout<<"bbbbbbbbbb"<<std::endl;
+				try{
+					timer_read_head.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				result_ = -3;
+				if(!flag_.expired())
+					flag_shared_->store(true);
+				if(!cv_.expired())
+					cv_shared_->notify_one();
+			}
+	});
+	timer_read_head.expires_from_now(boost::posix_time::seconds(TIME_OUT));
+	timer_read_head.async_wait(boost::bind(&ConnectToAppServer::handler_timerout_error,this,asio::placeholders::error));
+	std::cout<<"666666666666"<<std::endl;
 }
 
-void ConnectToAppServer::read_more()
+void ConnectToAppServer::read_body() 
 {
-	timer->expires_from_now(boost::posix_time::seconds(TIME_OUT));
-	std::tr1::shared_ptr<char> tmplenbuf(new char[4]);
-	lenbuf = tmplenbuf;
-    memset(lenbuf.get(),sizeof(lenbuf), 0);
-    asio::async_read(socket_,
-        asio::buffer(lenbuf.get(),4),
-        boost::bind(&ConnectToAppServer::read_body,
-            this,
-            asio::placeholders::error));
-	timer->async_wait(boost::bind(&handler_timerout_error,std::ref(socket_),asio::placeholders::error));
-}
-
-void ConnectToAppServer::read_body(const asio::error_code&error) 
-{
-	//timer->cancel();
-	timer->expires_from_now(boost::posix_time::seconds(TIME_OUT));
+	std::cout<<"77777777777"<<std::endl;
 	recvlen_ = 0;
-    if (error){
-		LOG(ERROR)<<error.message();
-        socket_.close();
-		result_ = -3;
-        return;
-    } 
 	recvlen_ |= ((lenbuf.get()[3])&0x000000ff);
 	recvlen_ |= ((lenbuf.get()[2])&0x000000ff) << 8;
 	recvlen_ |= ((lenbuf.get()[1])&0x000000ff) << 16;
@@ -125,36 +178,59 @@ void ConnectToAppServer::read_body(const asio::error_code&error)
 	std::tr1::shared_ptr<char> tmprecvbuf(new char[recvlen_]);
 	recvbuf = tmprecvbuf;
     memset(recvbuf.get(),sizeof(recvbuf), 0);
-    asio::async_read(socket_,
+
+	asio::async_read(*socket_.get(),
         asio::buffer(recvbuf.get(),recvlen_),
-        boost::bind(&ConnectToAppServer::read_more_body,
-            this,
-            asio::placeholders::error));
-	timer->async_wait(boost::bind(&handler_timerout_error,std::ref(socket_),asio::placeholders::error));
+        [this](std::error_code ec,std::size_t length){
+			if(!ec)
+			{
+				try{
+					timer_read_body.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				read_more_body();
+			}
+			else
+			{
+				try{
+					timer_read_body.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				result_ = -4;
+				if(!flag_.expired())
+					flag_shared_->store(true);
+				if(!cv_.expired())
+					cv_shared_->notify_one();
+			}
+	});
+	timer_read_body.expires_from_now(boost::posix_time::seconds(TIME_OUT));
+	timer_read_body.async_wait(boost::bind(&ConnectToAppServer::handler_timerout_error,this,asio::placeholders::error));
+	std::cout<<"88888888888"<<std::endl;
 }
 
-void ConnectToAppServer::read_more_body(const asio::error_code&error) 
+void ConnectToAppServer::read_more_body() 
 {
+	std::cout<<"99999999999"<<std::endl;
 	app::dispatch::Message message;
 	std::string tmpstr;
-	timer->cancel();
-	//timer->expires_from_now(boost::posix_time::seconds(TIME_OUT));
-    if (error){
-		LOG(ERROR)<<error.message();
-        socket_.close();
-		result_ = -4;
-        return;
-    } 
+	
 	tmpstr = std::string(recvbuf.get(),recvlen_);
 	recstr +=tmpstr;
 	message.ParseFromString(tmpstr);
-	//std::cout<<message.DebugString()<<std::endl;
 	if(!message.response().last_response())//后面还有数据需要接受
 	{
-		read_more();
+		read_head();
 	}
 	else
 	{
-		socket_.close();
+		if(!flag_.expired())
+			flag_shared_->store(true);
+		if(!cv_.expired())
+			cv_shared_->notify_one();
 	}
+	std::cout<<"000000000"<<std::endl;
 }

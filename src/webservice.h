@@ -16,8 +16,6 @@ param in	:
 param out	:
 */
 int ns__Dispatch_Logout(std::string session_id,
-						std::string name,
-						std::string password,
 						ns__Normal_Response &response);
 
 
@@ -27,8 +25,8 @@ param in	:
 param in	:
 param out	:
 */
-int ns__Dispatch_Keepalive_Request(std::string session_id,
-						ns__Normal_Response &response);
+/*int ns__Dispatch_Keepalive_Request(std::string session_id,
+						ns__Normal_Response &response);*/
 
 
 /*

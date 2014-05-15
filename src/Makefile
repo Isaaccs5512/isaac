@@ -13,10 +13,10 @@ SOURCE_OBJ = $(patsubst %.cpp,%.o,$(SOURCE))
 SERVER_SOURCE = $(SOURCE) $(PROTOBUF_SRC)
 SERVER_OBJ=$(PROTOBUF_OBJ) $(SOURCE_OBJ)
 .PHONY:all gsoap
-all : server
+all : webserver
 gsoap:
 	soapcpp2 -i -S -e webservice.h
-server:$(SERVER_OBJ)
+webserver:$(SERVER_OBJ)
 	$(CC) -o $@ $^
 %.o:%.cpp
 	$(CC) -o $@ -c $< $(FLAGS) $(INCLUDE)
@@ -29,6 +29,6 @@ server:$(SERVER_OBJ)
 
 .PHONY:clean gsoap_clean
 clean:
-	rm -f server *.o *.d *.d.* ./protobuf/*.o 
+	rm -f webserver *.o *.d *.d.* ./protobuf/*.o 
 gsoap_clean:
 	rm -f xiaofang* soap* ns.xsd
