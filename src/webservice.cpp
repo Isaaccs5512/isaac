@@ -42,7 +42,7 @@ void mainTimerHandler(){}
 
 int Dispatch_Keepalive_Request(std::string session_id,
 						ns__Normal_Response &response);
-void handler()
+void handler_keep_alive()
 {
 	std::map<unsigned long,int>::iterator itor;
 	ns__Normal_Response response;
@@ -60,6 +60,88 @@ void handler()
 	}
 }
 
+void handler_pushed_message()
+{
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
+	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.begin();
+	for(;itor_tcp!=keep_tcp_connection.end();++itor_tcp)
+	{
+		std::cout<<"aaaaaaaaaaa"<<std::endl;
+		std::mutex 	synchronous_mutex;
+		std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
+		std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
+
+		std::tr1::shared_ptr<asio::ip::tcp::socket> socket = itor_tcp->second;
+		unsigned long session_id = itor_tcp->first;
+		ConnectToAppServer connecttoserver(socket->get_io_service(),socket,"",0,cv,flag);
+		run_job([&connecttoserver,&synchronous_mutex]{
+		std::unique_lock<std::mutex> lock(synchronous_mutex);
+		connecttoserver.read_head_notification();
+		});
+		run_job([socket]{
+			asio::io_service::work work(socket->get_io_service());
+			socket->get_io_service().run();
+			});
+		{
+			std::unique_lock<std::mutex> lock(synchronous_mutex);
+			cv->wait(lock, [flag]{return flag->load();});
+		}
+		std::cout<<"ssssssssss"<<std::endl;
+		if(!connecttoserver.get_recstr().empty())
+		{
+		std::cout<<"ddddddddddd"<<std::endl;
+			app::dispatch::Message message;
+			app::dispatch::MSG message_type;
+			message.Clear();
+			if (message.ParseFromString(connecttoserver.get_recstr()) )
+			{	
+				message_type = message.msg_type();
+				switch(message_type)
+				{
+					case   app::dispatch::MSG::Entity_Notification:
+							std::cout<<" app::dispatch::MSG::Entity_Notification	"<<session_id<<std::endl;
+						break;
+					case	app::dispatch::MSG::Entity_Status_Notification:
+							std::cout<<" app::dispatch::MSG::Entity_Status_Notification	"<<session_id<<std::endl;
+						break;
+					case	app::dispatch::MSG::Participants_Notification:
+							std::cout<<" app::dispatch::MSG::Participants_Notification	"<<session_id<<std::endl;
+						break;
+					case	app::dispatch::MSG::Join_Group_Request_Notification:
+							std::cout<<" app::dispatch::MSG::Join_Group_Request_Notification	"<<session_id<<std::endl;
+						break;
+					case	app::dispatch::MSG::Participant_Status_Notification:
+							std::cout<<" app::dispatch::MSG::Participant_Status_Notification	"<<session_id<<std::endl;
+						break;
+					case	app::dispatch::MSG::Media_Message_Notification:
+							std::cout<<" app::dispatch::MSG::Media_Message_Notification	"<<session_id<<std::endl;
+						break;
+					case	app::dispatch::MSG::Participant_Connect_Request_Notification:
+							std::cout<<" app::dispatch::MSG::Participant_Connect_Request_Notification	"<<session_id<<std::endl;
+						break;
+					case	app::dispatch::MSG::Participant_Speak_Request_Notification:
+							std::cout<<" app::dispatch::MSG::Participant_Speak_Request_Notification	"<<session_id<<std::endl;
+						break;
+					case	app::dispatch::MSG::Session_Status_Notification:
+							std::cout<<" app::dispatch::MSG::Session_Status_Notification	"<<session_id<<std::endl;
+						break;
+					case	app::dispatch::MSG::Record_Status_Notification:
+							std::cout<<" app::dispatch::MSG::Record_Status_Notification	"<<session_id<<std::endl;
+						break;
+					case	app::dispatch::MSG::Account_Location_Notification:
+							std::cout<<" app::dispatch::MSG::Account_Location_Notification	"<<session_id<<std::endl;
+						break;
+					case	app::dispatch::MSG::Alert_Overed_Notification:
+							std::cout<<" app::dispatch::MSG::Alert_Overed_Notification	"<<session_id<<std::endl;
+						break;
+					defalut:
+						break;
+				}
+			}
+		}
+	}
+}
+
 void reset_keep_session_id(unsigned long session_id)
 {
 	std::lock_guard<std::mutex> lock(keep_session_id_mutex);
@@ -67,26 +149,12 @@ void reset_keep_session_id(unsigned long session_id)
 	itor->second=0;
 }
 
-void earse_no_tcp_session(unsigned long session_id,std::tr1::shared_ptr<asio::ip::tcp::socket> new_socket)
-{
-	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
-	std::map<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >::iterator itor_tcp = keep_tcp_connection.begin();
-	for(;itor_tcp!=keep_tcp_connection.end();++itor_tcp)
-	{
-		if(!itor_tcp->second->is_open())
-		{
-			keep_tcp_connection.erase(itor_tcp);
-			break;
-		}
-	}
-	keep_tcp_connection.insert(std::pair<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >(session_id,new_socket));
-}
-
 int main(int argc,char* argv[])
 {
 	xiaofangService service;
-	timer_pool_init(mainTimerHandler,5);
-	create_timer(handler,5,true);
+	timer_pool_init(mainTimerHandler,10);
+	create_timer(handler_keep_alive,5,true);
+	create_timer(handler_pushed_message,10, true);
    //	google::InitGoogleLogging("webservice");
 	FLAGS_log_dir = "/mnt/hgfs/centos_share/xiaofang/src/log";
 	LOG(INFO)<<"Service start\n";
@@ -181,7 +249,7 @@ int xiaofangService::Dispatch_Login(std::string name,
 		return SOAP_OK;
 	}
 
-
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -268,7 +336,6 @@ int xiaofangService::Dispatch_Login(std::string name,
 		keep_session_id.insert(std::pair<unsigned long,int>(atoi(response.session_id.c_str()),0));
 	}
 
-	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	keep_tcp_connection.insert(std::pair<unsigned long,std::tr1::shared_ptr<asio::ip::tcp::socket> >(atoi(response.session_id.c_str()),socket));	
 	return SOAP_OK;
 }
@@ -300,6 +367,7 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 		return SOAP_OK;
 	}
 
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -388,7 +456,6 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 	}
 	socket->close();
 	{
-		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		keep_tcp_connection.erase(itor_tcp);
 	}
 	return SOAP_OK;
@@ -420,6 +487,7 @@ int Dispatch_Keepalive_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -534,6 +602,7 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -627,7 +696,7 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 					response.data.account.number = message.response().entity().data().account().number();
 					response.data.account.priority = int2str(message.response().entity().data().account().priority());
 					response.data.account.short_number = message.response().entity().data().account().short_number();
-					response.data.account.sip_status = (ns__RegisterStatus)message.response().entity().data().account().sip_status();
+					response.data.account.sip_status = int2str(message.response().entity().data().account().sip_status());
 					response.data.account.register_tatus = int2str(message.response().entity().data().account().status());
 					response.data.account.token_privilege = int2str(message.response().entity().data().account().token_privilege());
 					response.data.account.call_privilege = int2str(message.response().entity().data().account().call_privilege());
@@ -771,6 +840,7 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -912,6 +982,7 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -1058,6 +1129,7 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -1183,6 +1255,7 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -1324,6 +1397,7 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -1476,6 +1550,7 @@ int xiaofangService::Dispatch_Invite_Participant_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -1597,6 +1672,7 @@ int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -1718,6 +1794,7 @@ int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string sess
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -1839,6 +1916,7 @@ int xiaofangService::Dispatch_Appoint_Participant_Speak_Request(std::string sess
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -1952,6 +2030,7 @@ int xiaofangService::Dispatch_Jion_Group_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -2065,6 +2144,7 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -2198,6 +2278,7 @@ int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -2311,6 +2392,7 @@ int xiaofangService::Dispatch_Start_Record_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -2424,6 +2506,7 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -2555,6 +2638,7 @@ int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string ses
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -2698,6 +2782,7 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -2826,6 +2911,7 @@ int xiaofangService::Dispatch_Modify_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -2938,6 +3024,7 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -3070,6 +3157,7 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -3197,6 +3285,7 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -3321,6 +3410,7 @@ int xiaofangService::Dispatch_History_Alert_Message_Request(std::string session_
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -3452,6 +3542,7 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));
@@ -3569,6 +3660,7 @@ int xiaofangService::Dispatch_Kick_Participant_Request(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	std::mutex 	synchronous_mutex;
 	std::tr1::shared_ptr<std::condition_variable> cv(new std::condition_variable());
 	std::tr1::shared_ptr<std::atomic<bool> > flag(new std::atomic<bool>(false));

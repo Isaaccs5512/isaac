@@ -33,6 +33,8 @@ public:
         timer_write(io_service),
         timer_read_head(io_service),
         timer_read_body(io_service),
+        timer_read_head_notification(io_service),
+        timer_read_body_notification(io_service),
         timer_start(io_service),
         cv_(cv),
         flag_(flag)
@@ -43,8 +45,12 @@ public:
     } 
 
     void start(); 
+	
 	std::string get_recstr();
+	
 	int get_result();
+
+	void read_head_notification();
 private:
     void write(); 
 
@@ -53,6 +59,8 @@ private:
     void read_body();
 
     void read_more_body();
+
+	void read_body_notification();
 	
 	std::string packData(std::string msg,int len);
 
@@ -60,7 +68,7 @@ private:
 
 	void write_with_tcp();
 
-	void handler_timerout_error(const asio::error_code &error);
+	void handler_timerout_error();
 
 private:
     std::tr1::shared_ptr<asio::ip::tcp::socket> socket_;
@@ -75,6 +83,8 @@ private:
 	asio::deadline_timer timer_start;
 	asio::deadline_timer timer_read_head;
 	asio::deadline_timer timer_read_body;
+	asio::deadline_timer timer_read_head_notification;
+	asio::deadline_timer timer_read_body_notification;
 	asio::deadline_timer timer_write;
     std::tr1::weak_ptr<std::condition_variable> cv_;
 	std::tr1::weak_ptr<std::atomic<bool> > flag_;

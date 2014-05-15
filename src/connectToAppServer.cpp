@@ -7,6 +7,7 @@
 #include "boost_1_55_0/boost/date_time/posix_time/posix_time.hpp"
 #include "protobuf/app.dispatch.pb.h"
 
+
 #define TIME_OUT 5
 
 std::string ConnectToAppServer::get_recstr()
@@ -32,22 +33,19 @@ std::string ConnectToAppServer::packData(std::string msg,int len)
 	return str_;
 }
 
-void ConnectToAppServer::handler_timerout_error(const asio::error_code &error)
+void ConnectToAppServer::handler_timerout_error()
 {	
-	if(error != asio::error::operation_aborted)
-	{
-		LOG(ERROR)<<error.message();
-		result_ = -5;
-		if(!flag_.expired())
-			flag_shared_->store(true);
-		if(!cv_.expired())
-			cv_shared_->notify_one();
-	}
+	std::cout<<"1111111111111"<<std::endl;
+	result_ = -5;
+	if(!flag_.expired())
+		flag_shared_->store(true);
+	if(!cv_.expired())
+		cv_shared_->notify_one();
+	socket_->cancel();
 }
 
 void ConnectToAppServer::start()
 {
-	std::cout<<"11111111111"<<std::endl;
 	asio::ip::tcp::endpoint end_point(asio::ip::address::from_string(SERVERIP), SERVPORT);
 	if(socket_->is_open())
 	{
@@ -56,7 +54,7 @@ void ConnectToAppServer::start()
 	else
 	{
 		socket_->async_connect(end_point,
-			[this](std::error_code ec){
+			[this](asio::error_code ec){
 			if(!ec)
 			{
 				try{
@@ -83,18 +81,21 @@ void ConnectToAppServer::start()
 			}
 		});
 		timer_start.expires_from_now(boost::posix_time::seconds(TIME_OUT));
-		timer_start.async_wait(boost::bind(&ConnectToAppServer::handler_timerout_error,this,asio::placeholders::error));
+		timer_start.async_wait([this](asio::error_code ec){
+			if(ec!=asio::error::operation_aborted)
+			{
+				handler_timerout_error();
+			}
+		});
 	}
-	std::cout<<"2222222222"<<std::endl;
 } 
 
 void ConnectToAppServer::write()
 {
-	std::cout<<"333333333"<<std::endl;
 	packData(sendstr_,sendlen_);
 	asio::async_write(*socket_.get(),
         asio::buffer(str_,sendlen_+4),
-        [this](std::error_code ec,std::size_t length){
+        [this](asio::error_code ec,std::size_t length){
 			if(!ec)
 			{
 				try{
@@ -121,22 +122,24 @@ void ConnectToAppServer::write()
 			}
 	});
 	timer_write.expires_from_now(boost::posix_time::seconds(TIME_OUT));
-	timer_write.async_wait(boost::bind(&ConnectToAppServer::handler_timerout_error,this,asio::placeholders::error));
-	std::cout<<"444444444444"<<std::endl;
+		timer_write.async_wait([this](asio::error_code ec){
+			if(ec!=asio::error::operation_aborted)
+			{
+				handler_timerout_error();
+			}
+		});
 } 
 
 void ConnectToAppServer::read_head() 
 {
-	std::cout<<"5555555555555"<<std::endl;
 	std::tr1::shared_ptr<char> tmplenbuf(new char[4]);
 	lenbuf = tmplenbuf;
     memset(lenbuf.get(),sizeof(lenbuf), 0);
 	asio::async_read(*socket_.get(),
         asio::buffer(lenbuf.get(),4),
-        [this](std::error_code ec,std::size_t length){
+        [this](asio::error_code ec,std::size_t length){
 			if(!ec)
 			{
-	std::cout<<"aaaaaaaa"<<std::endl;
 				try{
 					timer_read_head.cancel();
 				}catch(asio::system_error se)
@@ -147,7 +150,6 @@ void ConnectToAppServer::read_head()
 			}
 			else
 			{
-	std::cout<<"bbbbbbbbbb"<<std::endl;
 				try{
 					timer_read_head.cancel();
 				}catch(asio::system_error se)
@@ -162,13 +164,18 @@ void ConnectToAppServer::read_head()
 			}
 	});
 	timer_read_head.expires_from_now(boost::posix_time::seconds(TIME_OUT));
-	timer_read_head.async_wait(boost::bind(&ConnectToAppServer::handler_timerout_error,this,asio::placeholders::error));
-	std::cout<<"666666666666"<<std::endl;
+		timer_read_head.async_wait([this](asio::error_code ec){
+			if((ec!=asio::error::operation_aborted) && (ec.value()!=0))
+			{
+				LOG(ERROR)<<ec.message();
+				std::cout<<"444444444444"<<std::endl;
+				handler_timerout_error();
+			}
+		});
 }
 
 void ConnectToAppServer::read_body() 
 {
-	std::cout<<"77777777777"<<std::endl;
 	recvlen_ = 0;
 	recvlen_ |= ((lenbuf.get()[3])&0x000000ff);
 	recvlen_ |= ((lenbuf.get()[2])&0x000000ff) << 8;
@@ -181,7 +188,7 @@ void ConnectToAppServer::read_body()
 
 	asio::async_read(*socket_.get(),
         asio::buffer(recvbuf.get(),recvlen_),
-        [this](std::error_code ec,std::size_t length){
+        [this](asio::error_code ec,std::size_t length){
 			if(!ec)
 			{
 				try{
@@ -208,19 +215,23 @@ void ConnectToAppServer::read_body()
 			}
 	});
 	timer_read_body.expires_from_now(boost::posix_time::seconds(TIME_OUT));
-	timer_read_body.async_wait(boost::bind(&ConnectToAppServer::handler_timerout_error,this,asio::placeholders::error));
-	std::cout<<"88888888888"<<std::endl;
+		timer_read_body.async_wait([this](asio::error_code ec){
+			if(ec!=asio::error::operation_aborted)
+			{
+				handler_timerout_error();
+			}
+		});
 }
 
 void ConnectToAppServer::read_more_body() 
 {
-	std::cout<<"99999999999"<<std::endl;
 	app::dispatch::Message message;
 	std::string tmpstr;
 	
 	tmpstr = std::string(recvbuf.get(),recvlen_);
 	recstr +=tmpstr;
 	message.ParseFromString(tmpstr);
+	std::cout<<message.DebugString();
 	if(!message.response().last_response())//后面还有数据需要接受
 	{
 		read_head();
@@ -232,5 +243,100 @@ void ConnectToAppServer::read_more_body()
 		if(!cv_.expired())
 			cv_shared_->notify_one();
 	}
-	std::cout<<"000000000"<<std::endl;
 }
+
+void ConnectToAppServer::read_head_notification() 
+{
+	std::tr1::shared_ptr<char> tmplenbuf(new char[4]);
+	lenbuf = tmplenbuf;
+    memset(lenbuf.get(),sizeof(lenbuf), 0);
+	asio::async_read(*socket_.get(),
+        asio::buffer(lenbuf.get(),4),
+        [this](asio::error_code ec,std::size_t length){
+			if(!ec)
+			{
+				try{
+					timer_read_head_notification.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				read_body_notification();
+			}
+			else
+			{
+				try{
+					timer_read_head_notification.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				result_ = -3;
+				if(!flag_.expired())
+					flag_shared_->store(true);
+				if(!cv_.expired())
+					cv_shared_->notify_one();
+			}
+	});
+	timer_read_head_notification.expires_from_now(boost::posix_time::seconds(TIME_OUT));
+		timer_read_head_notification.async_wait([this](asio::error_code ec){
+			if(ec!=asio::error::operation_aborted)
+			{
+				LOG(ERROR)<<ec.message();
+				std::cout<<"444444444444"<<std::endl;
+				handler_timerout_error();
+			}
+		});
+}
+
+void ConnectToAppServer::read_body_notification() 
+{
+	std::cout<<"vvvvvvvvvvvvvvvv"<<std::endl;
+	recvlen_ = 0;
+	recvlen_ |= ((lenbuf.get()[3])&0x000000ff);
+	recvlen_ |= ((lenbuf.get()[2])&0x000000ff) << 8;
+	recvlen_ |= ((lenbuf.get()[1])&0x000000ff) << 16;
+	recvlen_ |= ((lenbuf.get()[0])&0x000000ff) << 24;
+
+	std::tr1::shared_ptr<char> tmprecvbuf(new char[recvlen_]);
+	recvbuf = tmprecvbuf;
+    memset(recvbuf.get(),sizeof(recvbuf), 0);
+
+	asio::async_read(*socket_.get(),
+        asio::buffer(recvbuf.get(),recvlen_),
+        [this](asio::error_code ec,std::size_t length){
+			if(!ec)
+			{
+				try{
+					timer_read_body_notification.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				recstr = std::string(recvbuf.get(),recvlen_);
+			}
+			else
+			{
+				try{
+					timer_read_body_notification.cancel();
+				}catch(asio::system_error se)
+				{
+					LOG(ERROR)<<"cancel timer error";
+				}
+				result_ = -4;
+				if(!flag_.expired())
+					flag_shared_->store(true);
+				if(!cv_.expired())
+					cv_shared_->notify_one();
+			}
+	});
+	timer_read_body_notification.expires_from_now(boost::posix_time::seconds(TIME_OUT));
+		timer_read_body_notification.async_wait([this](asio::error_code ec){
+			if(ec!=asio::error::operation_aborted)
+			{
+				std::cout<<"55555555555"<<std::endl;
+				handler_timerout_error();
+			}
+		});
+}
+
