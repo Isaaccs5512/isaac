@@ -10,6 +10,8 @@
 #include "boost_1_55_0/boost/bind.hpp"
 #include <condition_variable>
 #include <atomic>
+#include <queue>
+#include <map>
 
 
 #pragma once
@@ -19,75 +21,38 @@
 
 class ConnectToAppServer{
 public:
-    ConnectToAppServer(asio::io_service &io_service,
-		std::tr1::shared_ptr<asio::ip::tcp::socket> socket,
-		std::string msg,int len,
-		std::tr1::weak_ptr<std::condition_variable> cv,
-		std::tr1::weak_ptr<std::atomic<bool> > flag)
-        : socket_(socket),
-        recvlen_(0),
-        sendstr_(msg),
-        sendlen_(len),
-        recstr(""),
-        result_(0),
-        timer_write(io_service),
-        timer_read_head(io_service),
-        timer_read_body(io_service),
-        timer_read_head_notification(io_service),
-        timer_read_body_notification(io_service),
-        timer_start(io_service),
-        cv_(cv),
-        flag_(flag)
-    { 
-    	//socket_=socket;
-    	cv_shared_ = cv_.lock();
-		flag_shared_ = flag_.lock();
-    } 
+    ConnectToAppServer();
 
-    void start(); 
-	
-	std::string get_recstr();
-	
-	int get_result();
+	std::string get_response(unsigned long sequence);
 
-	void read_head_notification();
+	std::string get_notification();
+
+	void send_request(std::string requeststr);
+
 private:
+    void connect(); 
+
     void write(); 
 
     void read_head();
 
-    void read_body();
+    void read_body(std::tr1::shared_ptr<char> lenbuf);
 
-    void read_more_body();
-
-	void read_body_notification();
+    void read_more_body(std::tr1::shared_ptr<char> recvbuf,int recvlen_) ;
 	
 	std::string packData(std::string msg,int len);
-
-	void read_more();
-
-	void write_with_tcp();
 
 	void handler_timerout_error();
 
 private:
-    std::tr1::shared_ptr<asio::ip::tcp::socket> socket_;
-	std::string sendstr_;//传递进来的需要发送的数据
-	int sendlen_;//sendstr的长度
-	std::string str_;//sendstr经过重新封装后的数据
-	int recvlen_;
-	std::string recstr;//返回接受到的数据
-	int result_;
-	std::tr1::shared_ptr<char> lenbuf;
-	std::tr1::shared_ptr<char> recvbuf;
-	asio::deadline_timer timer_start;
+	asio::io_service io_service_;
+    asio::ip::tcp::socket socket_;
+	std::string recstr;
+	asio::deadline_timer timer_connect;
 	asio::deadline_timer timer_read_head;
 	asio::deadline_timer timer_read_body;
-	asio::deadline_timer timer_read_head_notification;
-	asio::deadline_timer timer_read_body_notification;
 	asio::deadline_timer timer_write;
-    std::tr1::weak_ptr<std::condition_variable> cv_;
-	std::tr1::weak_ptr<std::atomic<bool> > flag_;
-	std::tr1::shared_ptr<std::condition_variable> cv_shared_;
-	std::tr1::shared_ptr<std::atomic<bool> > flag_shared_;
+	std::map<unsigned long,std::string> response_message_map;
+	std::queue<std::string> notification_message_queue;
+	std::queue<std::string> request_queue;
 };
