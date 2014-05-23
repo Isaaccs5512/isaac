@@ -18,7 +18,7 @@
 #include <string>
 #include <set>
 
-#define BACKLOG (100)	// Max. request backlog 
+#define BACKLOG (100000)	// Max. request backlog 
 asio::io_service io_service;
 static unsigned long sequence = 1;
 std::mutex   keep_session_id_mutex;
@@ -52,6 +52,7 @@ void handler_keep_alive()
 	std::set<unsigned long>::iterator itor;
 	ns__Normal_Response response;
 	std::lock_guard<std::mutex> lock(keep_session_id_mutex);
+	std::cout<<"keep_session_id.size="<<keep_session_id.size()<<std::endl;
 	for(itor = keep_session_id.begin();itor!=keep_session_id.end();++itor)
 	{
 		Dispatch_Keepalive_Request(*itor,response);
@@ -616,7 +617,7 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 
 				ns__Entity member;
 				response.data.unit.size = int2str(message.response().entity().data().unit().members_size());
-				for(int i=0;i<std::stoul(response.data.unit.size,nullptr,0);i++)
+				for(int i=0;i<message.response().entity().data().unit().members_size();i++)
 				{
 					member.entity_type = int2str(message.response().entity().data().unit().members(i).entity_type());
 					member.id = int2str(message.response().entity().data().unit().members(i).id());
@@ -660,7 +661,7 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 				response.data.group.owner_id = int2str(message.response().entity().data().group().owner().id());
 				response.data.group.parent_id = int2str(message.response().entity().data().group().base().parent().id());
 				response.data.group.size = int2str(message.response().entity().data().group().participants_size());
-				for(int i=0;i<std::stoul(response.data.group.size,nullptr,0);i++)
+				for(int i=0;i<message.response().entity().data().group().participants_size();i++)
 				{
 					participant.id = int2str(message.response().entity().data().group().participants(i).account().id());
 					participant.name = message.response().entity().data().group().participants(i).account().name();
@@ -674,6 +675,23 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 				response.data.group.record_status = int2str(message.response().entity().data().group().record_status());
 				response.data.group.record_type = int2str(message.response().entity().data().group().record_type());
 				response.data.group.short_number = message.response().entity().data().group().short_number();
+			}
+			else if((ns__EntityType)message.response().entity().data().id().entity_type() == ORGANIZATION)
+			{
+				response.data.organization.base.entity_type = int2str(message.response().entity().data().organization().base().entity_type());
+				response.data.organization.base.id = int2str(message.response().entity().data().organization().base().id());
+				response.data.organization.base.name = message.response().entity().data().organization().base().name();
+				response.data.organization.base.parentid = int2str(message.response().entity().data().organization().base().parent().id());
+
+				ns__Entity entity;
+				for(int i=0;i<message.response().entity().data().organization().members_size();i++)
+				{
+					entity.entity_type = int2str(message.response().entity().data().organization().members(i).entity_type());
+					entity.id = int2str(message.response().entity().data().organization().members(i).id());
+					entity.name = message.response().entity().data().organization().members(i).name();
+					entity.parentid = int2str(message.response().entity().data().organization().members(i).parent().id());
+					response.data.organization.members.push_back(entity);
+				}
 			}
 			else if((ns__EntityType)message.response().entity().data().id().entity_type() == ALERT)
 			{
