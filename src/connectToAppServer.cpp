@@ -53,13 +53,6 @@ ConnectToAppServer::ConnectToAppServer():socket_(io_service),timer_read_body(io_
 			read_head();
 		}
 	});
-
-	run_job(
-	[this](){
-		asio::io_service::work work(io_service);
-		io_service.run();
-	}
-	);
 }
 
 std::string ConnectToAppServer::get_notification()
@@ -122,12 +115,24 @@ void ConnectToAppServer::read_head()
 		if(error != asio::error::operation_aborted)
 		{
 			LOG(ERROR)<<"read head fail";
-			socket_.cancel();
+			try
+			{
+				socket_.cancel();
+			}
+			catch(asio::system_error se)
+			{
+				LOG(ERROR)<<se.what();
+			}
 		}
 	});
 	asio::read(socket_,asio::buffer(lenbuf.get(),4));
-	asio::error_code ec;
-	timer_read_head.cancel(ec);
+	try{
+		timer_read_head.cancel();
+	}
+	catch(asio::error_code ec)
+	{
+		LOG(ERROR)<<ec.message();
+	}
 	read_body(lenbuf);
 }
 
@@ -146,13 +151,25 @@ void ConnectToAppServer::read_body(std::tr1::shared_ptr<char> lenbuf)
 	timer_read_body.async_wait([this](const asio::error_code& error){
 		if(error != asio::error::operation_aborted)
 		{
-			LOG(ERROR)<<"read body fail";
-			socket_.cancel();
+			LOG(ERROR)<<"read head fail";
+			try
+			{
+				socket_.cancel();
+			}
+			catch(asio::system_error se)
+			{
+				LOG(ERROR)<<se.what();
+			}
 		}
 	});
 	asio::read(socket_,asio::buffer(recvbuf.get(),recvlen_));
-	asio::error_code ec;
-	timer_read_body.cancel(ec);
+	try{
+		timer_read_body.cancel();
+	}
+	catch(asio::error_code ec)
+	{
+		LOG(ERROR)<<ec.message();
+	}
 
 	read_more_body(recvbuf,recvlen_);
 }
