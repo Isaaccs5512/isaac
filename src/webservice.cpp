@@ -131,7 +131,7 @@ int main(int argc,char* argv[])
 {
 	xiaofangService service;
 	timer_pool_init(mainTimerHandler,10);
-	create_timer(handler_keep_alive,5,true);
+	create_timer(handler_keep_alive,8,true);
 	create_timer(handler_pushed_message,10, true);
    //	google::InitGoogleLogging("webservice");
 	FLAGS_log_dir = "/mnt/hgfs/centos_share/xiaofang/src/log";
@@ -268,6 +268,7 @@ int xiaofangService::Dispatch_Login(std::string name,
 	else
 	{
 		LOG(ERROR)<<"socket write and read error";
+		connecttoserver_ptr->set_cancel_thread();
 		response.result = false;
 		response.error_describe = "socket write and read error";
 		return SOAP_OK;
@@ -287,6 +288,7 @@ int xiaofangService::Dispatch_Login(std::string name,
 		else
 		{
 			LOG(ERROR)<<message.response().error_describe();
+			connecttoserver_ptr->set_cancel_thread();
 			response.result = false;
 			response.error_describe = message.response().error_describe();
 			return SOAP_OK;
@@ -295,6 +297,7 @@ int xiaofangService::Dispatch_Login(std::string name,
 	else
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
+		connecttoserver_ptr->set_cancel_thread();
 		response.result = false;
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
@@ -378,11 +381,12 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 	else
 	{
 		LOG(ERROR)<<"socket write and read error";
+		connecttoserver_ptr->set_cancel_thread();
 		response.result = false;
 		response.error_describe = "socket write and read error";
 		return SOAP_OK;
 	}
-
+	connecttoserver_ptr->set_cancel_thread();
 	keep_tcp_connection.erase(itr);
 		
 	LOG(INFO)<<"Parse data from protobuf protocol";

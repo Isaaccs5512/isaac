@@ -89,6 +89,7 @@ void ConnectToAppServer::connect()
 
 	socket_.connect(end_point,ec);
 } 
+
 void ConnectToAppServer::send_request(std::string requeststr)
 {
 	request_queue.push(packData(requeststr,requeststr.length()));
@@ -114,7 +115,7 @@ void ConnectToAppServer::read_head()
 	timer_read_head.async_wait([this](const asio::error_code& error){
 		if(error != asio::error::operation_aborted)
 		{
-			LOG(ERROR)<<"read head fail";
+			LOG(ERROR)<<"read head time out";
 			try
 			{
 				socket_.cancel();
@@ -151,7 +152,7 @@ void ConnectToAppServer::read_body(std::tr1::shared_ptr<char> lenbuf)
 	timer_read_body.async_wait([this](const asio::error_code& error){
 		if(error != asio::error::operation_aborted)
 		{
-			LOG(ERROR)<<"read head fail";
+			LOG(ERROR)<<"read body time out";
 			try
 			{
 				socket_.cancel();
