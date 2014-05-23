@@ -28,15 +28,19 @@ std::string ConnectToAppServer::get_response(unsigned long sequence)
 	}
 }
 
-ConnectToAppServer::ConnectToAppServer():socket_(io_service_),timer_read_body(io_service_),
-										timer_read_head(io_service_),timer_connect(io_service_),
-										timer_write(io_service_)
+void ConnectToAppServer::set_cancel_thread()
+{
+	cancel_thread = true;
+}
+
+ConnectToAppServer::ConnectToAppServer():socket_(io_service),timer_read_body(io_service),
+										timer_read_head(io_service),cancel_thread(false)
 {
 	connect();
 
 	run_job(
 	[this](){
-		while(1)
+		while(!cancel_thread)
 		{
 			write();
 		}
@@ -44,7 +48,7 @@ ConnectToAppServer::ConnectToAppServer():socket_(io_service_),timer_read_body(io
 
 	run_job(
 	[this](){
-		while(1)
+		while(!cancel_thread)
 		{
 			read_head();
 		}
@@ -52,8 +56,8 @@ ConnectToAppServer::ConnectToAppServer():socket_(io_service_),timer_read_body(io
 
 	run_job(
 	[this](){
-		asio::io_service::work work(io_service_);
-		io_service_.run();
+		asio::io_service::work work(io_service);
+		io_service.run();
 	}
 	);
 }
@@ -85,11 +89,6 @@ std::string ConnectToAppServer::packData(std::string msg,int len)
 	return std::string(buf.get(),len+4);
 }
 
-void ConnectToAppServer::handler_timerout_error()
-{	
-	socket_.cancel();
-}
-
 void ConnectToAppServer::connect()
 {
 	asio::ip::tcp::endpoint end_point(asio::ip::address::from_string(SERVERIP), SERVPORT);
@@ -118,8 +117,17 @@ void ConnectToAppServer::read_head()
 	std::tr1::shared_ptr<char> lenbuf(new char[4]);
     memset(lenbuf.get(),sizeof(lenbuf), 0);
 
+	timer_read_head.expires_from_now(boost::posix_time::seconds(5));
+	timer_read_head.async_wait([this](const asio::error_code& error){
+		if(error != asio::error::operation_aborted)
+		{
+			LOG(ERROR)<<"read head fail";
+			socket_.cancel();
+		}
+	});
 	asio::read(socket_,asio::buffer(lenbuf.get(),4));
-
+	asio::error_code ec;
+	timer_read_head.cancel(ec);
 	read_body(lenbuf);
 }
 
@@ -134,8 +142,17 @@ void ConnectToAppServer::read_body(std::tr1::shared_ptr<char> lenbuf)
 	std::tr1::shared_ptr<char> recvbuf(new char[recvlen_]);
     memset(recvbuf.get(),sizeof(recvbuf), 0);
 
+	timer_read_body.expires_from_now(boost::posix_time::seconds(5));
+	timer_read_body.async_wait([this](const asio::error_code& error){
+		if(error != asio::error::operation_aborted)
+		{
+			LOG(ERROR)<<"read body fail";
+			socket_.cancel();
+		}
+	});
 	asio::read(socket_,asio::buffer(recvbuf.get(),recvlen_));
-
+	asio::error_code ec;
+	timer_read_body.cancel(ec);
 
 	read_more_body(recvbuf,recvlen_);
 }
@@ -148,7 +165,7 @@ void ConnectToAppServer::read_more_body(std::tr1::shared_ptr<char> recvbuf,int r
 	tmpstr = std::string(recvbuf.get(),recvlen_);
 	recstr +=tmpstr;
 	message.ParseFromString(tmpstr);
-	std::cout<<message.DebugString();
+	//std::cout<<message.DebugString();
 	if(message.sequence() == 0xffffffff)//notification message
 	{
 		notification_message_queue.push(recstr);

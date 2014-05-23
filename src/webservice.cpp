@@ -16,11 +16,13 @@
 #include <condition_variable>
 #include <atomic>
 #include <string>
+#include <set>
 
 #define BACKLOG (100)	// Max. request backlog 
+asio::io_service io_service;
 static unsigned long sequence = 1;
 std::mutex   keep_session_id_mutex;
-static std::map<unsigned long,int> keep_session_id;
+static std::set<unsigned long> keep_session_id;
 std::mutex  keep_tcp_connection_mutex;
 static std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> > keep_tcp_connection;
 
@@ -42,24 +44,18 @@ std::string int2str(int n)
 
 void mainTimerHandler(){}
 
-int Dispatch_Keepalive_Request(std::string session_id,
+int Dispatch_Keepalive_Request(unsigned long session_id,
 						ns__Normal_Response &response);
 
 void handler_keep_alive()
 {
-	std::map<unsigned long,int>::iterator itor;
+	std::set<unsigned long>::iterator itor;
 	ns__Normal_Response response;
 	std::lock_guard<std::mutex> lock(keep_session_id_mutex);
 	for(itor = keep_session_id.begin();itor!=keep_session_id.end();++itor)
 	{
-		if(itor->second < 360)
-		{
-			Dispatch_Keepalive_Request(int2str(itor->first),response);
-			(itor->second)++;
-		}
-		else
-			keep_session_id.erase(itor);
-		std::cout<<"first	="<<itor->first<<"	second=	"<<itor->second<<std::endl;
+		Dispatch_Keepalive_Request(*itor,response);
+		std::cout<<"Dispatch_Keepalive_Request	"<<*itor<<std::endl;
 	}
 }
 
@@ -129,12 +125,6 @@ void handler_pushed_message()
 	}
 }
 
-void reset_keep_session_id(unsigned long session_id)
-{
-	std::lock_guard<std::mutex> lock(keep_session_id_mutex);
-	std::map<unsigned long,int>::iterator itor = keep_session_id.find(session_id);
-	itor->second=0;
-}
 
 int main(int argc,char* argv[])
 {
@@ -145,7 +135,7 @@ int main(int argc,char* argv[])
    //	google::InitGoogleLogging("webservice");
 	FLAGS_log_dir = "/mnt/hgfs/centos_share/xiaofang/src/log";
 	LOG(INFO)<<"Service start\n";
-   	task_pool_init();
+	task_pool_init();
    	if (argc < 2) // no args: assume this is a CGI application 
    	{ 
 		LOG(INFO)<<"No IP address input\n";
@@ -244,9 +234,36 @@ int xiaofangService::Dispatch_Login(std::string name,
 	LOG(INFO)<<"Parse data from protobuf protocol";
 	message.Clear();
 
+
+	bool break_while = false;
+	asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
+	t.async_wait([this,&break_while](const asio::error_code& error){
+		if(error != asio::error::operation_aborted)
+		{
+			LOG(ERROR)<<"read head fail";
+			break_while = true;
+		}
+	});
 	do{
 		recev_str = connecttoserver_ptr->get_response(sequence_login);
-	}while(recev_str=="");
+	}while((recev_str=="") && (!break_while));
+
+	if(!break_while)
+	{
+		try{
+			t.cancel();
+		}catch(asio::system_error ec)
+		{
+			LOG(ERROR)<<ec.what();
+		}
+	}
+	else
+	{
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
+
 	
 	if(message.ParseFromString(recev_str))
 	{	
@@ -260,7 +277,7 @@ int xiaofangService::Dispatch_Login(std::string name,
 		}
 		else
 		{
-			LOG(ERROR)<<message.response().error_describe();;
+			LOG(ERROR)<<message.response().error_describe();
 			response.result = false;
 			response.error_describe = message.response().error_describe();
 			return SOAP_OK;
@@ -274,13 +291,14 @@ int xiaofangService::Dispatch_Login(std::string name,
 		return SOAP_OK;
 	}
 
-	{
-		std::lock_guard<std::mutex> lock(keep_session_id_mutex);
-		keep_session_id.insert(std::pair<unsigned long,int>(std::stoul(response.session_id,nullptr,0),0));
-	}
-
-	std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
+	std::lock(keep_session_id_mutex,keep_tcp_connection_mutex);
+	//std::lock_guard<std::mutex> lock(keep_session_id_mutex);
+	keep_session_id.insert(std::stoul(response.session_id,nullptr,0));
+	//std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 	keep_tcp_connection.insert(std::pair<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >(std::stoul(response.session_id,nullptr,0),connecttoserver_ptr));	
+
+	keep_session_id_mutex.unlock();
+	keep_tcp_connection_mutex.unlock();
 	return SOAP_OK;
 }
 
@@ -312,19 +330,26 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
+
+	std::lock(keep_tcp_connection_mutex,keep_session_id_mutex);
+	//std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
+	std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
+	if(itr == keep_tcp_connection.end())
 	{
-		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
-		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
-		connecttoserver_ptr->send_request(send_str);
-		message.Clear();
+		response.result = false;
+		response.error_describe = "session id not exist";
+		return SOAP_OK;
+	}
+	std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
+	connecttoserver_ptr->send_request(send_str);
+	message.Clear();
 
-		do{
-			recev_str = connecttoserver_ptr->get_response(sequence_logout);
-		}while(recev_str=="");
+	do{
+		recev_str = connecttoserver_ptr->get_response(sequence_logout);
+	}while(recev_str=="");
 
-		keep_tcp_connection.erase(itr);
-	}//unlock keep_tcp_connection_mutex
+	keep_tcp_connection.erase(itr);
+		
 	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(recev_str))
 	{	
@@ -348,16 +373,23 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-
+	
+	//std::lock_guard<std::mutex> lock(keep_session_id_mutex);
+	std::set<unsigned long>::iterator itor = keep_session_id.find(std::stoul(session_id,nullptr,0));
+	if(itor == keep_session_id.end())
 	{
-		std::lock_guard<std::mutex> lock(keep_session_id_mutex);
-		std::map<unsigned long,int>::iterator itor = keep_session_id.find(std::stoul(session_id,nullptr,0));
-		keep_session_id.erase(itor);
+		response.result = false;
+		response.error_describe = "session id not exist";
+		return SOAP_OK;
 	}
+	keep_session_id.erase(itor);
+
+	keep_tcp_connection_mutex.unlock();
+	keep_session_id_mutex.unlock();
 	return SOAP_OK;
 }
 
-int Dispatch_Keepalive_Request(std::string session_id,
+int Dispatch_Keepalive_Request(unsigned long session_id,
 						ns__Normal_Response &response)
 {
 	
@@ -366,7 +398,7 @@ int Dispatch_Keepalive_Request(std::string session_id,
 	LOG(INFO)<<"Serializa data to protobuf protocol";
 	app::dispatch::Message message;
 	message.set_msg_type(app::dispatch::MSG::Keepalive_Request);
-	message.set_session_id(std::stoul(session_id,nullptr,0));
+	message.set_session_id(session_id);
 	unsigned long sequence_keepalive = get_sequence();
 	message.set_sequence(sequence_keepalive);
 	
@@ -387,7 +419,13 @@ int Dispatch_Keepalive_Request(std::string session_id,
 	}
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
-		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
+		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(session_id);
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 		connecttoserver_ptr->send_request(send_str);
 		message.Clear();
@@ -439,7 +477,6 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 	message.mutable_request()->mutable_entity()->mutable_id()->set_id(std::stoul(id,nullptr,0));
 	unsigned long sequence_entity_request = get_sequence();
 	message.set_sequence(sequence_entity_request);
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
 	std::string send_str;
 	std::string recev_str;
 	if(!message.IsInitialized())
@@ -458,7 +495,12 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -593,7 +635,6 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 											ns__Dispatch_Append_Group_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Append_Group";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
 	app::dispatch::Message message;
 	unsigned long sequence_append_group = get_sequence();
 	message.set_sequence(sequence_append_group);
@@ -655,7 +696,12 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -719,7 +765,7 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 {
 	
 	LOG(INFO)<<"Dispatch_Modify_Group";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	unsigned long sequence_modify_group = get_sequence();
 	message.set_sequence(sequence_modify_group);
@@ -756,7 +802,12 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -806,7 +857,7 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 												ns__Dispatch_Modify_Participants_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Modify_Participants";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	unsigned long sequence_modify_participants = get_sequence();
 	message.set_sequence(sequence_modify_participants);
@@ -862,7 +913,12 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -916,7 +972,7 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 											ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Delete_Group";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_delete_group = get_sequence();
@@ -947,7 +1003,12 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1006,7 +1067,7 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 													ns__Dispatch_Media_Message_Request_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Media_Message_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_media_message = get_sequence();
@@ -1048,7 +1109,12 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1121,7 +1187,7 @@ int xiaofangService::Dispatch_Invite_Participant_Request(std::string session_id,
 														ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Invite_Participant_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_invite_participant = get_sequence();
@@ -1160,7 +1226,12 @@ int xiaofangService::Dispatch_Invite_Participant_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1202,7 +1273,7 @@ int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
 														ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Drop_Participant_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_drop_participant = get_sequence();
@@ -1241,7 +1312,12 @@ int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1283,7 +1359,7 @@ int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string sess
 																ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Release_Participant_Token_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_release_participant_token = get_sequence();
@@ -1322,7 +1398,12 @@ int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string sess
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1364,7 +1445,7 @@ int xiaofangService::Dispatch_Appoint_Participant_Speak_Request(std::string sess
 																ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Appoint_Participant_Speak_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_appoint_participant_speak = get_sequence();
@@ -1403,7 +1484,12 @@ int xiaofangService::Dispatch_Appoint_Participant_Speak_Request(std::string sess
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1444,7 +1530,7 @@ int xiaofangService::Dispatch_Jion_Group_Request(std::string session_id,
 												ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Jion_Group_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_jion_group = get_sequence();
@@ -1476,7 +1562,12 @@ int xiaofangService::Dispatch_Jion_Group_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1517,7 +1608,7 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 													ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Jion_Group_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_leave_group = get_sequence();
@@ -1549,7 +1640,12 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1596,7 +1692,7 @@ int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 													ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Send_Message_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_send_message = get_sequence();
@@ -1642,7 +1738,12 @@ int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1683,7 +1784,7 @@ int xiaofangService::Dispatch_Start_Record_Request(std::string session_id,
 													ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Start_Record_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_start_recode = get_sequence();
@@ -1715,7 +1816,12 @@ int xiaofangService::Dispatch_Start_Record_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1756,7 +1862,7 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 												ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Stop_Record_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_stop_record = get_sequence();
@@ -1788,7 +1894,12 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1836,7 +1947,7 @@ int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string ses
 															ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Subscribe_Account_Location_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_subcribe_account_location = get_sequence();
@@ -1879,7 +1990,12 @@ int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string ses
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -1927,7 +2043,7 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 													ns__Dispatch_Append_Alert_Request_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Append_Alert_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_append_alert = get_sequence();
@@ -1982,7 +2098,12 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -2033,7 +2154,7 @@ int xiaofangService::Dispatch_Modify_Alert_Request(std::string session_id,
 													ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Modify_Alert_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_modify_alert = get_sequence();
@@ -2070,7 +2191,12 @@ int xiaofangService::Dispatch_Modify_Alert_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -2111,7 +2237,7 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 												ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Modify_Alert_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_stop_alert = get_sequence();
@@ -2142,7 +2268,12 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -2195,7 +2326,7 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 													ns__Dispatch_History_Alert_Request_Reponse &response)
 {
 	LOG(INFO)<<"Dispatch_History_Alert_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_history_alert = get_sequence();
@@ -2234,7 +2365,12 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -2290,7 +2426,7 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 											ns__Dispatch_Alert_Request_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Modify_Alert_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_alert = get_sequence();
@@ -2321,7 +2457,12 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -2373,7 +2514,7 @@ int xiaofangService::Dispatch_History_Alert_Message_Request(std::string session_
 															ns__Dispatch_History_Alert_Message_Request_Response &response)
 {
 	LOG(INFO)<<"Dispatch_History_Alert_Message_Request";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_history_alert_message = get_sequence();
@@ -2405,7 +2546,12 @@ int xiaofangService::Dispatch_History_Alert_Message_Request(std::string session_
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -2465,7 +2611,7 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 															ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Delete_Group";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_delete_history_alert = get_sequence();
@@ -2496,7 +2642,12 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -2540,7 +2691,7 @@ int xiaofangService::Dispatch_Kick_Participant_Request(std::string session_id,
 														ns__Normal_Response &response)
 {
 	LOG(INFO)<<"Dispatch_Delete_Group";
-	reset_keep_session_id(std::stoul(session_id,nullptr,0));
+	
 	app::dispatch::Message message;
 	message.set_session_id(std::stoul(session_id,nullptr,0));
 	unsigned long sequence_kick_participant = get_sequence(); 
@@ -2573,7 +2724,12 @@ int xiaofangService::Dispatch_Kick_Participant_Request(std::string session_id,
 	{
 		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
 		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
-
+		if(itr == keep_tcp_connection.end())
+		{
+			response.result = false;
+			response.error_describe = "session id not exist";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);

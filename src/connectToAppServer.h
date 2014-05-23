@@ -19,6 +19,7 @@
 #define SERVERIP "192.168.0.43"
 #define SERVPORT 38881    /*·þÎñÆ÷¼àÌý¶Ë¿ÚºÅ */
 
+extern asio::io_service io_service;
 class ConnectToAppServer{
 public:
     ConnectToAppServer();
@@ -29,6 +30,7 @@ public:
 
 	void send_request(std::string requeststr);
 
+	void set_cancel_thread();
 private:
     void connect(); 
 
@@ -41,17 +43,12 @@ private:
     void read_more_body(std::tr1::shared_ptr<char> recvbuf,int recvlen_) ;
 	
 	std::string packData(std::string msg,int len);
-
-	void handler_timerout_error();
-
 private:
-	asio::io_service io_service_;
+	bool cancel_thread;
     asio::ip::tcp::socket socket_;
 	std::string recstr;
-	asio::deadline_timer timer_connect;
 	asio::deadline_timer timer_read_head;
 	asio::deadline_timer timer_read_body;
-	asio::deadline_timer timer_write;
 	std::map<unsigned long,std::string> response_message_map;
 	std::queue<std::string> notification_message_queue;
 	std::queue<std::string> request_queue;
