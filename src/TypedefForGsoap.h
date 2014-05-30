@@ -112,9 +112,9 @@ enum ns__EntityType
 	UNIT = 0,//    单元
 	ACCOUNT = 1,//  PoC账号
 	USER = 2,//     用户
-	GROUP = 3,//  群组
+	GROUPW = 3,//  群组
 //	GATEWAY = 4,//  媒体网关（录音服务器合并一起）
-//	ORGANIZATION = 5,// 组织（PoC账号的集合）
+	ORGANIZATION = 5,// 组织（PoC账号的集合）
 	ALERT = 6,
 };
 
@@ -251,7 +251,7 @@ class ns__Organization
 {
 public:
 	ns__Entity base;
-	ns__Entity members;
+	std::list<ns__Entity> members;
 };
 
 
@@ -493,3 +493,4 @@ class ns__Normal_Response
 	std::string error_describe;
 	bool result;
 };
+

@@ -19,22 +19,25 @@
 #define SERVERIP "192.168.0.43"
 #define SERVPORT 38881    /*·þÎñÆ÷¼àÌý¶Ë¿ÚºÅ */
 
-extern asio::io_service io_service;
+extern void handler_pushed_message();
+extern int Get_Keepalive_Request_str(const unsigned long session_id,std::string *out_str);
+
+
 class ConnectToAppServer{
 public:
     ConnectToAppServer();
 
-	std::string get_response(unsigned long sequence);
+	~ConnectToAppServer();
 
-	std::string get_notification();
+	std::string get_response();
 
 	void send_request(std::string requeststr);
 
 	void set_cancel_thread();
+
+	void keep_alive(const unsigned long session_id);
 private:
     void connect(); 
-
-    void write(); 
 
     void read_head();
 
@@ -45,11 +48,7 @@ private:
 	std::string packData(std::string msg,int len);
 private:
 	bool cancel_thread;
+	asio::io_service io_service;
     asio::ip::tcp::socket socket_;
 	std::string recstr;
-	asio::deadline_timer timer_read_head;
-	asio::deadline_timer timer_read_body;
-	std::map<unsigned long,std::string> response_message_map;
-	std::queue<std::string> notification_message_queue;
-	std::queue<std::string> request_queue;
 };
