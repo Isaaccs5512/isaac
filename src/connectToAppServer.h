@@ -25,7 +25,7 @@ extern int Get_Keepalive_Request_str(const unsigned long session_id,std::string 
 
 class ConnectToAppServer{
 public:
-    ConnectToAppServer();
+    ConnectToAppServer(asio::io_service &io_service);
 
 	~ConnectToAppServer();
 
@@ -33,11 +33,11 @@ public:
 
 	void send_request(std::string requeststr);
 
-	void set_cancel_thread();
-
 	void keep_alive(const unsigned long session_id);
+
+	int get_result();
 private:
-    void connect(); 
+    bool connect(); 
 
     void read_head();
 
@@ -47,8 +47,11 @@ private:
 	
 	std::string packData(std::string msg,int len);
 private:
-	bool cancel_thread;
-	asio::io_service io_service;
+	int result;
+	bool exit_keep_alive_thread;
+	bool exit_read_thread;
+	bool exit;
+	//asio::io_service io_service;
     asio::ip::tcp::socket socket_;
 	std::string recstr;
 };

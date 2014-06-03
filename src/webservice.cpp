@@ -20,10 +20,9 @@
 
 #define BACKLOG (100000)	// Max. request backlog 
 static unsigned long sequence = 1;
-std::mutex   keep_session_id_mutex;
-static std::set<unsigned long> keep_session_id;
 std::mutex  keep_tcp_connection_mutex;
 static std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> > keep_tcp_connection;
+thread_local asio::io_service io_service;
 
 unsigned long get_sequence()
 {
@@ -103,6 +102,19 @@ int main(int argc,char* argv[])
 			LOG(ERROR)<<"bind port to socket error\n";
 		 	exit(1);
 		}
+		run_job(
+		[](){
+			asio::io_service::work work(io_service);
+			try{
+				io_service.run();
+			}
+			catch(asio::system_error &error)
+			{
+				std::exception e;
+				throw e;
+			}
+		});
+
 		
 		for (;;) 
 		{ 
@@ -171,19 +183,24 @@ int xiaofangService::Dispatch_Login(std::string name,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr;
-	try
+	std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr(new ConnectToAppServer(io_service));
+	
+	if(connecttoserver_ptr->get_result() == -5)
 	{
-		std::tr1::shared_ptr<ConnectToAppServer> tmp_ptr(new ConnectToAppServer());
-		connecttoserver_ptr = tmp_ptr;
-	}
-	catch(std::runtime_error e)
-	{
-		LOG(ERROR)<<"RCVTIMEO not set properly";
+		LOG(ERROR)<<"Time out config error";
 		response.result = false;
-		response.error_describe = "RCVTIMEO not set properly";
+		response.error_describe = "Time out config error";
 		return SOAP_OK;
 	}
+	else if(connecttoserver_ptr->get_result() == -1)
+	{
+		LOG(ERROR)<<"Connect refulsed";
+		response.result = false;
+		response.error_describe = "Connect refulsed";
+		return SOAP_OK;
+	}
+
+	
 	connecttoserver_ptr->send_request(send_str);
 
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -191,19 +208,23 @@ int xiaofangService::Dispatch_Login(std::string name,
 
 
 	bool break_while = false;
-	asio::io_service timer_io_service;
-	asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+
+	asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
+
 	t.async_wait([this,&break_while](const asio::error_code& error){
 		if(error != asio::error::operation_aborted)
 		{
 			break_while = true;
 		}
+
 	});
-	
+
 	do{
 		recev_str = connecttoserver_ptr->get_response();
+		if(connecttoserver_ptr->get_result() != 0)
+			break_while = true;
 	}while((recev_str=="") && (!break_while));
-
+	
 	if(!break_while)
 	{
 		try{
@@ -216,7 +237,6 @@ int xiaofangService::Dispatch_Login(std::string name,
 	else
 	{
 		LOG(ERROR)<<"socket write and read error";
-		connecttoserver_ptr->set_cancel_thread();
 		response.result = false;
 		response.error_describe = "socket write and read error";
 		return SOAP_OK;
@@ -236,7 +256,6 @@ int xiaofangService::Dispatch_Login(std::string name,
 		else
 		{
 			LOG(ERROR)<<message.response().error_describe();
-			connecttoserver_ptr->set_cancel_thread();
 			response.result = false;
 			response.error_describe = message.response().error_describe();
 			return SOAP_OK;
@@ -245,7 +264,6 @@ int xiaofangService::Dispatch_Login(std::string name,
 	else
 	{
 		LOG(ERROR)<<message.InitializationErrorString();
-		connecttoserver_ptr->set_cancel_thread();
 		response.result = false;
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
@@ -299,8 +317,7 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 	message.Clear();
 
 	bool break_while = false;
-	asio::io_service timer_io_service;
-	asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+	asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 	t.async_wait([this,&break_while](const asio::error_code& error){
 		if(error != asio::error::operation_aborted)
 		{
@@ -327,7 +344,6 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 		response.error_describe = "socket write and read error";
 		return SOAP_OK;
 	}
-	connecttoserver_ptr->set_cancel_thread();
 	keep_tcp_connection.erase(itr);
 		
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -407,8 +423,7 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -651,8 +666,7 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -784,8 +798,8 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -922,8 +936,8 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -1039,8 +1053,8 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -1172,8 +1186,8 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -1316,8 +1330,8 @@ int xiaofangService::Dispatch_Invite_Participant_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -1429,8 +1443,8 @@ int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -1542,8 +1556,8 @@ int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string sess
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -1655,8 +1669,8 @@ int xiaofangService::Dispatch_Appoint_Participant_Speak_Request(std::string sess
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -1760,8 +1774,8 @@ int xiaofangService::Dispatch_Jion_Group_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -1865,8 +1879,8 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -1990,8 +2004,8 @@ int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -2095,8 +2109,8 @@ int xiaofangService::Dispatch_Start_Record_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -2200,8 +2214,8 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -2323,8 +2337,8 @@ int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string ses
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -2458,8 +2472,8 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -2578,8 +2592,8 @@ int xiaofangService::Dispatch_Modify_Alert_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -2682,8 +2696,8 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -2806,8 +2820,8 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -2925,8 +2939,8 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -3041,8 +3055,8 @@ int xiaofangService::Dispatch_History_Alert_Message_Request(std::string session_
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -3164,8 +3178,8 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{
@@ -3273,8 +3287,8 @@ int xiaofangService::Dispatch_Kick_Participant_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::io_service timer_io_service;
-		asio::deadline_timer t(timer_io_service,boost::posix_time::seconds(5));
+		
+		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
 		t.async_wait([this,&break_while](const asio::error_code& error){
 			if(error != asio::error::operation_aborted)
 			{

@@ -12,35 +12,40 @@
 #include <chrono>
 #include <thread>
 
-#define TIME_OUT 5
-
 std::string ConnectToAppServer::get_response()
 {
 	return recstr;
 }
 
-void ConnectToAppServer::set_cancel_thread()
+int ConnectToAppServer::get_result()
 {
-	cancel_thread = true;
+	return result;
 }
 
 void ConnectToAppServer::keep_alive(const unsigned long session_id)
 {
 	create_timer([this,session_id](){
-		if(cancel_thread)
-		{
-			std::exception e;
-			throw e;
-		}		
 		std::string keep_alive_str = "";
 		Get_Keepalive_Request_str(session_id,&keep_alive_str);
-		send_request(keep_alive_str);		
+		send_request(keep_alive_str);
+		
+		if(exit)
+		{
+			std::exception e;
+			exit_keep_alive_thread = true;
+			std::cout<<"exit_keep_alive_thread"<<std::endl;
+			throw e;
+		}		
 	},5,true);
 }
 
-ConnectToAppServer::ConnectToAppServer():socket_(io_service),cancel_thread(false),recstr("")
+ConnectToAppServer::ConnectToAppServer(asio::io_service &io_service):socket_(io_service),recstr(""),result(0),
+																	exit(false),exit_keep_alive_thread(false),exit_read_thread(false)
 {
-	connect();
+	if(!connect())
+	{
+		return;
+	}
 
 	struct timeval tv;
     tv.tv_sec  = 3; 
@@ -49,40 +54,41 @@ ConnectToAppServer::ConnectToAppServer():socket_(io_service),cancel_thread(false
 				(const char*)&tv, sizeof(tv)) != 0)
 	{
 		LOG(ERROR)<< "RCVTIMEO not set properly."<<errno;
-		throw std::runtime_error("RCVTIMEO not set properly");
+		result = -5;
+		return;
 	}
 	if( ::setsockopt(socket_.native_handle(), SOL_SOCKET, SO_SNDTIMEO, 
 				(const char*)&tv, sizeof(tv)) != 0)
 	{
 		LOG(ERROR)<< "SNDTIMEO not set properly."<<errno;
-		throw std::runtime_error("SNDTIMEO not set properly");
+		result = -5;
+		return;
 	}
 
-	run_job(
-	[this](){
-		while(!cancel_thread)
+	run_job([this](){
+		while(true)
 		{
 			read_head();
+			std::cout<<"333333333333333"<<std::endl;
+			if(exit)
+			{
+				std::exception e;
+				exit_read_thread = true;
+				std::cout<<"exit_read_thread"<<std::endl;
+				throw e;
+			}
 		}
-	});
-
-	run_job(
-	[this](){
-		asio::io_service::work work(io_service);
-		try{
-			io_service.run();
-		}
-		catch(...)
-		{
-			std::exception e;
-			throw e;
-		}
-	});
+	});	
 }
 
 ConnectToAppServer::~ConnectToAppServer()
 {
 	std::cout<<"Destructor is called"<<std::endl;
+	exit = true;
+	do
+	{}while(!exit_keep_alive_thread);
+	do
+	{}while(!exit_read_thread);
 }
 
 std::string ConnectToAppServer::packData(std::string msg,int len)
@@ -97,18 +103,29 @@ std::string ConnectToAppServer::packData(std::string msg,int len)
 	return std::string(buf.get(),len+4);
 }
 
-void ConnectToAppServer::connect()
+bool ConnectToAppServer::connect()
 {
 	asio::ip::tcp::endpoint end_point(asio::ip::address::from_string(SERVERIP), SERVPORT);
 	asio::error_code ec;
 
 	socket_.connect(end_point,ec);
+	if(ec)
+	{
+		result = -1;
+		return false;
+	}
+	return true;
 } 
 
 void ConnectToAppServer::send_request(std::string requeststr)
 {
+	asio::error_code ec;
 	std::string send_str = packData(requeststr,requeststr.length());
-	asio::write(socket_,asio::buffer(send_str,send_str.length()));
+	asio::write(socket_,asio::buffer(send_str,send_str.length()),ec);
+	if(ec)
+	{
+		result = -2;
+	}
 }
 
 void ConnectToAppServer::read_head() 
@@ -118,9 +135,13 @@ void ConnectToAppServer::read_head()
     memset(lenbuf.get(),sizeof(lenbuf), 0);
 
 	asio::read(socket_,asio::buffer(lenbuf.get(),4),ec);
+	if(ec)
+	{
+		result = -3;
+		return;
+	}
 
-	if(!ec)
-		read_body(lenbuf);
+	read_body(lenbuf);
 }
 
 void ConnectToAppServer::read_body(std::tr1::shared_ptr<char> lenbuf) 
@@ -136,8 +157,13 @@ void ConnectToAppServer::read_body(std::tr1::shared_ptr<char> lenbuf)
     memset(recvbuf.get(),sizeof(recvbuf), 0);
 
 	asio::read(socket_,asio::buffer(recvbuf.get(),recvlen_),ec);
-	if(!ec)
-		read_more_body(recvbuf,recvlen_);
+	if(ec)
+	{
+		result = -4;
+		return;
+	}
+
+	read_more_body(recvbuf,recvlen_);
 }
 
 void ConnectToAppServer::read_more_body(std::tr1::shared_ptr<char> recvbuf,int recvlen_) 
