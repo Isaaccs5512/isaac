@@ -51,7 +51,9 @@ private:
 	bool exit_keep_alive_thread;
 	bool exit_read_thread;
 	bool exit;
+	bool login_success;
 	//asio::io_service io_service;
     asio::ip::tcp::socket socket_;
 	std::string recstr;
+	std::string responsestr;
 };

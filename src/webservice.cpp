@@ -43,7 +43,7 @@ std::string int2str(int n)
 int Get_Keepalive_Request_str(const unsigned long session_id,std::string *out_str)
 {
 	
-	LOG(INFO)<<"Keepalive_Request";
+	//LOG(INFO)<<"Keepalive_Request";
 	
 	app::dispatch::Message message;
 	message.set_msg_type(app::dispatch::MSG::Keepalive_Request);
@@ -142,7 +142,7 @@ int main(int argc,char* argv[])
 
 void *process_request(std::tr1::shared_ptr<xiaofangService> & tservice) 
 { 
-	tservice->serve();
+	tservice->serve();	
 	tservice->destroy();
 	return NULL;
 }
@@ -209,32 +209,15 @@ int xiaofangService::Dispatch_Login(std::string name,
 
 	bool break_while = false;
 
-	asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-
-	t.async_wait([this,&break_while](const asio::error_code& error){
-		if(error != asio::error::operation_aborted)
-		{
-			break_while = true;
-		}
-
-	});
-
+	create_timer([&break_while](){break_while=true;}, 5, false);
 	do{
 		recev_str = connecttoserver_ptr->get_response();
 		if(connecttoserver_ptr->get_result() != 0)
 			break_while = true;
 	}while((recev_str=="") && (!break_while));
+	//}while((!break_while));
 	
-	if(!break_while)
-	{
-		try{
-			t.cancel();
-		}catch(asio::system_error ec)
-		{
-			LOG(ERROR)<<ec.what();
-		}
-	}
-	else
+	if(break_while)
 	{
 		LOG(ERROR)<<"socket write and read error";
 		response.result = false;
@@ -317,26 +300,11 @@ int xiaofangService::Dispatch_Logout(std::string session_id,
 	message.Clear();
 
 	bool break_while = false;
-	asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-	t.async_wait([this,&break_while](const asio::error_code& error){
-		if(error != asio::error::operation_aborted)
-		{
-			break_while = true;
-		}
-	});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 	do{
 		recev_str = connecttoserver_ptr->get_response();
 	}while((recev_str=="") && (!break_while));
-	if(!break_while)
-	{
-		try{
-			t.cancel();
-		}catch(asio::system_error ec)
-		{
-			LOG(ERROR)<<ec.what();
-		}
-	}
-	else
+	if(break_while)
 	{
 		LOG(ERROR)<<"socket write and read error";
 		
@@ -423,34 +391,20 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(recev_str))
@@ -595,7 +549,14 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 	app::dispatch::Message message;
 	unsigned long sequence_append_group = get_sequence();
 	message.set_sequence(sequence_append_group);
-	message.set_session_id(std::stoul(session_id,nullptr,0));
+	try{
+		message.set_session_id(std::stoul(session_id,nullptr,0));
+	}catch(...)
+	{
+		response.result = false;
+		response.error_describe = "no session id";
+		return SOAP_OK;
+	}
 	message.set_msg_type(app::dispatch::MSG::Append_Group_Request);
 	if(group.name.empty())
 	{
@@ -666,34 +627,20 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 		message.Clear();
 
 		bool break_while = false;
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -799,34 +746,20 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -937,34 +870,20 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1054,34 +973,20 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1187,34 +1092,20 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1331,34 +1222,20 @@ int xiaofangService::Dispatch_Invite_Participant_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1444,34 +1321,20 @@ int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1557,34 +1420,20 @@ int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string sess
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1670,34 +1519,20 @@ int xiaofangService::Dispatch_Appoint_Participant_Speak_Request(std::string sess
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1775,34 +1610,20 @@ int xiaofangService::Dispatch_Jion_Group_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1880,34 +1701,20 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2005,34 +1812,20 @@ int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2110,34 +1903,20 @@ int xiaofangService::Dispatch_Start_Record_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2215,34 +1994,20 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2338,34 +2103,20 @@ int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string ses
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2473,34 +2224,20 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2593,34 +2330,20 @@ int xiaofangService::Dispatch_Modify_Alert_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2697,34 +2420,20 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2821,34 +2530,20 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2940,34 +2635,20 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -3056,34 +2737,20 @@ int xiaofangService::Dispatch_History_Alert_Message_Request(std::string session_
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -3179,34 +2846,20 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -3288,34 +2941,20 @@ int xiaofangService::Dispatch_Kick_Participant_Request(std::string session_id,
 
 		bool break_while = false;
 		
-		asio::deadline_timer t(io_service,boost::posix_time::seconds(5));
-		t.async_wait([this,&break_while](const asio::error_code& error){
-			if(error != asio::error::operation_aborted)
-			{
-				break_while = true;
-			}
-		});
+	create_timer([&break_while](){break_while=true;}, 5, false);
 		
 		do{
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-		if(!break_while)
-		{
-			try{
-				t.cancel();
-			}catch(asio::system_error ec)
-			{
-				LOG(ERROR)<<ec.what();
-			}
-		}
-		else
-		{
-			LOG(ERROR)<<"socket write and read error";
-			response.result = false;
-			response.error_describe = "socket write and read error";
-			return SOAP_OK;
-		}
+	if(break_while)
+	{
+		LOG(ERROR)<<"socket write and read error";
+		
+		response.result = false;
+		response.error_describe = "socket write and read error";
+		return SOAP_OK;
+	}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
