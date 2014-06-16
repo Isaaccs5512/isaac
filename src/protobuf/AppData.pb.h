@@ -211,12 +211,11 @@ enum EntityType {
   GROUP = 3,
   GATEWAY = 4,
   ORGANIZATION = 5,
-  ALERT = 6,
-  HISTORY_ALERT = 7
+  ALERT = 6
 };
 bool EntityType_IsValid(int value);
 const EntityType EntityType_MIN = UNIT;
-const EntityType EntityType_MAX = HISTORY_ALERT;
+const EntityType EntityType_MAX = ALERT;
 const int EntityType_ARRAYSIZE = EntityType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* EntityType_descriptor();
@@ -1552,56 +1551,12 @@ class Group : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::pbmsg::Participant >*
       mutable_participants();
 
-  // optional .pbmsg.RecordType record_type = 8;
-  inline bool has_record_type() const;
-  inline void clear_record_type();
-  static const int kRecordTypeFieldNumber = 8;
-  inline ::pbmsg::RecordType record_type() const;
-  inline void set_record_type(::pbmsg::RecordType value);
-
-  // optional .pbmsg.Entity recorder = 9;
-  inline bool has_recorder() const;
-  inline void clear_recorder();
-  static const int kRecorderFieldNumber = 9;
-  inline const ::pbmsg::Entity& recorder() const;
-  inline ::pbmsg::Entity* mutable_recorder();
-  inline ::pbmsg::Entity* release_recorder();
-  inline void set_allocated_recorder(::pbmsg::Entity* recorder);
-
-  // optional .pbmsg.RecordStatus record_status = 10;
-  inline bool has_record_status() const;
-  inline void clear_record_status();
-  static const int kRecordStatusFieldNumber = 10;
-  inline ::pbmsg::RecordStatus record_status() const;
-  inline void set_record_status(::pbmsg::RecordStatus value);
-
-  // optional .pbmsg.Entity record_server = 11;
-  inline bool has_record_server() const;
-  inline void clear_record_server();
-  static const int kRecordServerFieldNumber = 11;
-  inline const ::pbmsg::Entity& record_server() const;
-  inline ::pbmsg::Entity* mutable_record_server();
-  inline ::pbmsg::Entity* release_record_server();
-  inline void set_allocated_record_server(::pbmsg::Entity* record_server);
-
-  // optional bool include_listen_users = 12;
-  inline bool has_include_listen_users() const;
-  inline void clear_include_listen_users();
-  static const int kIncludeListenUsersFieldNumber = 12;
-  inline bool include_listen_users() const;
-  inline void set_include_listen_users(bool value);
-
-  // repeated .pbmsg.Entity listen_users = 13;
-  inline int listen_users_size() const;
-  inline void clear_listen_users();
-  static const int kListenUsersFieldNumber = 13;
-  inline const ::pbmsg::Entity& listen_users(int index) const;
-  inline ::pbmsg::Entity* mutable_listen_users(int index);
-  inline ::pbmsg::Entity* add_listen_users();
-  inline const ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >&
-      listen_users() const;
-  inline ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >*
-      mutable_listen_users();
+  // optional bool temporary = 8;
+  inline bool has_temporary() const;
+  inline void clear_temporary();
+  static const int kTemporaryFieldNumber = 8;
+  inline bool temporary() const;
+  inline void set_temporary(bool value);
 
   // @@protoc_insertion_point(class_scope:pbmsg.Group)
  private:
@@ -1617,16 +1572,8 @@ class Group : public ::google::protobuf::Message {
   inline void clear_has_sealed();
   inline void set_has_include_participants();
   inline void clear_has_include_participants();
-  inline void set_has_record_type();
-  inline void clear_has_record_type();
-  inline void set_has_recorder();
-  inline void clear_has_recorder();
-  inline void set_has_record_status();
-  inline void clear_has_record_status();
-  inline void set_has_record_server();
-  inline void clear_has_record_server();
-  inline void set_has_include_listen_users();
-  inline void clear_has_include_listen_users();
+  inline void set_has_temporary();
+  inline void clear_has_temporary();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1637,15 +1584,10 @@ class Group : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::pbmsg::Participant > participants_;
   bool sealed_;
   bool include_participants_;
-  bool include_listen_users_;
-  int record_type_;
-  ::pbmsg::Entity* recorder_;
-  ::pbmsg::Entity* record_server_;
-  ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity > listen_users_;
-  int record_status_;
+  bool temporary_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
 
   friend void  protobuf_AddDesc_AppData_2eproto();
   friend void protobuf_AssignDesc_AppData_2eproto();
@@ -1889,67 +1831,10 @@ class Gateway : public ::google::protobuf::Message {
   inline ::pbmsg::Address* release_address();
   inline void set_allocated_address(::pbmsg::Address* address);
 
-  // optional bool include_allocate_counts = 3;
-  inline bool has_include_allocate_counts() const;
-  inline void clear_include_allocate_counts();
-  static const int kIncludeAllocateCountsFieldNumber = 3;
-  inline bool include_allocate_counts() const;
-  inline void set_include_allocate_counts(bool value);
-
-  // repeated .pbmsg.Entity allocate_counts = 4;
-  inline int allocate_counts_size() const;
-  inline void clear_allocate_counts();
-  static const int kAllocateCountsFieldNumber = 4;
-  inline const ::pbmsg::Entity& allocate_counts(int index) const;
-  inline ::pbmsg::Entity* mutable_allocate_counts(int index);
-  inline ::pbmsg::Entity* add_allocate_counts();
-  inline const ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >&
-      allocate_counts() const;
-  inline ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >*
-      mutable_allocate_counts();
-
-  // optional bool include_active_counts = 5;
-  inline bool has_include_active_counts() const;
-  inline void clear_include_active_counts();
-  static const int kIncludeActiveCountsFieldNumber = 5;
-  inline bool include_active_counts() const;
-  inline void set_include_active_counts(bool value);
-
-  // repeated .pbmsg.Entity active_counts = 6;
-  inline int active_counts_size() const;
-  inline void clear_active_counts();
-  static const int kActiveCountsFieldNumber = 6;
-  inline const ::pbmsg::Entity& active_counts(int index) const;
-  inline ::pbmsg::Entity* mutable_active_counts(int index);
-  inline ::pbmsg::Entity* add_active_counts();
-  inline const ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >&
-      active_counts() const;
-  inline ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >*
-      mutable_active_counts();
-
-  // optional bool include_recordings = 7;
-  inline bool has_include_recordings() const;
-  inline void clear_include_recordings();
-  static const int kIncludeRecordingsFieldNumber = 7;
-  inline bool include_recordings() const;
-  inline void set_include_recordings(bool value);
-
-  // repeated .pbmsg.Entity recordings = 8;
-  inline int recordings_size() const;
-  inline void clear_recordings();
-  static const int kRecordingsFieldNumber = 8;
-  inline const ::pbmsg::Entity& recordings(int index) const;
-  inline ::pbmsg::Entity* mutable_recordings(int index);
-  inline ::pbmsg::Entity* add_recordings();
-  inline const ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >&
-      recordings() const;
-  inline ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >*
-      mutable_recordings();
-
-  // optional .pbmsg.RegisterStatus status = 9;
+  // optional .pbmsg.RegisterStatus status = 3;
   inline bool has_status() const;
   inline void clear_status();
-  static const int kStatusFieldNumber = 9;
+  static const int kStatusFieldNumber = 3;
   inline ::pbmsg::RegisterStatus status() const;
   inline void set_status(::pbmsg::RegisterStatus value);
 
@@ -1959,12 +1844,6 @@ class Gateway : public ::google::protobuf::Message {
   inline void clear_has_base();
   inline void set_has_address();
   inline void clear_has_address();
-  inline void set_has_include_allocate_counts();
-  inline void clear_has_include_allocate_counts();
-  inline void set_has_include_active_counts();
-  inline void clear_has_include_active_counts();
-  inline void set_has_include_recordings();
-  inline void clear_has_include_recordings();
   inline void set_has_status();
   inline void clear_has_status();
 
@@ -1972,16 +1851,10 @@ class Gateway : public ::google::protobuf::Message {
 
   ::pbmsg::Entity* base_;
   ::pbmsg::Address* address_;
-  ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity > allocate_counts_;
-  ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity > active_counts_;
-  bool include_allocate_counts_;
-  bool include_active_counts_;
-  bool include_recordings_;
   int status_;
-  ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity > recordings_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(9 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
 
   friend void  protobuf_AddDesc_AppData_2eproto();
   friend void protobuf_AssignDesc_AppData_2eproto();
@@ -3996,173 +3869,26 @@ Group::mutable_participants() {
   return &participants_;
 }
 
-// optional .pbmsg.RecordType record_type = 8;
-inline bool Group::has_record_type() const {
+// optional bool temporary = 8;
+inline bool Group::has_temporary() const {
   return (_has_bits_[0] & 0x00000080u) != 0;
 }
-inline void Group::set_has_record_type() {
+inline void Group::set_has_temporary() {
   _has_bits_[0] |= 0x00000080u;
 }
-inline void Group::clear_has_record_type() {
+inline void Group::clear_has_temporary() {
   _has_bits_[0] &= ~0x00000080u;
 }
-inline void Group::clear_record_type() {
-  record_type_ = 0;
-  clear_has_record_type();
+inline void Group::clear_temporary() {
+  temporary_ = false;
+  clear_has_temporary();
 }
-inline ::pbmsg::RecordType Group::record_type() const {
-  return static_cast< ::pbmsg::RecordType >(record_type_);
+inline bool Group::temporary() const {
+  return temporary_;
 }
-inline void Group::set_record_type(::pbmsg::RecordType value) {
-  assert(::pbmsg::RecordType_IsValid(value));
-  set_has_record_type();
-  record_type_ = value;
-}
-
-// optional .pbmsg.Entity recorder = 9;
-inline bool Group::has_recorder() const {
-  return (_has_bits_[0] & 0x00000100u) != 0;
-}
-inline void Group::set_has_recorder() {
-  _has_bits_[0] |= 0x00000100u;
-}
-inline void Group::clear_has_recorder() {
-  _has_bits_[0] &= ~0x00000100u;
-}
-inline void Group::clear_recorder() {
-  if (recorder_ != NULL) recorder_->::pbmsg::Entity::Clear();
-  clear_has_recorder();
-}
-inline const ::pbmsg::Entity& Group::recorder() const {
-  return recorder_ != NULL ? *recorder_ : *default_instance_->recorder_;
-}
-inline ::pbmsg::Entity* Group::mutable_recorder() {
-  set_has_recorder();
-  if (recorder_ == NULL) recorder_ = new ::pbmsg::Entity;
-  return recorder_;
-}
-inline ::pbmsg::Entity* Group::release_recorder() {
-  clear_has_recorder();
-  ::pbmsg::Entity* temp = recorder_;
-  recorder_ = NULL;
-  return temp;
-}
-inline void Group::set_allocated_recorder(::pbmsg::Entity* recorder) {
-  delete recorder_;
-  recorder_ = recorder;
-  if (recorder) {
-    set_has_recorder();
-  } else {
-    clear_has_recorder();
-  }
-}
-
-// optional .pbmsg.RecordStatus record_status = 10;
-inline bool Group::has_record_status() const {
-  return (_has_bits_[0] & 0x00000200u) != 0;
-}
-inline void Group::set_has_record_status() {
-  _has_bits_[0] |= 0x00000200u;
-}
-inline void Group::clear_has_record_status() {
-  _has_bits_[0] &= ~0x00000200u;
-}
-inline void Group::clear_record_status() {
-  record_status_ = 0;
-  clear_has_record_status();
-}
-inline ::pbmsg::RecordStatus Group::record_status() const {
-  return static_cast< ::pbmsg::RecordStatus >(record_status_);
-}
-inline void Group::set_record_status(::pbmsg::RecordStatus value) {
-  assert(::pbmsg::RecordStatus_IsValid(value));
-  set_has_record_status();
-  record_status_ = value;
-}
-
-// optional .pbmsg.Entity record_server = 11;
-inline bool Group::has_record_server() const {
-  return (_has_bits_[0] & 0x00000400u) != 0;
-}
-inline void Group::set_has_record_server() {
-  _has_bits_[0] |= 0x00000400u;
-}
-inline void Group::clear_has_record_server() {
-  _has_bits_[0] &= ~0x00000400u;
-}
-inline void Group::clear_record_server() {
-  if (record_server_ != NULL) record_server_->::pbmsg::Entity::Clear();
-  clear_has_record_server();
-}
-inline const ::pbmsg::Entity& Group::record_server() const {
-  return record_server_ != NULL ? *record_server_ : *default_instance_->record_server_;
-}
-inline ::pbmsg::Entity* Group::mutable_record_server() {
-  set_has_record_server();
-  if (record_server_ == NULL) record_server_ = new ::pbmsg::Entity;
-  return record_server_;
-}
-inline ::pbmsg::Entity* Group::release_record_server() {
-  clear_has_record_server();
-  ::pbmsg::Entity* temp = record_server_;
-  record_server_ = NULL;
-  return temp;
-}
-inline void Group::set_allocated_record_server(::pbmsg::Entity* record_server) {
-  delete record_server_;
-  record_server_ = record_server;
-  if (record_server) {
-    set_has_record_server();
-  } else {
-    clear_has_record_server();
-  }
-}
-
-// optional bool include_listen_users = 12;
-inline bool Group::has_include_listen_users() const {
-  return (_has_bits_[0] & 0x00000800u) != 0;
-}
-inline void Group::set_has_include_listen_users() {
-  _has_bits_[0] |= 0x00000800u;
-}
-inline void Group::clear_has_include_listen_users() {
-  _has_bits_[0] &= ~0x00000800u;
-}
-inline void Group::clear_include_listen_users() {
-  include_listen_users_ = false;
-  clear_has_include_listen_users();
-}
-inline bool Group::include_listen_users() const {
-  return include_listen_users_;
-}
-inline void Group::set_include_listen_users(bool value) {
-  set_has_include_listen_users();
-  include_listen_users_ = value;
-}
-
-// repeated .pbmsg.Entity listen_users = 13;
-inline int Group::listen_users_size() const {
-  return listen_users_.size();
-}
-inline void Group::clear_listen_users() {
-  listen_users_.Clear();
-}
-inline const ::pbmsg::Entity& Group::listen_users(int index) const {
-  return listen_users_.Get(index);
-}
-inline ::pbmsg::Entity* Group::mutable_listen_users(int index) {
-  return listen_users_.Mutable(index);
-}
-inline ::pbmsg::Entity* Group::add_listen_users() {
-  return listen_users_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >&
-Group::listen_users() const {
-  return listen_users_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >*
-Group::mutable_listen_users() {
-  return &listen_users_;
+inline void Group::set_temporary(bool value) {
+  set_has_temporary();
+  temporary_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -4580,156 +4306,15 @@ inline void Gateway::set_allocated_address(::pbmsg::Address* address) {
   }
 }
 
-// optional bool include_allocate_counts = 3;
-inline bool Gateway::has_include_allocate_counts() const {
+// optional .pbmsg.RegisterStatus status = 3;
+inline bool Gateway::has_status() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void Gateway::set_has_include_allocate_counts() {
+inline void Gateway::set_has_status() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void Gateway::clear_has_include_allocate_counts() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void Gateway::clear_include_allocate_counts() {
-  include_allocate_counts_ = false;
-  clear_has_include_allocate_counts();
-}
-inline bool Gateway::include_allocate_counts() const {
-  return include_allocate_counts_;
-}
-inline void Gateway::set_include_allocate_counts(bool value) {
-  set_has_include_allocate_counts();
-  include_allocate_counts_ = value;
-}
-
-// repeated .pbmsg.Entity allocate_counts = 4;
-inline int Gateway::allocate_counts_size() const {
-  return allocate_counts_.size();
-}
-inline void Gateway::clear_allocate_counts() {
-  allocate_counts_.Clear();
-}
-inline const ::pbmsg::Entity& Gateway::allocate_counts(int index) const {
-  return allocate_counts_.Get(index);
-}
-inline ::pbmsg::Entity* Gateway::mutable_allocate_counts(int index) {
-  return allocate_counts_.Mutable(index);
-}
-inline ::pbmsg::Entity* Gateway::add_allocate_counts() {
-  return allocate_counts_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >&
-Gateway::allocate_counts() const {
-  return allocate_counts_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >*
-Gateway::mutable_allocate_counts() {
-  return &allocate_counts_;
-}
-
-// optional bool include_active_counts = 5;
-inline bool Gateway::has_include_active_counts() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
-inline void Gateway::set_has_include_active_counts() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void Gateway::clear_has_include_active_counts() {
-  _has_bits_[0] &= ~0x00000010u;
-}
-inline void Gateway::clear_include_active_counts() {
-  include_active_counts_ = false;
-  clear_has_include_active_counts();
-}
-inline bool Gateway::include_active_counts() const {
-  return include_active_counts_;
-}
-inline void Gateway::set_include_active_counts(bool value) {
-  set_has_include_active_counts();
-  include_active_counts_ = value;
-}
-
-// repeated .pbmsg.Entity active_counts = 6;
-inline int Gateway::active_counts_size() const {
-  return active_counts_.size();
-}
-inline void Gateway::clear_active_counts() {
-  active_counts_.Clear();
-}
-inline const ::pbmsg::Entity& Gateway::active_counts(int index) const {
-  return active_counts_.Get(index);
-}
-inline ::pbmsg::Entity* Gateway::mutable_active_counts(int index) {
-  return active_counts_.Mutable(index);
-}
-inline ::pbmsg::Entity* Gateway::add_active_counts() {
-  return active_counts_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >&
-Gateway::active_counts() const {
-  return active_counts_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >*
-Gateway::mutable_active_counts() {
-  return &active_counts_;
-}
-
-// optional bool include_recordings = 7;
-inline bool Gateway::has_include_recordings() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
-}
-inline void Gateway::set_has_include_recordings() {
-  _has_bits_[0] |= 0x00000040u;
-}
-inline void Gateway::clear_has_include_recordings() {
-  _has_bits_[0] &= ~0x00000040u;
-}
-inline void Gateway::clear_include_recordings() {
-  include_recordings_ = false;
-  clear_has_include_recordings();
-}
-inline bool Gateway::include_recordings() const {
-  return include_recordings_;
-}
-inline void Gateway::set_include_recordings(bool value) {
-  set_has_include_recordings();
-  include_recordings_ = value;
-}
-
-// repeated .pbmsg.Entity recordings = 8;
-inline int Gateway::recordings_size() const {
-  return recordings_.size();
-}
-inline void Gateway::clear_recordings() {
-  recordings_.Clear();
-}
-inline const ::pbmsg::Entity& Gateway::recordings(int index) const {
-  return recordings_.Get(index);
-}
-inline ::pbmsg::Entity* Gateway::mutable_recordings(int index) {
-  return recordings_.Mutable(index);
-}
-inline ::pbmsg::Entity* Gateway::add_recordings() {
-  return recordings_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >&
-Gateway::recordings() const {
-  return recordings_;
-}
-inline ::google::protobuf::RepeatedPtrField< ::pbmsg::Entity >*
-Gateway::mutable_recordings() {
-  return &recordings_;
-}
-
-// optional .pbmsg.RegisterStatus status = 9;
-inline bool Gateway::has_status() const {
-  return (_has_bits_[0] & 0x00000100u) != 0;
-}
-inline void Gateway::set_has_status() {
-  _has_bits_[0] |= 0x00000100u;
-}
 inline void Gateway::clear_has_status() {
-  _has_bits_[0] &= ~0x00000100u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void Gateway::clear_status() {
   status_ = 0;

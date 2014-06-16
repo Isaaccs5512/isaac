@@ -5,149 +5,190 @@ import "AppData.proto";
 import "EntityData.proto";
 import "MediaMessage.proto";
 import "HistoryAlert.proto";
-
+/*
+消息类型
+XXX_Request为请求消息   如果某个消息有消息体，那么会有一个对应的message XXXRequest消息定义
+XXX_Response为应答消息  如果某个消息有消息体，那么会有一个对应的message XXXResponse消息定义
+XXX_Notification 为指示消息 消息体为对应的的message XXXNotification消息定义
+*/
 enum MSG
 {
-    Login_Request                       =   200001;
-    Login_Response                      =   200002;
+    Login_Request                       =   200001;//登录请求   客户端-->服务器
+    Login_Response                      =   200002;//登录应答   服务器-->客户端
 
-    Logout_Request                      =   200003;
-    Logout_Response                     =   200004;
+    Logout_Request                      =   200003;//注销请求   客户端-->服务器
+    Logout_Response                     =   200004;//注销应答   服务器-->客户端
 
-    Keepalive_Request                   =   200005;
-    Keepalive_Response                  =   200006;
 
-    Entity_Request                      =   200007;
-    Entity_Response                     =   200008;
+    Keepalive_Request                   =   200005;//保活请求  客户端-->服务器 在ttl超时之间必须发送保活请求到服务器
+    Keepalive_Response                  =   200006;//包含应答  服务器-->客户端
 
-    Append_Group_Request                =   200009;
-    Append_Group_Response               =   200010;
+    Entity_Request                      =   200007;//实体请求  客户端-->服务器 
+    Entity_Response                     =   200008;//实体应答  服务器-->客户端
 
-    Modify_Group_Request                =   200011;
-    Modify_Group_Response               =   200012;
+    Append_Group_Request                =   200009;//新增群组请求 客户端-->服务器
+    Append_Group_Response               =   200010;//新增群组应答  服务器-->客户端
 
-    Modify_Participants_Request         =   200013;
-    Modify_Participants_Response        =   200014;
+    Modify_Group_Request                =   200011;//修改群组请求 客户端-->服务器  值修改群星配置、不包含成员
+    Modify_Group_Response               =   200012;//修改群组应答 服务器-->客户端
 
-    Media_Message_Request               =   200015;
-    Media_Message_Response              =   200016;
+    Modify_Participants_Request         =   200013;//修改群组成员请求 客户端-->服务器  
+    Modify_Participants_Response        =   200014;//修改群组成员应答 服务器-->客户端
 
-    Invite_Participant_Request          =   200017;
-    Invite_Participant_Response         =   200018;
+    Media_Message_Request               =   200015;//群组消息刷新请求 客户端-->服务器
+    Media_Message_Response              =   200016;//群星消息刷新应答 服务器-->客户端
 
-    Drop_Participant_Request            =   200019;
-    Drop_Participant_Response           =   200020;
+    Invite_Participant_Request          =   200017;//群组成员操作--邀请成员呼入群组请求  客户端-->服务器 
+    Invite_Participant_Response         =   200018;//              要求成员呼入群组应答   服务器-->客户端
 
-    Release_Participant_Token_Request   =   200021;
-    Release_Participant_Token_Response  =   200022;
+    Drop_Participant_Request            =   200019;//群组成员操作--释放成员呼叫请求      客户端-->服务器
+    Drop_Participant_Response           =   200020;//              释放成员呼叫应答      服务器-->客户端
 
-    Appoint_Participant_Speak_Request   =   200023;
-    Appoint_Participant_Speak_Response  =   200024;
+    Release_Participant_Token_Request   =   200021;//群组成员操作--释放成员话权请求     客户端-->服务器
+    Release_Participant_Token_Response  =   200022;//			   释放成员话权应答     服务器-->客户端
 
-    Jion_Group_Request                  =   200025;
-    Jion_Group_Response                 =   200026;
+    Appoint_Participant_Speak_Request   =   200023;//群组成员操作--请求成员申请话权请求     客户端-->服务器
+    Appoint_Participant_Speak_Response  =   200024;//              请求成员申请话权应答     服务器-->客户端
 
-    Leave_Group_Request                 =   200027;
-    Leave_Group_Response                =   200028;
+    Jion_Group_Request                  =   200025;//调度员加入群组请求  客户端-->服务器  同等于 Modify_Participants_Request增加一个成员，该成员为调度员绑定的PoC账号
+    Jion_Group_Response                 =   200026;//调度员加入群组应答  服务器-->客户端
 
-    Send_Message_Request                =   200029;
-    Send_Message_Response               =   200030;
+    Leave_Group_Request                 =   200027;//调度员离开群组请求 客户端-->服务器  同等于 Modify_Participants_Request删除一个成员、该成员为调度员绑定的PoC账号
+    Leave_Group_Response                =   200028;//调度员离开群组应答  服务器-->客户端
 
-    Kick_Participant_Request            =   200031;
-    Kick_Participant_Response           =   200032;
+    Send_Message_Request                =   200029;//发送群组消息请求  客户端-->服务器 
+    Send_Message_Response               =   200030;//发送群组消息应答  服务器-->客户端
 
-    Start_Record_Request                =   200033;
-    Start_Record_Response               =   200034;
+    Kick_Participant_Request            =   200031;//踢出成员请求  客户端-->服务器 同等于Modify_Participants_Request 删除成员
+    Kick_Participant_Response           =   200032;//踢出成员应答  服务器-->客户端
 
-    Stop_Record_Request                 =   200035;
-    Stop_Record_Response                =   200036;
+    Start_Record_Request                =   200033;//群组开始录音请求 客户端-->服务器  成员中需要有录音账号
+    Start_Record_Response               =   200034;//群组开始录音应答  服务器-->客户端
 
-    Subscribe_Account_Location_Request  =   200037;
-    Subscribe_Account_Location_Response =   200038;
+    Stop_Record_Request                 =   200035;//群组停止录音请求 客户端-->服务器 
+    Stop_Record_Response                =   200036;//群组停止录音应答 服务器-->客户端
 
-    Append_Alert_Request                =   200039;
-    Append_Alert_Response               =   200040;
+    Subscribe_Account_Location_Request  =   200037;//订阅终端账号的GPS信息请求 客户端-->服务器 
+    Subscribe_Account_Location_Response =   200038;//订阅终端账号的GPS信息应答 服务器-->客户端
 
-    Modify_Alert_Request                =   200041;
-    Modify_Alert_Response               =   200042;
+    Append_Alert_Request                =   200039;//新增警情请求 客户端-->服务器 
+    Append_Alert_Response               =   200040;//新增警情应答 服务器-->客户端
 
-    Stop_Alert_Request                  =   200043;
-    Stop_Alert_Response                 =   200044;
+    Modify_Alert_Request                =   200041;//修改警情请求 客户端-->服务器 
+    Modify_Alert_Response               =   200042;//修改警情应答 服务器-->客户端
 
-    History_Alerts_Request              =   200045;
-    History_Alerts_Response             =   200046;
+    Stop_Alert_Request                  =   200043;//停止警情请求 客户端-->服务器 
+    Stop_Alert_Response                 =   200044;//停止警情应答 服务器-->客户端
 
-    History_Alert_Request               =   200047;
-    History_Alert_Response              =   200048;
+    History_Alerts_Request              =   200045;//历史警情查询请求 客户端-->服务器 
+    History_Alerts_Response             =   200046;//历史警情查询应答 服务器-->客户端
 
-    History_Alert_Message_Request       =   200049;
-    History_Alert_Message_Response      =   200050;
+    History_Alert_Request               =   200047;//历史警情详细信息请求 客户端-->服务器 
+    History_Alert_Response              =   200048;//历史警情详细信息应答  服务器-->客户端
 
-    Delete_History_Alert_Request        =   200051;
-    Delete_History_Alert_Response       =   200052;
+    History_Alert_Message_Request       =   200049;//历史警情消息查询请求  客户端-->服务器 
+    History_Alert_Message_Response      =   200050;//历史警情消息查询应答  服务器-->客户端
 
-    Delete_Group_Request				= 	200053;
-    Delete_Group_Response				=   200054;
+    Delete_History_Alert_Request        =   200051;//删除历史警情请求  客户端-->服务器 
+    Delete_History_Alert_Response       =   200052;//删除历史警情应答  服务器-->客户端
 
-    Entity_Notification                         =   210001;
-    Entity_Status_Notification                  =   210002;
-    Participants_Notification                   =   210003;
-    Join_Group_Request_Notification              =   210004;
-    Participant_Status_Notification             =   210005;
-    Media_Message_Notification                  =   210006;
-    Participant_Connect_Request_Notification    =   210007;
-    Participant_Speak_Request_Notification      =   210008;
-    Session_Status_Notification                 =   210009;
-    Record_Status_Notification                  =   210010;
-    Account_Location_Notification               =   210011;
-    Alert_Overed_Notification                   =   210012;
+    Delete_Group_Request				= 	200053;//删除群组请求   客户端-->服务器  需所有成员的状态都为IDLE时才可以删除
+    Delete_Group_Response				=   200054;//删除群组应答  服务器-->客户端
+
+    Entity_Notification                         =   210001;// 实体通知、一般新增、删除、修改实体时会触发该通知
+    Entity_Status_Notification                  =   210002;// 实体状态通知、主要用于ACCOUNT等需要注册到服务器的实体的状态通知
+    Participants_Notification                   =   210003;// 群组成员变更通知,主要为新增、删除
+    Join_Group_Request_Notification              =   210004;//终端PoC ACCOUNT 加入指定群组请求的通知
+    Participant_Status_Notification             =   210005;//群组成员状态通知、呼叫状态、话权状态通知
+    Media_Message_Notification                  =   210006;//群组消息通知、其他调度员或者终端发送群组消息时 会产生此通知
+    Participant_Connect_Request_Notification    =   210007;//群组成员呼叫建立请求通知
+    Participant_Speak_Request_Notification      =   210008;//群组成员话权申请请求通知
+    Session_Status_Notification                 =   210009;//会话状态通知、该消息废弃，被Participant_Status_Notification替代
+    Record_Status_Notification                  =   210010;//录音状态通知、
+    Account_Location_Notification               =   210011;//GPS位置更新通知
+    Alert_Overed_Notification                   =   210012;//警情结束通知
+    Move_Unit_Notification 						=   210013;//单元移动通知
 
 }
+/*
+	用户登录
+	c++ eg:
+	using namespace app::dispatch;
 
+	Message msg;
+	msg.set_msg_type(Login_Request);
+	msg.set_sequence(1); // 客户端自动生成 用于与Response消息进行匹配
+	//login.set_session_id(); 登录消息不需要设置session_id
+	auto request = login->mutable_request();//参考 Message消息的定义
+	auto login   = request->mutable_login();//参考Request消息的定义
+	login->set_username("admin");
+	login->set_password(md5_str("admin"));
+
+	//初始化完成，可以进行打包等相关操作.
+*/
 message LoginRequest
 {
-    required    bytes   username        =   1;
-    required    string  password        =   2;
+    required    bytes   username        =   1;//用户名 匹配 User.name
+    required    string  password        =   2;// 密码，MD5 字符串格式
 }
 
+/*
+	void on_reponse( const Message & rsp_msg ){
+		assert( rsp_msg.has_response() );//必须包含
+
+		auto response = rsp_msg.response();
+		if( response.result() ){
+			auto login = response.login();
+
+			//处理具体 的业务逻辑...
+		}else{
+			std::cout<<"error:"<<response.error_describe();
+		}
+	}
+*/
 message LoginResponse
 {
-    required    fixed32     session_id      =   1;
-    required    pbmsg.User  self            =   2;
-    required    fixed32     ttl             =   3;
+    required    fixed32     session_id      =   1;//会话id、服务器分配的、后续客户端发往服务器的消息都需要携带该值
+    required    pbmsg.User  self            =   2;//用户的自身配置信息, self.base.parent为所在的单元id、从该单元id开始获取数据
+    required    fixed32     ttl             =   3;//保活间隔、ttl超时之前需要发送Keepalive_Request消息到服务器
+    optional    string      poc_register    =   4;//poc账号注册服务器,
+    optional    string      poc_outbound    =   5;//poc账号的呼叫服务器，如果不存在则使用poc_register值
 }
-
+//实体详细内容请求
 message EntityRequest
 {
-    required    pbmsg.Entity    id  =   1;
+    required    pbmsg.Entity    id  =   1; //被请求的实体id、id.id值必须包含、其他的可以不包含、包含其他字段方便调试打印
 }
-
+//实体详细内容应答
 message EntityResponse
 {
-    required    pbmsg.EntityData    data    =   1;
+    required    pbmsg.EntityData    data    =   1;//具体的内容，如果是unit，可以根据data.unit.members的成员进行递归的请求下级的内容
 }
-
+//实体通知
 message EntityNotification
 {
     required    pbmsg.EntityNotifyType   notify_type =   1;
-    required    pbmsg.EntityData        data        =   2;
+    required    pbmsg.EntityData        data        =   2;//如果notify_type为deleted时，只需要包含data.id值
 }
-
+/*
+	Only for Account .
+	实体状态通知、目前只用于Account
+*/
 message EntityStatusNotification
 {
-    required    pbmsg.Entity            id          =   1;
-    optional    pbmsg.RegisterStatus    status      =   2;
-    optional    pbmsg.RegisterStatus    sip_status  =   3;
-    optional    pbmsg.CustomStatus      custom_status = 4;
+    required    pbmsg.Entity            id          =   1; //账号id  id.id必须包含
+    optional    pbmsg.RegisterStatus    status      =   2; //注册服务器的状态
+    optional    pbmsg.RegisterStatus    sip_status  =   3; //注册SIP Register的状态
+    optional    pbmsg.CustomStatus      custom_status = 4; //自定义状态
 }
 
 message AppendGroupRequest
 {
-    required    pbmsg.Group             group       =   1;
+    required    pbmsg.Group             group       =   1; //新增群组时 group.base.id设置为0、或者不设置
 }
 message AppendGroupResponse
 {
-    required    pbmsg.Group             group       =   1;
+    required    pbmsg.Group             group       =   1;//应答时，group.base.id为服务器分配的唯一id
 }
 
 message ModifyGroupRequest
@@ -161,9 +202,9 @@ message ModifyGroupResponse
 
 message ModifyParticipantsRequest
 {
-	required    pbmsg.Entity			group_id		=   1;
-    required    pbmsg.ListModifyType    modify_type     =   2;
-    repeated    pbmsg.Participant       particiapnts    =   3;
+	required    pbmsg.Entity			group_id		=   1;//群组id 
+    required    pbmsg.ListModifyType    modify_type     =   2;//修改类型、增加成员、删除成员或者覆盖成员
+    repeated    pbmsg.Participant       particiapnts    =   3;//成员列表，与modify_type配合；尽量使用增加和删除
 }
 
 message ModifyParticipantsResponse
@@ -175,9 +216,9 @@ message ModifyParticipantsResponse
 
 message ParticipantsNotification
 {
-	required    pbmsg.Entity			group_id		=   1;
-    required    pbmsg.ListModifyType    modify_type     =   2;
-    repeated    pbmsg.Participant       particiapnts    =   3;
+	required    pbmsg.Entity			group_id		=   1;//群组id
+    required    pbmsg.ListModifyType    modify_type     =   2;//修改类型
+    repeated    pbmsg.Participant       particiapnts    =   3;//影响的成员类别
 }
 
 message JoinGroupRequestNotification
@@ -398,6 +439,10 @@ message DeleteGroupRequest
 	required	pbmsg.Entity	group_id				= 1;
 }
 
+message MoveUnitNotification
+{
+	required pbmsg.Entity		id						= 1;
+}
 message Request
 {
     optional    LoginRequest                      login                      =   1;
@@ -460,6 +505,7 @@ message Indication
      optional    RecordStatusNotification                  record_status               =   10;
      optional    AccountLocationNotification               account_location            =   11;
      optional    AlertOveredNotification                   alert_overed                =   12;
+     optional    MoveUnitNotification					   move_unit				   =   13;
 
 }
 

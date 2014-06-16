@@ -384,6 +384,13 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 			response.error_describe = "session id not exist";
 			return SOAP_OK;
 		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
 
 		connecttoserver_ptr->send_request(send_str);
@@ -406,9 +413,11 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 		return SOAP_OK;
 	}
 	}//unlock keep_tcp_connection_mutex
+	
 	LOG(INFO)<<"Parse data from protobuf protocol";
 	if (message.ParseFromString(recev_str))
 	{	
+		std::cout<<message.DebugString();
 		if(message.response().result())
 		{
 			response.result = true;
@@ -480,8 +489,8 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 					participant.token_privilege = int2str(message.response().entity().data().group().participants(i).token_privilege());
 					response.data.group.participants.push_back(participant);
 				}
-				response.data.group.record_status = int2str(message.response().entity().data().group().record_status());
-				response.data.group.record_type = int2str(message.response().entity().data().group().record_type());
+				//response.data.group.record_status = int2str(message.response().entity().data().group().record_status());
+				//response.data.group.record_type = int2str(message.response().entity().data().group().record_type());
 				response.data.group.short_number = message.response().entity().data().group().short_number();
 			}
 			else if((ns__EntityType)message.response().entity().data().id().entity_type() == ORGANIZATION)
@@ -633,14 +642,21 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -657,8 +673,8 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 			response.data.owner_id = int2str(message.response().append_group().group().owner().id());
 			response.data.parent_id = int2str(message.response().append_group().group().owner().parent().id());
 			response.data.short_number = message.response().append_group().group().short_number();
-			response.data.record_status = (ns__RecordStatus)message.response().append_group().group().record_status();
-			response.data.record_type = (ns__RecordType)message.response().append_group().group().record_type();
+			//response.data.record_status = (ns__RecordStatus)message.response().append_group().group().record_status();
+			//response.data.record_type = (ns__RecordType)message.response().append_group().group().record_type();
 			response.data.size = int2str(message.response().append_group().group().participants_size());
 			ns__Participant participant;
 			for(int i=0;i<message.response().append_group().group().participants_size();i++)
@@ -752,14 +768,21 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -774,8 +797,8 @@ int xiaofangService::Dispatch_Modify_Group(std::string session_id,
 			response.data.number = message.response().modify_group().group().number();
 			response.data.owner_id = int2str(message.response().modify_group().group().owner().id());
 			response.data.short_number = message.response().modify_group().group().short_number();
-			response.data.record_status = (ns__RecordStatus)message.response().modify_group().group().record_status();
-			response.data.record_type = (ns__RecordType)message.response().modify_group().group().record_type();
+			//response.data.record_status = (ns__RecordStatus)message.response().modify_group().group().record_status();
+			//response.data.record_type = (ns__RecordType)message.response().modify_group().group().record_type();
 			response.data.sealed = message.response().modify_group().group().sealed();
 			response.data.parent_id = int2str(message.response().modify_group().group().base().parent().id());
 		}
@@ -876,14 +899,21 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -979,14 +1009,21 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1098,14 +1135,21 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1228,14 +1272,21 @@ int xiaofangService::Dispatch_Invite_Participant_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1327,14 +1378,21 @@ int xiaofangService::Dispatch_Drop_Participant_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1426,14 +1484,21 @@ int xiaofangService::Dispatch_Release_Participant_Token_Request(std::string sess
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1525,14 +1590,21 @@ int xiaofangService::Dispatch_Appoint_Participant_Speak_Request(std::string sess
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1616,14 +1688,21 @@ int xiaofangService::Dispatch_Jion_Group_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1707,14 +1786,21 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1818,14 +1904,21 @@ int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -1909,14 +2002,21 @@ int xiaofangService::Dispatch_Start_Record_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2000,14 +2100,21 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2109,14 +2216,21 @@ int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string ses
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2230,14 +2344,21 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2336,14 +2457,21 @@ int xiaofangService::Dispatch_Modify_Alert_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2426,14 +2554,21 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2462,6 +2597,12 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 
 int xiaofangService::Dispatch_Alert_Overed_Notification(std::string session_id,
 			ns__Dispatch_Alert_Overed_Notification_Response &response)
+{
+	return SOAP_OK;
+}
+
+int xiaofangService::Dispatch_Move_Unit_Notification(std::string session_id,
+			ns__Dispatch_Move_Unit_Notification_Response &response)
 {
 	return SOAP_OK;
 }
@@ -2536,14 +2677,21 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2641,14 +2789,21 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2743,14 +2898,21 @@ int xiaofangService::Dispatch_History_Alert_Message_Request(std::string session_
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2852,14 +3014,21 @@ int xiaofangService::Dispatch_Delete_History_Alert_Request(std::string session_i
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";
@@ -2947,14 +3116,21 @@ int xiaofangService::Dispatch_Kick_Participant_Request(std::string session_id,
 			recev_str = connecttoserver_ptr->get_response();
 		}while((recev_str=="") && (!break_while));
 
-	if(break_while)
-	{
-		LOG(ERROR)<<"socket write and read error";
-		
-		response.result = false;
-		response.error_describe = "socket write and read error";
-		return SOAP_OK;
-	}
+		if(break_while)
+		{
+			LOG(ERROR)<<"socket write and read error";
+			
+			response.result = false;
+			response.error_describe = "socket write and read error";
+			return SOAP_OK;
+		}
+		if(!(itr->second->socket_.is_open()))
+		{
+			keep_tcp_connection.erase(itr);
+			response.result = false;
+			response.error_describe = "tcp connection has been closed,please login first";
+			return SOAP_OK;
+		}
 
 	}//unlock keep_tcp_connection_mutex
 	LOG(INFO)<<"Parse data from protobuf protocol";

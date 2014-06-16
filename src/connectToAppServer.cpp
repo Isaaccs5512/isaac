@@ -12,7 +12,6 @@
 #include <chrono>
 #include <thread>
 
-long int count=0;
 std::string ConnectToAppServer::get_response()
 {
 	std::string tempstr = responsestr;
@@ -163,7 +162,6 @@ void ConnectToAppServer::read_body(std::tr1::shared_ptr<char> lenbuf)
 	asio::read(socket_,asio::buffer(recvbuf.get(),recvlen_),ec);
 	if(ec)
 	{
-		std::cout<<"2222222222222		"<<errno<<"		"<<std::endl;
 		result = -4;
 		return;
 	}
@@ -185,7 +183,7 @@ void ConnectToAppServer::read_more_body(std::tr1::shared_ptr<char> recvbuf,int r
 		handler_pushed_message();
 		recstr = "";
 	}
-	else
+	else if(message.msg_type() != app::dispatch::MSG::Keepalive_Response)
 	{
 		if(!message.response().last_response())//后面还有数据需要接受
 		{

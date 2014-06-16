@@ -494,3 +494,7 @@ class ns__Normal_Response
 	bool result;
 };
 
+class ns__Dispatch_Move_Unit_Notification_Response
+{
+	ns__Entity entity;
+};

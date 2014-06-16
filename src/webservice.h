@@ -345,6 +345,17 @@ param out	:
 int ns__Dispatch_Alert_Overed_Notification(std::string session_id,
 			ns__Dispatch_Alert_Overed_Notification_Response &response);
 
+
+/*
+brief		:移动unit通知消息
+param in	:
+param in	:  
+param out	:
+*/
+int ns__Dispatch_Move_Unit_Notification(std::string session_id,
+			ns__Dispatch_Move_Unit_Notification_Response &response);
+
+
 /*
 brief		:可以指定时间范围，模糊名称等查询警情已完成的警情
 param in	:name//根据警情名次进行查询

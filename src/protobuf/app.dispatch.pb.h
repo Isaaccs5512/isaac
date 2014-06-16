@@ -86,6 +86,7 @@ class HistoryAlertMessageRequest;
 class HistoryAlertMessageResponse;
 class DeleteHistoryAlertRequest;
 class DeleteGroupRequest;
+class MoveUnitNotification;
 class Request;
 class Response;
 class Indication;
@@ -157,11 +158,12 @@ enum MSG {
   Session_Status_Notification = 210009,
   Record_Status_Notification = 210010,
   Account_Location_Notification = 210011,
-  Alert_Overed_Notification = 210012
+  Alert_Overed_Notification = 210012,
+  Move_Unit_Notification = 210013
 };
 bool MSG_IsValid(int value);
 const MSG MSG_MIN = Login_Request;
-const MSG MSG_MAX = Alert_Overed_Notification;
+const MSG MSG_MAX = Move_Unit_Notification;
 const int MSG_ARRAYSIZE = MSG_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* MSG_descriptor();
@@ -355,6 +357,30 @@ class LoginResponse : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 ttl() const;
   inline void set_ttl(::google::protobuf::uint32 value);
 
+  // optional string poc_register = 4;
+  inline bool has_poc_register() const;
+  inline void clear_poc_register();
+  static const int kPocRegisterFieldNumber = 4;
+  inline const ::std::string& poc_register() const;
+  inline void set_poc_register(const ::std::string& value);
+  inline void set_poc_register(const char* value);
+  inline void set_poc_register(const char* value, size_t size);
+  inline ::std::string* mutable_poc_register();
+  inline ::std::string* release_poc_register();
+  inline void set_allocated_poc_register(::std::string* poc_register);
+
+  // optional string poc_outbound = 5;
+  inline bool has_poc_outbound() const;
+  inline void clear_poc_outbound();
+  static const int kPocOutboundFieldNumber = 5;
+  inline const ::std::string& poc_outbound() const;
+  inline void set_poc_outbound(const ::std::string& value);
+  inline void set_poc_outbound(const char* value);
+  inline void set_poc_outbound(const char* value, size_t size);
+  inline ::std::string* mutable_poc_outbound();
+  inline ::std::string* release_poc_outbound();
+  inline void set_allocated_poc_outbound(::std::string* poc_outbound);
+
   // @@protoc_insertion_point(class_scope:app.dispatch.LoginResponse)
  private:
   inline void set_has_session_id();
@@ -363,15 +389,21 @@ class LoginResponse : public ::google::protobuf::Message {
   inline void clear_has_self();
   inline void set_has_ttl();
   inline void clear_has_ttl();
+  inline void set_has_poc_register();
+  inline void clear_has_poc_register();
+  inline void set_has_poc_outbound();
+  inline void clear_has_poc_outbound();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::pbmsg::User* self_;
   ::google::protobuf::uint32 session_id_;
   ::google::protobuf::uint32 ttl_;
+  ::std::string* poc_register_;
+  ::std::string* poc_outbound_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
 
   friend void  protobuf_AddDesc_app_2edispatch_2eproto();
   friend void protobuf_AssignDesc_app_2edispatch_2eproto();
@@ -4703,6 +4735,90 @@ class DeleteGroupRequest : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class MoveUnitNotification : public ::google::protobuf::Message {
+ public:
+  MoveUnitNotification();
+  virtual ~MoveUnitNotification();
+
+  MoveUnitNotification(const MoveUnitNotification& from);
+
+  inline MoveUnitNotification& operator=(const MoveUnitNotification& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MoveUnitNotification& default_instance();
+
+  void Swap(MoveUnitNotification* other);
+
+  // implements Message ----------------------------------------------
+
+  MoveUnitNotification* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MoveUnitNotification& from);
+  void MergeFrom(const MoveUnitNotification& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .pbmsg.Entity id = 1;
+  inline bool has_id() const;
+  inline void clear_id();
+  static const int kIdFieldNumber = 1;
+  inline const ::pbmsg::Entity& id() const;
+  inline ::pbmsg::Entity* mutable_id();
+  inline ::pbmsg::Entity* release_id();
+  inline void set_allocated_id(::pbmsg::Entity* id);
+
+  // @@protoc_insertion_point(class_scope:app.dispatch.MoveUnitNotification)
+ private:
+  inline void set_has_id();
+  inline void clear_has_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::pbmsg::Entity* id_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_app_2edispatch_2eproto();
+  friend void protobuf_AssignDesc_app_2edispatch_2eproto();
+  friend void protobuf_ShutdownFile_app_2edispatch_2eproto();
+
+  void InitAsDefaultInstance();
+  static MoveUnitNotification* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class Request : public ::google::protobuf::Message {
  public:
   Request();
@@ -5464,6 +5580,15 @@ class Indication : public ::google::protobuf::Message {
   inline ::app::dispatch::AlertOveredNotification* release_alert_overed();
   inline void set_allocated_alert_overed(::app::dispatch::AlertOveredNotification* alert_overed);
 
+  // optional .app.dispatch.MoveUnitNotification move_unit = 13;
+  inline bool has_move_unit() const;
+  inline void clear_move_unit();
+  static const int kMoveUnitFieldNumber = 13;
+  inline const ::app::dispatch::MoveUnitNotification& move_unit() const;
+  inline ::app::dispatch::MoveUnitNotification* mutable_move_unit();
+  inline ::app::dispatch::MoveUnitNotification* release_move_unit();
+  inline void set_allocated_move_unit(::app::dispatch::MoveUnitNotification* move_unit);
+
   // @@protoc_insertion_point(class_scope:app.dispatch.Indication)
  private:
   inline void set_has_entity();
@@ -5490,6 +5615,8 @@ class Indication : public ::google::protobuf::Message {
   inline void clear_has_account_location();
   inline void set_has_alert_overed();
   inline void clear_has_alert_overed();
+  inline void set_has_move_unit();
+  inline void clear_has_move_unit();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -5505,9 +5632,10 @@ class Indication : public ::google::protobuf::Message {
   ::app::dispatch::RecordStatusNotification* record_status_;
   ::app::dispatch::AccountLocationNotification* account_location_;
   ::app::dispatch::AlertOveredNotification* alert_overed_;
+  ::app::dispatch::MoveUnitNotification* move_unit_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(12 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
 
   friend void  protobuf_AddDesc_app_2edispatch_2eproto();
   friend void protobuf_AssignDesc_app_2edispatch_2eproto();
@@ -5885,6 +6013,146 @@ inline ::google::protobuf::uint32 LoginResponse::ttl() const {
 inline void LoginResponse::set_ttl(::google::protobuf::uint32 value) {
   set_has_ttl();
   ttl_ = value;
+}
+
+// optional string poc_register = 4;
+inline bool LoginResponse::has_poc_register() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void LoginResponse::set_has_poc_register() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void LoginResponse::clear_has_poc_register() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void LoginResponse::clear_poc_register() {
+  if (poc_register_ != &::google::protobuf::internal::kEmptyString) {
+    poc_register_->clear();
+  }
+  clear_has_poc_register();
+}
+inline const ::std::string& LoginResponse::poc_register() const {
+  return *poc_register_;
+}
+inline void LoginResponse::set_poc_register(const ::std::string& value) {
+  set_has_poc_register();
+  if (poc_register_ == &::google::protobuf::internal::kEmptyString) {
+    poc_register_ = new ::std::string;
+  }
+  poc_register_->assign(value);
+}
+inline void LoginResponse::set_poc_register(const char* value) {
+  set_has_poc_register();
+  if (poc_register_ == &::google::protobuf::internal::kEmptyString) {
+    poc_register_ = new ::std::string;
+  }
+  poc_register_->assign(value);
+}
+inline void LoginResponse::set_poc_register(const char* value, size_t size) {
+  set_has_poc_register();
+  if (poc_register_ == &::google::protobuf::internal::kEmptyString) {
+    poc_register_ = new ::std::string;
+  }
+  poc_register_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* LoginResponse::mutable_poc_register() {
+  set_has_poc_register();
+  if (poc_register_ == &::google::protobuf::internal::kEmptyString) {
+    poc_register_ = new ::std::string;
+  }
+  return poc_register_;
+}
+inline ::std::string* LoginResponse::release_poc_register() {
+  clear_has_poc_register();
+  if (poc_register_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = poc_register_;
+    poc_register_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void LoginResponse::set_allocated_poc_register(::std::string* poc_register) {
+  if (poc_register_ != &::google::protobuf::internal::kEmptyString) {
+    delete poc_register_;
+  }
+  if (poc_register) {
+    set_has_poc_register();
+    poc_register_ = poc_register;
+  } else {
+    clear_has_poc_register();
+    poc_register_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// optional string poc_outbound = 5;
+inline bool LoginResponse::has_poc_outbound() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void LoginResponse::set_has_poc_outbound() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void LoginResponse::clear_has_poc_outbound() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void LoginResponse::clear_poc_outbound() {
+  if (poc_outbound_ != &::google::protobuf::internal::kEmptyString) {
+    poc_outbound_->clear();
+  }
+  clear_has_poc_outbound();
+}
+inline const ::std::string& LoginResponse::poc_outbound() const {
+  return *poc_outbound_;
+}
+inline void LoginResponse::set_poc_outbound(const ::std::string& value) {
+  set_has_poc_outbound();
+  if (poc_outbound_ == &::google::protobuf::internal::kEmptyString) {
+    poc_outbound_ = new ::std::string;
+  }
+  poc_outbound_->assign(value);
+}
+inline void LoginResponse::set_poc_outbound(const char* value) {
+  set_has_poc_outbound();
+  if (poc_outbound_ == &::google::protobuf::internal::kEmptyString) {
+    poc_outbound_ = new ::std::string;
+  }
+  poc_outbound_->assign(value);
+}
+inline void LoginResponse::set_poc_outbound(const char* value, size_t size) {
+  set_has_poc_outbound();
+  if (poc_outbound_ == &::google::protobuf::internal::kEmptyString) {
+    poc_outbound_ = new ::std::string;
+  }
+  poc_outbound_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* LoginResponse::mutable_poc_outbound() {
+  set_has_poc_outbound();
+  if (poc_outbound_ == &::google::protobuf::internal::kEmptyString) {
+    poc_outbound_ = new ::std::string;
+  }
+  return poc_outbound_;
+}
+inline ::std::string* LoginResponse::release_poc_outbound() {
+  clear_has_poc_outbound();
+  if (poc_outbound_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = poc_outbound_;
+    poc_outbound_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void LoginResponse::set_allocated_poc_outbound(::std::string* poc_outbound) {
+  if (poc_outbound_ != &::google::protobuf::internal::kEmptyString) {
+    delete poc_outbound_;
+  }
+  if (poc_outbound) {
+    set_has_poc_outbound();
+    poc_outbound_ = poc_outbound;
+  } else {
+    clear_has_poc_outbound();
+    poc_outbound_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
 }
 
 // -------------------------------------------------------------------
@@ -9381,6 +9649,48 @@ inline void DeleteGroupRequest::set_allocated_group_id(::pbmsg::Entity* group_id
 
 // -------------------------------------------------------------------
 
+// MoveUnitNotification
+
+// required .pbmsg.Entity id = 1;
+inline bool MoveUnitNotification::has_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MoveUnitNotification::set_has_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MoveUnitNotification::clear_has_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MoveUnitNotification::clear_id() {
+  if (id_ != NULL) id_->::pbmsg::Entity::Clear();
+  clear_has_id();
+}
+inline const ::pbmsg::Entity& MoveUnitNotification::id() const {
+  return id_ != NULL ? *id_ : *default_instance_->id_;
+}
+inline ::pbmsg::Entity* MoveUnitNotification::mutable_id() {
+  set_has_id();
+  if (id_ == NULL) id_ = new ::pbmsg::Entity;
+  return id_;
+}
+inline ::pbmsg::Entity* MoveUnitNotification::release_id() {
+  clear_has_id();
+  ::pbmsg::Entity* temp = id_;
+  id_ = NULL;
+  return temp;
+}
+inline void MoveUnitNotification::set_allocated_id(::pbmsg::Entity* id) {
+  delete id_;
+  id_ = id;
+  if (id) {
+    set_has_id();
+  } else {
+    clear_has_id();
+  }
+}
+
+// -------------------------------------------------------------------
+
 // Request
 
 // optional .app.dispatch.LoginRequest login = 1;
@@ -11288,6 +11598,44 @@ inline void Indication::set_allocated_alert_overed(::app::dispatch::AlertOveredN
     set_has_alert_overed();
   } else {
     clear_has_alert_overed();
+  }
+}
+
+// optional .app.dispatch.MoveUnitNotification move_unit = 13;
+inline bool Indication::has_move_unit() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void Indication::set_has_move_unit() {
+  _has_bits_[0] |= 0x00001000u;
+}
+inline void Indication::clear_has_move_unit() {
+  _has_bits_[0] &= ~0x00001000u;
+}
+inline void Indication::clear_move_unit() {
+  if (move_unit_ != NULL) move_unit_->::app::dispatch::MoveUnitNotification::Clear();
+  clear_has_move_unit();
+}
+inline const ::app::dispatch::MoveUnitNotification& Indication::move_unit() const {
+  return move_unit_ != NULL ? *move_unit_ : *default_instance_->move_unit_;
+}
+inline ::app::dispatch::MoveUnitNotification* Indication::mutable_move_unit() {
+  set_has_move_unit();
+  if (move_unit_ == NULL) move_unit_ = new ::app::dispatch::MoveUnitNotification;
+  return move_unit_;
+}
+inline ::app::dispatch::MoveUnitNotification* Indication::release_move_unit() {
+  clear_has_move_unit();
+  ::app::dispatch::MoveUnitNotification* temp = move_unit_;
+  move_unit_ = NULL;
+  return temp;
+}
+inline void Indication::set_allocated_move_unit(::app::dispatch::MoveUnitNotification* move_unit) {
+  delete move_unit_;
+  move_unit_ = move_unit;
+  if (move_unit) {
+    set_has_move_unit();
+  } else {
+    clear_has_move_unit();
   }
 }
 

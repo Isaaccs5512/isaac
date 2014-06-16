@@ -162,6 +162,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* DeleteGroupRequest_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   DeleteGroupRequest_reflection_ = NULL;
+const ::google::protobuf::Descriptor* MoveUnitNotification_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  MoveUnitNotification_reflection_ = NULL;
 const ::google::protobuf::Descriptor* Request_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Request_reflection_ = NULL;
@@ -202,10 +205,12 @@ void protobuf_AssignDesc_app_2edispatch_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LoginRequest));
   LoginResponse_descriptor_ = file->message_type(1);
-  static const int LoginResponse_offsets_[3] = {
+  static const int LoginResponse_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginResponse, session_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginResponse, self_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginResponse, ttl_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginResponse, poc_register_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginResponse, poc_outbound_),
   };
   LoginResponse_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -939,7 +944,22 @@ void protobuf_AssignDesc_app_2edispatch_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(DeleteGroupRequest));
-  Request_descriptor_ = file->message_type(47);
+  MoveUnitNotification_descriptor_ = file->message_type(47);
+  static const int MoveUnitNotification_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MoveUnitNotification, id_),
+  };
+  MoveUnitNotification_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      MoveUnitNotification_descriptor_,
+      MoveUnitNotification::default_instance_,
+      MoveUnitNotification_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MoveUnitNotification, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MoveUnitNotification, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(MoveUnitNotification));
+  Request_descriptor_ = file->message_type(48);
   static const int Request_offsets_[25] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, login_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, entity_),
@@ -978,7 +998,7 @@ void protobuf_AssignDesc_app_2edispatch_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Request));
-  Response_descriptor_ = file->message_type(48);
+  Response_descriptor_ = file->message_type(49);
   static const int Response_offsets_[13] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, result_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, last_response_),
@@ -1005,8 +1025,8 @@ void protobuf_AssignDesc_app_2edispatch_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Response));
-  Indication_descriptor_ = file->message_type(49);
-  static const int Indication_offsets_[12] = {
+  Indication_descriptor_ = file->message_type(50);
+  static const int Indication_offsets_[13] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Indication, entity_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Indication, entity_status_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Indication, participants_),
@@ -1019,6 +1039,7 @@ void protobuf_AssignDesc_app_2edispatch_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Indication, record_status_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Indication, account_location_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Indication, alert_overed_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Indication, move_unit_),
   };
   Indication_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -1031,7 +1052,7 @@ void protobuf_AssignDesc_app_2edispatch_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Indication));
-  Message_descriptor_ = file->message_type(50);
+  Message_descriptor_ = file->message_type(51);
   static const int Message_offsets_[6] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message, msg_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message, sequence_),
@@ -1159,6 +1180,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     DeleteGroupRequest_descriptor_, &DeleteGroupRequest::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    MoveUnitNotification_descriptor_, &MoveUnitNotification::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Request_descriptor_, &Request::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Response_descriptor_, &Response::default_instance());
@@ -1265,6 +1288,8 @@ void protobuf_ShutdownFile_app_2edispatch_2eproto() {
   delete DeleteHistoryAlertRequest_reflection_;
   delete DeleteGroupRequest::default_instance_;
   delete DeleteGroupRequest_reflection_;
+  delete MoveUnitNotification::default_instance_;
+  delete MoveUnitNotification_reflection_;
   delete Request::default_instance_;
   delete Request_reflection_;
   delete Response::default_instance_;
@@ -1290,243 +1315,247 @@ void protobuf_AddDesc_app_2edispatch_2eproto() {
     "ata.proto\032\020EntityData.proto\032\022MediaMessag"
     "e.proto\032\022HistoryAlert.proto\"2\n\014LoginRequ"
     "est\022\020\n\010username\030\001 \002(\014\022\020\n\010password\030\002 \002(\t\""
-    "K\n\rLoginResponse\022\022\n\nsession_id\030\001 \002(\007\022\031\n\004"
-    "self\030\002 \002(\0132\013.pbmsg.User\022\013\n\003ttl\030\003 \002(\007\"*\n\r"
-    "EntityRequest\022\031\n\002id\030\001 \002(\0132\r.pbmsg.Entity"
-    "\"1\n\016EntityResponse\022\037\n\004data\030\001 \002(\0132\021.pbmsg"
-    ".EntityData\"c\n\022EntityNotification\022,\n\013not"
-    "ify_type\030\001 \002(\0162\027.pbmsg.EntityNotifyType\022"
-    "\037\n\004data\030\002 \002(\0132\021.pbmsg.EntityData\"\263\001\n\030Ent"
-    "ityStatusNotification\022\031\n\002id\030\001 \002(\0132\r.pbms"
-    "g.Entity\022%\n\006status\030\002 \001(\0162\025.pbmsg.Registe"
-    "rStatus\022)\n\nsip_status\030\003 \001(\0162\025.pbmsg.Regi"
-    "sterStatus\022*\n\rcustom_status\030\004 \001(\0162\023.pbms"
-    "g.CustomStatus\"1\n\022AppendGroupRequest\022\033\n\005"
-    "group\030\001 \002(\0132\014.pbmsg.Group\"2\n\023AppendGroup"
-    "Response\022\033\n\005group\030\001 \002(\0132\014.pbmsg.Group\"1\n"
-    "\022ModifyGroupRequest\022\033\n\005group\030\001 \002(\0132\014.pbm"
-    "sg.Group\"2\n\023ModifyGroupResponse\022\033\n\005group"
-    "\030\001 \002(\0132\014.pbmsg.Group\"\222\001\n\031ModifyParticipa"
-    "ntsRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Ent"
-    "ity\022*\n\013modify_type\030\002 \002(\0162\025.pbmsg.ListMod"
-    "ifyType\022(\n\014particiapnts\030\003 \003(\0132\022.pbmsg.Pa"
-    "rticipant\"\223\001\n\032ModifyParticipantsResponse"
-    "\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022*\n\013mod"
-    "ify_type\030\002 \002(\0162\025.pbmsg.ListModifyType\022(\n"
-    "\014particiapnts\030\003 \003(\0132\022.pbmsg.Participant\""
-    "\221\001\n\030ParticipantsNotification\022\037\n\010group_id"
-    "\030\001 \002(\0132\r.pbmsg.Entity\022*\n\013modify_type\030\002 \002"
-    "(\0162\025.pbmsg.ListModifyType\022(\n\014particiapnt"
-    "s\030\003 \003(\0132\022.pbmsg.Participant\"b\n\034JoinGroup"
-    "RequestNotification\022\037\n\010group_id\030\001 \002(\0132\r."
-    "pbmsg.Entity\022!\n\naccount_id\030\002 \002(\0132\r.pbmsg"
-    ".Entity\"\211\001\n\035ParticipantStatusNotificatio"
-    "n\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\nac"
-    "count_id\030\002 \002(\0132\r.pbmsg.Entity\022$\n\006status\030"
-    "\003 \002(\0162\024.pbmsg.SessionStatus\"|\n\023MediaMess"
-    "ageRequest\022\031\n\002id\030\001 \002(\0132\r.pbmsg.Entity\022\027\n"
-    "\017from_message_id\030\002 \001(\007\022\026\n\016from_timestamp"
-    "\030\003 \001(\t\022\031\n\021max_message_count\030\004 \002(\007\"u\n\024Med"
-    "iaMessageResponse\022\031\n\002id\030\001 \002(\0132\r.pbmsg.En"
-    "tity\022%\n\010messages\030\002 \003(\0132\023.pbmsg.MediaMess"
-    "age\022\033\n\023leave_message_count\030\003 \002(\007\"W\n\030Medi"
-    "aMessageNotification\022\031\n\002id\030\001 \002(\0132\r.pbmsg"
-    ".Entity\022 \n\003msg\030\002 \002(\0132\023.pbmsg.MediaMessag"
-    "e\"k\n%ParticipantConnectRequestNotificati"
-    "on\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\na"
-    "ccount_id\030\002 \002(\0132\r.pbmsg.Entity\"i\n#Partic"
-    "ipantSpeakRequestNotification\022\037\n\010group_i"
-    "d\030\001 \002(\0132\r.pbmsg.Entity\022!\n\naccount_id\030\002 \002"
-    "(\0132\r.pbmsg.Entity\"^\n\030InviteParticipantRe"
-    "quest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!"
-    "\n\naccount_id\030\002 \001(\0132\r.pbmsg.Entity\"\\\n\026Dro"
-    "pParticipantRequest\022\037\n\010group_id\030\001 \002(\0132\r."
-    "pbmsg.Entity\022!\n\naccount_id\030\002 \001(\0132\r.pbmsg"
-    ".Entity\"d\n\036ReleaseParticipantTokenReques"
-    "t\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\nac"
-    "count_id\030\002 \002(\0132\r.pbmsg.Entity\"d\n\036Appoint"
-    "ParticipantSpeakRequest\022\037\n\010group_id\030\001 \002("
+    "w\n\rLoginResponse\022\022\n\nsession_id\030\001 \002(\007\022\031\n\004"
+    "self\030\002 \002(\0132\013.pbmsg.User\022\013\n\003ttl\030\003 \002(\007\022\024\n\014"
+    "poc_register\030\004 \001(\t\022\024\n\014poc_outbound\030\005 \001(\t"
+    "\"*\n\rEntityRequest\022\031\n\002id\030\001 \002(\0132\r.pbmsg.En"
+    "tity\"1\n\016EntityResponse\022\037\n\004data\030\001 \002(\0132\021.p"
+    "bmsg.EntityData\"c\n\022EntityNotification\022,\n"
+    "\013notify_type\030\001 \002(\0162\027.pbmsg.EntityNotifyT"
+    "ype\022\037\n\004data\030\002 \002(\0132\021.pbmsg.EntityData\"\263\001\n"
+    "\030EntityStatusNotification\022\031\n\002id\030\001 \002(\0132\r."
+    "pbmsg.Entity\022%\n\006status\030\002 \001(\0162\025.pbmsg.Reg"
+    "isterStatus\022)\n\nsip_status\030\003 \001(\0162\025.pbmsg."
+    "RegisterStatus\022*\n\rcustom_status\030\004 \001(\0162\023."
+    "pbmsg.CustomStatus\"1\n\022AppendGroupRequest"
+    "\022\033\n\005group\030\001 \002(\0132\014.pbmsg.Group\"2\n\023AppendG"
+    "roupResponse\022\033\n\005group\030\001 \002(\0132\014.pbmsg.Grou"
+    "p\"1\n\022ModifyGroupRequest\022\033\n\005group\030\001 \002(\0132\014"
+    ".pbmsg.Group\"2\n\023ModifyGroupResponse\022\033\n\005g"
+    "roup\030\001 \002(\0132\014.pbmsg.Group\"\222\001\n\031ModifyParti"
+    "cipantsRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg"
+    ".Entity\022*\n\013modify_type\030\002 \002(\0162\025.pbmsg.Lis"
+    "tModifyType\022(\n\014particiapnts\030\003 \003(\0132\022.pbms"
+    "g.Participant\"\223\001\n\032ModifyParticipantsResp"
+    "onse\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022*\n"
+    "\013modify_type\030\002 \002(\0162\025.pbmsg.ListModifyTyp"
+    "e\022(\n\014particiapnts\030\003 \003(\0132\022.pbmsg.Particip"
+    "ant\"\221\001\n\030ParticipantsNotification\022\037\n\010grou"
+    "p_id\030\001 \002(\0132\r.pbmsg.Entity\022*\n\013modify_type"
+    "\030\002 \002(\0162\025.pbmsg.ListModifyType\022(\n\014partici"
+    "apnts\030\003 \003(\0132\022.pbmsg.Participant\"b\n\034JoinG"
+    "roupRequestNotification\022\037\n\010group_id\030\001 \002("
     "\0132\r.pbmsg.Entity\022!\n\naccount_id\030\002 \002(\0132\r.p"
-    "bmsg.Entity\"3\n\020JionGroupRequest\022\037\n\010group"
-    "_id\030\001 \002(\0132\r.pbmsg.Entity\"4\n\021LeaveGroupRe"
-    "quest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\"b"
-    "\n\031SessionStatusNotification\022\037\n\010group_id\030"
-    "\001 \002(\0132\r.pbmsg.Entity\022$\n\006status\030\002 \002(\0162\024.p"
-    "bmsg.SessionStatus\"Q\n\022SendMessageRequest"
-    "\022\031\n\002id\030\001 \002(\0132\r.pbmsg.Entity\022 \n\003msg\030\002 \002(\013"
-    "2\023.pbmsg.MediaMessage\"\\\n\026KickParticipant"
-    "Request\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity"
-    "\022!\n\naccount_id\030\002 \001(\0132\r.pbmsg.Entity\"5\n\022S"
-    "tartRecordRequest\022\037\n\010group_id\030\001 \002(\0132\r.pb"
-    "msg.Entity\"4\n\021StopRecordRequest\022\037\n\010group"
-    "_id\030\001 \002(\0132\r.pbmsg.Entity\"N\n\030RecordStatus"
-    "Notification\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.E"
-    "ntity\022\021\n\trecording\030\002 \002(\010\"f\n\037SubscribeAcc"
-    "ountLocationRequest\022\023\n\013subscribing\030\001 \002(\010"
-    "\022!\n\naccount_id\030\002 \002(\0132\r.pbmsg.Entity\022\013\n\003t"
-    "tl\030\003 \002(\007\"x\n\033AccountLocationNotification\022"
-    "!\n\naccount_id\030\001 \002(\0132\r.pbmsg.Entity\022\021\n\tlo"
-    "ngitude\030\002 \002(\001\022\020\n\010latitude\030\003 \002(\001\022\021\n\ttimes"
-    "tamp\030\004 \002(\t\"Q\n\022AppendAlertRequest\022\033\n\005aler"
-    "t\030\001 \002(\0132\014.pbmsg.Alert\022\036\n\007members\030\002 \003(\0132\r"
-    ".pbmsg.Entity\"2\n\023AppendAlertResponse\022\033\n\005"
-    "alert\030\001 \002(\0132\014.pbmsg.Alert\"1\n\022ModifyAlert"
-    "Request\022\033\n\005alert\030\001 \002(\0132\014.pbmsg.Alert\"3\n\020"
-    "StopAlertRequest\022\037\n\010alert_id\030\001 \002(\0132\r.pbm"
-    "sg.Entity\":\n\027AlertOveredNotification\022\037\n\010"
-    "alert_id\030\001 \002(\0132\r.pbmsg.Entity\"\264\001\n\024Histor"
-    "yAlertsRequest\022\014\n\004name\030\001 \001(\014\022\030\n\020create_t"
-    "ime_from\030\002 \001(\t\022\026\n\016create_time_to\030\003 \001(\t\022\027"
-    "\n\017alram_time_from\030\004 \001(\t\022\025\n\ralram_time_to"
-    "\030\005 \001(\t\022\026\n\016over_time_from\030\006 \001(\t\022\024\n\014over_t"
-    "ime_to\030\007 \001(\t\"D\n\025HistoryAlertsResponse\022+\n"
-    "\016history_alerts\030\001 \003(\0132\023.pbmsg.HistoryAle"
-    "rt\"/\n\023HistoryAlertRequest\022\030\n\020history_ale"
-    "rt_id\030\001 \002(\007\"B\n\024HistoryAlertResponse\022*\n\rh"
-    "istory_alert\030\001 \002(\0132\023.pbmsg.HistoryAlert\""
-    "}\n\032HistoryAlertMessageRequest\022\030\n\020history"
-    "_alert_id\030\001 \002(\007\022\027\n\017from_message_id\030\002 \001(\007"
-    "\022\021\n\tfrom_time\030\003 \001(\t\022\031\n\021max_message_count"
-    "\030\004 \002(\007\"{\n\033HistoryAlertMessageResponse\022\030\n"
-    "\020history_alert_id\030\001 \002(\007\022%\n\010messages\030\002 \003("
-    "\0132\023.pbmsg.MediaMessage\022\033\n\023leave_message_"
-    "count\030\003 \002(\007\"5\n\031DeleteHistoryAlertRequest"
-    "\022\030\n\020history_alert_id\030\001 \002(\007\"5\n\022DeleteGrou"
-    "pRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entit"
-    "y\"\374\013\n\007Request\022)\n\005login\030\001 \001(\0132\032.app.dispa"
-    "tch.LoginRequest\022+\n\006entity\030\002 \001(\0132\033.app.d"
-    "ispatch.EntityRequest\0226\n\014append_group\030\003 "
-    "\001(\0132 .app.dispatch.AppendGroupRequest\0226\n"
-    "\014modify_group\030\004 \001(\0132 .app.dispatch.Modif"
-    "yGroupRequest\022D\n\023modify_participants\030\005 \001"
-    "(\0132\'.app.dispatch.ModifyParticipantsRequ"
-    "est\0228\n\rgroup_message\030\006 \001(\0132!.app.dispatc"
-    "h.MediaMessageRequest\022B\n\022invite_particip"
-    "ant\030\007 \001(\0132&.app.dispatch.InviteParticipa"
-    "ntRequest\022>\n\020drop_participant\030\010 \001(\0132$.ap"
-    "p.dispatch.DropParticipantRequest\022O\n\031rel"
-    "ease_participant_token\030\t \001(\0132,.app.dispa"
-    "tch.ReleaseParticipantTokenRequest\022O\n\031ap"
-    "point_participant_speak\030\n \001(\0132,.app.disp"
-    "atch.AppointParticipantSpeakRequest\0222\n\nj"
-    "ion_group\030\013 \001(\0132\036.app.dispatch.JionGroup"
-    "Request\0224\n\013leave_group\030\014 \001(\0132\037.app.dispa"
-    "tch.LeaveGroupRequest\0226\n\014send_message\030\r "
-    "\001(\0132 .app.dispatch.SendMessageRequest\022>\n"
-    "\020kick_participant\030\016 \001(\0132$.app.dispatch.K"
-    "ickParticipantRequest\0226\n\014start_record\030\017 "
-    "\001(\0132 .app.dispatch.StartRecordRequest\0224\n"
-    "\013stop_record\030\020 \001(\0132\037.app.dispatch.StopRe"
-    "cordRequest\022Q\n\032subscribe_account_locatio"
-    "n\030\021 \001(\0132-.app.dispatch.SubscribeAccountL"
-    "ocationRequest\0226\n\014append_alert\030\022 \001(\0132 .a"
-    "pp.dispatch.AppendAlertRequest\0226\n\014modify"
-    "_alert\030\023 \001(\0132 .app.dispatch.ModifyAlertR"
-    "equest\0222\n\nstop_alert\030\024 \001(\0132\036.app.dispatc"
-    "h.StopAlertRequest\022:\n\016history_alerts\030\025 \001"
-    "(\0132\".app.dispatch.HistoryAlertsRequest\0228"
-    "\n\rhistory_alert\030\026 \001(\0132!.app.dispatch.His"
-    "toryAlertRequest\022E\n\024delete_history_alert"
-    "\030\027 \001(\0132\'.app.dispatch.DeleteHistoryAlert"
-    "Request\0226\n\014delete_group\030\030 \001(\0132 .app.disp"
-    "atch.DeleteGroupRequest\022G\n\025history_alert"
-    "_message\030\031 \001(\0132(.app.dispatch.HistoryAle"
-    "rtMessageRequest\"\222\005\n\010Response\022\016\n\006result\030"
-    "\001 \002(\010\022\025\n\rlast_response\030\002 \002(\010\022\026\n\016error_de"
-    "scribe\030\003 \001(\014\022*\n\005login\030\004 \001(\0132\033.app.dispat"
-    "ch.LoginResponse\022,\n\006entity\030\005 \001(\0132\034.app.d"
-    "ispatch.EntityResponse\0227\n\014append_group\030\006"
-    " \001(\0132!.app.dispatch.AppendGroupResponse\022"
-    "7\n\014modify_group\030\007 \001(\0132!.app.dispatch.Mod"
-    "ifyGroupResponse\022E\n\023modify_participants\030"
-    "\010 \001(\0132(.app.dispatch.ModifyParticipantsR"
-    "esponse\0229\n\rgroup_message\030\t \001(\0132\".app.dis"
-    "patch.MediaMessageResponse\0227\n\014append_ale"
-    "rt\030\n \001(\0132!.app.dispatch.AppendAlertRespo"
-    "nse\022;\n\016history_alerts\030\013 \001(\0132#.app.dispat"
-    "ch.HistoryAlertsResponse\0229\n\rhistory_aler"
-    "t\030\014 \001(\0132\".app.dispatch.HistoryAlertRespo"
-    "nse\022H\n\025history_alert_message\030\r \001(\0132).app"
-    ".dispatch.HistoryAlertMessageResponse\"\275\006"
-    "\n\nIndication\0220\n\006entity\030\001 \001(\0132 .app.dispa"
-    "tch.EntityNotification\022=\n\rentity_status\030"
-    "\002 \001(\0132&.app.dispatch.EntityStatusNotific"
-    "ation\022<\n\014participants\030\003 \001(\0132&.app.dispat"
-    "ch.ParticipantsNotification\022F\n\022join_grou"
-    "p_request\030\004 \001(\0132*.app.dispatch.JoinGroup"
-    "RequestNotification\022G\n\022participant_statu"
-    "s\030\005 \001(\0132+.app.dispatch.ParticipantStatus"
-    "Notification\022=\n\rmedia_message\030\006 \001(\0132&.ap"
-    "p.dispatch.MediaMessageNotification\022X\n\033p"
-    "articipant_connect_request\030\007 \001(\01323.app.d"
-    "ispatch.ParticipantConnectRequestNotific"
-    "ation\022T\n\031participant_speak_request\030\010 \001(\013"
-    "21.app.dispatch.ParticipantSpeakRequestN"
-    "otification\022\?\n\016session_status\030\t \001(\0132\'.ap"
-    "p.dispatch.SessionStatusNotification\022=\n\r"
-    "record_status\030\n \001(\0132&.app.dispatch.Recor"
-    "dStatusNotification\022C\n\020account_location\030"
-    "\013 \001(\0132).app.dispatch.AccountLocationNoti"
-    "fication\022;\n\014alert_overed\030\014 \001(\0132%.app.dis"
-    "patch.AlertOveredNotification\"\324\001\n\007Messag"
-    "e\022#\n\010msg_type\030\001 \002(\0162\021.app.dispatch.MSG\022\020"
-    "\n\010sequence\030\002 \002(\007\022\022\n\nsession_id\030\003 \001(\007\022&\n\007"
-    "request\030\004 \001(\0132\025.app.dispatch.Request\022(\n\010"
-    "response\030\005 \001(\0132\026.app.dispatch.Response\022,"
-    "\n\nindication\030\006 \001(\0132\030.app.dispatch.Indica"
-    "tion*\253\020\n\003MSG\022\023\n\rLogin_Request\020\301\232\014\022\024\n\016Log"
-    "in_Response\020\302\232\014\022\024\n\016Logout_Request\020\303\232\014\022\025\n"
-    "\017Logout_Response\020\304\232\014\022\027\n\021Keepalive_Reques"
-    "t\020\305\232\014\022\030\n\022Keepalive_Response\020\306\232\014\022\024\n\016Entit"
-    "y_Request\020\307\232\014\022\025\n\017Entity_Response\020\310\232\014\022\032\n\024"
-    "Append_Group_Request\020\311\232\014\022\033\n\025Append_Group"
-    "_Response\020\312\232\014\022\032\n\024Modify_Group_Request\020\313\232"
-    "\014\022\033\n\025Modify_Group_Response\020\314\232\014\022!\n\033Modify"
-    "_Participants_Request\020\315\232\014\022\"\n\034Modify_Part"
-    "icipants_Response\020\316\232\014\022\033\n\025Media_Message_R"
-    "equest\020\317\232\014\022\034\n\026Media_Message_Response\020\320\232\014"
-    "\022 \n\032Invite_Participant_Request\020\321\232\014\022!\n\033In"
-    "vite_Participant_Response\020\322\232\014\022\036\n\030Drop_Pa"
-    "rticipant_Request\020\323\232\014\022\037\n\031Drop_Participan"
-    "t_Response\020\324\232\014\022\'\n!Release_Participant_To"
-    "ken_Request\020\325\232\014\022(\n\"Release_Participant_T"
-    "oken_Response\020\326\232\014\022\'\n!Appoint_Participant"
-    "_Speak_Request\020\327\232\014\022(\n\"Appoint_Participan"
-    "t_Speak_Response\020\330\232\014\022\030\n\022Jion_Group_Reque"
-    "st\020\331\232\014\022\031\n\023Jion_Group_Response\020\332\232\014\022\031\n\023Lea"
-    "ve_Group_Request\020\333\232\014\022\032\n\024Leave_Group_Resp"
-    "onse\020\334\232\014\022\032\n\024Send_Message_Request\020\335\232\014\022\033\n\025"
-    "Send_Message_Response\020\336\232\014\022\036\n\030Kick_Partic"
-    "ipant_Request\020\337\232\014\022\037\n\031Kick_Participant_Re"
-    "sponse\020\340\232\014\022\032\n\024Start_Record_Request\020\341\232\014\022\033"
-    "\n\025Start_Record_Response\020\342\232\014\022\031\n\023Stop_Reco"
-    "rd_Request\020\343\232\014\022\032\n\024Stop_Record_Response\020\344"
-    "\232\014\022(\n\"Subscribe_Account_Location_Request"
-    "\020\345\232\014\022)\n#Subscribe_Account_Location_Respo"
-    "nse\020\346\232\014\022\032\n\024Append_Alert_Request\020\347\232\014\022\033\n\025A"
-    "ppend_Alert_Response\020\350\232\014\022\032\n\024Modify_Alert"
-    "_Request\020\351\232\014\022\033\n\025Modify_Alert_Response\020\352\232"
-    "\014\022\030\n\022Stop_Alert_Request\020\353\232\014\022\031\n\023Stop_Aler"
-    "t_Response\020\354\232\014\022\034\n\026History_Alerts_Request"
-    "\020\355\232\014\022\035\n\027History_Alerts_Response\020\356\232\014\022\033\n\025H"
-    "istory_Alert_Request\020\357\232\014\022\034\n\026History_Aler"
-    "t_Response\020\360\232\014\022#\n\035History_Alert_Message_"
-    "Request\020\361\232\014\022$\n\036History_Alert_Message_Res"
-    "ponse\020\362\232\014\022\"\n\034Delete_History_Alert_Reques"
-    "t\020\363\232\014\022#\n\035Delete_History_Alert_Response\020\364"
-    "\232\014\022\032\n\024Delete_Group_Request\020\365\232\014\022\033\n\025Delete"
-    "_Group_Response\020\366\232\014\022\031\n\023Entity_Notificati"
-    "on\020\321\350\014\022 \n\032Entity_Status_Notification\020\322\350\014"
-    "\022\037\n\031Participants_Notification\020\323\350\014\022%\n\037Joi"
-    "n_Group_Request_Notification\020\324\350\014\022%\n\037Part"
-    "icipant_Status_Notification\020\325\350\014\022 \n\032Media"
-    "_Message_Notification\020\326\350\014\022.\n(Participant"
-    "_Connect_Request_Notification\020\327\350\014\022,\n&Par"
-    "ticipant_Speak_Request_Notification\020\330\350\014\022"
-    "!\n\033Session_Status_Notification\020\331\350\014\022 \n\032Re"
-    "cord_Status_Notification\020\332\350\014\022#\n\035Account_"
-    "Location_Notification\020\333\350\014\022\037\n\031Alert_Overe"
-    "d_Notification\020\334\350\014", 9618);
+    "bmsg.Entity\"\211\001\n\035ParticipantStatusNotific"
+    "ation\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!"
+    "\n\naccount_id\030\002 \002(\0132\r.pbmsg.Entity\022$\n\006sta"
+    "tus\030\003 \002(\0162\024.pbmsg.SessionStatus\"|\n\023Media"
+    "MessageRequest\022\031\n\002id\030\001 \002(\0132\r.pbmsg.Entit"
+    "y\022\027\n\017from_message_id\030\002 \001(\007\022\026\n\016from_times"
+    "tamp\030\003 \001(\t\022\031\n\021max_message_count\030\004 \002(\007\"u\n"
+    "\024MediaMessageResponse\022\031\n\002id\030\001 \002(\0132\r.pbms"
+    "g.Entity\022%\n\010messages\030\002 \003(\0132\023.pbmsg.Media"
+    "Message\022\033\n\023leave_message_count\030\003 \002(\007\"W\n\030"
+    "MediaMessageNotification\022\031\n\002id\030\001 \002(\0132\r.p"
+    "bmsg.Entity\022 \n\003msg\030\002 \002(\0132\023.pbmsg.MediaMe"
+    "ssage\"k\n%ParticipantConnectRequestNotifi"
+    "cation\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022"
+    "!\n\naccount_id\030\002 \002(\0132\r.pbmsg.Entity\"i\n#Pa"
+    "rticipantSpeakRequestNotification\022\037\n\010gro"
+    "up_id\030\001 \002(\0132\r.pbmsg.Entity\022!\n\naccount_id"
+    "\030\002 \002(\0132\r.pbmsg.Entity\"^\n\030InviteParticipa"
+    "ntRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Enti"
+    "ty\022!\n\naccount_id\030\002 \001(\0132\r.pbmsg.Entity\"\\\n"
+    "\026DropParticipantRequest\022\037\n\010group_id\030\001 \002("
+    "\0132\r.pbmsg.Entity\022!\n\naccount_id\030\002 \001(\0132\r.p"
+    "bmsg.Entity\"d\n\036ReleaseParticipantTokenRe"
+    "quest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Entity\022!"
+    "\n\naccount_id\030\002 \002(\0132\r.pbmsg.Entity\"d\n\036App"
+    "ointParticipantSpeakRequest\022\037\n\010group_id\030"
+    "\001 \002(\0132\r.pbmsg.Entity\022!\n\naccount_id\030\002 \002(\013"
+    "2\r.pbmsg.Entity\"3\n\020JionGroupRequest\022\037\n\010g"
+    "roup_id\030\001 \002(\0132\r.pbmsg.Entity\"4\n\021LeaveGro"
+    "upRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.Enti"
+    "ty\"b\n\031SessionStatusNotification\022\037\n\010group"
+    "_id\030\001 \002(\0132\r.pbmsg.Entity\022$\n\006status\030\002 \002(\016"
+    "2\024.pbmsg.SessionStatus\"Q\n\022SendMessageReq"
+    "uest\022\031\n\002id\030\001 \002(\0132\r.pbmsg.Entity\022 \n\003msg\030\002"
+    " \002(\0132\023.pbmsg.MediaMessage\"\\\n\026KickPartici"
+    "pantRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.En"
+    "tity\022!\n\naccount_id\030\002 \001(\0132\r.pbmsg.Entity\""
+    "5\n\022StartRecordRequest\022\037\n\010group_id\030\001 \002(\0132"
+    "\r.pbmsg.Entity\"4\n\021StopRecordRequest\022\037\n\010g"
+    "roup_id\030\001 \002(\0132\r.pbmsg.Entity\"N\n\030RecordSt"
+    "atusNotification\022\037\n\010group_id\030\001 \002(\0132\r.pbm"
+    "sg.Entity\022\021\n\trecording\030\002 \002(\010\"f\n\037Subscrib"
+    "eAccountLocationRequest\022\023\n\013subscribing\030\001"
+    " \002(\010\022!\n\naccount_id\030\002 \002(\0132\r.pbmsg.Entity\022"
+    "\013\n\003ttl\030\003 \002(\007\"x\n\033AccountLocationNotificat"
+    "ion\022!\n\naccount_id\030\001 \002(\0132\r.pbmsg.Entity\022\021"
+    "\n\tlongitude\030\002 \002(\001\022\020\n\010latitude\030\003 \002(\001\022\021\n\tt"
+    "imestamp\030\004 \002(\t\"Q\n\022AppendAlertRequest\022\033\n\005"
+    "alert\030\001 \002(\0132\014.pbmsg.Alert\022\036\n\007members\030\002 \003"
+    "(\0132\r.pbmsg.Entity\"2\n\023AppendAlertResponse"
+    "\022\033\n\005alert\030\001 \002(\0132\014.pbmsg.Alert\"1\n\022ModifyA"
+    "lertRequest\022\033\n\005alert\030\001 \002(\0132\014.pbmsg.Alert"
+    "\"3\n\020StopAlertRequest\022\037\n\010alert_id\030\001 \002(\0132\r"
+    ".pbmsg.Entity\":\n\027AlertOveredNotification"
+    "\022\037\n\010alert_id\030\001 \002(\0132\r.pbmsg.Entity\"\264\001\n\024Hi"
+    "storyAlertsRequest\022\014\n\004name\030\001 \001(\014\022\030\n\020crea"
+    "te_time_from\030\002 \001(\t\022\026\n\016create_time_to\030\003 \001"
+    "(\t\022\027\n\017alram_time_from\030\004 \001(\t\022\025\n\ralram_tim"
+    "e_to\030\005 \001(\t\022\026\n\016over_time_from\030\006 \001(\t\022\024\n\014ov"
+    "er_time_to\030\007 \001(\t\"D\n\025HistoryAlertsRespons"
+    "e\022+\n\016history_alerts\030\001 \003(\0132\023.pbmsg.Histor"
+    "yAlert\"/\n\023HistoryAlertRequest\022\030\n\020history"
+    "_alert_id\030\001 \002(\007\"B\n\024HistoryAlertResponse\022"
+    "*\n\rhistory_alert\030\001 \002(\0132\023.pbmsg.HistoryAl"
+    "ert\"}\n\032HistoryAlertMessageRequest\022\030\n\020his"
+    "tory_alert_id\030\001 \002(\007\022\027\n\017from_message_id\030\002"
+    " \001(\007\022\021\n\tfrom_time\030\003 \001(\t\022\031\n\021max_message_c"
+    "ount\030\004 \002(\007\"{\n\033HistoryAlertMessageRespons"
+    "e\022\030\n\020history_alert_id\030\001 \002(\007\022%\n\010messages\030"
+    "\002 \003(\0132\023.pbmsg.MediaMessage\022\033\n\023leave_mess"
+    "age_count\030\003 \002(\007\"5\n\031DeleteHistoryAlertReq"
+    "uest\022\030\n\020history_alert_id\030\001 \002(\007\"5\n\022Delete"
+    "GroupRequest\022\037\n\010group_id\030\001 \002(\0132\r.pbmsg.E"
+    "ntity\"1\n\024MoveUnitNotification\022\031\n\002id\030\001 \002("
+    "\0132\r.pbmsg.Entity\"\374\013\n\007Request\022)\n\005login\030\001 "
+    "\001(\0132\032.app.dispatch.LoginRequest\022+\n\006entit"
+    "y\030\002 \001(\0132\033.app.dispatch.EntityRequest\0226\n\014"
+    "append_group\030\003 \001(\0132 .app.dispatch.Append"
+    "GroupRequest\0226\n\014modify_group\030\004 \001(\0132 .app"
+    ".dispatch.ModifyGroupRequest\022D\n\023modify_p"
+    "articipants\030\005 \001(\0132\'.app.dispatch.ModifyP"
+    "articipantsRequest\0228\n\rgroup_message\030\006 \001("
+    "\0132!.app.dispatch.MediaMessageRequest\022B\n\022"
+    "invite_participant\030\007 \001(\0132&.app.dispatch."
+    "InviteParticipantRequest\022>\n\020drop_partici"
+    "pant\030\010 \001(\0132$.app.dispatch.DropParticipan"
+    "tRequest\022O\n\031release_participant_token\030\t "
+    "\001(\0132,.app.dispatch.ReleaseParticipantTok"
+    "enRequest\022O\n\031appoint_participant_speak\030\n"
+    " \001(\0132,.app.dispatch.AppointParticipantSp"
+    "eakRequest\0222\n\njion_group\030\013 \001(\0132\036.app.dis"
+    "patch.JionGroupRequest\0224\n\013leave_group\030\014 "
+    "\001(\0132\037.app.dispatch.LeaveGroupRequest\0226\n\014"
+    "send_message\030\r \001(\0132 .app.dispatch.SendMe"
+    "ssageRequest\022>\n\020kick_participant\030\016 \001(\0132$"
+    ".app.dispatch.KickParticipantRequest\0226\n\014"
+    "start_record\030\017 \001(\0132 .app.dispatch.StartR"
+    "ecordRequest\0224\n\013stop_record\030\020 \001(\0132\037.app."
+    "dispatch.StopRecordRequest\022Q\n\032subscribe_"
+    "account_location\030\021 \001(\0132-.app.dispatch.Su"
+    "bscribeAccountLocationRequest\0226\n\014append_"
+    "alert\030\022 \001(\0132 .app.dispatch.AppendAlertRe"
+    "quest\0226\n\014modify_alert\030\023 \001(\0132 .app.dispat"
+    "ch.ModifyAlertRequest\0222\n\nstop_alert\030\024 \001("
+    "\0132\036.app.dispatch.StopAlertRequest\022:\n\016his"
+    "tory_alerts\030\025 \001(\0132\".app.dispatch.History"
+    "AlertsRequest\0228\n\rhistory_alert\030\026 \001(\0132!.a"
+    "pp.dispatch.HistoryAlertRequest\022E\n\024delet"
+    "e_history_alert\030\027 \001(\0132\'.app.dispatch.Del"
+    "eteHistoryAlertRequest\0226\n\014delete_group\030\030"
+    " \001(\0132 .app.dispatch.DeleteGroupRequest\022G"
+    "\n\025history_alert_message\030\031 \001(\0132(.app.disp"
+    "atch.HistoryAlertMessageRequest\"\222\005\n\010Resp"
+    "onse\022\016\n\006result\030\001 \002(\010\022\025\n\rlast_response\030\002 "
+    "\002(\010\022\026\n\016error_describe\030\003 \001(\014\022*\n\005login\030\004 \001"
+    "(\0132\033.app.dispatch.LoginResponse\022,\n\006entit"
+    "y\030\005 \001(\0132\034.app.dispatch.EntityResponse\0227\n"
+    "\014append_group\030\006 \001(\0132!.app.dispatch.Appen"
+    "dGroupResponse\0227\n\014modify_group\030\007 \001(\0132!.a"
+    "pp.dispatch.ModifyGroupResponse\022E\n\023modif"
+    "y_participants\030\010 \001(\0132(.app.dispatch.Modi"
+    "fyParticipantsResponse\0229\n\rgroup_message\030"
+    "\t \001(\0132\".app.dispatch.MediaMessageRespons"
+    "e\0227\n\014append_alert\030\n \001(\0132!.app.dispatch.A"
+    "ppendAlertResponse\022;\n\016history_alerts\030\013 \001"
+    "(\0132#.app.dispatch.HistoryAlertsResponse\022"
+    "9\n\rhistory_alert\030\014 \001(\0132\".app.dispatch.Hi"
+    "storyAlertResponse\022H\n\025history_alert_mess"
+    "age\030\r \001(\0132).app.dispatch.HistoryAlertMes"
+    "sageResponse\"\364\006\n\nIndication\0220\n\006entity\030\001 "
+    "\001(\0132 .app.dispatch.EntityNotification\022=\n"
+    "\rentity_status\030\002 \001(\0132&.app.dispatch.Enti"
+    "tyStatusNotification\022<\n\014participants\030\003 \001"
+    "(\0132&.app.dispatch.ParticipantsNotificati"
+    "on\022F\n\022join_group_request\030\004 \001(\0132*.app.dis"
+    "patch.JoinGroupRequestNotification\022G\n\022pa"
+    "rticipant_status\030\005 \001(\0132+.app.dispatch.Pa"
+    "rticipantStatusNotification\022=\n\rmedia_mes"
+    "sage\030\006 \001(\0132&.app.dispatch.MediaMessageNo"
+    "tification\022X\n\033participant_connect_reques"
+    "t\030\007 \001(\01323.app.dispatch.ParticipantConnec"
+    "tRequestNotification\022T\n\031participant_spea"
+    "k_request\030\010 \001(\01321.app.dispatch.Participa"
+    "ntSpeakRequestNotification\022\?\n\016session_st"
+    "atus\030\t \001(\0132\'.app.dispatch.SessionStatusN"
+    "otification\022=\n\rrecord_status\030\n \001(\0132&.app"
+    ".dispatch.RecordStatusNotification\022C\n\020ac"
+    "count_location\030\013 \001(\0132).app.dispatch.Acco"
+    "untLocationNotification\022;\n\014alert_overed\030"
+    "\014 \001(\0132%.app.dispatch.AlertOveredNotifica"
+    "tion\0225\n\tmove_unit\030\r \001(\0132\".app.dispatch.M"
+    "oveUnitNotification\"\324\001\n\007Message\022#\n\010msg_t"
+    "ype\030\001 \002(\0162\021.app.dispatch.MSG\022\020\n\010sequence"
+    "\030\002 \002(\007\022\022\n\nsession_id\030\003 \001(\007\022&\n\007request\030\004 "
+    "\001(\0132\025.app.dispatch.Request\022(\n\010response\030\005"
+    " \001(\0132\026.app.dispatch.Response\022,\n\nindicati"
+    "on\030\006 \001(\0132\030.app.dispatch.Indication*\311\020\n\003M"
+    "SG\022\023\n\rLogin_Request\020\301\232\014\022\024\n\016Login_Respons"
+    "e\020\302\232\014\022\024\n\016Logout_Request\020\303\232\014\022\025\n\017Logout_Re"
+    "sponse\020\304\232\014\022\027\n\021Keepalive_Request\020\305\232\014\022\030\n\022K"
+    "eepalive_Response\020\306\232\014\022\024\n\016Entity_Request\020"
+    "\307\232\014\022\025\n\017Entity_Response\020\310\232\014\022\032\n\024Append_Gro"
+    "up_Request\020\311\232\014\022\033\n\025Append_Group_Response\020"
+    "\312\232\014\022\032\n\024Modify_Group_Request\020\313\232\014\022\033\n\025Modif"
+    "y_Group_Response\020\314\232\014\022!\n\033Modify_Participa"
+    "nts_Request\020\315\232\014\022\"\n\034Modify_Participants_R"
+    "esponse\020\316\232\014\022\033\n\025Media_Message_Request\020\317\232\014"
+    "\022\034\n\026Media_Message_Response\020\320\232\014\022 \n\032Invite"
+    "_Participant_Request\020\321\232\014\022!\n\033Invite_Parti"
+    "cipant_Response\020\322\232\014\022\036\n\030Drop_Participant_"
+    "Request\020\323\232\014\022\037\n\031Drop_Participant_Response"
+    "\020\324\232\014\022\'\n!Release_Participant_Token_Reques"
+    "t\020\325\232\014\022(\n\"Release_Participant_Token_Respo"
+    "nse\020\326\232\014\022\'\n!Appoint_Participant_Speak_Req"
+    "uest\020\327\232\014\022(\n\"Appoint_Participant_Speak_Re"
+    "sponse\020\330\232\014\022\030\n\022Jion_Group_Request\020\331\232\014\022\031\n\023"
+    "Jion_Group_Response\020\332\232\014\022\031\n\023Leave_Group_R"
+    "equest\020\333\232\014\022\032\n\024Leave_Group_Response\020\334\232\014\022\032"
+    "\n\024Send_Message_Request\020\335\232\014\022\033\n\025Send_Messa"
+    "ge_Response\020\336\232\014\022\036\n\030Kick_Participant_Requ"
+    "est\020\337\232\014\022\037\n\031Kick_Participant_Response\020\340\232\014"
+    "\022\032\n\024Start_Record_Request\020\341\232\014\022\033\n\025Start_Re"
+    "cord_Response\020\342\232\014\022\031\n\023Stop_Record_Request"
+    "\020\343\232\014\022\032\n\024Stop_Record_Response\020\344\232\014\022(\n\"Subs"
+    "cribe_Account_Location_Request\020\345\232\014\022)\n#Su"
+    "bscribe_Account_Location_Response\020\346\232\014\022\032\n"
+    "\024Append_Alert_Request\020\347\232\014\022\033\n\025Append_Aler"
+    "t_Response\020\350\232\014\022\032\n\024Modify_Alert_Request\020\351"
+    "\232\014\022\033\n\025Modify_Alert_Response\020\352\232\014\022\030\n\022Stop_"
+    "Alert_Request\020\353\232\014\022\031\n\023Stop_Alert_Response"
+    "\020\354\232\014\022\034\n\026History_Alerts_Request\020\355\232\014\022\035\n\027Hi"
+    "story_Alerts_Response\020\356\232\014\022\033\n\025History_Ale"
+    "rt_Request\020\357\232\014\022\034\n\026History_Alert_Response"
+    "\020\360\232\014\022#\n\035History_Alert_Message_Request\020\361\232"
+    "\014\022$\n\036History_Alert_Message_Response\020\362\232\014\022"
+    "\"\n\034Delete_History_Alert_Request\020\363\232\014\022#\n\035D"
+    "elete_History_Alert_Response\020\364\232\014\022\032\n\024Dele"
+    "te_Group_Request\020\365\232\014\022\033\n\025Delete_Group_Res"
+    "ponse\020\366\232\014\022\031\n\023Entity_Notification\020\321\350\014\022 \n\032"
+    "Entity_Status_Notification\020\322\350\014\022\037\n\031Partic"
+    "ipants_Notification\020\323\350\014\022%\n\037Join_Group_Re"
+    "quest_Notification\020\324\350\014\022%\n\037Participant_St"
+    "atus_Notification\020\325\350\014\022 \n\032Media_Message_N"
+    "otification\020\326\350\014\022.\n(Participant_Connect_R"
+    "equest_Notification\020\327\350\014\022,\n&Participant_S"
+    "peak_Request_Notification\020\330\350\014\022!\n\033Session"
+    "_Status_Notification\020\331\350\014\022 \n\032Record_Statu"
+    "s_Notification\020\332\350\014\022#\n\035Account_Location_N"
+    "otification\020\333\350\014\022\037\n\031Alert_Overed_Notifica"
+    "tion\020\334\350\014\022\034\n\026Move_Unit_Notification\020\335\350\014", 9798);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "app.dispatch.proto", &protobuf_RegisterTypes);
   LoginRequest::default_instance_ = new LoginRequest();
@@ -1576,6 +1605,7 @@ void protobuf_AddDesc_app_2edispatch_2eproto() {
   HistoryAlertMessageResponse::default_instance_ = new HistoryAlertMessageResponse();
   DeleteHistoryAlertRequest::default_instance_ = new DeleteHistoryAlertRequest();
   DeleteGroupRequest::default_instance_ = new DeleteGroupRequest();
+  MoveUnitNotification::default_instance_ = new MoveUnitNotification();
   Request::default_instance_ = new Request();
   Response::default_instance_ = new Response();
   Indication::default_instance_ = new Indication();
@@ -1627,6 +1657,7 @@ void protobuf_AddDesc_app_2edispatch_2eproto() {
   HistoryAlertMessageResponse::default_instance_->InitAsDefaultInstance();
   DeleteHistoryAlertRequest::default_instance_->InitAsDefaultInstance();
   DeleteGroupRequest::default_instance_->InitAsDefaultInstance();
+  MoveUnitNotification::default_instance_->InitAsDefaultInstance();
   Request::default_instance_->InitAsDefaultInstance();
   Response::default_instance_->InitAsDefaultInstance();
   Indication::default_instance_->InitAsDefaultInstance();
@@ -1712,6 +1743,7 @@ bool MSG_IsValid(int value) {
     case 210010:
     case 210011:
     case 210012:
+    case 210013:
       return true;
     default:
       return false;
@@ -1999,6 +2031,8 @@ void LoginRequest::Swap(LoginRequest* other) {
 const int LoginResponse::kSessionIdFieldNumber;
 const int LoginResponse::kSelfFieldNumber;
 const int LoginResponse::kTtlFieldNumber;
+const int LoginResponse::kPocRegisterFieldNumber;
+const int LoginResponse::kPocOutboundFieldNumber;
 #endif  // !_MSC_VER
 
 LoginResponse::LoginResponse()
@@ -2021,6 +2055,8 @@ void LoginResponse::SharedCtor() {
   session_id_ = 0u;
   self_ = NULL;
   ttl_ = 0u;
+  poc_register_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  poc_outbound_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -2029,6 +2065,12 @@ LoginResponse::~LoginResponse() {
 }
 
 void LoginResponse::SharedDtor() {
+  if (poc_register_ != &::google::protobuf::internal::kEmptyString) {
+    delete poc_register_;
+  }
+  if (poc_outbound_ != &::google::protobuf::internal::kEmptyString) {
+    delete poc_outbound_;
+  }
   if (this != default_instance_) {
     delete self_;
   }
@@ -2062,6 +2104,16 @@ void LoginResponse::Clear() {
       if (self_ != NULL) self_->::pbmsg::User::Clear();
     }
     ttl_ = 0u;
+    if (has_poc_register()) {
+      if (poc_register_ != &::google::protobuf::internal::kEmptyString) {
+        poc_register_->clear();
+      }
+    }
+    if (has_poc_outbound()) {
+      if (poc_outbound_ != &::google::protobuf::internal::kEmptyString) {
+        poc_outbound_->clear();
+      }
+    }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -2114,6 +2166,40 @@ bool LoginResponse::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(34)) goto parse_poc_register;
+        break;
+      }
+
+      // optional string poc_register = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_poc_register:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_poc_register()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->poc_register().data(), this->poc_register().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(42)) goto parse_poc_outbound;
+        break;
+      }
+
+      // optional string poc_outbound = 5;
+      case 5: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_poc_outbound:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_poc_outbound()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->poc_outbound().data(), this->poc_outbound().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -2152,6 +2238,24 @@ void LoginResponse::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFixed32(3, this->ttl(), output);
   }
 
+  // optional string poc_register = 4;
+  if (has_poc_register()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->poc_register().data(), this->poc_register().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      4, this->poc_register(), output);
+  }
+
+  // optional string poc_outbound = 5;
+  if (has_poc_outbound()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->poc_outbound().data(), this->poc_outbound().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      5, this->poc_outbound(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -2175,6 +2279,26 @@ void LoginResponse::SerializeWithCachedSizes(
   // required fixed32 ttl = 3;
   if (has_ttl()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteFixed32ToArray(3, this->ttl(), target);
+  }
+
+  // optional string poc_register = 4;
+  if (has_poc_register()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->poc_register().data(), this->poc_register().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        4, this->poc_register(), target);
+  }
+
+  // optional string poc_outbound = 5;
+  if (has_poc_outbound()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->poc_outbound().data(), this->poc_outbound().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        5, this->poc_outbound(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2203,6 +2327,20 @@ int LoginResponse::ByteSize() const {
     // required fixed32 ttl = 3;
     if (has_ttl()) {
       total_size += 1 + 4;
+    }
+
+    // optional string poc_register = 4;
+    if (has_poc_register()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->poc_register());
+    }
+
+    // optional string poc_outbound = 5;
+    if (has_poc_outbound()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->poc_outbound());
     }
 
   }
@@ -2241,6 +2379,12 @@ void LoginResponse::MergeFrom(const LoginResponse& from) {
     if (from.has_ttl()) {
       set_ttl(from.ttl());
     }
+    if (from.has_poc_register()) {
+      set_poc_register(from.poc_register());
+    }
+    if (from.has_poc_outbound()) {
+      set_poc_outbound(from.poc_outbound());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -2271,6 +2415,8 @@ void LoginResponse::Swap(LoginResponse* other) {
     std::swap(session_id_, other->session_id_);
     std::swap(self_, other->self_);
     std::swap(ttl_, other->ttl_);
+    std::swap(poc_register_, other->poc_register_);
+    std::swap(poc_outbound_, other->poc_outbound_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -13989,6 +14135,220 @@ void DeleteGroupRequest::Swap(DeleteGroupRequest* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int MoveUnitNotification::kIdFieldNumber;
+#endif  // !_MSC_VER
+
+MoveUnitNotification::MoveUnitNotification()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+}
+
+void MoveUnitNotification::InitAsDefaultInstance() {
+  id_ = const_cast< ::pbmsg::Entity*>(&::pbmsg::Entity::default_instance());
+}
+
+MoveUnitNotification::MoveUnitNotification(const MoveUnitNotification& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+}
+
+void MoveUnitNotification::SharedCtor() {
+  _cached_size_ = 0;
+  id_ = NULL;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+MoveUnitNotification::~MoveUnitNotification() {
+  SharedDtor();
+}
+
+void MoveUnitNotification::SharedDtor() {
+  if (this != default_instance_) {
+    delete id_;
+  }
+}
+
+void MoveUnitNotification::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* MoveUnitNotification::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return MoveUnitNotification_descriptor_;
+}
+
+const MoveUnitNotification& MoveUnitNotification::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_app_2edispatch_2eproto();
+  return *default_instance_;
+}
+
+MoveUnitNotification* MoveUnitNotification::default_instance_ = NULL;
+
+MoveUnitNotification* MoveUnitNotification::New() const {
+  return new MoveUnitNotification;
+}
+
+void MoveUnitNotification::Clear() {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (has_id()) {
+      if (id_ != NULL) id_->::pbmsg::Entity::Clear();
+    }
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool MoveUnitNotification::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) return false
+  ::google::protobuf::uint32 tag;
+  while ((tag = input->ReadTag()) != 0) {
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .pbmsg.Entity id = 1;
+      case 1: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_id()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectAtEnd()) return true;
+        break;
+      }
+
+      default: {
+      handle_uninterpreted:
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          return true;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+  return true;
+#undef DO_
+}
+
+void MoveUnitNotification::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // required .pbmsg.Entity id = 1;
+  if (has_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->id(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+}
+
+::google::protobuf::uint8* MoveUnitNotification::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // required .pbmsg.Entity id = 1;
+  if (has_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->id(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  return target;
+}
+
+int MoveUnitNotification::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required .pbmsg.Entity id = 1;
+    if (has_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->id());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void MoveUnitNotification::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const MoveUnitNotification* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const MoveUnitNotification*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void MoveUnitNotification::MergeFrom(const MoveUnitNotification& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_id()) {
+      mutable_id()->::pbmsg::Entity::MergeFrom(from.id());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void MoveUnitNotification::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void MoveUnitNotification::CopyFrom(const MoveUnitNotification& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MoveUnitNotification::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  return true;
+}
+
+void MoveUnitNotification::Swap(MoveUnitNotification* other) {
+  if (other != this) {
+    std::swap(id_, other->id_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata MoveUnitNotification::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = MoveUnitNotification_descriptor_;
+  metadata.reflection = MoveUnitNotification_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int Request::kLoginFieldNumber;
 const int Request::kEntityFieldNumber;
 const int Request::kAppendGroupFieldNumber;
@@ -16160,6 +16520,7 @@ const int Indication::kSessionStatusFieldNumber;
 const int Indication::kRecordStatusFieldNumber;
 const int Indication::kAccountLocationFieldNumber;
 const int Indication::kAlertOveredFieldNumber;
+const int Indication::kMoveUnitFieldNumber;
 #endif  // !_MSC_VER
 
 Indication::Indication()
@@ -16180,6 +16541,7 @@ void Indication::InitAsDefaultInstance() {
   record_status_ = const_cast< ::app::dispatch::RecordStatusNotification*>(&::app::dispatch::RecordStatusNotification::default_instance());
   account_location_ = const_cast< ::app::dispatch::AccountLocationNotification*>(&::app::dispatch::AccountLocationNotification::default_instance());
   alert_overed_ = const_cast< ::app::dispatch::AlertOveredNotification*>(&::app::dispatch::AlertOveredNotification::default_instance());
+  move_unit_ = const_cast< ::app::dispatch::MoveUnitNotification*>(&::app::dispatch::MoveUnitNotification::default_instance());
 }
 
 Indication::Indication(const Indication& from)
@@ -16202,6 +16564,7 @@ void Indication::SharedCtor() {
   record_status_ = NULL;
   account_location_ = NULL;
   alert_overed_ = NULL;
+  move_unit_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -16223,6 +16586,7 @@ void Indication::SharedDtor() {
     delete record_status_;
     delete account_location_;
     delete alert_overed_;
+    delete move_unit_;
   }
 }
 
@@ -16286,6 +16650,9 @@ void Indication::Clear() {
     }
     if (has_alert_overed()) {
       if (alert_overed_ != NULL) alert_overed_->::app::dispatch::AlertOveredNotification::Clear();
+    }
+    if (has_move_unit()) {
+      if (move_unit_ != NULL) move_unit_->::app::dispatch::MoveUnitNotification::Clear();
     }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -16461,6 +16828,20 @@ bool Indication::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(106)) goto parse_move_unit;
+        break;
+      }
+
+      // optional .app.dispatch.MoveUnitNotification move_unit = 13;
+      case 13: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_move_unit:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_move_unit()));
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -16555,6 +16936,12 @@ void Indication::SerializeWithCachedSizes(
       12, this->alert_overed(), output);
   }
 
+  // optional .app.dispatch.MoveUnitNotification move_unit = 13;
+  if (has_move_unit()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      13, this->move_unit(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -16645,6 +17032,13 @@ void Indication::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         12, this->alert_overed(), target);
+  }
+
+  // optional .app.dispatch.MoveUnitNotification move_unit = 13;
+  if (has_move_unit()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        13, this->move_unit(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -16744,6 +17138,13 @@ int Indication::ByteSize() const {
           this->alert_overed());
     }
 
+    // optional .app.dispatch.MoveUnitNotification move_unit = 13;
+    if (has_move_unit()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->move_unit());
+    }
+
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -16809,6 +17210,9 @@ void Indication::MergeFrom(const Indication& from) {
     if (from.has_alert_overed()) {
       mutable_alert_overed()->::app::dispatch::AlertOveredNotification::MergeFrom(from.alert_overed());
     }
+    if (from.has_move_unit()) {
+      mutable_move_unit()->::app::dispatch::MoveUnitNotification::MergeFrom(from.move_unit());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -16863,6 +17267,9 @@ bool Indication::IsInitialized() const {
   if (has_alert_overed()) {
     if (!this->alert_overed().IsInitialized()) return false;
   }
+  if (has_move_unit()) {
+    if (!this->move_unit().IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -16880,6 +17287,7 @@ void Indication::Swap(Indication* other) {
     std::swap(record_status_, other->record_status_);
     std::swap(account_location_, other->account_location_);
     std::swap(alert_overed_, other->alert_overed_);
+    std::swap(move_unit_, other->move_unit_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
