@@ -19,6 +19,18 @@ std::string ConnectToAppServer::get_response()
 	return tempstr;
 }
 
+std::string ConnectToAppServer::get_notificationMessage()
+{
+	if(!notificationMessageQueue.empty())
+	{
+		std::string tmpstr = notificationMessageQueue.front();
+		notificationMessageQueue.pop();
+		return tmpstr;
+	}
+	else
+		return "";
+}
+
 int ConnectToAppServer::get_result()
 {
 	return result;
@@ -180,7 +192,7 @@ void ConnectToAppServer::read_more_body(std::tr1::shared_ptr<char> recvbuf,int r
 	//std::cout<<message.DebugString();
 	if(message.sequence() == 0xffffffff)//notification message
 	{
-		handler_pushed_message();
+		notificationMessageQueue.push(recstr);
 		recstr = "";
 	}
 	else if(message.msg_type() != app::dispatch::MSG::Keepalive_Response)

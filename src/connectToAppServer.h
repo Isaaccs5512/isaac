@@ -36,6 +36,8 @@ public:
 	void keep_alive(const unsigned long session_id);
 
 	int get_result();
+
+	std::string get_notificationMessage();
 private:
     bool connect(); 
 
@@ -55,6 +57,7 @@ private:
 	//asio::io_service io_service;
 	std::string recstr;
 	std::string responsestr;
+	std::queue<std::string> notificationMessageQueue;
 public:
 	asio::ip::tcp::socket socket_;
 };

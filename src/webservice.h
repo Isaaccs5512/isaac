@@ -42,15 +42,6 @@ int ns__Dispatch_Entity_Request(std::string session_id,
 								ns__Dispatch_Entity_Request_Response &response);
 
 /*
-brief		:服务器主动发送，当实体的内容被新增、修改、状态更新、删除时，同步通知有权限的调度台。
-param in	:
-param in	:
-param out	:response
-*/
-int ns__Dispatch_Entity_Nofitication(std::string session_id,
-			ns__Dispatch_Entity_Nofitication_Response &response);
-
-/*
 brief		:创建群组
 param in	:group  //base.id字段可以不包含或者为0
 param in	:
@@ -90,33 +81,6 @@ int ns__Dispatch_Delete_Group(std::string session_id,
 							std::string group_id,
 							ns__Normal_Response &response);
 
-/*
-brief		:群组创建，配置修改，删除通知使用
-param in	:
-param in	:  
-param out	:response
-*/
-int ns__Dispatch_Dispatch_Participants_Notification(std::string session_id,
-			ns__Dispatch_Dispatch_Participants_Notification_Response &response);
-
-/*
-brief		:某个不在群组中的终端，相应加入某个封闭的群组时，后台无法决策，因此推送此消息告知调度台。
-				如果终端对封闭式群组屏蔽此功能，者服务器也无需提供。
-param in	:
-param in	:  
-param out	:response
-*/
-int ns__Dispatch_Join_Group_Request_Nofitication(std::string session_id,
-			ns__Dispatch_Join_Group_Request_Nofitication_Response &response);
-
-/*
-brief		: 群组成员状态通知,
-param in	:
-param in	:  
-param out	:response
-*/
-int ns__Dispatch_Participant_Status_Notification(std::string session_id,
-			ns__Dispatch_Participant_Status_Notification_Response &response);
 
 /*
 brief		: 可以刷新指定群组的消息， 刷新所有群组消息可能需要通过几次组合。
@@ -132,37 +96,6 @@ int ns__Dispatch_Media_Message_Request(std::string session_id,
 										std::string from_time,
 										std::string max_message_count,
 										ns__Dispatch_Media_Message_Request_Response &response);
-
-/*
-brief		:应用服务器转发群组消息到调度台
-param in	:
-param in	:  
-param out	:response
-*/
-int ns__Dispatch_Media_Message_Notification(std::string session_id,
-			ns__Dispatch_Media_Message_Notification_Response &response);
-
-/*
-brief		:群组成员请求与群组建立通话通知,必须为群组成员,
-			//当终端与PoC服务器建立呼叫的呼叫权限（CallPrivilege）为CallPolicy，服务器无法决策时，
-			//通过此消息转发给调度台，调度员允许后，可以使用邀请用户命令(ns__Dispatch_Appoint_Participant_Speak_Request)来允许。
-param in	:
-param in	:  
-param out	:
-*/
-int ns__Dispatch_Participant_Connect_Request_Notification(std::string session_id,
-			ns__Dispatch_Participant_Connect_Request_Notification_Response &response);
-
-/*
-brief		:应用服务器转发群组消息到调度台,成员在群组中的状态为InGroup时，要发言时，
-			//并且话权权限（TokenPrivilege）为TokenPolicy时，服务器转发请求到调度台。调度台允许后,
-			//可以执行指定发言调度命令ns__Dispatch_Appoint_Participant_Speak_Request
-param in	:
-param in	:  
-param out	:
-*/
-int ns__Dispatch_Participant_Speak_Request_Notification(std::string session_id,
-			ns__Dispatch_Participant_Speak_Request_Notification_Response &response);
 
 /*
 brief		:调度台请求服务器邀请某个终端与群组建立SIP会话。或者与另一个终端建立点对点呼叫。
@@ -233,15 +166,6 @@ int ns__Dispatch_Leave_Group_Request(std::string session_id,
 									ns__Normal_Response &response);
 
 /*
-brief		:监听群组时，会话状态的报告
-param in	:
-param in	:  
-param out	:
-*/
-int ns__Dispatch_Session_Status_Notification(std::string session_id,
-			ns__Dispatch_Session_Status_Notification_Response &response);
-
-/*
 brief		:可以发送文字消息和图片消息到指定的群组成员，或者全部。
 param in	:id//接收消息的群组ID或者警情;消息实际上是与群组关联的
 param in	:message
@@ -273,15 +197,6 @@ int ns__Dispatch_Stop_Record_Request(std::string session_id,
 									ns__Normal_Response &response);
 
 /*
-brief		:录音状态通知
-param in	:
-param in	:  
-param out	:response
-*/
-int ns__Dispatch_Record_Status_Notification(std::string session_id,
-			ns__Dispatch_Record_Status_Notification_Response &response);
-
-/*
 brief		:订阅信息
 param in	:subscribing,//true-订阅 false-取消订阅
 param in	:account_id,//订阅或者取消的账号一般只可以订阅账号类型为Terminal的。
@@ -293,15 +208,6 @@ int ns__Dispatch_Subscribe_Account_Location_Request(std::string session_id,
 												std::string account_id,
 												std::string ttl,
 												ns__Normal_Response &response);
-
-/*
-brief		:调度台订阅了终端信息后，有信息上报时通知给调度台
-param in	:
-param in	:  
-param out	:response
-*/
-int ns__Dispatch_Account_Location_Notification(std::string session_id,
-			ns__Dispatch_Account_Info_Notification_Response &response);
 
 /*
 brief		:创建警情
@@ -335,25 +241,6 @@ param out	:
 int ns__Dispatch_Stop_Alert_Request(std::string session_id,
 									std::string alert_id,
 									ns__Normal_Response &response);
-
-/*
-brief		:警情结束通知
-param in	:alert_id
-param in	:  
-param out	:
-*/
-int ns__Dispatch_Alert_Overed_Notification(std::string session_id,
-			ns__Dispatch_Alert_Overed_Notification_Response &response);
-
-
-/*
-brief		:移动unit通知消息
-param in	:
-param in	:  
-param out	:
-*/
-int ns__Dispatch_Move_Unit_Notification(std::string session_id,
-			ns__Dispatch_Move_Unit_Notification_Response &response);
 
 
 /*
@@ -418,3 +305,12 @@ int ns__Dispatch_Kick_Participant_Request(std::string session_id,
 											std::string group_id,
 											std::string account_id,
 											ns__Normal_Response &response);
+
+/*
+brief		:将指定的id踢出群组，如果没有制定id，那么清空群组
+param in	:history_alert_id
+param in	:  
+param out	:
+*/
+int ns__Dispatch_Notification_Message(std::string session_id,
+										ns__Notification &response);

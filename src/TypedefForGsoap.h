@@ -119,6 +119,35 @@ enum ns__EntityType
 };
 
 
+enum ns__NotificationType
+{
+	Entity_Notification,
+	Entity_Status_Notification,
+	Participants_Notification,
+	Join_Group_Request_Notification,
+	Participant_Status_Notification,
+	Media_Message_Notification,
+	Participant_Connect_Request_Notification,
+	Participant_Speak_Request_Notification,
+	Session_Status_Notification,
+	Record_Status_Notification,
+	Account_Location_Notification,
+	Alert_Overed_Notification,
+	Move_Unit_Notification,
+};
+
+enum ns__enumType
+{
+	EntityType,
+	EntityNotifyType,
+	RegisterStatus,
+	TokenPrivilege,
+	CallPrivilege,
+	SessionStatus,
+	AlertLevel,
+	ListModifyType,
+};
+
 class ns__Entity
 {
 public:
@@ -275,14 +304,11 @@ class ns__Dispatch_Entity_Request_Response
 	bool result;
 };
 
-class ns__Dispatch_Entity_Nofitication_Response
+class ns__Dispatch_Entity_Notification
 {
 public:
 	std::string notify_type;//
 	ns__EntityData data;//实体的集合信息如果为Deleted时，data只需要包含id字段即可
-	std::string session_id;
-	std::string error_describe;
-	bool result;
 };
 
 class ns__Entity_Status_Notification
@@ -310,33 +336,24 @@ class ns__Dispatch_Modify_Participants_Response
 	bool result;
 };
 
-class ns__Dispatch_Dispatch_Participants_Notification_Response
+class ns__Dispatch_Participants_Notification
 {
 	ns__Modify_Participant data;
-	std::string session_id;
-	std::string error_describe;
-	bool result;
 };
 
-class ns__Dispatch_Join_Group_Request_Nofitication_Response
+class ns__Dispatch_Join_Group_Request_Notification
 {
 public:
-	ns__Entity group_id;//要加入的群组
-	ns__Entity account_id;//请求加入群组的账号
-	std::string session_id;
-	std::string error_describe;
-	bool result;
+	std::string group_id;//要加入的群组
+	std::string account_id;//请求加入群组的账号
 };
 
-class ns__Dispatch_Participant_Status_Notification_Response
+class ns__Dispatch_Participant_Status_Notification
 {
 public:
-	ns__Entity group_id;//群组id
-	ns__Entity account_id;//PoC账号ID
+	std::string group_id;//群组id
+	std::string account_id;//PoC账号ID
 	std::string session_status;//会话状态
-	std::string session_id;
-	std::string error_describe;
-	bool result;
 };
 
 class ns__MediaMessage
@@ -371,59 +388,44 @@ public:
 	std::string leave_message_count;//
 };
 
-class ns__Dispatch_Media_Message_Notification_Response
+class ns__Dispatch_Media_Message_Notification
 {
 public:
 	std::string id;//接收此消息的群组/或者警情
 	ns__MediaMessage messages;
-	std::string session_id;
-	std::string error_describe;
-	bool result;
 };
 
-class ns__Dispatch_Participant_Connect_Request_Notification_Response
+class ns__Dispatch_Participant_Connect_Request_Notification
 {
 public:
-	ns__Entity group_id;
-	ns__Entity account_id;
-	std::string session_id;
-	std::string error_describe;
-	bool result;
+	std::string group_id;
+	std::string account_id;
 };
 
-class ns__Dispatch_Participant_Speak_Request_Notification_Response
+class ns__Dispatch_Participant_Speak_Request_Notification
 {
 public:
-	ns__Entity group_id;
-	ns__Entity account_id;
-	std::string session_id;
-	std::string error_describe;
-	bool result;
+	std::string group_id;
+	std::string account_id;
 };
 
 
-class ns__Dispatch_Session_Status_Notification_Response
+class ns__Dispatch_Session_Status_Notification
 {
 public:
-	ns__Entity group_id;
+	std::string group_id;
 	std::string session_status;
-	std::string session_id;
-	std::string error_describe;
-	bool result;
 };
 
-class ns__Dispatch_Account_Info_Notification_Response
+class ns__Dispatch_Account_Info_Notification
 {
 public:
-	ns__Entity account_id;//Terminal账号ID
+	std::string account_id;//Terminal账号ID
 	double longitude;//经度
 	double latitude;//维度
 	std::string timestamp;//此位置信息获取的时间
 	std::string profession_status;
 	std::string register_status;
-	std::string session_id;
-	std::string error_describe;
-	bool result;
 };
 
 class ns__HistoryAlert
@@ -469,32 +471,49 @@ public:
 	bool result;
 };
 
-class ns__Dispatch_Record_Status_Notification_Response
+class ns__Dispatch_Record_Status_Notification
 {
 public:
-	ns__Entity group_id;
+	std::string group_id;
 	bool recording;//true-正在录音 false-录音已停止
-	std::string error_describe;
-	std::string session_id;
-	bool result;
 };
 
-class ns__Dispatch_Alert_Overed_Notification_Response
+class ns__Dispatch_Alert_Overed_Notification
 {
+public:
 	std::string alert_id;
-	std::string error_describe;
-	std::string session_id;
-	bool result;
 };
 
 class ns__Normal_Response
 {
+public:
 	std::string session_id;
 	std::string error_describe;
 	bool result;
 };
 
-class ns__Dispatch_Move_Unit_Notification_Response
+class ns__Dispatch_Move_Unit_Notification
 {
+public:
 	ns__Entity entity;
+};
+
+class ns__Notification
+{
+public:
+	bool have_Notification;
+	ns__Dispatch_Entity_Notification entityData;
+	enum ns__NotificationType notificationType;
+	ns__Entity_Status_Notification entityStatus;
+	ns__Dispatch_Participants_Notification participants;
+	ns__Dispatch_Join_Group_Request_Notification jionGroup;
+	ns__Dispatch_Participant_Status_Notification participantStatus;
+	ns__Dispatch_Media_Message_Notification mediaMessage;
+	ns__Dispatch_Participant_Connect_Request_Notification participantConnect;
+	ns__Dispatch_Participant_Speak_Request_Notification paticipantSpeak;
+	ns__Dispatch_Session_Status_Notification sessionStatus;
+	ns__Dispatch_Account_Info_Notification accoutInfo;
+	ns__Dispatch_Record_Status_Notification recordStatus;
+	ns__Dispatch_Alert_Overed_Notification alertOvered;
+	ns__Dispatch_Move_Unit_Notification moveUnit;
 };

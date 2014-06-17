@@ -30,6 +30,91 @@ unsigned long get_sequence()
 	return sequence;
 }
 
+
+std::string enum2str(ns__enumType type,int vaule)
+{
+	if(type == EntityType)
+	{
+		if(vaule == 0)
+			return "UNIT";
+		else if(vaule == 1)
+			return "ACCOUNT";
+		else if(vaule == 2)
+			return "USER";
+		else if(vaule == 3)
+			return "GROUPW";
+		else if(vaule == 5)
+			return "ORGANIZATION";
+		else if(vaule == 6)
+			return "ALERT";
+	}
+	else if(type == EntityNotifyType)
+	{
+		if(vaule == 0)
+			return "Created";
+		else if(vaule == 1)
+			return "Modify";
+		else if(vaule == 2)
+			return "Update";
+		else if(vaule == 3)
+			return "Deleted";
+	}
+	else if(type == RegisterStatus)
+	{
+		if(vaule == 0)
+			return "OffLine";
+		else if(vaule == 1)
+			return "OnLine";
+	}
+	else if(type == TokenPrivilege)
+	{
+		if(vaule == 0)
+			return "TokenForbid";
+		else if(vaule == 1)
+			return "TokenFreedom";
+		else if(vaule == 2)
+			return "TokenPolicy";
+	}
+	else if(type == CallPrivilege)
+	{
+		if(vaule == 0)
+			return "CallForbid";
+		else if(vaule == 1)
+			return "CallFreedom";
+		else if(vaule == 2)
+			return "CallPolicy";
+	}
+	else if(type == SessionStatus)
+	{
+		if(vaule == 0)
+			return "IDLE";
+		else if(vaule == 1)
+			return "InGroup";
+		else if(vaule == 2)
+			return "Talking";
+	}
+	else if(type == AlertLevel)
+	{
+		if(vaule == 0)
+			return "Exigency";
+		else if(vaule == 1)
+			return "Importance";
+		else if(vaule == 2)
+			return "Subordination";
+		else if(vaule == 3)
+			return "Ordinary";
+	}
+	else if(type == ListModifyType)
+	{
+		if(vaule == 0)
+			return "Increased";
+		else if(vaule == 1)
+			return "Decrease";
+		else if(vaule == 2)
+			return "Replace";
+	}
+}
+
 std::string int2str(int n)
 {
     std::stringstream ss;
@@ -61,13 +146,6 @@ int Get_Keepalive_Request_str(const unsigned long session_id,std::string *out_st
 	}
 	return 0;
 }
-
-
-void handler_pushed_message()
-{
-	
-}
-
 
 int main(int argc,char* argv[])
 {
@@ -421,13 +499,13 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 		if(message.response().result())
 		{
 			response.result = true;
-			response.data.id.entity_type = int2str(message.response().entity().data().id().entity_type());
+			response.data.id.entity_type = enum2str(EntityType,message.response().entity().data().id().entity_type());
 			response.data.id.id = int2str(message.response().entity().data().id().id());
 			response.data.id.name = message.response().entity().data().id().name();
 			response.session_id = int2str(message.session_id());
 			if((ns__EntityType)message.response().entity().data().id().entity_type() == UNIT)					
 			{
-				response.data.unit.base.entity_type = int2str(message.response().entity().data().unit().base().entity_type());
+				response.data.unit.base.entity_type = enum2str(EntityType,message.response().entity().data().unit().base().entity_type());
 				response.data.unit.base.id = int2str(message.response().entity().data().unit().base().id());
 				response.data.unit.base.name = message.response().entity().data().unit().base().name();
 				response.data.unit.base.parentid = int2str(message.response().entity().data().unit().base().parent().id());
@@ -436,7 +514,7 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 				response.data.unit.size = int2str(message.response().entity().data().unit().members_size());
 				for(int i=0;i<message.response().entity().data().unit().members_size();i++)
 				{
-					member.entity_type = int2str(message.response().entity().data().unit().members(i).entity_type());
+					member.entity_type = enum2str(EntityType,message.response().entity().data().unit().members(i).entity_type());
 					member.id = int2str(message.response().entity().data().unit().members(i).id());
 					member.name = message.response().entity().data().unit().members(i).name();
 					member.parentid = int2str(message.response().entity().data().unit().members(i).parent().id());
@@ -445,29 +523,29 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 			}
 			else if((ns__EntityType)message.response().entity().data().id().entity_type() == ACCOUNT)
 			{
-				response.data.account.base.entity_type = int2str(message.response().entity().data().account().base().entity_type());
+				response.data.account.base.entity_type = enum2str(EntityType,message.response().entity().data().account().base().entity_type());
 				response.data.account.base.id = int2str(message.response().entity().data().account().base().id());
 				response.data.account.base.name = message.response().entity().data().account().base().name();
 				response.data.account.base.parentid = int2str(message.response().entity().data().account().base().parent().id());
 				response.data.account.number = message.response().entity().data().account().number();
 				response.data.account.priority = int2str(message.response().entity().data().account().priority());
 				response.data.account.short_number = message.response().entity().data().account().short_number();
-				response.data.account.sip_status = int2str(message.response().entity().data().account().sip_status());
-				response.data.account.register_tatus = int2str(message.response().entity().data().account().status());
-				response.data.account.token_privilege = int2str(message.response().entity().data().account().token_privilege());
-				response.data.account.call_privilege = int2str(message.response().entity().data().account().call_privilege());
+				response.data.account.sip_status = enum2str(RegisterStatus,message.response().entity().data().account().sip_status());
+				response.data.account.register_tatus = enum2str(RegisterStatus,message.response().entity().data().account().status());
+				response.data.account.token_privilege = enum2str(TokenPrivilege,message.response().entity().data().account().token_privilege());
+				response.data.account.call_privilege = enum2str(CallPrivilege,message.response().entity().data().account().call_privilege());
 			}
 			else if((ns__EntityType)message.response().entity().data().id().entity_type() == USER)
 			{
-				response.data.user.account.entity_type = int2str(message.response().entity().data().user().account().entity_type());
+				response.data.user.account.entity_type = enum2str(EntityType,message.response().entity().data().user().account().entity_type());
 				response.data.user.account.id = int2str(message.response().entity().data().user().account().id());
 				response.data.user.account.name = message.response().entity().data().user().account().name();
 				response.data.user.account.parentid = int2str(message.response().entity().data().user().account().parent().id());
-				response.data.user.base.entity_type = int2str(message.response().entity().data().user().base().entity_type());
+				response.data.user.base.entity_type = enum2str(EntityType,message.response().entity().data().user().base().entity_type());
 				response.data.user.base.id = int2str(message.response().entity().data().user().base().id());
 				response.data.user.base.name = message.response().entity().data().user().base().name();
 				response.data.user.base.parentid = int2str(message.response().entity().data().user().base().parent().id());
-				response.data.user.register_tatus = int2str(message.response().entity().data().user().status());
+				response.data.user.register_tatus = enum2str(RegisterStatus,message.response().entity().data().user().status());
 			}
 			else if((ns__EntityType)message.response().entity().data().id().entity_type() == GROUPW)
 			{
@@ -483,10 +561,10 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 					participant.id = int2str(message.response().entity().data().group().participants(i).account().id());
 					participant.name = message.response().entity().data().group().participants(i).account().name();
 					participant.parentid = int2str(message.response().entity().data().group().participants(i).account().parent().id());
-					participant.call_privilege = int2str(message.response().entity().data().group().participants(i).call_privilege());
+					participant.call_privilege = enum2str(CallPrivilege,message.response().entity().data().group().participants(i).call_privilege());
 					participant.priority = int2str(message.response().entity().data().group().participants(i).priority());
-					participant.session_status = int2str(message.response().entity().data().group().participants(i).status());
-					participant.token_privilege = int2str(message.response().entity().data().group().participants(i).token_privilege());
+					participant.session_status = enum2str(SessionStatus,message.response().entity().data().group().participants(i).status());
+					participant.token_privilege = enum2str(TokenPrivilege,message.response().entity().data().group().participants(i).token_privilege());
 					response.data.group.participants.push_back(participant);
 				}
 				//response.data.group.record_status = int2str(message.response().entity().data().group().record_status());
@@ -495,7 +573,7 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 			}
 			else if((ns__EntityType)message.response().entity().data().id().entity_type() == ORGANIZATION)
 			{
-				response.data.organization.base.entity_type = int2str(message.response().entity().data().organization().base().entity_type());
+				response.data.organization.base.entity_type = enum2str(EntityType,message.response().entity().data().organization().base().entity_type());
 				response.data.organization.base.id = int2str(message.response().entity().data().organization().base().id());
 				response.data.organization.base.name = message.response().entity().data().organization().base().name();
 				response.data.organization.base.parentid = int2str(message.response().entity().data().organization().base().parent().id());
@@ -503,7 +581,7 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 				ns__Entity entity;
 				for(int i=0;i<message.response().entity().data().organization().members_size();i++)
 				{
-					entity.entity_type = int2str(message.response().entity().data().organization().members(i).entity_type());
+					entity.entity_type = enum2str(EntityType,message.response().entity().data().organization().members(i).entity_type());
 					entity.id = int2str(message.response().entity().data().organization().members(i).id());
 					entity.name = message.response().entity().data().organization().members(i).name();
 					entity.parentid = int2str(message.response().entity().data().organization().members(i).parent().id());
@@ -512,10 +590,10 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 			}
 			else if((ns__EntityType)message.response().entity().data().id().entity_type() == ALERT)
 			{
-				response.data.alert.alert_level = int2str(message.response().entity().data().alert().level());
+				response.data.alert.alert_level = enum2str(AlertLevel,message.response().entity().data().alert().level());
 				//response.data.alert.alert_status = int2str(message.response().entity().data().alert().level());
 				response.data.alert.alram_time = message.response().entity().data().alert().alram_time();
-				response.data.alert.base.entity_type = int2str(message.response().entity().data().alert().base().entity_type());
+				response.data.alert.base.entity_type = enum2str(EntityType,message.response().entity().data().alert().base().entity_type());
 				response.data.alert.base.id = int2str(message.response().entity().data().alert().base().id());
 				response.data.alert.base.name = message.response().entity().data().alert().base().name();
 				response.data.alert.base.parentid = int2str(message.response().entity().data().alert().base().parent().id());
@@ -541,12 +619,6 @@ int xiaofangService::Dispatch_Entity_Request(std::string session_id,
 		return SOAP_OK;
 	}
 	
-	return SOAP_OK;
-}
-
-int xiaofangService::Dispatch_Entity_Nofitication(std::string session_id, 
-													ns__Dispatch_Entity_Nofitication_Response &response)
-{
 	return SOAP_OK;
 }
 
@@ -679,10 +751,10 @@ int xiaofangService::Dispatch_Append_Group(std::string session_id,
 			ns__Participant participant;
 			for(int i=0;i<message.response().append_group().group().participants_size();i++)
 			{
-				participant.call_privilege = (ns__CallPrivilege)message.response().append_group().group().participants(i).call_privilege();
+				participant.call_privilege = enum2str(CallPrivilege,message.response().append_group().group().participants(i).call_privilege());
 				participant.priority = int2str(message.response().append_group().group().participants(i).priority());
-				participant.session_status = int2str(message.response().append_group().group().participants(i).status());
-				participant.token_privilege = (ns__TokenPrivilege)message.response().append_group().group().participants(i).token_privilege();
+				participant.session_status = enum2str(SessionStatus,message.response().append_group().group().participants(i).status());
+				participant.token_privilege = enum2str(TokenPrivilege,message.response().append_group().group().participants(i).token_privilege());
 				participant.id = int2str(message.response().append_group().group().participants(i).account().id());
 				participant.name = message.response().append_group().group().participants(i).account().name();
 				participant.parentid = int2str(message.response().append_group().group().participants(i).account().parent().id());
@@ -927,10 +999,10 @@ int xiaofangService::Dispatch_Modify_Participants(std::string session_id,
 			ns__Participant participant;
 			for(int i=0;i<message.response().append_group().group().participants_size();i++)
 			{
-				participant.call_privilege = (ns__CallPrivilege)message.response().append_group().group().participants(i).call_privilege();
+				participant.call_privilege = enum2str(CallPrivilege,message.response().append_group().group().participants(i).call_privilege());
 				participant.priority = int2str(message.response().append_group().group().participants(i).priority());
-				participant.session_status = int2str(message.response().append_group().group().participants(i).status());
-				participant.token_privilege = (ns__TokenPrivilege)message.response().append_group().group().participants(i).token_privilege();
+				participant.session_status = enum2str(SessionStatus,message.response().append_group().group().participants(i).status());
+				participant.token_privilege = enum2str(TokenPrivilege,message.response().append_group().group().participants(i).token_privilege());
 				participant.id = int2str(message.response().append_group().group().participants(i).account().id());
 				participant.name = message.response().append_group().group().participants(i).account().name();
 				participant.parentid = int2str(message.response().append_group().group().participants(i).account().parent().id());
@@ -1047,21 +1119,6 @@ int xiaofangService::Dispatch_Delete_Group(std::string session_id,
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	return SOAP_OK;
-}
-
-int xiaofangService::Dispatch_Dispatch_Participants_Notification(std::string session_id, ns__Dispatch_Dispatch_Participants_Notification_Response &response)
-{
-	return SOAP_OK;
-}
-
-int xiaofangService::Dispatch_Join_Group_Request_Nofitication(std::string session_id, ns__Dispatch_Join_Group_Request_Nofitication_Response &response)
-{
-	return SOAP_OK;
-}
-
-int xiaofangService::Dispatch_Participant_Status_Notification(std::string session_id, ns__Dispatch_Participant_Status_Notification_Response &response)
-{
 	return SOAP_OK;
 }
 
@@ -1192,20 +1249,6 @@ int xiaofangService::Dispatch_Media_Message_Request(std::string session_id,
 	return SOAP_OK;
 }
 
-int xiaofangService::Dispatch_Media_Message_Notification(std::string session_id, ns__Dispatch_Media_Message_Notification_Response &response)
-{
-	return SOAP_OK;
-}
-
-int xiaofangService::Dispatch_Participant_Connect_Request_Notification(std::string session_id, ns__Dispatch_Participant_Connect_Request_Notification_Response &response)
-{
-	return SOAP_OK;
-}
-
-int xiaofangService::Dispatch_Participant_Speak_Request_Notification(std::string session_id, ns__Dispatch_Participant_Speak_Request_Notification_Response &response)
-{
-	return SOAP_OK;
-}
 
 int xiaofangService::Dispatch_Invite_Participant_Request(std::string session_id,
 														std::string group_id, 
@@ -1827,11 +1870,6 @@ int xiaofangService::Dispatch_Leave_Group_Request(std::string session_id,
 	return SOAP_OK;
 }
 
-int xiaofangService::Dispatch_Session_Status_Notification(std::string session_id, ns__Dispatch_Session_Status_Notification_Response &response)
-{
-	return SOAP_OK;
-}
-
 int xiaofangService::Dispatch_Send_Message_Request(std::string session_id,
 													std::string group_id, 
 													ns__MediaMessage mediamessage, 
@@ -2141,11 +2179,6 @@ int xiaofangService::Dispatch_Stop_Record_Request(std::string session_id,
 	return SOAP_OK;
 }
 
-int xiaofangService::Dispatch_Record_Status_Notification(std::string session_id, ns__Dispatch_Record_Status_Notification_Response &response)
-{
-	return SOAP_OK;
-}
-
 int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string session_id,
 															bool subscribing, 
 															std::string account_id, 
@@ -2254,11 +2287,6 @@ int xiaofangService::Dispatch_Subscribe_Account_Location_Request(std::string ses
 		response.error_describe = message.InitializationErrorString();
 		return SOAP_OK;
 	}
-	return SOAP_OK;
-}
-
-int xiaofangService::Dispatch_Account_Location_Notification(std::string session_id, ns__Dispatch_Account_Info_Notification_Response &response)
-{
 	return SOAP_OK;
 }
 
@@ -2372,9 +2400,9 @@ int xiaofangService::Dispatch_Append_Alert_Request(std::string session_id,
 			response.data.create_time = message.response().append_alert().alert().create_time();
 			response.data.describe = message.response().append_alert().alert().describe();
 			response.data.group_id = int2str(message.response().append_alert().alert().group().id());
-			response.data.alert_level = int2str(message.response().append_alert().alert().level());
+			response.data.alert_level = enum2str(AlertLevel,message.response().append_alert().alert().level());
 			response.data.use_cars = int2str(message.response().append_alert().alert().use_cars());
-			response.data.base.entity_type = int2str(message.response().append_alert().alert().base().entity_type());
+			response.data.base.entity_type = enum2str(EntityType,message.response().append_alert().alert().base().entity_type());
 			response.data.base.id = int2str(message.response().append_alert().alert().base().id());
 			response.data.base.name = message.response().append_alert().alert().base().name();
 			response.data.base.parentid = int2str(message.response().append_alert().alert().base().parent().id());
@@ -2595,18 +2623,6 @@ int xiaofangService::Dispatch_Stop_Alert_Request(std::string session_id,
 	return SOAP_OK;
 }
 
-int xiaofangService::Dispatch_Alert_Overed_Notification(std::string session_id,
-			ns__Dispatch_Alert_Overed_Notification_Response &response)
-{
-	return SOAP_OK;
-}
-
-int xiaofangService::Dispatch_Move_Unit_Notification(std::string session_id,
-			ns__Dispatch_Move_Unit_Notification_Response &response)
-{
-	return SOAP_OK;
-}
-
 int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 													std::string name, 
 													std::string create_time_from, 
@@ -2710,7 +2726,7 @@ int xiaofangService::Dispatch_History_Alert_Request(std::string session_id,
 				historyalert.create_time = message.response().history_alerts().history_alerts(i).create_time();
 				historyalert.describe = message.response().history_alerts().history_alerts(i).describe();
 				historyalert.id = int2str(message.response().history_alerts().history_alerts(i).id());
-				historyalert.alert_level = int2str(message.response().history_alerts().history_alerts(i).level());
+				historyalert.alert_level = enum2str(AlertLevel,message.response().history_alerts().history_alerts(i).level());
 				historyalert.name = message.response().history_alerts().history_alerts(i).name();
 				historyalert.over_time = message.response().history_alerts().history_alerts(i).over_time();
 				historyalert.use_cars = int2str(message.response().history_alerts().history_alerts(i).use_cars());
@@ -2817,7 +2833,7 @@ int xiaofangService::Dispatch_Alert_Request(std::string session_id,
 			response.data.create_time = message.response().history_alert().history_alert().create_time();
 			response.data.describe = message.response().history_alert().history_alert().describe();
 			response.data.id = int2str(message.response().history_alert().history_alert().id());
-			response.data.alert_level = int2str(message.response().history_alert().history_alert().level());
+			response.data.alert_level = enum2str(AlertLevel,message.response().history_alert().history_alert().level());
 			response.data.name = message.response().history_alert().history_alert().name();
 			response.data.over_time = message.response().history_alert().history_alert().over_time();
 			response.data.use_cars = int2str(message.response().history_alert().history_alert().use_cars());
@@ -3157,3 +3173,228 @@ int xiaofangService::Dispatch_Kick_Participant_Request(std::string session_id,
 	return SOAP_OK;
 }
 
+int xiaofangService::Dispatch_Notification_Message(std::string session_id,
+										ns__Notification &response)
+{
+	std::string notificationMessage;
+	{
+		std::lock_guard<std::mutex> lock(keep_tcp_connection_mutex);
+		std::map<unsigned long,std::tr1::shared_ptr<ConnectToAppServer> >::iterator itr = keep_tcp_connection.find(std::stoul(session_id,nullptr,0));
+		if(itr == keep_tcp_connection.end())
+		{
+			return SOAP_OK;
+		}
+		std::tr1::shared_ptr<ConnectToAppServer> connecttoserver_ptr = itr->second;
+
+		notificationMessage = connecttoserver_ptr->get_notificationMessage();
+	}//unlock keep_tcp_connection_mutex
+
+	if(notificationMessage.empty())
+	{
+		response.have_Notification = false;
+		return SOAP_OK;
+	}
+	else
+	{
+		response.have_Notification = true;
+		app::dispatch::Message message;
+		LOG(INFO)<<"Parse notification message from protobuf protocol";
+		message.ParseFromString(notificationMessage);
+		response.notificationType = (ns__NotificationType)message.msg_type();
+
+		if(message.msg_type() == app::dispatch::MSG::Entity_Notification)
+		{
+			response.entityData.notify_type = enum2str(EntityNotifyType,message.indication().entity().notify_type());
+			response.entityData.data.id.entity_type = enum2str(EntityType,message.indication().entity().data().id().entity_type());
+			response.entityData.data.id.id = message.indication().entity().data().id().id();
+			response.entityData.data.id.name = message.indication().entity().data().id().name();
+			response.entityData.data.id.parentid = message.indication().entity().data().id().parent().id();
+			if((ns__EntityType)message.indication().entity().data().id().entity_type() == UNIT)					
+			{
+				response.entityData.data.unit.base.entity_type = enum2str(EntityType,message.indication().entity().data().unit().base().entity_type());
+				response.entityData.data.unit.base.id = int2str(message.indication().entity().data().unit().base().id());
+				response.entityData.data.unit.base.name = message.indication().entity().data().unit().base().name();
+				response.entityData.data.unit.base.parentid = int2str(message.indication().entity().data().unit().base().parent().id());
+
+				ns__Entity member;
+				response.entityData.data.unit.size = int2str(message.indication().entity().data().unit().members_size());
+				for(int i=0;i<message.indication().entity().data().unit().members_size();i++)
+				{
+					member.entity_type = int2str(message.indication().entity().data().unit().members(i).entity_type());
+					member.id = int2str(message.indication().entity().data().unit().members(i).id());
+					member.name = message.indication().entity().data().unit().members(i).name();
+					member.parentid = int2str(message.indication().entity().data().unit().members(i).parent().id());
+					response.entityData.data.unit.members.push_back(member);
+				}
+			}
+			else if((ns__EntityType)message.indication().entity().data().id().entity_type() == ACCOUNT)
+			{
+				response.entityData.data.account.base.entity_type = enum2str(EntityType,message.indication().entity().data().account().base().entity_type());
+				response.entityData.data.account.base.id = int2str(message.indication().entity().data().account().base().id());
+				response.entityData.data.account.base.name = message.indication().entity().data().account().base().name();
+				response.entityData.data.account.base.parentid = int2str(message.indication().entity().data().account().base().parent().id());
+				response.entityData.data.account.number = message.indication().entity().data().account().number();
+				response.entityData.data.account.priority = int2str(message.indication().entity().data().account().priority());
+				response.entityData.data.account.short_number = message.indication().entity().data().account().short_number();
+				response.entityData.data.account.sip_status = enum2str(RegisterStatus,message.indication().entity().data().account().sip_status());
+				response.entityData.data.account.register_tatus = enum2str(RegisterStatus,message.indication().entity().data().account().status());
+				response.entityData.data.account.token_privilege = enum2str(TokenPrivilege,message.indication().entity().data().account().token_privilege());
+				response.entityData.data.account.call_privilege = enum2str(CallPrivilege,message.indication().entity().data().account().call_privilege());
+			}
+			else if((ns__EntityType)message.indication().entity().data().id().entity_type() == USER)
+			{
+				response.entityData.data.user.account.entity_type = enum2str(EntityType,message.indication().entity().data().user().account().entity_type());
+				response.entityData.data.user.account.id = int2str(message.indication().entity().data().user().account().id());
+				response.entityData.data.user.account.name = message.indication().entity().data().user().account().name();
+				response.entityData.data.user.account.parentid = int2str(message.indication().entity().data().user().account().parent().id());
+				response.entityData.data.user.base.entity_type = enum2str(EntityType,message.indication().entity().data().user().base().entity_type());
+				response.entityData.data.user.base.id = int2str(message.indication().entity().data().user().base().id());
+				response.entityData.data.user.base.name = message.indication().entity().data().user().base().name();
+				response.entityData.data.user.base.parentid = int2str(message.indication().entity().data().user().base().parent().id());
+				response.entityData.data.user.register_tatus = enum2str(RegisterStatus,message.indication().entity().data().user().status());
+			}
+			else if((ns__EntityType)message.indication().entity().data().id().entity_type() == GROUPW)
+			{
+				ns__Participant participant;
+				response.entityData.data.group.id = int2str(message.indication().entity().data().group().base().id());
+				response.entityData.data.group.name = message.indication().entity().data().group().base().name();
+				response.entityData.data.group.number = message.indication().entity().data().group().number();
+				response.entityData.data.group.owner_id = int2str(message.indication().entity().data().group().owner().id());
+				response.entityData.data.group.parent_id = int2str(message.indication().entity().data().group().base().parent().id());
+				response.entityData.data.group.size = int2str(message.indication().entity().data().group().participants_size());
+				for(int i=0;i<message.indication().entity().data().group().participants_size();i++)
+				{
+					participant.id = int2str(message.indication().entity().data().group().participants(i).account().id());
+					participant.name = message.indication().entity().data().group().participants(i).account().name();
+					participant.parentid = int2str(message.indication().entity().data().group().participants(i).account().parent().id());
+					participant.call_privilege = enum2str(CallPrivilege,message.indication().entity().data().group().participants(i).call_privilege());
+					participant.priority = int2str(message.indication().entity().data().group().participants(i).priority());
+					participant.session_status = enum2str(SessionStatus,message.indication().entity().data().group().participants(i).status());
+					participant.token_privilege = enum2str(TokenPrivilege,message.indication().entity().data().group().participants(i).token_privilege());
+					response.entityData.data.group.participants.push_back(participant);
+				}
+				//response.data.group.record_status = int2str(message.response().entity().data().group().record_status());
+				//response.data.group.record_type = int2str(message.response().entity().data().group().record_type());
+				response.entityData.data.group.short_number = message.indication().entity().data().group().short_number();
+			}
+			else if((ns__EntityType)message.indication().entity().data().id().entity_type() == ORGANIZATION)
+			{
+				response.entityData.data.organization.base.entity_type = enum2str(EntityType,message.indication().entity().data().organization().base().entity_type());
+				response.entityData.data.organization.base.id = int2str(message.indication().entity().data().organization().base().id());
+				response.entityData.data.organization.base.name = message.indication().entity().data().organization().base().name();
+				response.entityData.data.organization.base.parentid = int2str(message.indication().entity().data().organization().base().parent().id());
+
+				ns__Entity entity;
+				for(int i=0;i<message.indication().entity().data().organization().members_size();i++)
+				{
+					entity.entity_type = enum2str(EntityType,message.indication().entity().data().organization().members(i).entity_type());
+					entity.id = int2str(message.indication().entity().data().organization().members(i).id());
+					entity.name = message.indication().entity().data().organization().members(i).name();
+					entity.parentid = int2str(message.indication().entity().data().organization().members(i).parent().id());
+					response.entityData.data.organization.members.push_back(entity);
+				}
+			}
+			else if((ns__EntityType)message.indication().entity().data().id().entity_type() == ALERT)
+			{
+				response.entityData.data.alert.alert_level = enum2str(AlertLevel,message.indication().entity().data().alert().level());
+				//response.data.alert.alert_status = int2str(message.response().entity().data().alert().level());
+				response.entityData.data.alert.alram_time = message.indication().entity().data().alert().alram_time();
+				response.entityData.data.alert.base.entity_type = enum2str(EntityType,message.indication().entity().data().alert().base().entity_type());
+				response.entityData.data.alert.base.id = int2str(message.indication().entity().data().alert().base().id());
+				response.entityData.data.alert.base.name = message.indication().entity().data().alert().base().name();
+				response.entityData.data.alert.base.parentid = int2str(message.indication().entity().data().alert().base().parent().id());
+				response.entityData.data.alert.create_time = message.indication().entity().data().alert().create_time();
+				response.entityData.data.alert.describe = message.indication().entity().data().alert().describe();
+				response.entityData.data.alert.use_cars = int2str(message.indication().entity().data().alert().use_cars());
+				response.entityData.data.alert.group_id = int2str(message.indication().entity().data().alert().group().id());
+			}
+		}else if(message.msg_type() == app::dispatch::MSG::Entity_Status_Notification)
+		{
+			response.entityStatus.id.entity_type = enum2str(EntityType,message.indication().entity_status().id().entity_type());
+			response.entityStatus.id.id = message.indication().entity_status().id().id();
+			response.entityStatus.id.name = message.indication().entity_status().id().name();
+			response.entityStatus.id.parentid = message.indication().entity_status().id().parent().id();
+			response.entityStatus.register_status = enum2str(RegisterStatus,message.indication().entity_status().status());
+			response.entityStatus.sip_status = enum2str(RegisterStatus,message.indication().entity_status().sip_status());
+		}
+		else if(message.msg_type() == app::dispatch::MSG::Participants_Notification)
+		{
+			response.participants.data.group_id = message.indication().participants().group_id().id();
+			response.participants.data.modify_type = enum2str(ListModifyType,message.indication().participants().modify_type());
+			response.participants.data.size = int2str(message.indication().participants().particiapnts_size());
+			ns__Participant participant;
+			for(int i=0;i<message.indication().participants().particiapnts_size();i++)
+			{
+				participant.call_privilege = enum2str(CallPrivilege,message.indication().participants().particiapnts(i).call_privilege());
+				participant.priority = int2str(message.indication().participants().particiapnts(i).priority());
+				participant.session_status = enum2str(SessionStatus,message.indication().participants().particiapnts(i).status());
+				participant.token_privilege = enum2str(TokenPrivilege,message.indication().participants().particiapnts(i).token_privilege());
+				participant.id = int2str(message.indication().participants().particiapnts(i).account().id());
+				participant.name = message.indication().participants().particiapnts(i).account().name();
+				participant.parentid = int2str(message.indication().participants().particiapnts(i).account().parent().id());
+				response.participants.data.participants.push_back(participant);
+			}
+		}
+		else if(message.msg_type() == app::dispatch::MSG::Join_Group_Request_Notification)
+		{
+			response.jionGroup.account_id = int2str(message.indication().join_group_request().account_id().id());
+			response.jionGroup.group_id = int2str(message.indication().join_group_request().group_id().id());
+		}
+		else if(message.msg_type() == app::dispatch::MSG::Participant_Status_Notification)
+		{
+			response.participantStatus.account_id = message.indication().participant_status().account_id().id();
+			response.participantStatus.group_id = message.indication().participant_status().group_id().id();
+			response.participantStatus.session_status = enum2str(SessionStatus,message.indication().participant_status().status());
+		}
+		else if(message.msg_type() == app::dispatch::MSG::Media_Message_Notification)
+		{
+			response.mediaMessage.id = message.indication().media_message().id().id();
+			response.mediaMessage.messages.id = message.indication().media_message().msg().id();
+			response.mediaMessage.messages.audio_length = int2str(message.indication().media_message().msg().audio_length());
+			response.mediaMessage.messages.audio_uri = message.indication().media_message().msg().audio_uri();
+			response.mediaMessage.messages.picture_uri = message.indication().media_message().msg().audio_uri();
+			response.mediaMessage.messages.sender = message.indication().media_message().msg().sender();
+			response.mediaMessage.messages.text = message.indication().media_message().msg().text();
+			response.mediaMessage.messages.timestamp = message.indication().media_message().msg().timestamp();
+			response.mediaMessage.messages.video_length = int2str(message.indication().media_message().msg().video_length());
+			response.mediaMessage.messages.video_uri = message.indication().media_message().msg().video_uri();
+		}
+		else if(message.msg_type() == app::dispatch::MSG::Participant_Connect_Request_Notification)
+		{
+			response.participantConnect.account_id = message.indication().participant_connect_request().account_id().id();
+			response.participantConnect.group_id = message.indication().participant_connect_request().group_id().id();
+		}
+		else if(message.msg_type() == app::dispatch::MSG::Participant_Speak_Request_Notification)
+		{
+			response.paticipantSpeak.account_id = message.indication().participant_speak_request().account_id().id();
+			response.paticipantSpeak.group_id = message.indication().participant_speak_request().group_id().id();
+		}
+		else if(message.msg_type() == app::dispatch::MSG::Session_Status_Notification)
+		{
+			response.sessionStatus.group_id = message.indication().session_status().group_id().id();
+			response.sessionStatus.session_status = int2str(message.indication().session_status().status());
+		}
+		else if(message.msg_type() == app::dispatch::MSG::Record_Status_Notification)
+		{
+			response.recordStatus.group_id = message.indication().record_status().group_id().id();
+			response.recordStatus.recording = message.indication().record_status().recording();
+		}
+		else if(message.msg_type() == app::dispatch::MSG::Account_Location_Notification)
+		{
+			response.accoutInfo.account_id = message.indication().account_location().account_id().id();
+			response.accoutInfo.latitude = message.indication().account_location().latitude();
+			response.accoutInfo.longitude = message.indication().account_location().longitude();
+			response.accoutInfo.timestamp = message.indication().account_location().timestamp();
+		}
+		else if(message.msg_type() == app::dispatch::MSG::Alert_Overed_Notification)
+		{
+			response.alertOvered.alert_id = message.indication().alert_overed().alert_id().id();
+		}
+		else if(message.msg_type() == app::dispatch::MSG::Move_Unit_Notification)
+		{
+			response.moveUnit.entity.id = message.indication().move_unit().id().id();
+			response.moveUnit.entity.parentid = message.indication().move_unit().id().parent().id();
+		}
+	}
+	return SOAP_OK;
+}

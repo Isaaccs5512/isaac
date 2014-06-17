@@ -1,4 +1,4 @@
-FLAGS =--std=c++11 -lglog -lpthread -lprotobuf -DWITH_OPENSSL -lssl -lcrypt -g -DDEBUG -gdwarf-2 -gstrict-dwarf
+FLAGS =--std=c++11 -lglog -lpthread -lprotobuf -DWITH_OPENSSL -lssl -lcrypt -g
 INCLUDE = -I./ -I./boost_1_55_0 -I/usr/local/protobuf/include -I./asio-1.10.1/include
 
 LIB = -L/usr/local/lib
@@ -13,10 +13,10 @@ SOURCE_OBJ = $(patsubst %.cpp,%.o,$(SOURCE))
 SERVER_SOURCE = $(SOURCE) $(PROTOBUF_SRC)
 SERVER_OBJ=$(PROTOBUF_OBJ) $(SOURCE_OBJ)
 .PHONY:all gsoap
-all : webserver
+all : server
 gsoap:
-	soapcpp2 -i -S -e webservice.h
-webserver:$(SERVER_OBJ)
+	soapcpp2 -i -S -e -x webservice.h
+server:$(SERVER_OBJ)
 	$(CC) -o $@ $^
 %.o:%.cpp
 	$(CC) -o $@ -c $< $(FLAGS) $(INCLUDE)
@@ -29,6 +29,6 @@ webserver:$(SERVER_OBJ)
 
 .PHONY:clean gsoap_clean
 clean:
-	rm -f webserver *.o *.d *.d.* ./protobuf/*.o 
+	rm -f server *.o *.d *.d.* ./protobuf/*.o 
 gsoap_clean:
 	rm -f xiaofang* soap* ns.xsd
